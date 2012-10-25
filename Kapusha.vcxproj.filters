@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="math">
+      <UniqueIdentifier>{eb5687f9-2f27-45c8-9ee7-0c66b492aa23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sys">
+      <UniqueIdentifier>{c97d7110-08da-4447-8737-c3e8b2e3cb26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="io">
+      <UniqueIdentifier>{c77d72c8-730d-499e-86a6-82700f333620}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gl">
+      <UniqueIdentifier>{bbb2770f-a63a-4a72-8100-9d98a48fd523}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gl\glew">
+      <UniqueIdentifier>{f8c44a6d-d951-43c9-adfe-a025009e8833}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gl\glew\GL">
+      <UniqueIdentifier>{d717bf17-abc1-414c-b1ec-66befa6fc141}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="math\mat2.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\mat4.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\rect2.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\vec2.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\vec4.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\types.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\Log.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\IApplication.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="io\Stream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\StreamFile.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\System.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\Buffer.h">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\OpenGL.h">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\Program.h">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\Texture.h">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\GL\glew.h">
+      <Filter>gl\glew\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\GL\wglew.h">
+      <Filter>gl\glew\GL</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="math\math.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\Log.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="io\Stream.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\StreamFile.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="gl\Buffer.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="gl\OpenGL.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="gl\Program.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="gl\Texture.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="glew\GL\glew.c">
+      <Filter>gl\glew\GL</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

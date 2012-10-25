@@ -1,0 +1,193 @@
+#include <string>
+
+#include "../sys/Log.h"
+#include "OpenGL.h"
+#include "Program.h"
+
+namespace kapusha {
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  struct _ShaderInfoLogHelper {
+    static int length(unsigned object)
+    {
+      int result;
+      glGetShaderiv(object, GL_INFO_LOG_LENGTH, &result);
+      return result;
+    }
+    static void get(unsigned object, int length, char* out)
+    {
+      glGetShaderInfoLog(object, length, 0, out);
+    }
+  };
+  
+  struct _ProgramInfoLogHelper {
+    static int length(unsigned object)
+    {
+      int result;
+      glGetProgramiv(object, GL_INFO_LOG_LENGTH, &result);
+      return result;
+    }
+    static void get(unsigned object, int length, char* out)
+    {
+      glGetProgramInfoLog(object, length, 0, out);
+    }
+  };
+  
+  template <typename H>
+  void printInfoLog(unsigned name)
+  {
+    int length = H::length(name);
+    std::string info_log;
+    info_log.resize(length);
+    H::get(name, length, &*info_log.begin());
+    L("there were errors:\n%s\n", info_log.c_str());
+  }
+  
+  void printShaderInfoLog(unsigned shader)
+  {
+    printInfoLog<_ShaderInfoLogHelper>(shader);
+  }
+  
+  void printProgramInfoLog(unsigned program)
+  {
+    printInfoLog<_ProgramInfoLogHelper>(program);
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+  Program::Program(const char* vertex, const char* fragment)
+  : shader_vertex_(0), shader_fragment_(0), program_name_(0)
+  {
+    shader_vertex_ = compileShader(GL_VERTEX_SHADER, vertex);
+    if (!shader_vertex_) return;
+    
+    shader_fragment_ = compileShader(GL_FRAGMENT_SHADER, fragment);
+    if (!shader_fragment_) {
+      glDeleteShader(shader_vertex_);
+      shader_vertex_ = 0;
+      return;
+    }
+    
+    program_name_ = glCreateProgram();
+    glAttachShader(program_name_, shader_vertex_);
+    glAttachShader(program_name_, shader_fragment_);
+    
+    glBindAttribLocation(program_name_, 0, "vertex");
+    GL_ASSERT
+    
+    glLinkProgram(program_name_);
+    
+    // errcheck
+    
+    {
+      int param;
+      glGetProgramiv(program_name_, GL_LINK_STATUS, &param);
+      
+      if (param != GL_TRUE)
+      {
+        printProgramInfoLog(program_name_);
+        
+        glDeleteProgram(program_name_);
+        glDeleteShader(shader_fragment_);
+        glDeleteShader(shader_vertex_);
+        shader_fragment_ = shader_vertex_ = program_name_ = 0;
+      }
+    }
+  }
+  
+  Program::~Program()
+  {
+    if (program_name_)
+      glDeleteProgram(program_name_);
+    if (shader_fragment_)
+      glDeleteShader(shader_fragment_);
+    if (shader_vertex_)
+      glDeleteShader(shader_vertex_);
+  }
+  
+  void Program::use() const
+  {
+    glUseProgram(program_name_);
+    GL_ASSERT
+  }
+  
+  void Program::setUniform(const char *name, float value) const
+  {
+    if (!program_name_) return;
+    
+    glUniform1f(glGetUniformLocation(program_name_, name), value);
+    GL_ASSERT
+  }
+  
+  void Program::setUniform(const char *name, float x, float y) const
+  {
+    if (!program_name_) return;
+    
+    glUniform2f(glGetUniformLocation(program_name_, name), x, y);
+    GL_ASSERT
+  }
+  
+  void Program::setUniform(const char *name, float value[4]) const
+  {
+    if (!program_name_) return;
+    
+    glUniform4fv(glGetUniformLocation(program_name_, name), 1, value);
+    GL_ASSERT
+  }
+  
+  void Program::setUniformMatrix(const char *name, float value[4]) const
+  {
+    if (!program_name_) return;
+    
+    glUniformMatrix2fv(glGetUniformLocation(program_name_, name), 1, GL_FALSE, value);
+    GL_ASSERT
+  }
+  
+  unsigned Program::getAttributeLocation(const char *name) const
+  {
+    if (!program_name_) return -1;
+    
+    return glGetAttribLocation(program_name_, name);
+  }
+  
+  unsigned Program::compileShader(unsigned type, const char* source)
+  {
+    unsigned shader = glCreateShader(type);
+    
+    glShaderSource(shader, 1, &source, 0);
+    glCompileShader(shader);
+    
+    int result;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
+    if (result != GL_TRUE)
+    {
+      L("for shader [");
+      unsigned long len = strlen(source)+1;
+      char* buffer = (char*)malloc(len);
+      memcpy(buffer, source, len);
+      char* s = buffer;
+      for (int line = 1;; ++line)
+      {
+        char* next = strchr(s, '\n');
+        if (next != NULL)
+        {
+          *next = 0;
+        }
+        L("%d: %s", line, s);
+        if (next == NULL)
+        {
+          break;
+        }
+        s = next + 1;
+      }
+      L("]");
+      
+      printShaderInfoLog(shader);
+      glDeleteShader(shader);
+      return 0;
+    }
+    
+    return shader;
+  }
+} // namespace kapusha
