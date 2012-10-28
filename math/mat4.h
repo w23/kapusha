@@ -21,13 +21,14 @@ namespace math {
       m[11] = m[12] = m[13] = m[14] = 0;
     }
     
-    mat4x4(const vec4<T>& c0, const vec4<T>& c1, const vec4<T>& c2,
-           const vec4<T>& c3 = vec4<T>(0,0,0,1))
+    //! initialize by rows
+    mat4x4(const vec4<T>& r0, const vec4<T>& r1, const vec4<T>& r2,
+           const vec4<T>& r3 = vec4<T>(0,0,0,1))
     {
-      m[0]  = c0.x; m[1]  = c1.x; m[2]  = c2.x; m[3]  = c3.x;
-      m[4]  = c0.y; m[5]  = c1.y; m[6]  = c2.y; m[7]  = c3.y;
-      m[8]  = c0.z; m[9]  = c1.z; m[10] = c2.z; m[11] = c3.z;
-      m[12] = c0.w; m[13] = c1.w; m[14] = c2.w; m[15] = c3.w;
+      m[0]  = r0.x; m[1]  = r1.x; m[2]  = r2.x; m[3]  = r3.x;
+      m[4]  = r0.y; m[5]  = r1.y; m[6]  = r2.y; m[7]  = r3.y;
+      m[8]  = r0.z; m[9]  = r1.z; m[10] = r2.z; m[11] = r3.z;
+      m[12] = r0.w; m[13] = r1.w; m[14] = r2.w; m[15] = r3.w;
     }
     
     mat4x4<T>& cols(const vec4<T>& c0, const vec4<T>& c1, const vec4<T>& c2,
@@ -50,6 +51,50 @@ namespace math {
     }
     
     // very useful operators
+    mat4x4<T> operator*(T a) const
+    {
+      mat4x4<T> res;
+      res.m[0] = m[0] * a;
+      res.m[1] = m[1] * a;
+      res.m[2] = m[2] * a;
+      res.m[3] = m[3] * a;
+      res.m[4] = m[4] * a;
+      res.m[5] = m[5] * a;
+      res.m[6] = m[6] * a;
+      res.m[7] = m[7] * a;
+      res.m[8] = m[8] * a;
+      res.m[9] = m[9] * a;
+      res.m[10] = m[10] * a;
+      res.m[11] = m[11] * a;
+      res.m[12] = m[12] * a;
+      res.m[13] = m[13] * a;
+      res.m[14] = m[14] * a;
+      res.m[15] = m[15] * a;
+      return res;
+    }
+
+    mat4x4<T> operator+(const mat4x4& a) const
+    {
+      mat4x4<T> res;
+      res.m[0] = m[0] + a.m[0];
+      res.m[1] = m[1] + a.m[1];
+      res.m[2] = m[2] + a.m[2];
+      res.m[3] = m[3] + a.m[3];
+      res.m[4] = m[4] + a.m[4];
+      res.m[5] = m[5] + a.m[5];
+      res.m[6] = m[6] + a.m[6];
+      res.m[7] = m[7] + a.m[7];
+      res.m[8] = m[8] + a.m[8];
+      res.m[9] = m[9] + a.m[9];
+      res.m[10] = m[10] + a.m[10];
+      res.m[11] = m[11] + a.m[11];
+      res.m[12] = m[12] + a.m[12];
+      res.m[13] = m[13] + a.m[13];
+      res.m[14] = m[14] + a.m[14];
+      res.m[15] = m[15] + a.m[15];
+      return res;
+    }
+
     mat4x4<T> operator*(const mat4x4& a) const
     {
       mat4x4<T> res;
@@ -86,5 +131,7 @@ namespace math {
 #endif
       return res;
     }
+    
+    mat4x4<T>& rotationAroundAxis(vec3<T> axis, T angle);
   };
 } // namespace math

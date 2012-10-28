@@ -10,4 +10,20 @@ namespace math {
   const float c_pi2 = c_pi * .5f;
   const float c_pi4 = c_pi * .25f;
 
+
+  mat4f& mat4f::rotationAroundAxis(vec3f axis, float angle)
+  {
+    float s = sinf(angle), c = cosf(angle);
+    *this = mat4f(c) + 
+      mat4f(vec4f(0.f, -axis.z, axis.y),
+            vec4f(axis.z, 0.f, -axis.y),
+            vec4f(-axis.y, axis.x, 0.f)) * s +
+      mat4f(vec4f(axis) * axis.x,
+            vec4f(axis) * axis.y,
+            vec4f(axis) * axis.z) * (1.f - c);
+    m[12] = m[13] = m[14] = 0.f;
+    m[15] = 1.f;
+    return *this;
+  }
+
 } // namespace math
