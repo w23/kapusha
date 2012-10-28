@@ -6,19 +6,19 @@ namespace kapusha {
 
   Buffer::Buffer()
   {
-    glGenBuffers(1, &buffer_name_);
+    glGenBuffers(1, &name_);
     GL_ASSERT
   }
 
   Buffer::~Buffer()
   {
-    glDeleteBuffers(1, &buffer_name_);
+    glDeleteBuffers(1, &name_);
     GL_ASSERT
   }
 
   void Buffer::load(Stream *data, unsigned size)
   {
-    glBindBuffer(GL_ARRAY_BUFFER, buffer_name_);
+    glBindBuffer(GL_ARRAY_BUFFER, name_);
     GL_ASSERT
 
     if (data->size() >= size)
@@ -32,17 +32,12 @@ namespace kapusha {
     }
   }
 
-  void Buffer::bindAttribute(int index, int components, int offset, int stride) const
+  void Buffer::load(void *data, unsigned size)
   {
-    glBindBuffer(GL_ARRAY_BUFFER, buffer_name_);
+    glBindBuffer(GL_ARRAY_BUFFER, name_);
     GL_ASSERT
 
-    glVertexAttribPointer(index, components, GL_FLOAT, GL_FALSE,
-      stride, reinterpret_cast<void*>(offset));
-    GL_ASSERT
-
-    glEnableVertexAttribArray(index);
+    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
     GL_ASSERT
   }
-
 }

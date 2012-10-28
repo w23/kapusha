@@ -10,12 +10,15 @@ namespace kapusha {
     ~Buffer();
 
     void load(Stream* data, unsigned size);
+    void load(void* data, unsigned size);
 
-  public:
-    void bindAttribute(int index, int components, int offset, int stride) const;
+    unsigned name() const { return name_; }
+
+  private: // noncopyable
+    Buffer& operator=(const Buffer& right) { return *this; }
+    Buffer(const Buffer& right) {}
 
   private:
-    unsigned buffer_name_;
+    unsigned name_;
   };
-
 } // kapusha

@@ -72,6 +72,15 @@
     <ClInclude Include="glew\GL\wglew.h">
       <Filter>gl\glew\GL</Filter>
     </ClInclude>
+    <ClInclude Include="gl\Render.h">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\Object.h">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\Tracker.h">
+      <Filter>gl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="math\math.cpp">
@@ -100,6 +109,12 @@
     </ClCompile>
     <ClCompile Include="glew\GL\glew.c">
       <Filter>gl\glew\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="gl\Object.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="gl\Tracker.cpp">
+      <Filter>gl</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
