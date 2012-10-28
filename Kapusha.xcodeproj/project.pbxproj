@@ -1,0 +1,461 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E18DE008163D8F5400869CF5 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
+		E18DE009163D8F7A00869CF5 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD4163D8EED00869CF5 /* Buffer.cpp */; };
+		E18DE00B163D8F7A00869CF5 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD6163D8EED00869CF5 /* Object.cpp */; };
+		E18DE00D163D8F7A00869CF5 /* OpenGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD8163D8EED00869CF5 /* OpenGL.cpp */; };
+		E18DE00F163D8F7A00869CF5 /* Program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDA163D8EED00869CF5 /* Program.cpp */; };
+		E18DE011163D8F7A00869CF5 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDC163D8EED00869CF5 /* Texture.cpp */; };
+		E18DE013163D8F7F00869CF5 /* Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDF163D8EED00869CF5 /* Stream.cpp */; };
+		E18DE017163D8F8700869CF5 /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFE6163D8EED00869CF5 /* math.cpp */; };
+		E18DE018163D8F9800869CF5 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFED163D8EED00869CF5 /* Log.cpp */; };
+		E18DE03A163D923000869CF5 /* main_glut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE039163D923000869CF5 /* main_glut.cpp */; };
+		E18DE040163D925500869CF5 /* libKapusha.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DDFF5163D8F3A00869CF5 /* libKapusha.a */; };
+		E18DE041163D925500869CF5 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
+		E18DE043163D925600869CF5 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE042163D925600869CF5 /* GLUT.framework */; };
+		E18DE05B163D9C9A00869CF5 /* StreamFile_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E18DE034163D923000869CF5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		E18DDFD4163D8EED00869CF5 /* Buffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Buffer.cpp; sourceTree = "<group>"; };
+		E18DDFD5163D8EED00869CF5 /* Buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
+		E18DDFD6163D8EED00869CF5 /* Object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
+		E18DDFD7163D8EED00869CF5 /* Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
+		E18DDFD8163D8EED00869CF5 /* OpenGL.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGL.cpp; sourceTree = "<group>"; };
+		E18DDFD9163D8EED00869CF5 /* OpenGL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGL.h; sourceTree = "<group>"; };
+		E18DDFDA163D8EED00869CF5 /* Program.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Program.cpp; sourceTree = "<group>"; };
+		E18DDFDB163D8EED00869CF5 /* Program.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Program.h; sourceTree = "<group>"; };
+		E18DDFDC163D8EED00869CF5 /* Texture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
+		E18DDFDD163D8EED00869CF5 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
+		E18DDFDF163D8EED00869CF5 /* Stream.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Stream.cpp; sourceTree = "<group>"; };
+		E18DDFE0163D8EED00869CF5 /* Stream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Stream.h; sourceTree = "<group>"; };
+		E18DDFE1163D8EED00869CF5 /* StreamFile_win.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamFile_win.cpp; sourceTree = "<group>"; };
+		E18DDFE2163D8EED00869CF5 /* StreamFile_win.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamFile_win.h; sourceTree = "<group>"; };
+		E18DDFE4163D8EED00869CF5 /* mat2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mat2.h; sourceTree = "<group>"; };
+		E18DDFE5163D8EED00869CF5 /* mat4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mat4.h; sourceTree = "<group>"; };
+		E18DDFE6163D8EED00869CF5 /* math.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = math.cpp; sourceTree = "<group>"; };
+		E18DDFE7163D8EED00869CF5 /* rect2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rect2.h; sourceTree = "<group>"; };
+		E18DDFE8163D8EED00869CF5 /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
+		E18DDFE9163D8EED00869CF5 /* vec2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vec2.h; sourceTree = "<group>"; };
+		E18DDFEA163D8EED00869CF5 /* vec4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vec4.h; sourceTree = "<group>"; };
+		E18DDFEC163D8EED00869CF5 /* IApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IApplication.h; sourceTree = "<group>"; };
+		E18DDFED163D8EED00869CF5 /* Log.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
+		E18DDFEE163D8EED00869CF5 /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
+		E18DDFEF163D8EED00869CF5 /* System.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
+		E18DDFF5163D8F3A00869CF5 /* libKapusha.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libKapusha.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E18DDFF8163D8F3A00869CF5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		E18DDFFB163D8F3B00869CF5 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		E18DDFFC163D8F3B00869CF5 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		E18DDFFD163D8F3B00869CF5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		E18DE007163D8F5400869CF5 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = DEVELOPER_DIR; };
+		E18DE036163D923000869CF5 /* KapushaTestGLUT */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = KapushaTestGLUT; sourceTree = BUILT_PRODUCTS_DIR; };
+		E18DE039163D923000869CF5 /* main_glut.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main_glut.cpp; sourceTree = "<group>"; };
+		E18DE042163D925600869CF5 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/GLUT.framework; sourceTree = DEVELOPER_DIR; };
+		E18DE044163D9BE500869CF5 /* StreamFile_posix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamFile_posix.h; sourceTree = "<group>"; };
+		E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamFile_posix.cpp; sourceTree = "<group>"; };
+		E18DE05C163D9E4600869CF5 /* StreamFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamFile.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E18DDFF2163D8F3A00869CF5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E18DE008163D8F5400869CF5 /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E18DE033163D923000869CF5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E18DE043163D925600869CF5 /* GLUT.framework in Frameworks */,
+				E18DE040163D925500869CF5 /* libKapusha.a in Frameworks */,
+				E18DE041163D925500869CF5 /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E18DDFC7163D8ED100869CF5 = {
+			isa = PBXGroup;
+			children = (
+				E18DDFD3163D8EED00869CF5 /* gl */,
+				E18DDFDE163D8EED00869CF5 /* io */,
+				E18DDFE3163D8EED00869CF5 /* math */,
+				E18DDFEB163D8EED00869CF5 /* sys */,
+				E18DE038163D923000869CF5 /* KapushaTestGLUT */,
+				E18DDFF7163D8F3A00869CF5 /* Frameworks */,
+				E18DDFF6163D8F3A00869CF5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E18DDFD3163D8EED00869CF5 /* gl */ = {
+			isa = PBXGroup;
+			children = (
+				E18DDFD4163D8EED00869CF5 /* Buffer.cpp */,
+				E18DDFD5163D8EED00869CF5 /* Buffer.h */,
+				E18DDFD6163D8EED00869CF5 /* Object.cpp */,
+				E18DDFD7163D8EED00869CF5 /* Object.h */,
+				E18DDFD8163D8EED00869CF5 /* OpenGL.cpp */,
+				E18DDFD9163D8EED00869CF5 /* OpenGL.h */,
+				E18DDFDA163D8EED00869CF5 /* Program.cpp */,
+				E18DDFDB163D8EED00869CF5 /* Program.h */,
+				E18DDFDC163D8EED00869CF5 /* Texture.cpp */,
+				E18DDFDD163D8EED00869CF5 /* Texture.h */,
+			);
+			path = gl;
+			sourceTree = "<group>";
+		};
+		E18DDFDE163D8EED00869CF5 /* io */ = {
+			isa = PBXGroup;
+			children = (
+				E18DDFDF163D8EED00869CF5 /* Stream.cpp */,
+				E18DDFE0163D8EED00869CF5 /* Stream.h */,
+				E18DDFE1163D8EED00869CF5 /* StreamFile_win.cpp */,
+				E18DDFE2163D8EED00869CF5 /* StreamFile_win.h */,
+				E18DE044163D9BE500869CF5 /* StreamFile_posix.h */,
+				E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */,
+				E18DE05C163D9E4600869CF5 /* StreamFile.h */,
+			);
+			path = io;
+			sourceTree = "<group>";
+		};
+		E18DDFE3163D8EED00869CF5 /* math */ = {
+			isa = PBXGroup;
+			children = (
+				E18DDFE4163D8EED00869CF5 /* mat2.h */,
+				E18DDFE5163D8EED00869CF5 /* mat4.h */,
+				E18DDFE6163D8EED00869CF5 /* math.cpp */,
+				E18DDFE7163D8EED00869CF5 /* rect2.h */,
+				E18DDFE8163D8EED00869CF5 /* types.h */,
+				E18DDFE9163D8EED00869CF5 /* vec2.h */,
+				E18DDFEA163D8EED00869CF5 /* vec4.h */,
+			);
+			path = math;
+			sourceTree = "<group>";
+		};
+		E18DDFEB163D8EED00869CF5 /* sys */ = {
+			isa = PBXGroup;
+			children = (
+				E18DDFEC163D8EED00869CF5 /* IApplication.h */,
+				E18DDFED163D8EED00869CF5 /* Log.cpp */,
+				E18DDFEE163D8EED00869CF5 /* Log.h */,
+				E18DDFEF163D8EED00869CF5 /* System.h */,
+			);
+			path = sys;
+			sourceTree = "<group>";
+		};
+		E18DDFF6163D8F3A00869CF5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E18DDFF5163D8F3A00869CF5 /* libKapusha.a */,
+				E18DE036163D923000869CF5 /* KapushaTestGLUT */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E18DDFF7163D8F3A00869CF5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E18DE042163D925600869CF5 /* GLUT.framework */,
+				E18DE007163D8F5400869CF5 /* OpenGL.framework */,
+				E18DDFF8163D8F3A00869CF5 /* Cocoa.framework */,
+				E18DDFFA163D8F3A00869CF5 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E18DDFFA163D8F3A00869CF5 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E18DDFFB163D8F3B00869CF5 /* AppKit.framework */,
+				E18DDFFC163D8F3B00869CF5 /* CoreData.framework */,
+				E18DDFFD163D8F3B00869CF5 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		E18DE038163D923000869CF5 /* KapushaTestGLUT */ = {
+			isa = PBXGroup;
+			children = (
+				E18DE039163D923000869CF5 /* main_glut.cpp */,
+			);
+			path = KapushaTestGLUT;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		E18DDFF3163D8F3A00869CF5 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		E18DDFF4163D8F3A00869CF5 /* Kapusha */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E18DE004163D8F3B00869CF5 /* Build configuration list for PBXNativeTarget "Kapusha" */;
+			buildPhases = (
+				E18DDFF1163D8F3A00869CF5 /* Sources */,
+				E18DDFF2163D8F3A00869CF5 /* Frameworks */,
+				E18DDFF3163D8F3A00869CF5 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Kapusha;
+			productName = Kapusha;
+			productReference = E18DDFF5163D8F3A00869CF5 /* libKapusha.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		E18DE035163D923000869CF5 /* KapushaTestGLUT */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E18DE03D163D923000869CF5 /* Build configuration list for PBXNativeTarget "KapushaTestGLUT" */;
+			buildPhases = (
+				E18DE032163D923000869CF5 /* Sources */,
+				E18DE033163D923000869CF5 /* Frameworks */,
+				E18DE034163D923000869CF5 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KapushaTestGLUT;
+			productName = KapushaTestGLUT;
+			productReference = E18DE036163D923000869CF5 /* KapushaTestGLUT */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E18DDFC9163D8ED100869CF5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+			};
+			buildConfigurationList = E18DDFCC163D8ED100869CF5 /* Build configuration list for PBXProject "Kapusha" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = E18DDFC7163D8ED100869CF5;
+			productRefGroup = E18DDFF6163D8F3A00869CF5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E18DDFF4163D8F3A00869CF5 /* Kapusha */,
+				E18DE035163D923000869CF5 /* KapushaTestGLUT */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E18DDFF1163D8F3A00869CF5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E18DE009163D8F7A00869CF5 /* Buffer.cpp in Sources */,
+				E18DE00B163D8F7A00869CF5 /* Object.cpp in Sources */,
+				E18DE00D163D8F7A00869CF5 /* OpenGL.cpp in Sources */,
+				E18DE00F163D8F7A00869CF5 /* Program.cpp in Sources */,
+				E18DE011163D8F7A00869CF5 /* Texture.cpp in Sources */,
+				E18DE013163D8F7F00869CF5 /* Stream.cpp in Sources */,
+				E18DE017163D8F8700869CF5 /* math.cpp in Sources */,
+				E18DE018163D8F9800869CF5 /* Log.cpp in Sources */,
+				E18DE05B163D9C9A00869CF5 /* StreamFile_posix.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E18DE032163D923000869CF5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E18DE03A163D923000869CF5 /* main_glut.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E18DDFCE163D8ED100869CF5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		E18DDFCF163D8ED100869CF5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		E18DE005163D8F3B00869CF5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Kapusha/Kapusha-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		E18DE006163D8F3B00869CF5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Kapusha/Kapusha-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		E18DE03E163D923000869CF5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		E18DE03F163D923000869CF5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E18DDFCC163D8ED100869CF5 /* Build configuration list for PBXProject "Kapusha" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E18DDFCE163D8ED100869CF5 /* Debug */,
+				E18DDFCF163D8ED100869CF5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E18DE004163D8F3B00869CF5 /* Build configuration list for PBXNativeTarget "Kapusha" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E18DE005163D8F3B00869CF5 /* Debug */,
+				E18DE006163D8F3B00869CF5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		E18DE03D163D923000869CF5 /* Build configuration list for PBXNativeTarget "KapushaTestGLUT" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E18DE03E163D923000869CF5 /* Debug */,
+				E18DE03F163D923000869CF5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E18DDFC9163D8ED100869CF5 /* Project object */;
+}

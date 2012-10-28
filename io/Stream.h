@@ -14,15 +14,16 @@ namespace kapusha {
       ErrorTruncated,
       ErrorCorrupted
     };
-    typedef Error (RefillFunc)(Stream*);
+    typedef void (RefillFunc)(Stream*);
 
   public:
     virtual ~Stream() {}
-    unsigned size() const {
+    size_t size() const {
       return end_ - cursor_;
     }
     Error refill() { 
-      return refill_func_(this);
+      refill_func_(this);
+      return error_;
     }
 
     const void* read(unsigned size) {
@@ -32,26 +33,25 @@ namespace kapusha {
       return ret;
     }
 
-    template <typename F>
-    Error process(int size)
+    template <typename PROC>
+    Error process(int bytes)
     {
       do {
-      unsigned chunk = (bytes > size()) ? size() : bytes;
+      size_t chunk = (bytes > size()) ? size() : bytes;
       if (!chunk)
       {
         if (refill() != ErrorNone)
           return error_;
         continue;
       }
-      F(cursor_, chunk);
+      PROC(cursor_, chunk);
       cursor_ += chunk;
-      to = ((u8*)to + chunk);
       bytes -= chunk;
     } while (bytes > 0);
     return error_;
     }
 
-    Error copy(void* to, unsigned bytes);
+    Error copy(void* to, size_t bytes);
 
   public:
     const char *start_;
@@ -60,12 +60,12 @@ namespace kapusha {
     Error error_;
     RefillFunc* refill_func_;
 
-    static Error fail(Stream* stream, Error error);
-    static Error refillZeroes(Stream* stream);
-    static Error refillZeroesAtEnd(Stream* stream);
+    static void fail(Stream* stream, Error error);
+    static void refillZeroes(Stream* stream);
+    static void refillZeroesAtEnd(Stream* stream);
   };
 
-//////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
   class StreamSeekable : public Stream {
   public:
@@ -74,16 +74,30 @@ namespace kapusha {
       ReferenceCursor,
       ReferenceEnd
     };
-    typedef Error (SeekFunc)(StreamSeekable*, int offset, Reference ref);
+    typedef void (SeekFunc)(StreamSeekable*, off_t offset, Reference ref);
 
-    Error seek(int offset, Reference ref = ReferenceCursor) {
-      return seek_func_(this, offset, ref);
+    Error seek(off_t offset, Reference ref = ReferenceCursor) {
+      seek_func_(this, offset, ref);
+      return error_;
     }
 
   public:
     SeekFunc *seek_func_;
   };
+  
+////////////////////////////////////////////////////////////////////////////////
 
-  //! \todo class StreamMemory : public StreamSeekable
+  //! \fixme if seek < start, will read zeroes indefinitely
+  //! \fixme also, when over-/underflow, cursor-relative seek won't work at all
+  //! \fixme absolute seek will bring sanity back
+  class StreamMemory : public StreamSeekable
+  {
+  public:
+    void useMemory(const void* ptr, size_t size);
+    
+  public:
+    const char *pointer_;
+    size_t size_;
+  };
 
 } // namespace kapusha

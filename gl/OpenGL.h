@@ -3,6 +3,9 @@
 #ifdef WIN32
 #include <GL/glew.h>
 #include <GL/gl.h>
+#elif defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
 #else
 #error please include opengl in platform-specific way
 #endif

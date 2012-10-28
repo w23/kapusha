@@ -23,9 +23,12 @@ namespace kapusha {
   {
     SP_ASSERT(!g_log.file_);
     SP_ASSERT(!g_log.syslog_);
-    g_log.file_ = fopen(filename, "a");
-    SP_ASSERT(g_log.file_);
     g_log.syslog_ = syslog;
+    if (filename)
+    {
+      g_log.file_ = fopen(filename, "a");
+      SP_ASSERT(g_log.file_);
+    }
   }
 
   void Log::write(const char* format, ...)

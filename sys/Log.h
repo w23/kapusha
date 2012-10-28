@@ -26,7 +26,7 @@ namespace kapusha {
 
 } // namespace kapusha
 
-#define SP_LOG_OPEN(f,i) ::kapusha::Log::open(f,i)
-#define L(f,...) ::kapusha::Log::write(f, __VA_ARGS__)
+#define KP_LOG_OPEN(f,i) ::kapusha::Log::open(f,i)
+#define L(f,...) ::kapusha::Log::write(f, ##__VA_ARGS__)
 
 //! \todo levels, subsystems, call-stack depth with files and lines (in debug mode)
