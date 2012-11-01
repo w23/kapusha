@@ -21,13 +21,13 @@ namespace kapusha {
 
   void Log::open(const char* filename, ISystemLog *syslog)
   {
-    SP_ASSERT(!g_log.file_);
-    SP_ASSERT(!g_log.syslog_);
+    KP_ASSERT(!g_log.file_);
+    KP_ASSERT(!g_log.syslog_);
     g_log.syslog_ = syslog;
     if (filename)
     {
       g_log.file_ = fopen(filename, "a");
-      SP_ASSERT(g_log.file_);
+      KP_ASSERT(g_log.file_);
     }
   }
 
@@ -37,7 +37,7 @@ namespace kapusha {
     va_start(args, format);
     vsnprintf(g_log_messsage_buffer, LOG_MESSAGE_BUFFER_SIZE, format, args);
     
-    SP_ASSERT(g_log.file_);
+    KP_ASSERT(g_log.file_);
     //! \todo timestamp
     fprintf(g_log.file_, "%s\n", g_log_messsage_buffer);
 

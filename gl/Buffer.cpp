@@ -28,7 +28,7 @@ namespace kapusha {
     } else {
       glBufferData(GL_ARRAY_BUFFER, size, 0, GL_STATIC_DRAW);
       GL_ASSERT
-      SP_ASSERT(!"implement this using data->process<>(size);");
+      KP_ASSERT(!"implement this using data->process<>(size);");
     }
   }
 

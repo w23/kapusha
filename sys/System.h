@@ -3,9 +3,9 @@
 #include <cassert>
 
 #if DEBUG
-#define SP_ASSERT(a) assert((a))
+#define KP_ASSERT(a) assert((a))
 #else
-#define SP_ASSERT(a) {}
+#define KP_ASSERT(a) {}
 #endif
 
 //! \todo custom assert to be able to dump stack trace to log file

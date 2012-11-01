@@ -27,7 +27,7 @@ namespace kapusha {
     }
 
     const void* read(unsigned size) {
-      SP_ASSERT(size <= this->size());
+      KP_ASSERT(size <= this->size());
       const void* ret = cursor_;
       cursor_ += size;
       return ret;

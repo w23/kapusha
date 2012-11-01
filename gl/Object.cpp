@@ -28,13 +28,13 @@ namespace kapusha {
   void Object::setAttribSource(const char* attrib_name,
       Buffer* buffer, int components, int offset, int stride)
   {
-    SP_ASSERT(shader_program_);
+    KP_ASSERT(shader_program_);
 
     int i = 0;
     for (; i < MAX_ATTRIBS; ++i)
       if (attribs_[i].index == -1) break;
     
-    SP_ASSERT(i < MAX_ATTRIBS);
+    KP_ASSERT(i < MAX_ATTRIBS);
 
     attribs_[i].index = shader_program_->getAttributeLocation(attrib_name);
     attribs_[i].buffer = buffer;
@@ -45,7 +45,7 @@ namespace kapusha {
 
   void Object::draw() const
   {
-    SP_ASSERT(shader_program_);
+    KP_ASSERT(shader_program_);
     shader_program_->use();
 
     for (int i = 0; i < MAX_ATTRIBS; ++i)

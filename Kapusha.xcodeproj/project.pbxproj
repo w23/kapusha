@@ -21,6 +21,8 @@
 		E18DE041163D925500869CF5 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
 		E18DE043163D925600869CF5 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE042163D925600869CF5 /* GLUT.framework */; };
 		E18DE05B163D9C9A00869CF5 /* StreamFile_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */; };
+		E18DE08F1642E81200869CF5 /* runGlut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE08D1642E81200869CF5 /* runGlut.cpp */; };
+		E18DE0901642E81200869CF5 /* runGlut.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DE08E1642E81200869CF5 /* runGlut.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -57,7 +59,7 @@
 		E18DDFE8163D8EED00869CF5 /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		E18DDFE9163D8EED00869CF5 /* vec2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vec2.h; sourceTree = "<group>"; };
 		E18DDFEA163D8EED00869CF5 /* vec4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vec4.h; sourceTree = "<group>"; };
-		E18DDFEC163D8EED00869CF5 /* IApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IApplication.h; sourceTree = "<group>"; };
+		E18DDFEC163D8EED00869CF5 /* IViewport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IViewport.h; sourceTree = "<group>"; };
 		E18DDFED163D8EED00869CF5 /* Log.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
 		E18DDFEE163D8EED00869CF5 /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		E18DDFEF163D8EED00869CF5 /* System.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
@@ -73,6 +75,8 @@
 		E18DE044163D9BE500869CF5 /* StreamFile_posix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamFile_posix.h; sourceTree = "<group>"; };
 		E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamFile_posix.cpp; sourceTree = "<group>"; };
 		E18DE05C163D9E4600869CF5 /* StreamFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamFile.h; sourceTree = "<group>"; };
+		E18DE08D1642E81200869CF5 /* runGlut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = runGlut.cpp; sourceTree = "<group>"; };
+		E18DE08E1642E81200869CF5 /* runGlut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = runGlut.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,10 +162,12 @@
 		E18DDFEB163D8EED00869CF5 /* sys */ = {
 			isa = PBXGroup;
 			children = (
-				E18DDFEC163D8EED00869CF5 /* IApplication.h */,
+				E18DDFEC163D8EED00869CF5 /* IViewport.h */,
 				E18DDFED163D8EED00869CF5 /* Log.cpp */,
 				E18DDFEE163D8EED00869CF5 /* Log.h */,
 				E18DDFEF163D8EED00869CF5 /* System.h */,
+				E18DE08D1642E81200869CF5 /* runGlut.cpp */,
+				E18DE08E1642E81200869CF5 /* runGlut.h */,
 			);
 			path = sys;
 			sourceTree = "<group>";
@@ -211,6 +217,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E18DE0901642E81200869CF5 /* runGlut.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +298,7 @@
 				E18DE017163D8F8700869CF5 /* math.cpp in Sources */,
 				E18DE018163D8F9800869CF5 /* Log.cpp in Sources */,
 				E18DE05B163D9C9A00869CF5 /* StreamFile_posix.cpp in Sources */,
+				E18DE08F1642E81200869CF5 /* runGlut.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,8 +339,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Kapusha/Kapusha-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -362,8 +368,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Kapusha/Kapusha-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -446,6 +450,7 @@
 				E18DE006163D8F3B00869CF5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E18DE03D163D923000869CF5 /* Build configuration list for PBXNativeTarget "KapushaTestGLUT" */ = {
 			isa = XCConfigurationList;
@@ -454,6 +459,7 @@
 				E18DE03F163D923000869CF5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

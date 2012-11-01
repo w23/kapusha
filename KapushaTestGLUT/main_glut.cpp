@@ -9,80 +9,68 @@
 #include "../sys/System.h"
 #include "../sys/Log.h"
 #include "../math/types.h"
+#include "../sys/IViewport.h"
+#include "../sys/runGlut.h"
 #include "../gl/Object.h"
 #include "../gl/Buffer.h"
 #include "../gl/Program.h"
 
 using namespace kapusha;
 
-#define WIDTH 640
-#define HEIGHT 480
-
-class Syslog : public Log::ISystemLog {
+class Viewport : public IViewport {
 public:
-  void write(const char* msg) {
-    std::cerr << msg << std::endl;
-  }
+  virtual ~Viewport() {}
+  virtual void init(ISystem* system);
+  virtual void resize(int width, int height);
+  virtual void draw(int ms);
+  
+private:
+  Object* object_;
 };
 
-static Object* object = 0;
-
-static void display()
+void Viewport::init(ISystem *system)
 {
-  object->draw();
-  glutSwapBuffers();
+  object_ = new Object();
+  
+  const char* svtx =
+  "attribute vec4 vtx;\n"
+  "void main(){\n"
+  "gl_Position = vtx;\n"
+  "}"
+  ;
+  const char* sfrg =
+  "void main(){\n"
+  "gl_FragColor = vec4(1.,0.,0.,0.);\n"
+  "}"
+  ;
+  Program *prog = new Program(svtx, sfrg);
+  object_->setProgram(prog);
+  
+  math::vec2f rect[4] = {
+    math::vec2f(-1.f, -1.f),
+    math::vec2f(-1.f,  1.f),
+    math::vec2f( 1.f,  1.f),
+    math::vec2f( 1.f, -1.f)
+  };
+  Buffer *fsrect = new Buffer();
+  fsrect->load(rect, sizeof rect);
+  object_->setAttribSource("vtx", fsrect, 2);
+  
+  object_->setGeometry(0, 0, 4, Object::GeometryTriangleFan);
+
 }
 
-static void resize(int w, int h)
+void Viewport::resize(int width, int height)
 {
-  glViewport(0, 0, w, h);
-  if (!object)
-  {
-    object = new Object();
-    
-    const char* svtx =
-    "attribute vec4 vtx;\n"
-    "void main(){\n"
-    "gl_Position = vtx;\n"
-    "}"
-    ;
-    const char* sfrg =
-    "void main(){\n"
-    "gl_FragColor = vec4(1.,0.,0.,0.);\n"
-    "}"
-    ;
-    Program *prog = new Program(svtx, sfrg);
-    object->setProgram(prog);
-    
-    math::vec2f rect[4] = {
-      math::vec2f(-1.f, -1.f),
-      math::vec2f(-1.f,  1.f),
-      math::vec2f( 1.f,  1.f),
-      math::vec2f( 1.f, -1.f)
-    };
-    Buffer *fsrect = new Buffer();
-    fsrect->load(rect, sizeof rect);
-    object->setAttribSource("vtx", fsrect, 2);
-    
-    object->setGeometry(0, 0, 4, Object::GeometryTriangleFan);
-  }
+  glViewport(0, 0, width, height);
+}
+
+void Viewport::draw(int ms)
+{
+  object_->draw();
 }
 
 int main(int argc, const char * argv[])
 {
-  KP_LOG_OPEN(0, new Syslog);
-  glutInit(&argc, (char**)argv);
-  
-  glutInitDisplayMode(GLUT_MULTISAMPLE | GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-  
-  glutInitWindowSize(WIDTH, HEIGHT);
-  glutCreateWindow("KapushaTest");
-  
-  glEnable(GL_MULTISAMPLE);
-  
-  glutDisplayFunc(display);
-  glutReshapeFunc(resize);
-  
-  glutMainLoop();
-  return 0;
+  return runGlut(argc, argv, new Viewport);
 }
