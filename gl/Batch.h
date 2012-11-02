@@ -43,6 +43,7 @@ namespace kapusha {
       gl_geometry_type_ = type;
     }
 
+    void prepare() const;
     void draw() const;
 
   private:

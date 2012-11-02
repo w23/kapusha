@@ -35,7 +35,7 @@ namespace kapusha {
     attribs_[i].stride = stride;
   }
 
-  void Batch::draw() const
+  void Batch::prepare() const
   {
     KP_ASSERT(material_);
     material_->use();
@@ -43,7 +43,10 @@ namespace kapusha {
     for (int i = 0; i < MAX_ATTRIBS; ++i)
       if (attribs_[i].index != -1)
         attribs_[i].bind();
+  }
 
+  void Batch::draw() const
+  {
     if (indices_)
     {
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_->name());

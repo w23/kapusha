@@ -21,7 +21,7 @@ namespace kapusha {
     void use() const;
     
     //! Get material program
-    Program *getProgram() { return shader_program_; }
+    Program *getProgram() const { return shader_program_; }
     
     //! Set persistent uniform values
     //! These must correspond to names and types in provided program

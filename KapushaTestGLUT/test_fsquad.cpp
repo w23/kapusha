@@ -12,6 +12,7 @@
 #include "../sys/IViewport.h"
 #include "../sys/runGlut.h"
 #include "../gl/Batch.h"
+#include "../gl/Object.h"
 #include "../gl/Buffer.h"
 #include "../gl/Program.h"
 #include "../gl/Material.h"
@@ -26,17 +27,20 @@ public:
   virtual void draw(int ms);
   
 private:
-  Batch* object_;
+  ISystem *system_;
+  Object* object_;
 };
 
 void Viewport::init(ISystem *system)
 {
-  object_ = new Batch();
+  system_ = system;
+  Batch* batch = new Batch();
   
   const char* svtx =
   "attribute vec4 vtx;\n"
+  "uniform mat4 transform;\n"
   "void main(){\n"
-  "gl_Position = vtx;\n"
+  "gl_Position = vtx * transform;\n"
   "}"
   ;
   const char* sfrg =
@@ -46,8 +50,8 @@ void Viewport::init(ISystem *system)
   "}"
   ;
   Material *mat = new Material(new Program(svtx, sfrg));
-  mat->setUniform("color", math::vec4f(0.f, 1.f, 0.f, 0.f));
-  object_->setMaterial(mat);
+  mat->setUniform("color", math::vec4f(1.f, 0.f, 0.f, 0.f));
+  batch->setMaterial(mat);
   
   math::vec2f rect[4] = {
     math::vec2f(-1.f, -1.f),
@@ -57,9 +61,11 @@ void Viewport::init(ISystem *system)
   };
   Buffer *fsrect = new Buffer();
   fsrect->load(rect, sizeof rect);
-  object_->setAttribSource("vtx", fsrect, 2);
+  batch->setAttribSource("vtx", fsrect, 2);
   
-  object_->setGeometry(Batch::GeometryTriangleFan, 0, 4, 0);
+  batch->setGeometry(Batch::GeometryTriangleFan, 0, 4, 0);
+  
+  object_ = new Object(batch);
 
 }
 
@@ -70,7 +76,12 @@ void Viewport::resize(int width, int height)
 
 void Viewport::draw(int ms)
 {
+  glClear(GL_COLOR_BUFFER_BIT);
+  float time = ms / 1000.f;
+  object_->setTransform(math::mat4f().rotationAroundAxis(math::vec3f(0,0,1),time));
   object_->draw();
+  
+  system_->redraw();
 }
 
 int main(int argc, const char * argv[])
