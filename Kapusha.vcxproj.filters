@@ -78,7 +78,10 @@
     <ClInclude Include="gl\Object.h">
       <Filter>gl</Filter>
     </ClInclude>
-    <ClInclude Include="gl\Tracker.h">
+    <ClInclude Include="math\vec3.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\Camera.h">
       <Filter>gl</Filter>
     </ClInclude>
   </ItemGroup>
@@ -113,7 +116,7 @@
     <ClCompile Include="gl\Object.cpp">
       <Filter>gl</Filter>
     </ClCompile>
-    <ClCompile Include="gl\Tracker.cpp">
+    <ClCompile Include="gl\Camera.cpp">
       <Filter>gl</Filter>
     </ClCompile>
   </ItemGroup>

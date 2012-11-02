@@ -5,6 +5,7 @@
 
 #include <math.h>
 #include "vec2.h"
+#include "vec3.h"
 
 namespace math {
 
@@ -21,6 +22,7 @@ namespace math {
     
     vec4(T v) : x(v), y(v), z(v), w(v) {}
     
+    vec4(const vec3<T>& v, T _w = 0) : x(v.x), y(v.y), z(v.z), w(_w) {}
     vec4(const vec2<T>& v, T _z = 0, T _w = 0) : x(v.x), y(v.y), z(_z), w(_w) {}
     
     // swizzle

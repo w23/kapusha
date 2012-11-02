@@ -4,6 +4,7 @@
 #pragma once
 
 #include "vec2.h"
+#include "vec3.h"
 #include "vec4.h"
 #include "mat2.h"
 #include "mat4.h"
@@ -14,10 +15,12 @@ namespace math {
   typedef vec2<int> vec2i;
   typedef vec2<float> vec2f;
   
+  typedef vec3<float> vec3f;
+
   typedef vec4<float> vec4f;
   
-  typedef mat2x2<float> mat2x2f;
-  typedef mat4x4<float> mat4x4f;
+  typedef mat2x2<float> mat2f;
+  typedef mat4x4<float> mat4f;
   
   typedef rect2<int> rect2i;
   typedef rect2<float> rect2f;

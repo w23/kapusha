@@ -16,6 +16,13 @@ namespace kapusha {
     
     //! Make current program
     void use() const;
+
+    //! Attribute location
+    unsigned getAttributeLocation(const char* name) const;
+
+    //! Uniform location
+    unsigned getUniformLocation(const char* name) const;
+
     
     //! Set uniform value
     //! \param name Uniform name
@@ -25,14 +32,11 @@ namespace kapusha {
     void setUniform(const char* name, float value[4]) const;
     void setUniformMatrix(const char* name, float value[4]) const;
     
-    //! Get attribute location
-    unsigned getAttributeLocation(const char* name) const;
-    
   private:
     static unsigned compileShader(unsigned name, const char* source);
 
   private: // this object is noncopyable
-    Program& operator=(const Program& other) {return *this;}
+    Program& operator=(const Program& other) { return *this; }
     Program(const Program& other) {}
     
   private:
