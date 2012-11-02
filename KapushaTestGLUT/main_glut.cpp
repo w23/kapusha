@@ -11,9 +11,10 @@
 #include "../math/types.h"
 #include "../sys/IViewport.h"
 #include "../sys/runGlut.h"
-#include "../gl/Object.h"
+#include "../gl/Batch.h"
 #include "../gl/Buffer.h"
 #include "../gl/Program.h"
+#include "../gl/Material.h"
 
 using namespace kapusha;
 
@@ -25,12 +26,12 @@ public:
   virtual void draw(int ms);
   
 private:
-  Object* object_;
+  Batch* object_;
 };
 
 void Viewport::init(ISystem *system)
 {
-  object_ = new Object();
+  object_ = new Batch();
   
   const char* svtx =
   "attribute vec4 vtx;\n"
@@ -39,12 +40,14 @@ void Viewport::init(ISystem *system)
   "}"
   ;
   const char* sfrg =
+  "uniform vec4 color;"
   "void main(){\n"
-  "gl_FragColor = vec4(1.,0.,0.,0.);\n"
+  "gl_FragColor = color;\n"
   "}"
   ;
-  Program *prog = new Program(svtx, sfrg);
-  object_->setProgram(prog);
+  Material *mat = new Material(new Program(svtx, sfrg));
+  mat->setUniform("color", math::vec4f(0.f, 1.f, 0.f, 0.f));
+  object_->setMaterial(mat);
   
   math::vec2f rect[4] = {
     math::vec2f(-1.f, -1.f),
@@ -56,7 +59,7 @@ void Viewport::init(ISystem *system)
   fsrect->load(rect, sizeof rect);
   object_->setAttribSource("vtx", fsrect, 2);
   
-  object_->setGeometry(0, 0, 4, Object::GeometryTriangleFan);
+  object_->setGeometry(Batch::GeometryTriangleFan, 0, 4, 0);
 
 }
 

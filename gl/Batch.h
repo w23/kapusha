@@ -3,38 +3,44 @@
 namespace kapusha {
 
   class Buffer;
-  class Program;
+  class Material;
 
 #define MAX_ATTRIBS 8
 
-  class Object {
+  class Batch {
   public:
+    // match GL_... types exactly
     enum GeometryType {
+      GeometryPoints,
+      GeometryLineList,
+      GeometryLineLoop,
+      GeometryLineStrip,
       GeometryTriangleList,
       GeometryTriangleStrip,
       GeometryTriangleFan,
-      GeometryPointList,
-      GeometryLineList,
-      GeometryLineStrip,
       _GeometryTypes
     };
 
   public:
-    Object();
-    ~Object();
+    Batch();
+    ~Batch();
 
-    void setProgram(Program* program) {
-      shader_program_ = program;
+    void setMaterial(Material* material) {
+      material_ = material;
     }
+    
+    Material* getMaterial() const { return material_; }
 
     void setAttribSource(const char* attrib_name,
-      Buffer* buffer, int components = 3, int offset = 0, int stride = 0);
+                         Buffer* buffer, unsigned components = 3,
+                         unsigned offset = 0, unsigned stride = 0);
 
-    void setGeometry(Buffer *index, int first, int count, GeometryType type) {
+    void setGeometry(GeometryType type,
+                     unsigned first, unsigned count, Buffer *index = 0) {
       indices_ = index;
       first_ = first;
       count_ = count;
-      gl_geometry_type_ = gl_geometry_type_table[type];
+      gl_geometry_type_ = type;
     }
 
     void draw() const;
@@ -52,13 +58,11 @@ namespace kapusha {
     };
     Attrib attribs_[MAX_ATTRIBS];
     
-    Program *shader_program_;
+    Material *material_;
 
     Buffer *indices_;
-    int first_, count_;
+    unsigned first_, count_;
     unsigned gl_geometry_type_;
-
-    static unsigned gl_geometry_type_table[_GeometryTypes];
   };
 
 } // namespace kapusha

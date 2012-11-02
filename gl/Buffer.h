@@ -1,10 +1,11 @@
 #pragma once
+#include "../sys/IShared.h"
 
 namespace kapusha {
 
   class Stream;
 
-  class Buffer {
+  class Buffer : public IShared {
   public:
     Buffer();
     ~Buffer();
@@ -21,4 +22,6 @@ namespace kapusha {
   private:
     unsigned name_;
   };
+  
+  typedef shared<Buffer> SBuffer;
 } // kapusha

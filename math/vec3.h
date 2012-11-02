@@ -29,11 +29,6 @@ namespace math {
       return vec2<T>(x, y);
     }
     
-    vec2<T> zw() const
-    {
-      return vec2<T>(z, w);
-    }
-    
     // math ops
     T length_sq()
     {

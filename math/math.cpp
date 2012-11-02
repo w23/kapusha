@@ -11,6 +11,7 @@ namespace math {
   const float c_pi4 = c_pi * .25f;
 
 
+  template<>
   mat4f& mat4f::rotationAroundAxis(vec3f axis, float angle)
   {
     float s = sinf(angle), c = cosf(angle);

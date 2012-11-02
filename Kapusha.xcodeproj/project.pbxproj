@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		E18DE008163D8F5400869CF5 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
 		E18DE009163D8F7A00869CF5 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD4163D8EED00869CF5 /* Buffer.cpp */; };
-		E18DE00B163D8F7A00869CF5 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD6163D8EED00869CF5 /* Object.cpp */; };
+		E18DE00B163D8F7A00869CF5 /* Batch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD6163D8EED00869CF5 /* Batch.cpp */; };
 		E18DE00D163D8F7A00869CF5 /* OpenGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD8163D8EED00869CF5 /* OpenGL.cpp */; };
 		E18DE00F163D8F7A00869CF5 /* Program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDA163D8EED00869CF5 /* Program.cpp */; };
 		E18DE011163D8F7A00869CF5 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDC163D8EED00869CF5 /* Texture.cpp */; };
@@ -23,6 +23,10 @@
 		E18DE05B163D9C9A00869CF5 /* StreamFile_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */; };
 		E18DE08F1642E81200869CF5 /* runGlut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE08D1642E81200869CF5 /* runGlut.cpp */; };
 		E18DE0901642E81200869CF5 /* runGlut.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DE08E1642E81200869CF5 /* runGlut.h */; };
+		E1E74B62164436330038E873 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B60164436330038E873 /* Material.cpp */; };
+		E1E74B63164436330038E873 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = E1E74B61164436330038E873 /* Material.h */; };
+		E1E74B6A16444BBA0038E873 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B6816444BBA0038E873 /* Camera.cpp */; };
+		E1E74B6B16444BBA0038E873 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = E1E74B6916444BBA0038E873 /* Camera.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,8 +44,8 @@
 /* Begin PBXFileReference section */
 		E18DDFD4163D8EED00869CF5 /* Buffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Buffer.cpp; sourceTree = "<group>"; };
 		E18DDFD5163D8EED00869CF5 /* Buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
-		E18DDFD6163D8EED00869CF5 /* Object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
-		E18DDFD7163D8EED00869CF5 /* Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
+		E18DDFD6163D8EED00869CF5 /* Batch.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Batch.cpp; sourceTree = "<group>"; };
+		E18DDFD7163D8EED00869CF5 /* Batch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Batch.h; sourceTree = "<group>"; };
 		E18DDFD8163D8EED00869CF5 /* OpenGL.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGL.cpp; sourceTree = "<group>"; };
 		E18DDFD9163D8EED00869CF5 /* OpenGL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGL.h; sourceTree = "<group>"; };
 		E18DDFDA163D8EED00869CF5 /* Program.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Program.cpp; sourceTree = "<group>"; };
@@ -77,6 +81,12 @@
 		E18DE05C163D9E4600869CF5 /* StreamFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamFile.h; sourceTree = "<group>"; };
 		E18DE08D1642E81200869CF5 /* runGlut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = runGlut.cpp; sourceTree = "<group>"; };
 		E18DE08E1642E81200869CF5 /* runGlut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = runGlut.h; sourceTree = "<group>"; };
+		E1E74B60164436330038E873 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
+		E1E74B61164436330038E873 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
+		E1E74B6816444BBA0038E873 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
+		E1E74B6916444BBA0038E873 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
+		E1E74B6D164454B30038E873 /* vec3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vec3.h; sourceTree = "<group>"; };
+		E1E74B6E1644551C0038E873 /* IShared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IShared.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,10 +127,14 @@
 		E18DDFD3163D8EED00869CF5 /* gl */ = {
 			isa = PBXGroup;
 			children = (
+				E18DDFD6163D8EED00869CF5 /* Batch.cpp */,
+				E18DDFD7163D8EED00869CF5 /* Batch.h */,
 				E18DDFD4163D8EED00869CF5 /* Buffer.cpp */,
 				E18DDFD5163D8EED00869CF5 /* Buffer.h */,
-				E18DDFD6163D8EED00869CF5 /* Object.cpp */,
-				E18DDFD7163D8EED00869CF5 /* Object.h */,
+				E1E74B6816444BBA0038E873 /* Camera.cpp */,
+				E1E74B6916444BBA0038E873 /* Camera.h */,
+				E1E74B60164436330038E873 /* Material.cpp */,
+				E1E74B61164436330038E873 /* Material.h */,
 				E18DDFD8163D8EED00869CF5 /* OpenGL.cpp */,
 				E18DDFD9163D8EED00869CF5 /* OpenGL.h */,
 				E18DDFDA163D8EED00869CF5 /* Program.cpp */,
@@ -136,11 +150,11 @@
 			children = (
 				E18DDFDF163D8EED00869CF5 /* Stream.cpp */,
 				E18DDFE0163D8EED00869CF5 /* Stream.h */,
+				E18DE05C163D9E4600869CF5 /* StreamFile.h */,
+				E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */,
+				E18DE044163D9BE500869CF5 /* StreamFile_posix.h */,
 				E18DDFE1163D8EED00869CF5 /* StreamFile_win.cpp */,
 				E18DDFE2163D8EED00869CF5 /* StreamFile_win.h */,
-				E18DE044163D9BE500869CF5 /* StreamFile_posix.h */,
-				E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */,
-				E18DE05C163D9E4600869CF5 /* StreamFile.h */,
 			);
 			path = io;
 			sourceTree = "<group>";
@@ -154,6 +168,7 @@
 				E18DDFE7163D8EED00869CF5 /* rect2.h */,
 				E18DDFE8163D8EED00869CF5 /* types.h */,
 				E18DDFE9163D8EED00869CF5 /* vec2.h */,
+				E1E74B6D164454B30038E873 /* vec3.h */,
 				E18DDFEA163D8EED00869CF5 /* vec4.h */,
 			);
 			path = math;
@@ -165,9 +180,10 @@
 				E18DDFEC163D8EED00869CF5 /* IViewport.h */,
 				E18DDFED163D8EED00869CF5 /* Log.cpp */,
 				E18DDFEE163D8EED00869CF5 /* Log.h */,
-				E18DDFEF163D8EED00869CF5 /* System.h */,
 				E18DE08D1642E81200869CF5 /* runGlut.cpp */,
 				E18DE08E1642E81200869CF5 /* runGlut.h */,
+				E18DDFEF163D8EED00869CF5 /* System.h */,
+				E1E74B6E1644551C0038E873 /* IShared.h */,
 			);
 			path = sys;
 			sourceTree = "<group>";
@@ -218,6 +234,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E18DE0901642E81200869CF5 /* runGlut.h in Headers */,
+				E1E74B63164436330038E873 /* Material.h in Headers */,
+				E1E74B6B16444BBA0038E873 /* Camera.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,7 +308,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E18DE009163D8F7A00869CF5 /* Buffer.cpp in Sources */,
-				E18DE00B163D8F7A00869CF5 /* Object.cpp in Sources */,
+				E18DE00B163D8F7A00869CF5 /* Batch.cpp in Sources */,
 				E18DE00D163D8F7A00869CF5 /* OpenGL.cpp in Sources */,
 				E18DE00F163D8F7A00869CF5 /* Program.cpp in Sources */,
 				E18DE011163D8F7A00869CF5 /* Texture.cpp in Sources */,
@@ -299,6 +317,8 @@
 				E18DE018163D8F9800869CF5 /* Log.cpp in Sources */,
 				E18DE05B163D9C9A00869CF5 /* StreamFile_posix.cpp in Sources */,
 				E18DE08F1642E81200869CF5 /* runGlut.cpp in Sources */,
+				E1E74B62164436330038E873 /* Material.cpp in Sources */,
+				E1E74B6A16444BBA0038E873 /* Camera.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

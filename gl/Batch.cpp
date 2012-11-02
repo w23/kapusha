@@ -1,34 +1,26 @@
 #include "../sys/System.h"
 #include "OpenGL.h"
-#include "Program.h"
+#include "Material.h"
 #include "Buffer.h"
-#include "Object.h"
+#include "Batch.h"
 
 namespace kapusha {
 
-  unsigned Object::gl_geometry_type_table[_GeometryTypes] = {
-    GL_TRIANGLES,
-    GL_TRIANGLE_STRIP,
-    GL_TRIANGLE_FAN,
-    GL_POINTS,
-    GL_LINES,
-    GL_LINE_STRIP
-  };
-
-  Object::Object()
-    : shader_program_(0)
+  Batch::Batch()
+    : material_(0)
     , indices_(0)
   {
   }
 
-  Object::~Object()
+  Batch::~Batch()
   {
   }
 
-  void Object::setAttribSource(const char* attrib_name,
-      Buffer* buffer, int components, int offset, int stride)
+  void Batch::setAttribSource(const char* attrib_name,
+                              Buffer* buffer, unsigned components,
+                              unsigned offset, unsigned stride)
   {
-    KP_ASSERT(shader_program_);
+    KP_ASSERT(material_);
 
     int i = 0;
     for (; i < MAX_ATTRIBS; ++i)
@@ -36,17 +28,17 @@ namespace kapusha {
     
     KP_ASSERT(i < MAX_ATTRIBS);
 
-    attribs_[i].index = shader_program_->getAttributeLocation(attrib_name);
+    attribs_[i].index = material_->getProgram()->getAttributeLocation(attrib_name);
     attribs_[i].buffer = buffer;
     attribs_[i].components = components;
     attribs_[i].offset = offset;
     attribs_[i].stride = stride;
   }
 
-  void Object::draw() const
+  void Batch::draw() const
   {
-    KP_ASSERT(shader_program_);
-    shader_program_->use();
+    KP_ASSERT(material_);
+    material_->use();
 
     for (int i = 0; i < MAX_ATTRIBS; ++i)
       if (attribs_[i].index != -1)
@@ -66,7 +58,7 @@ namespace kapusha {
     }
   }
 
-  void Object::Attrib::bind() const
+  void Batch::Attrib::bind() const
   {
     glBindBuffer(GL_ARRAY_BUFFER, buffer->name());
     GL_ASSERT

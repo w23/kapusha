@@ -1,5 +1,6 @@
 #include <string>
 
+#include "../sys/System.h"
 #include "../sys/Log.h"
 #include "OpenGL.h"
 #include "Program.h"
@@ -92,6 +93,8 @@ namespace kapusha {
         glDeleteShader(shader_fragment_);
         glDeleteShader(shader_vertex_);
         shader_fragment_ = shader_vertex_ = program_name_ = 0;
+        
+        KP_ASSERT(!"Invalid shader");
       }
     }
   }
@@ -112,43 +115,65 @@ namespace kapusha {
     GL_ASSERT
   }
   
+  /*
   void Program::setUniform(const char *name, float value) const
   {
-    if (!program_name_) return;
-    
     glUniform1f(glGetUniformLocation(program_name_, name), value);
     GL_ASSERT
   }
   
   void Program::setUniform(const char *name, float x, float y) const
   {
-    if (!program_name_) return;
-    
     glUniform2f(glGetUniformLocation(program_name_, name), x, y);
     GL_ASSERT
   }
   
   void Program::setUniform(const char *name, float value[4]) const
   {
-    if (!program_name_) return;
-    
     glUniform4fv(glGetUniformLocation(program_name_, name), 1, value);
     GL_ASSERT
   }
   
   void Program::setUniformMatrix(const char *name, float value[4]) const
   {
-    if (!program_name_) return;
-    
     glUniformMatrix2fv(glGetUniformLocation(program_name_, name), 1, GL_FALSE, value);
     GL_ASSERT
   }
+  */
   
-  unsigned Program::getAttributeLocation(const char *name) const
+  int Program::getAttributeLocation(const char *name) const
   {
-    if (!program_name_) return -1;
-    
     return glGetAttribLocation(program_name_, name);
+  }
+  
+  int Program::getUniformLocation(const char *name) const
+  {
+    return glGetUniformLocation(program_name_, name);
+  }
+  
+  void Program::setUniform(int location, const float* value,
+                           int components, int count) const
+  {
+    static void (*uniform_components[4])(GLint, GLsizei, const GLfloat*) = {
+      glUniform1fv, glUniform2fv, glUniform3fv, glUniform4fv
+    };
+    
+    KP_ASSERT(components >= 1 && components <= 4);
+    uniform_components[components-1](location, count, value);
+    GL_ASSERT
+  }
+  
+  void Program::setUniformMatrix(int location, const float* value,
+                                int components, int count) const
+  {
+    static void (*uniform_components[3])
+      (GLint, GLsizei, GLboolean, const GLfloat*) = {
+      glUniformMatrix2fv, glUniformMatrix3fv, glUniformMatrix4fv
+    };
+    
+    KP_ASSERT(components >= 2 && components <= 4);
+    uniform_components[components-2](location, count, GL_FALSE, value);
+    GL_ASSERT
   }
   
   unsigned Program::compileShader(unsigned type, const char* source)

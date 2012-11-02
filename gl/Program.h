@@ -18,19 +18,36 @@ namespace kapusha {
     void use() const;
 
     //! Attribute location
-    unsigned getAttributeLocation(const char* name) const;
+    int getAttributeLocation(const char* name) const;
 
     //! Uniform location
-    unsigned getUniformLocation(const char* name) const;
-
+    int getUniformLocation(const char* name) const;
     
     //! Set uniform value
     //! \param name Uniform name
     //! \param value Uniform value
-    void setUniform(const char* name, float value) const;
+    /*void setUniform(const char* name, float value) const;
     void setUniform(const char* name, float x, float y) const;
     void setUniform(const char* name, float value[4]) const;
-    void setUniformMatrix(const char* name, float value[4]) const;
+    void setUniformMatrix(const char* name, float value[4]) const;*/
+    
+    //! set scalar/vector float uniform value
+    //! expects: program already in use
+    //! \param location Uniform location obtained via getUniformLocation
+    //! \param values Pointer to new uniform data
+    //! \param components Vector components (1-4)
+    //! \param count Size of array, if uniform is an array
+    void setUniform(int location, const float* values,
+                    int components = 4, int count = 1) const;
+    
+    //! set uniform float matrix value
+    //! expects: program already in use
+    //! \param location Uniform location obtained via getUniformLocation
+    //! \param values Pointer to new uniform data
+    //! \param components Matrix size (2-4); only square matrices are supported
+    //! \param count Size of array, if uniform is an array
+    void setUniformMatrix(int location, const float* values,
+                          int components = 4, int count = 1) const;
     
   private:
     static unsigned compileShader(unsigned name, const char* source);
