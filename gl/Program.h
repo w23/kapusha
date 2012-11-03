@@ -23,14 +23,6 @@ namespace kapusha {
     //! Uniform location
     int getUniformLocation(const char* name) const;
     
-    //! Set uniform value
-    //! \param name Uniform name
-    //! \param value Uniform value
-    /*void setUniform(const char* name, float value) const;
-    void setUniform(const char* name, float x, float y) const;
-    void setUniform(const char* name, float value[4]) const;
-    void setUniformMatrix(const char* name, float value[4]) const;*/
-    
     //! set scalar/vector float uniform value
     //! expects: program already in use
     //! \param location Uniform location obtained via getUniformLocation

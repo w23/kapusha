@@ -1,6 +1,10 @@
 #pragma once
 
+#include "../math/types.h"
+
 namespace kapusha {
+  
+#define MAX_POINTERS_IN_EVENT 8
 
   class ISystem {
   public:
@@ -15,15 +19,27 @@ namespace kapusha {
     virtual void resize(int width, int height) = 0;
     virtual void draw(int ms) = 0;
   
-    /*! \todo
   public:
      struct PointerEvent {
-     #define KAPUSHA_MAX_POINTERS 16
+       struct Pointer {
+         enum {
+           None = 0,
+           Pressed = 1,
+           Move = 2,
+           LeftButton = 4,
+           MiddleButton = 8,
+           WheelUp = 16,
+           WheelDown = 32
+         } flags;
+         math::vec2f point;
+         float pressure;
+       };
+       
+       int combined_flags_;
+       Pointer pointers_[MAX_POINTERS_IN_EVENT];
      };
 
-    virtual void eventKey() = 0;
-    virtual void eventPointer() = 0;
-     */
+    virtual void pointerEvent(const PointerEvent& event) = 0;
   };
   
 } // namespace kapusha

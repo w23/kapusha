@@ -80,7 +80,6 @@ namespace kapusha {
     glLinkProgram(program_name_);
     
     // errcheck
-    
     {
       int param;
       glGetProgramiv(program_name_, GL_LINK_STATUS, &param);
@@ -97,6 +96,7 @@ namespace kapusha {
         KP_ASSERT(!"Invalid shader");
       }
     }
+    GL_ASSERT
   }
   
   Program::~Program()
@@ -115,40 +115,20 @@ namespace kapusha {
     GL_ASSERT
   }
   
-  /*
-  void Program::setUniform(const char *name, float value) const
-  {
-    glUniform1f(glGetUniformLocation(program_name_, name), value);
-    GL_ASSERT
-  }
-  
-  void Program::setUniform(const char *name, float x, float y) const
-  {
-    glUniform2f(glGetUniformLocation(program_name_, name), x, y);
-    GL_ASSERT
-  }
-  
-  void Program::setUniform(const char *name, float value[4]) const
-  {
-    glUniform4fv(glGetUniformLocation(program_name_, name), 1, value);
-    GL_ASSERT
-  }
-  
-  void Program::setUniformMatrix(const char *name, float value[4]) const
-  {
-    glUniformMatrix2fv(glGetUniformLocation(program_name_, name), 1, GL_FALSE, value);
-    GL_ASSERT
-  }
-  */
-  
   int Program::getAttributeLocation(const char *name) const
   {
-    return glGetAttribLocation(program_name_, name);
+    int loc = glGetAttribLocation(program_name_, name);
+    GL_ASSERT
+    KP_ASSERT(loc != -1);
+    return loc;
   }
   
   int Program::getUniformLocation(const char *name) const
   {
-    return glGetUniformLocation(program_name_, name);
+    int loc = glGetUniformLocation(program_name_, name);
+    GL_ASSERT
+    KP_ASSERT(loc != -1);
+    return loc;
   }
   
   void Program::setUniform(int location, const float* value,
@@ -212,6 +192,7 @@ namespace kapusha {
       glDeleteShader(shader);
       return 0;
     }
+    GL_ASSERT
     
     return shader;
   }
