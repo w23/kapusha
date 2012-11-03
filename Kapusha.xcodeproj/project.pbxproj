@@ -29,10 +29,23 @@
 		E1E74B6B16444BBA0038E873 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = E1E74B6916444BBA0038E873 /* Camera.h */; };
 		E1E74B71164462670038E873 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B6F164462670038E873 /* Object.cpp */; };
 		E1E74B72164462670038E873 /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = E1E74B70164462670038E873 /* Object.h */; };
+		E1E74B82164596410038E873 /* test_object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B73164594C10038E873 /* test_object.cpp */; };
+		E1E74B83164596910038E873 /* libKapusha.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DDFF5163D8F3A00869CF5 /* libKapusha.a */; };
+		E1E74B84164596990038E873 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE042163D925600869CF5 /* GLUT.framework */; };
+		E1E74B851645969E0038E873 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		E18DE034163D923000869CF5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		E1E74B76164595030038E873 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -91,6 +104,8 @@
 		E1E74B6E1644551C0038E873 /* IShared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IShared.h; sourceTree = "<group>"; };
 		E1E74B6F164462670038E873 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
 		E1E74B70164462670038E873 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
+		E1E74B73164594C10038E873 /* test_object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_object.cpp; sourceTree = "<group>"; };
+		E1E74B78164595030038E873 /* kapusha_test_object */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = kapusha_test_object; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +127,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E1E74B75164595030038E873 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1E74B851645969E0038E873 /* OpenGL.framework in Frameworks */,
+				E1E74B84164596990038E873 /* GLUT.framework in Frameworks */,
+				E1E74B83164596910038E873 /* libKapusha.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -122,7 +147,7 @@
 				E18DDFDE163D8EED00869CF5 /* io */,
 				E18DDFE3163D8EED00869CF5 /* math */,
 				E18DDFEB163D8EED00869CF5 /* sys */,
-				E18DE038163D923000869CF5 /* KapushaTestGLUT */,
+				E18DE038163D923000869CF5 /* tests */,
 				E18DDFF7163D8F3A00869CF5 /* Frameworks */,
 				E18DDFF6163D8F3A00869CF5 /* Products */,
 			);
@@ -199,6 +224,7 @@
 			children = (
 				E18DDFF5163D8F3A00869CF5 /* libKapusha.a */,
 				E18DE036163D923000869CF5 /* KapushaTestGLUT */,
+				E1E74B78164595030038E873 /* kapusha_test_object */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -224,12 +250,13 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
-		E18DE038163D923000869CF5 /* KapushaTestGLUT */ = {
+		E18DE038163D923000869CF5 /* tests */ = {
 			isa = PBXGroup;
 			children = (
 				E18DE039163D923000869CF5 /* test_fsquad.cpp */,
+				E1E74B73164594C10038E873 /* test_object.cpp */,
 			);
-			path = KapushaTestGLUT;
+			path = tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,9 +293,9 @@
 			productReference = E18DDFF5163D8F3A00869CF5 /* libKapusha.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		E18DE035163D923000869CF5 /* KapushaTestGLUT */ = {
+		E18DE035163D923000869CF5 /* kapusha_test_fullscreen_quad */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E18DE03D163D923000869CF5 /* Build configuration list for PBXNativeTarget "KapushaTestGLUT" */;
+			buildConfigurationList = E18DE03D163D923000869CF5 /* Build configuration list for PBXNativeTarget "kapusha_test_fullscreen_quad" */;
 			buildPhases = (
 				E18DE032163D923000869CF5 /* Sources */,
 				E18DE033163D923000869CF5 /* Frameworks */,
@@ -278,9 +305,26 @@
 			);
 			dependencies = (
 			);
-			name = KapushaTestGLUT;
+			name = kapusha_test_fullscreen_quad;
 			productName = KapushaTestGLUT;
 			productReference = E18DE036163D923000869CF5 /* KapushaTestGLUT */;
+			productType = "com.apple.product-type.tool";
+		};
+		E1E74B77164595030038E873 /* kapusha_test_object */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E1E74B7F164595030038E873 /* Build configuration list for PBXNativeTarget "kapusha_test_object" */;
+			buildPhases = (
+				E1E74B74164595030038E873 /* Sources */,
+				E1E74B75164595030038E873 /* Frameworks */,
+				E1E74B76164595030038E873 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = kapusha_test_object;
+			productName = kapusha_test_object;
+			productReference = E1E74B78164595030038E873 /* kapusha_test_object */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -304,7 +348,8 @@
 			projectRoot = "";
 			targets = (
 				E18DDFF4163D8F3A00869CF5 /* Kapusha */,
-				E18DE035163D923000869CF5 /* KapushaTestGLUT */,
+				E18DE035163D923000869CF5 /* kapusha_test_fullscreen_quad */,
+				E1E74B77164595030038E873 /* kapusha_test_object */,
 			);
 		};
 /* End PBXProject section */
@@ -338,6 +383,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E1E74B74164595030038E873 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1E74B82164596410038E873 /* test_object.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -365,7 +418,9 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -395,7 +450,9 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -418,7 +475,9 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -448,7 +507,66 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		E1E74B80164595030038E873 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		E1E74B81164595030038E873 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -480,7 +598,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E18DE03D163D923000869CF5 /* Build configuration list for PBXNativeTarget "KapushaTestGLUT" */ = {
+		E18DE03D163D923000869CF5 /* Build configuration list for PBXNativeTarget "kapusha_test_fullscreen_quad" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E18DE03E163D923000869CF5 /* Debug */,
@@ -488,6 +606,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		E1E74B7F164595030038E873 /* Build configuration list for PBXNativeTarget "kapusha_test_object" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E1E74B80164595030038E873 /* Debug */,
+				E1E74B81164595030038E873 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

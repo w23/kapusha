@@ -9,6 +9,8 @@ namespace math {
   const float c_2pi = c_pi * 2.f;
   const float c_pi2 = c_pi * .5f;
   const float c_pi4 = c_pi * .25f;
+  const float c_kdeg2rad = c_pi / 180.f;
+  const float c_krad2deg = 180.f / c_pi;
 
 
   template<>

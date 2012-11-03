@@ -29,5 +29,7 @@ namespace math {
   extern const float c_2pi;
   extern const float c_pi2;
   extern const float c_pi4;
+  extern const float c_kdeg2rad;
+  extern const float c_krad2deg;
   
 } // namespace math

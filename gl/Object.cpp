@@ -6,22 +6,17 @@
 namespace kapusha {
   
   Object::Object(Batch *batch)
-    : batch_(batch), transform_(1.f)
+    : batch_(batch)
   {
-    transform_location_ = batch_->getMaterial()->getProgram()->
-      getUniformLocation("transform");
-  }
-  
-  void Object::setTransform(const math::mat4f& transform)
-  {
-    transform_ = transform;
+    mview_loc_ = batch_->getMaterial()->getProgram()->getUniformLocation("mview");
+    mproj_loc_ = batch_->getMaterial()->getProgram()->getUniformLocation("mproj");
   }
 
-  void Object::draw() const
+  void Object::draw(const math::mat4f& view, const math::mat4f& proj) const
   {
     batch_->prepare();
-    batch_->getMaterial()->getProgram()->setUniformMatrix(transform_location_,
-                                                          transform_.m);
+    batch_->getMaterial()->getProgram()->setUniformMatrix(mview_loc_,view.m);
+    batch_->getMaterial()->getProgram()->setUniformMatrix(mproj_loc_,proj.m);
     batch_->draw();
   }
 

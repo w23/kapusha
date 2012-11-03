@@ -41,6 +41,11 @@ namespace math {
       return *this;
     }
     
+    vec4<T>& col(int n)
+    {
+      return *(static_cast<vec4<T>*>(&m[n*4]));
+    }
+    
     mat4x4<T>& translation(const vec4<T>& v)
     {
       *this = mat4x4().cols(vec4<T>(1,0,0,0),

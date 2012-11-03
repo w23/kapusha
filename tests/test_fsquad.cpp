@@ -1,16 +1,11 @@
 #include <iostream>
 
-#ifdef __APPLE__
-#include <GLUT/GLUT.h>
-#else
-#include <GL/glut.h>
-#endif
-
 #include "../sys/System.h"
 #include "../sys/Log.h"
 #include "../math/types.h"
 #include "../sys/IViewport.h"
 #include "../sys/runGlut.h"
+#include "../gl/OpenGL.h"
 #include "../gl/Batch.h"
 #include "../gl/Object.h"
 #include "../gl/Buffer.h"
@@ -39,10 +34,10 @@ void Viewport::init(ISystem *system)
   
   const char* svtx =
   "attribute vec4 vtx;\n"
-  "uniform mat4 transform;\n"
+  "uniform mat4 mview, mproj;\n"
   "varying vec2 p;\n"
   "void main(){\n"
-  "gl_Position = vtx * transform;\n"
+  "gl_Position = mproj * mview * vtx;\n"
   "p = vtx.xy;\n"
   "}"
   ;
@@ -82,9 +77,9 @@ void Viewport::draw(int ms)
 {
   glClear(GL_COLOR_BUFFER_BIT);
   float time = ms / 1000.f;
-  object_->setTransform(math::mat4f().rotationAroundAxis(math::vec3f(0,0,1),time));
+  //object_->setTransform(math::mat4f().rotationAroundAxis(math::vec3f(0,0,1),time));
   object_->getBatch()->getMaterial()->setUniform("time", time);
-  object_->draw();
+  object_->draw(math::mat4f().rotationAroundAxis(math::vec3f(0,0,1),time), math::mat4f(1.f));
   
   system_->redraw();
 }
