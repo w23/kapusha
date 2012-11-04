@@ -20,8 +20,7 @@ namespace kapusha {
 
 const char* glDescribeError(int code)
 {
-  int i;
-  for(i = 0; i < sizeof(glErrorDesc)/sizeof(*glErrorDesc); ++i)
+  for(unsigned i = 0; i < sizeof(glErrorDesc)/sizeof(*glErrorDesc); ++i)
   {
     if (glErrorDesc[i].code == code)
       return glErrorDesc[i].name;

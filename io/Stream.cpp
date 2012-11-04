@@ -1,3 +1,4 @@
+#include <string.h>
 #include "Stream.h"
 
 namespace kapusha {
@@ -21,7 +22,7 @@ namespace kapusha {
   void Stream::refillZeroesAtEnd(Stream* stream)
   {
     stream->refill_func_ = refillZeroes;
-    stream->error_ = Error::ErrorEnd;
+    stream->error_ = ErrorEnd;
   }
 
   Stream::Error Stream::copy(void* to, size_t bytes)
@@ -66,7 +67,7 @@ namespace kapusha {
     }
     
     // if absolute offset is valid
-    if (offset >= 0 && offset < memory->size_)
+    if (offset >= 0 && offset < static_cast<off_t>(memory->size_))
     {
       // if setup is wrong, redo it
       if (memory->start_ != memory->pointer_)

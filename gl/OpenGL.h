@@ -6,6 +6,10 @@
 #elif defined(__APPLE__)
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
+#elif defined(__linux__)
+#define GL_GLEXT_PROTOTYPES 1
+#include <GL/gl.h>
+#include <GL/glext.h>
 #else
 #error please include opengl in platform-specific way
 #endif

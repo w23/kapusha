@@ -1,3 +1,4 @@
+#include <string.h>
 #include <string>
 
 #include "../sys/System.h"
@@ -119,9 +120,8 @@ namespace kapusha {
     if (result != GL_TRUE)
     {
       L("for shader [");
-      unsigned long len = strlen(source)+1;
-      char* buffer = (char*)malloc(len);
-      memcpy(buffer, source, len);
+      char* buffer = new char[strlen(source)+1];
+	  strcpy(buffer, source);
       char* s = buffer;
       for (int line = 1;; ++line)
       {
@@ -138,6 +138,7 @@ namespace kapusha {
         s = next + 1;
       }
       L("]");
+	  delete buffer;
       
       printShaderInfoLog(shader);
       glDeleteShader(shader);

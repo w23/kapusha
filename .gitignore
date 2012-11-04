@@ -5,3 +5,6 @@ xcuserdata
 project.xcworkspace
 *~
 *.swp
+*.o
+*.a
+*.log
