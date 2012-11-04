@@ -18,7 +18,7 @@ namespace kapusha {
     
     void lookAt(math::vec3f pos, math::vec3f at,
                 math::vec3f up = math::vec3f(0.f, 1.f, 0.f));
-
+    
     void moveForward(float units);
     void moveRigth(float units);
     void moveUp(float units);

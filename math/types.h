@@ -32,4 +32,13 @@ namespace math {
   extern const float c_kdeg2rad;
   extern const float c_krad2deg;
   
+  //! float random
+  //! \return random float value in [0..1]
+  extern float frand();
+  
+  //! float random in range
+  //! \param min minimum value
+  //! \param max maximum value
+  //! \return random float value in [min..max]
+  extern float frand(float min, float max);
 } // namespace math

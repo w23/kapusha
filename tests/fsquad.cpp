@@ -19,7 +19,7 @@ public:
   virtual ~Viewport() {}
   virtual void init(ISystem* system);
   virtual void resize(int width, int height);
-  virtual void draw(int ms);
+  virtual void draw(int ms, float dt);
   virtual void pointerEvent(const PointerEvent& event);
   
 private:
@@ -73,7 +73,7 @@ void Viewport::resize(int width, int height)
   glViewport(0, 0, width, height);
 }
 
-void Viewport::draw(int ms)
+void Viewport::draw(int ms, float dt)
 {
   glClear(GL_COLOR_BUFFER_BIT);
   float time = ms / 1000.f;

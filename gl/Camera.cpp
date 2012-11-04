@@ -64,16 +64,28 @@ namespace kapusha {
   
   void Camera::rotatePitch(float radians)
   {
+    math::mat4f rotation;
+    rotation.rotationAroundAxis(right_, radians);
+    forward_ = (rotation * forward_).normalize();
+    up_ = right_ ^ forward_;
     need_update_ = true;
   }
   
   void Camera::rotateRoll(float radians)
   {
+    math::mat4f rotation;
+    rotation.rotationAroundAxis(forward_, radians);
+    up_ = (rotation * up_).normalize();
+    right_ = forward_ ^ up_;
     need_update_ = true;
   }
   
   void Camera::rotateYaw(float radians)
   {
+    math::mat4f rotation;
+    rotation.rotationAroundAxis(up_, radians);
+    forward_ = (rotation * forward_).normalize();
+    right_ = forward_ ^ up_;
     need_update_ = true;
   }
   

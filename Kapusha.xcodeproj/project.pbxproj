@@ -16,7 +16,7 @@
 		E18DE013163D8F7F00869CF5 /* Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDF163D8EED00869CF5 /* Stream.cpp */; };
 		E18DE017163D8F8700869CF5 /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFE6163D8EED00869CF5 /* math.cpp */; };
 		E18DE018163D8F9800869CF5 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFED163D8EED00869CF5 /* Log.cpp */; };
-		E18DE03A163D923000869CF5 /* test_fsquad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE039163D923000869CF5 /* test_fsquad.cpp */; };
+		E18DE03A163D923000869CF5 /* fsquad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE039163D923000869CF5 /* fsquad.cpp */; };
 		E18DE040163D925500869CF5 /* libKapusha.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DDFF5163D8F3A00869CF5 /* libKapusha.a */; };
 		E18DE041163D925500869CF5 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
 		E18DE043163D925600869CF5 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE042163D925600869CF5 /* GLUT.framework */; };
@@ -29,10 +29,11 @@
 		E1E74B6B16444BBA0038E873 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = E1E74B6916444BBA0038E873 /* Camera.h */; };
 		E1E74B71164462670038E873 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B6F164462670038E873 /* Object.cpp */; };
 		E1E74B72164462670038E873 /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = E1E74B70164462670038E873 /* Object.h */; };
-		E1E74B82164596410038E873 /* test_object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B73164594C10038E873 /* test_object.cpp */; };
+		E1E74B82164596410038E873 /* flyby_static_geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B73164594C10038E873 /* flyby_static_geometry.cpp */; };
 		E1E74B83164596910038E873 /* libKapusha.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DDFF5163D8F3A00869CF5 /* libKapusha.a */; };
 		E1E74B84164596990038E873 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE042163D925600869CF5 /* GLUT.framework */; };
 		E1E74B851645969E0038E873 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
+		E1E74B8B1646731E0038E873 /* IViewport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B8A1646731E0038E873 /* IViewport.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -88,8 +89,8 @@
 		E18DDFFC163D8F3B00869CF5 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		E18DDFFD163D8F3B00869CF5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E18DE007163D8F5400869CF5 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = DEVELOPER_DIR; };
-		E18DE036163D923000869CF5 /* KapushaTestGLUT */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = KapushaTestGLUT; sourceTree = BUILT_PRODUCTS_DIR; };
-		E18DE039163D923000869CF5 /* test_fsquad.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_fsquad.cpp; sourceTree = "<group>"; };
+		E18DE036163D923000869CF5 /* KapushaTestGLUT */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = KapushaTestGLUT; path = kapusha_test_fullscreen_quad; sourceTree = BUILT_PRODUCTS_DIR; };
+		E18DE039163D923000869CF5 /* fsquad.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fsquad.cpp; sourceTree = "<group>"; };
 		E18DE042163D925600869CF5 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/GLUT.framework; sourceTree = DEVELOPER_DIR; };
 		E18DE044163D9BE500869CF5 /* StreamFile_posix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamFile_posix.h; sourceTree = "<group>"; };
 		E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamFile_posix.cpp; sourceTree = "<group>"; };
@@ -104,8 +105,9 @@
 		E1E74B6E1644551C0038E873 /* IShared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IShared.h; sourceTree = "<group>"; };
 		E1E74B6F164462670038E873 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
 		E1E74B70164462670038E873 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
-		E1E74B73164594C10038E873 /* test_object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_object.cpp; sourceTree = "<group>"; };
+		E1E74B73164594C10038E873 /* flyby_static_geometry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = flyby_static_geometry.cpp; sourceTree = "<group>"; };
 		E1E74B78164595030038E873 /* kapusha_test_object */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = kapusha_test_object; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1E74B8A1646731E0038E873 /* IViewport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IViewport.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,13 +210,14 @@
 		E18DDFEB163D8EED00869CF5 /* sys */ = {
 			isa = PBXGroup;
 			children = (
+				E1E74B6E1644551C0038E873 /* IShared.h */,
+				E1E74B8A1646731E0038E873 /* IViewport.cpp */,
 				E18DDFEC163D8EED00869CF5 /* IViewport.h */,
 				E18DDFED163D8EED00869CF5 /* Log.cpp */,
 				E18DDFEE163D8EED00869CF5 /* Log.h */,
 				E18DE08D1642E81200869CF5 /* runGlut.cpp */,
 				E18DE08E1642E81200869CF5 /* runGlut.h */,
 				E18DDFEF163D8EED00869CF5 /* System.h */,
-				E1E74B6E1644551C0038E873 /* IShared.h */,
 			);
 			path = sys;
 			sourceTree = "<group>";
@@ -253,8 +256,8 @@
 		E18DE038163D923000869CF5 /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				E18DE039163D923000869CF5 /* test_fsquad.cpp */,
-				E1E74B73164594C10038E873 /* test_object.cpp */,
+				E18DE039163D923000869CF5 /* fsquad.cpp */,
+				E1E74B73164594C10038E873 /* flyby_static_geometry.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -372,6 +375,7 @@
 				E1E74B62164436330038E873 /* Material.cpp in Sources */,
 				E1E74B6A16444BBA0038E873 /* Camera.cpp in Sources */,
 				E1E74B71164462670038E873 /* Object.cpp in Sources */,
+				E1E74B8B1646731E0038E873 /* IViewport.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,7 +383,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E18DE03A163D923000869CF5 /* test_fsquad.cpp in Sources */,
+				E18DE03A163D923000869CF5 /* fsquad.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,7 +391,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1E74B82164596410038E873 /* test_object.cpp in Sources */,
+				E1E74B82164596410038E873 /* flyby_static_geometry.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -614,6 +618,7 @@
 				E1E74B81164595030038E873 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

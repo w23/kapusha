@@ -37,14 +37,17 @@ namespace kapusha {
   };
   
   static GlutSystem system;
+  static int last_draw;
 
   static void display()
   {
     redraw_requested = false;
-    viewport->draw(glutGet(GLUT_ELAPSED_TIME));
+    int now = glutGet(GLUT_ELAPSED_TIME);
+    viewport->draw(now, (now - last_draw) / 1000.f);
     glutSwapBuffers();
     if (redraw_requested)
       glutPostRedisplay();
+    last_draw = now;
   }
 
   static void resize(int w, int h)
@@ -56,6 +59,63 @@ namespace kapusha {
     }
     viewport->resize(w, h);
   }
+  
+  static void keyDown(unsigned char key, int, int)
+  {
+    viewport->userEvent(IViewport::KeyEvent(key, 0));
+  }
+  
+  static void keyUp(unsigned char key, int, int)
+  {
+    viewport->userEvent(IViewport::KeyEvent(key, 0, false));
+  }
+  
+  static void keySpecialDown(int key, int, int)
+  {
+    int code;
+    switch (key) {
+      case GLUT_KEY_LEFT:
+      case GLUT_KEY_UP:
+      case GLUT_KEY_RIGHT:
+      case GLUT_KEY_DOWN:
+        code = IViewport::KeyEvent::KeyLeft + key - GLUT_KEY_LEFT;
+        break;
+        
+      default:
+        L("Unknown special key %d", key);
+    }
+    viewport->userEvent(IViewport::KeyEvent(code, 0));
+  }
+  
+  static void keySpecialUp(int key, int, int)
+  {
+    int code;
+    switch (key) {
+      case GLUT_KEY_LEFT:
+      case GLUT_KEY_UP:
+      case GLUT_KEY_RIGHT:
+      case GLUT_KEY_DOWN:
+        code = IViewport::KeyEvent::KeyLeft + key - GLUT_KEY_LEFT;
+        break;
+        
+      default:
+        L("Unknown special key %d", key);
+    }
+
+    viewport->userEvent(IViewport::KeyEvent(code, 0, false));
+  }
+  
+  static void mouse(int button, int state, int x, int y)
+  {
+  }
+
+  static void mouse_move(int x, int y)
+  {
+    viewport->userEvent(IViewport::PointerEvent(math::vec2f(x,y),
+                                                IViewport::PointerEvent::Pointer::Move));
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
 
   int runGlut(int argc, const char * argv[], IViewport *vp)
   {
@@ -75,7 +135,17 @@ namespace kapusha {
     
     glutDisplayFunc(display);
     glutReshapeFunc(resize);
+    glutKeyboardFunc(keyDown);
+    glutKeyboardUpFunc(keyUp);
+    glutSpecialFunc(keySpecialDown);
+    glutSpecialUpFunc(keySpecialUp);
+    glutMouseFunc(mouse);
+    glutMotionFunc(mouse_move);
+    glutPassiveMotionFunc(mouse_move);
     
+    glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
+    
+    last_draw = glutGet(GLUT_ELAPSED_TIME);
     glutMainLoop();
     
     delete viewport;

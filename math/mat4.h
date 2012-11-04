@@ -137,6 +137,25 @@ namespace math {
       return res;
     }
     
+    vec4<T> operator*(const vec4<T>& right) const
+    {
+      math::vec4<T> ret;
+      ret.x = right.x * m[0] + right.y * m[4] + right.z * m[8] + right.w * m[12];
+      ret.y = right.x * m[1] + right.y * m[5] + right.z * m[9] + right.w * m[13];
+      ret.z = right.x * m[2] + right.y * m[6] + right.z * m[10] + right.w * m[14];
+      ret.w = right.x * m[3] + right.y * m[7] + right.z * m[11] + right.w * m[15];
+      return ret;
+    }
+    
+    vec3<T> operator*(const vec3<T>& right) const
+    {
+      math::vec3<T> ret;
+      ret.x = right.x * m[0] + right.y * m[4] + right.z * m[8] + m[12];
+      ret.y = right.x * m[1] + right.y * m[5] + right.z * m[9] + m[13];
+      ret.z = right.x * m[2] + right.y * m[6] + right.z * m[10] + m[14];
+      return ret;
+    }
+    
     mat4x4<T>& rotationAroundAxis(vec3<T> axis, T angle);
   };
 } // namespace math

@@ -92,8 +92,6 @@ namespace kapusha {
         glDeleteShader(shader_fragment_);
         glDeleteShader(shader_vertex_);
         shader_fragment_ = shader_vertex_ = program_name_ = 0;
-        
-        KP_ASSERT(!"Invalid shader");
       }
     }
     GL_ASSERT
@@ -107,53 +105,6 @@ namespace kapusha {
       glDeleteShader(shader_fragment_);
     if (shader_vertex_)
       glDeleteShader(shader_vertex_);
-  }
-  
-  void Program::use() const
-  {
-    glUseProgram(program_name_);
-    GL_ASSERT
-  }
-  
-  int Program::getAttributeLocation(const char *name) const
-  {
-    int loc = glGetAttribLocation(program_name_, name);
-    GL_ASSERT
-    KP_ASSERT(loc != -1);
-    return loc;
-  }
-  
-  int Program::getUniformLocation(const char *name) const
-  {
-    int loc = glGetUniformLocation(program_name_, name);
-    GL_ASSERT
-    KP_ASSERT(loc != -1);
-    return loc;
-  }
-  
-  void Program::setUniform(int location, const float* value,
-                           int components, int count) const
-  {
-    static void (*uniform_components[4])(GLint, GLsizei, const GLfloat*) = {
-      glUniform1fv, glUniform2fv, glUniform3fv, glUniform4fv
-    };
-    
-    KP_ASSERT(components >= 1 && components <= 4);
-    uniform_components[components-1](location, count, value);
-    GL_ASSERT
-  }
-  
-  void Program::setUniformMatrix(int location, const float* value,
-                                int components, int count) const
-  {
-    static void (*uniform_components[3])
-      (GLint, GLsizei, GLboolean, const GLfloat*) = {
-      glUniformMatrix2fv, glUniformMatrix3fv, glUniformMatrix4fv
-    };
-    
-    KP_ASSERT(components >= 2 && components <= 4);
-    uniform_components[components-2](location, count, GL_FALSE, value);
-    GL_ASSERT
   }
   
   unsigned Program::compileShader(unsigned type, const char* source)
@@ -195,5 +146,57 @@ namespace kapusha {
     GL_ASSERT
     
     return shader;
+  }
+  
+  void Program::use() const
+  {
+    KP_ASSERT(program_name_);
+    glUseProgram(program_name_);
+    GL_ASSERT
+  }
+  
+  int Program::getAttributeLocation(const char *name) const
+  {
+    KP_ASSERT(program_name_);
+    int loc = glGetAttribLocation(program_name_, name);
+    GL_ASSERT
+    KP_ASSERT(loc != -1);
+    return loc;
+  }
+  
+  int Program::getUniformLocation(const char *name) const
+  {
+    KP_ASSERT(program_name_);
+    int loc = glGetUniformLocation(program_name_, name);
+    GL_ASSERT
+    KP_ASSERT(loc != -1);
+    return loc;
+  }
+  
+  void Program::setUniform(int location, const float* value,
+                           int components, int count) const
+  {
+    KP_ASSERT(program_name_);
+    static void (*uniform_components[4])(GLint, GLsizei, const GLfloat*) = {
+      glUniform1fv, glUniform2fv, glUniform3fv, glUniform4fv
+    };
+    
+    KP_ASSERT(components >= 1 && components <= 4);
+    uniform_components[components-1](location, count, value);
+    GL_ASSERT
+  }
+  
+  void Program::setUniformMatrix(int location, const float* value,
+                                int components, int count) const
+  {
+    KP_ASSERT(program_name_);
+    static void (*uniform_components[3])
+      (GLint, GLsizei, GLboolean, const GLfloat*) = {
+      glUniformMatrix2fv, glUniformMatrix3fv, glUniformMatrix4fv
+    };
+    
+    KP_ASSERT(components >= 2 && components <= 4);
+    uniform_components[components-2](location, count, GL_FALSE, value);
+    GL_ASSERT
   }
 } // namespace kapusha
