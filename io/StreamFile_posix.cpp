@@ -2,8 +2,14 @@
 #include <fcntl.h> // ::open
 #include <sys/stat.h> // ::stat
 #include <sys/mman.h> // ::mmap
+#include <unistd.h> // ::close
 
 namespace kapusha {
+  
+  StreamFile::~StreamFile()
+  {
+    close();
+  }
   
   Stream::Error StreamFile::open(const char* filename)
   {
@@ -33,6 +39,12 @@ namespace kapusha {
     useMemory(ptr, st.st_size);
     
     return error_;
+  }
+  
+  void StreamFile::close()
+  {
+    ::close(file_);
+    file_ = 0;
   }
 
 } // namespace kapusha
