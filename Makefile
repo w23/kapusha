@@ -21,8 +21,8 @@ MODULES=$(patsubst %.cpp, %.o, $(SOURCES))
 
 .PHONY: all clean
 
-libKapusha.a: $(MODULES)
-	ar rcs libKapusha.a $(MODULES)
+libkapusha.a: $(MODULES)
+	ar rcs libkapusha.a $(MODULES)
 
 clean:
-	@rm -rf $(MODULES)
+	@rm -rf $(MODULES) libkapusha.a

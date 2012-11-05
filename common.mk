@@ -1,6 +1,6 @@
 CXX=g++
 LD=g++
-CXXFLAGS=-Wall -Werror -fno-exceptions -fno-rtti `pkg-config --cflags sdl`
+CXXFLAGS=-Wall -Werror -fno-exceptions -fno-rtti `pkg-config --cflags sdl` -g -DDEBUG=1
 LDFLAGS=`pkg-config --libs sdl`
 
 .SUFFIXES: .cpp .o

@@ -1,3 +1,4 @@
+#include "../sys/Log.h"
 #include "StreamFile_posix.h"
 #include <fcntl.h> // ::open
 #include <sys/stat.h> // ::stat
@@ -18,6 +19,7 @@ namespace kapusha {
 #if !SIZE_OPTIMIZE
     if (file_ == -1)
     {
+      L("Error opening file \"%s\"", filename);
       fail(this, ErrorCorrupted);
       return error_;
     }
@@ -30,6 +32,7 @@ namespace kapusha {
 #if !SIZE_OPTIMIZE
     if (ptr == MAP_FAILED)
     {
+      L("Error mmapping file \"%s\"", filename);
       close();
       fail(this, ErrorTruncated);
       return error_;
@@ -37,6 +40,8 @@ namespace kapusha {
 #endif
     
     useMemory(ptr, st.st_size);
+
+	L("Opened file \"%s\" stream @%p size %ld", filename, ptr, st.st_size);
     
     return error_;
   }

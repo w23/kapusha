@@ -16,6 +16,10 @@ namespace kapusha {
     //! Request system to IViewport::draw() when appropriate
     //! Call this every IViewport::draw() call to make constant animation
     virtual void redraw() = 0;
+
+    //! Reset pointer position to center
+    //! Useful for mouse-aiming
+    virtual void pointerReset() = 0;
   };
   
   //! Viewport is a place where all the fun happens

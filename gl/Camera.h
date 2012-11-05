@@ -25,6 +25,7 @@ namespace kapusha {
     void rotatePitch(float radians);
     void rotateRoll(float radians);
     void rotateYaw(float radians);
+	void rotateAxis(math::vec3f axis, float radians);
     
     bool update();
 

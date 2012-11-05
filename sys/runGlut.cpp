@@ -25,6 +25,8 @@ namespace kapusha {
   static bool initialized;
   static IViewport *viewport = 0;
   static bool redraw_requested;
+  static math::vec2i center;
+  static bool warped = false;
   
   class GlutSystem : public ISystem {
   public:
@@ -33,6 +35,10 @@ namespace kapusha {
     }
     virtual void redraw() {
       redraw_requested = true;
+    }
+    virtual void pointerReset() {
+      warped = true;
+      glutWarpPointer(center.x, center.y);
     }
   };
   
@@ -52,6 +58,7 @@ namespace kapusha {
 
   static void resize(int w, int h)
   {
+    center = math::vec2i(w/2, h/2);
     if (!initialized)
     {
       viewport->init(&system);
@@ -111,6 +118,7 @@ namespace kapusha {
 
   static void mouse_move(int x, int y)
   {
+    if (warped) { warped = false; return; }
     viewport->userEvent(IViewport::PointerEvent(math::vec2f(x,y),
                                                 IViewport::PointerEvent::Pointer::Move));
   }

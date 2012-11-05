@@ -88,6 +88,17 @@ namespace kapusha {
     right_ = forward_ ^ up_;
     need_update_ = true;
   }
+
+  void Camera::rotateAxis(math::vec3f axis, float radians)
+  {
+    math::mat4f rotation;
+    rotation.rotationAroundAxis(axis, radians);
+    forward_ = (rotation * forward_).normalize();
+    right_ = (rotation * right_).normalize();
+    up_ = right_ ^ forward_;
+	right_ = forward_ ^ up_;
+    need_update_ = true;
+  }
   
   bool Camera::update()
   {

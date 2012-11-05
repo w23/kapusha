@@ -28,6 +28,11 @@ namespace math {
     {
       return vec2<T>(x, y);
     }
+
+    vec3<T> xzy() const
+    {
+      return vec3<T>(x, z, y);
+    }
     
     // math ops
     T length_sq()
@@ -79,6 +84,12 @@ namespace math {
     vec3<T> operator*(T b) const
     {
       return vec3<T>(x*b, y*b, z*b);
+    }
+
+    vec3<T> operator*=(T r)
+    {
+      x *= r; y *= r; z*= r;
+      return *this;
     }
 
     vec3<T> operator/=(T v)
