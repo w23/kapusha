@@ -104,14 +104,6 @@ namespace kapusha {
     for (i = 0; i < MAX_MATERIAL_UNIFORMS; ++i)
     {
       Uniform& uni = uniforms_[i];
-      if (uni.location == location)
-      {
-        KP_ASSERT(type == uni.type);
-        KP_ASSERT(components == uni.components);
-        KP_ASSERT(size == uni.size);
-        memcpy(storage_ + offset, data, size * sizeof(float));
-        return;
-      } else
       if (uni.type == Uniform::None)
       {
         KP_ASSERT((storage_occupied_+size) < MAX_MATERIAL_UNIFORM_STORAGE);
@@ -121,6 +113,13 @@ namespace kapusha {
         uni.size = size;
         memcpy(storage_ + storage_occupied_, data, size * sizeof(float));
         storage_occupied_ += size;
+        return;
+      } else if (uni.location == location)
+      {
+        KP_ASSERT(type == uni.type);
+        KP_ASSERT(components == uni.components);
+        KP_ASSERT(size == uni.size);
+        memcpy(storage_ + offset, data, size * sizeof(float));
         return;
       }
       offset += uni.size;
