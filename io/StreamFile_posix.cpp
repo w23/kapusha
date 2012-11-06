@@ -41,13 +41,14 @@ namespace kapusha {
     
     useMemory(ptr, st.st_size);
 
-	L("Opened file \"%s\" stream @%p size %ld", filename, ptr, st.st_size);
+	  L("Opened file \"%s\" stream @%p size %ld", filename, ptr, st.st_size);
     
     return error_;
   }
   
   void StreamFile::close()
   {
+    //! \fixme unmap, set empty
     ::close(file_);
     file_ = 0;
   }

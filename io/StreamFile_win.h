@@ -6,8 +6,7 @@
 
 namespace kapusha {
 
-class StreamFile :
-  public StreamSeekable
+class StreamFile : public StreamMemory
 {
 public:
   StreamFile(void);

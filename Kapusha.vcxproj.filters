@@ -42,9 +42,6 @@
     <ClInclude Include="sys\Log.h">
       <Filter>sys</Filter>
     </ClInclude>
-    <ClInclude Include="sys\IApplication.h">
-      <Filter>sys</Filter>
-    </ClInclude>
     <ClInclude Include="io\Stream.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -84,6 +81,18 @@
     <ClInclude Include="gl\Camera.h">
       <Filter>gl</Filter>
     </ClInclude>
+    <ClInclude Include="io\StreamFile_win.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\IViewport.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\Batch.h">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\Material.h">
+      <Filter>gl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="math\math.cpp">
@@ -93,9 +102,6 @@
       <Filter>sys</Filter>
     </ClCompile>
     <ClCompile Include="io\Stream.cpp">
-      <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="io\StreamFile.cpp">
       <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="gl\Buffer.cpp">
@@ -117,6 +123,18 @@
       <Filter>gl</Filter>
     </ClCompile>
     <ClCompile Include="gl\Camera.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="io\StreamFile_win.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\IViewport.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="gl\Batch.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="gl\Material.cpp">
       <Filter>gl</Filter>
     </ClCompile>
   </ItemGroup>

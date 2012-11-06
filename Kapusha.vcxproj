@@ -13,8 +13,10 @@
   <ItemGroup>
     <ClInclude Include="glew\GL\glew.h" />
     <ClInclude Include="glew\GL\wglew.h" />
+    <ClInclude Include="gl\Batch.h" />
     <ClInclude Include="gl\Camera.h" />
     <ClInclude Include="gl\Buffer.h" />
+    <ClInclude Include="gl\Material.h" />
     <ClInclude Include="gl\Object.h" />
     <ClInclude Include="gl\OpenGL.h" />
     <ClInclude Include="gl\Program.h" />
@@ -22,6 +24,7 @@
     <ClInclude Include="gl\Texture.h" />
     <ClInclude Include="io\Stream.h" />
     <ClInclude Include="io\StreamFile.h" />
+    <ClInclude Include="io\StreamFile_win.h" />
     <ClInclude Include="math\mat2.h" />
     <ClInclude Include="math\mat4.h" />
     <ClInclude Include="math\rect2.h" />
@@ -29,21 +32,24 @@
     <ClInclude Include="math\vec2.h" />
     <ClInclude Include="math\vec3.h" />
     <ClInclude Include="math\vec4.h" />
-    <ClInclude Include="sys\IApplication.h" />
+    <ClInclude Include="sys\IViewport.h" />
     <ClInclude Include="sys\Log.h" />
     <ClInclude Include="sys\System.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glew\GL\glew.c" />
+    <ClCompile Include="gl\Batch.cpp" />
     <ClCompile Include="gl\Camera.cpp" />
     <ClCompile Include="gl\Buffer.cpp" />
+    <ClCompile Include="gl\Material.cpp" />
     <ClCompile Include="gl\Object.cpp" />
     <ClCompile Include="gl\OpenGL.cpp" />
     <ClCompile Include="gl\Program.cpp" />
     <ClCompile Include="gl\Texture.cpp" />
     <ClCompile Include="io\Stream.cpp" />
-    <ClCompile Include="io\StreamFile.cpp" />
+    <ClCompile Include="io\StreamFile_win.cpp" />
     <ClCompile Include="math\math.cpp" />
+    <ClCompile Include="sys\IViewport.cpp" />
     <ClCompile Include="sys\Log.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

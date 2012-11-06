@@ -178,12 +178,24 @@ namespace kapusha {
                            int components, int count) const
   {
     KP_ASSERT(program_name_);
-    static void (*uniform_components[4])(GLint, GLsizei, const GLfloat*) = {
-      glUniform1fv, glUniform2fv, glUniform3fv, glUniform4fv
-    };
     
-    KP_ASSERT(components >= 1 && components <= 4);
-    uniform_components[components-1](location, count, value);
+    switch (components)
+    {
+    case 1:
+      glUniform1fv(location, count, value);
+      break;
+    case 2:
+      glUniform2fv(location, count, value);
+      break;
+    case 3:
+      glUniform3fv(location, count, value);
+      break;
+    case 4:
+      glUniform4fv(location, count, value);
+      break;
+    default:
+      KP_ASSERT(!"Invalid number of components");
+    }
     GL_ASSERT
   }
   
@@ -191,13 +203,21 @@ namespace kapusha {
                                 int components, int count) const
   {
     KP_ASSERT(program_name_);
-    static void (*uniform_components[3])
-      (GLint, GLsizei, GLboolean, const GLfloat*) = {
-      glUniformMatrix2fv, glUniformMatrix3fv, glUniformMatrix4fv
-    };
     
-    KP_ASSERT(components >= 2 && components <= 4);
-    uniform_components[components-2](location, count, GL_FALSE, value);
+    switch (components)
+    {
+    case 2:
+      glUniformMatrix2fv(location, count, GL_FALSE, value);
+      break;
+    case 3:
+      glUniformMatrix2fv(location, count, GL_FALSE, value);
+      break;
+    case 4:
+      glUniformMatrix2fv(location, count, GL_FALSE, value);
+      break;
+    default:
+      KP_ASSERT(!"Invalid number of components");
+    }
     GL_ASSERT
   }
 } // namespace kapusha

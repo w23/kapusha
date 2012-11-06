@@ -9,7 +9,7 @@ namespace kapusha {
     StreamFile() : file_(-1) {}
     virtual ~StreamFile();
     
-    Error open(const char* filename);
+    Error open(const char *filename);
     void close();
     
   protected:

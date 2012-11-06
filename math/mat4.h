@@ -103,9 +103,9 @@ namespace math {
     mat4x4<T> operator*(const mat4x4& a) const
     {
       mat4x4<T> res;
-      __restrict T* r = res.m;
-      __restrict T const *m0 = m;
-      __restrict T const *m1 = a.m;
+      T* r = res.m;
+      T const *m0 = m;
+      T const *m1 = a.m;
       // wat is faster?
 #define UNROLL 1
 #if !UNROLL
