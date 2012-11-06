@@ -210,10 +210,10 @@ namespace kapusha {
       glUniformMatrix2fv(location, count, GL_FALSE, value);
       break;
     case 3:
-      glUniformMatrix2fv(location, count, GL_FALSE, value);
+      glUniformMatrix3fv(location, count, GL_FALSE, value);
       break;
     case 4:
-      glUniformMatrix2fv(location, count, GL_FALSE, value);
+      glUniformMatrix4fv(location, count, GL_FALSE, value);
       break;
     default:
       KP_ASSERT(!"Invalid number of components");

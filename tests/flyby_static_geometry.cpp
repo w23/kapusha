@@ -210,7 +210,14 @@ void Viewport::pointerEvent(const PointerEvent &event)
   pitch_speed_ = rel.y;
 }
 
+#ifndef WIN32
 int main(int argc, const char * argv[])
 {
   return runGlut(argc, argv, new Viewport);
 }
+#else
+IViewport *makeViewport()
+{
+  return new Viewport;
+}
+#endif
