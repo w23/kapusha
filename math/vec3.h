@@ -97,6 +97,12 @@ namespace math {
       x /= v; y /= v; z /= v;
       return *this;
     }
+
+    // dot product
+    T operator&(const vec3<T>& r) const
+    {
+      return x * r.x + y * r.y + z * r.z;
+    }
     
     // cross product
     vec3<T> operator^(const vec3<T>& b) const

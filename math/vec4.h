@@ -35,6 +35,11 @@ namespace math {
     {
       return vec2<T>(z, w);
     }
+
+    vec3<T> xyz() const
+    {
+      return vec3<T>(x, y, z);
+    }
     
     // math ops
     T length_sq()
