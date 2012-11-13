@@ -31,6 +31,7 @@ namespace kapusha {
     //! \param count Size of array, if uniform is an array
     void setUniform(int location, const float* values,
                     int components = 4, int count = 1) const;
+    void setUniform(int location, int value) const;
     
     //! set uniform float matrix value
     //! expects: program already in use

@@ -10,6 +10,11 @@ namespace kapusha {
   
 //! maximum number of floats to store
 #define MAX_MATERIAL_UNIFORM_STORAGE 64
+
+//! maximum number of textures
+#define MAX_TEXTURE_UNIFORM_STORAGE 4
+
+  class Texture;
   
   //! Basic material that contains uniform values for specific program
   class Material {
@@ -38,6 +43,7 @@ namespace kapusha {
     void setUniform(int location, const math::vec4f& value);
     void setUniform(int location, const math::mat2f& value);
     void setUniform(int location, const math::mat4f& value);
+    void setTexture(const char *name, const Texture *texture);
     
   private:
     Program *shader_program_;
@@ -46,7 +52,6 @@ namespace kapusha {
       enum Type {
         None,
         Float,
-        Int,
         Matrix
       } type;
       int location;
@@ -57,6 +62,14 @@ namespace kapusha {
     };
     Uniform uniforms_[MAX_MATERIAL_UNIFORMS];
     float storage_[MAX_MATERIAL_UNIFORM_STORAGE];
+
+    struct UniformTexture {
+      const ::kapusha::Texture* texture;
+      int location;
+      UniformTexture() : texture(0) {}
+      bool empty() const { return texture == 0; }
+    };
+    UniformTexture uniforms_texture_[MAX_TEXTURE_UNIFORM_STORAGE];
     
     int storage_occupied_;
     

@@ -198,6 +198,13 @@ namespace kapusha {
     }
     GL_ASSERT
   }
+
+  void Program::setUniform(int location, int value) const
+  {
+    KP_ASSERT(program_name_);
+    glUniform1i(location, value);
+    GL_ASSERT
+  }
   
   void Program::setUniformMatrix(int location, const float* value,
                                 int components, int count) const

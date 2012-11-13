@@ -42,7 +42,7 @@ namespace kapusha {
   
     void upload(const ImageDesc& desc, void* pixels);
     const ImageDesc& desc() const { return desc_; }
-    void use() const;
+    void use(int slot = 0) const;
     unsigned name() const { return name_; }
     
   private:

@@ -8,8 +8,8 @@ namespace kapusha {
   Object::Object(Batch *batch)
     : batch_(batch)
   {
-    mview_loc_ = batch_->getMaterial()->getProgram()->getUniformLocation("mview");
-    mproj_loc_ = batch_->getMaterial()->getProgram()->getUniformLocation("mproj");
+    mview_loc_ = batch_->getMaterial()->getProgram()->getUniformLocation("um4_view");
+    mproj_loc_ = batch_->getMaterial()->getProgram()->getUniformLocation("um4_proj");
   }
 
   void Object::draw(const math::mat4f& view, const math::mat4f& proj) const
