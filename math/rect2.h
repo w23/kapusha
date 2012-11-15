@@ -36,12 +36,15 @@ namespace math {
     
     T width() const { return right() - left(); }
     T height() const { return top() - bottom(); }
+    vec2<T> size() const { return vec2<T>(width(), height()); }
     T area() const { return width() * height(); }
     
     //! \fixme this should be specialization or something
     T widthi() const { return right() - left() + 1; }
     T heighti() const { return top() - bottom() + 1; }
+    vec2<T> sizei() const { return vec2<T>(widthi(), heighti()); }
     T areai() const { return widthi() * heighti(); }
+
     vec2<T> center() const { return (bl+tr)/2; }
     
     vec2<T> bottomLeft() const { return bl; }

@@ -107,14 +107,15 @@ namespace kapusha {
 
   void Material::setTexture(const char *name, const Texture *texture)
   {
+    int loc = getUniformLocation(name);
     for (int i = 0; i < MAX_TEXTURE_UNIFORM_STORAGE; ++i)
-      if (uniforms_texture_[i].empty())
+      if (uniforms_texture_[i].empty() || uniforms_texture_[i].location == loc)
       {
-        uniforms_texture_[i].location = getUniformLocation(name);
+        uniforms_texture_[i].location = loc;
         uniforms_texture_[i].texture = texture;
         return;
       }
-      KP_ASSERT(!"Not enough uniform storage for texture");
+    KP_ASSERT(!"Not enough uniform storage for texture");
   }
   
   void Material::setUniform(int location, Uniform::Type type,
