@@ -58,6 +58,11 @@ namespace kapusha {
   {
     setUniform(name, Uniform::Float, &value.x, 2, 2);
   }
+
+  void Material::setUniform(const char *name, const math::vec3f& value)
+  {
+    setUniform(name, Uniform::Float, &value.x, 3, 3);
+  }
   
   void Material::setUniform(const char *name, const math::vec4f& value)
   {
@@ -82,6 +87,11 @@ namespace kapusha {
   void Material::setUniform(int location, const math::vec2f& value)
   {
     setUniform(location, Uniform::Float, &value.x, 2, 2);
+  }
+
+  void Material::setUniform(int location, const math::vec3f& value)
+  {
+    setUniform(location, Uniform::Float, &value.x, 3, 3);
   }
   
   void Material::setUniform(int location, const math::vec4f& value)

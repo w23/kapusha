@@ -19,7 +19,9 @@ namespace kapusha {
   {
     if (mapping_ != INVALID_HANDLE_VALUE)
     {
-      UnmapViewOfFile(start_);
+      if (start_)
+        UnmapViewOfFile(start_);
+      start_ = 0;
       CloseHandle(mapping_);
       mapping_ = INVALID_HANDLE_VALUE;
     }
@@ -44,6 +46,7 @@ namespace kapusha {
       return error_;
     }
 
+    start_ = 0;
     mapping_ = CreateFileMapping(file_, NULL, PAGE_READONLY, 0, 0, NULL);
     void* ptr;
     if (mapping_ == INVALID_HANDLE_VALUE || 
@@ -58,7 +61,7 @@ namespace kapusha {
     size_t size = GetFileSize(file_, NULL);
     useMemory(ptr, size);
 
-    L("Opened file \"%s\" stream @%p size %ld", filename, ptr, size);
+    //L("Opened file \"%s\" stream @%p size %ld", filename, ptr, size);
 
     return error_ = ErrorNone;
   }

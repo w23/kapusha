@@ -22,6 +22,9 @@ namespace math {
     vec3(T v) : x(v), y(v), z(v) {}
     
     vec3(const vec2<T>& v, T _z = 0) : x(v.x), y(v.y), z(_z) {}
+
+    template <typename U>
+    vec3(const vec3<U>& v) : x(v.x), y(v.y), z(v.z) {}
     
     // swizzle
     vec2<T> xy() const

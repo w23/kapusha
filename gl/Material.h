@@ -35,11 +35,13 @@ namespace kapusha {
     //! These must correspond to names and types in provided program
     void setUniform(const char *name, float value);
     void setUniform(const char *name, const math::vec2f& value);
+    void setUniform(const char *name, const math::vec3f& value);
     void setUniform(const char *name, const math::vec4f& value);
     void setUniform(const char *name, const math::mat2f& value);
     void setUniform(const char *name, const math::mat4f& value);
     void setUniform(int location, float value);
     void setUniform(int location, const math::vec2f& value);
+    void setUniform(int location, const math::vec3f& value);
     void setUniform(int location, const math::vec4f& value);
     void setUniform(int location, const math::mat2f& value);
     void setUniform(int location, const math::mat4f& value);
