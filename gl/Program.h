@@ -1,10 +1,10 @@
-
 #pragma once
+#include "../sys/IShared.h"
 
 namespace kapusha {
   
   //! Simple class for handling shader programs
-  class Program {
+  class Program : public IShared {
   public:
     //! Constructor compiles shaders and links program
     //! \param vertex Vertex shader
@@ -53,7 +53,8 @@ namespace kapusha {
     unsigned shader_vertex_;
     unsigned shader_fragment_;
     unsigned program_name_;
-    
   };
+  
+  typedef shared<Program> SProgram;
 
 } // namespace kapusha

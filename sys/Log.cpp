@@ -37,9 +37,11 @@ namespace kapusha {
     va_start(args, format);
     vsnprintf(g_log_messsage_buffer, LOG_MESSAGE_BUFFER_SIZE, format, args);
     
-    KP_ASSERT(g_log.file_);
-    //! \todo timestamp
-    fprintf(g_log.file_, "%s\n", g_log_messsage_buffer);
+    if (g_log.file_)
+    {
+      //! \todo timestamp
+      fprintf(g_log.file_, "%s\n", g_log_messsage_buffer);
+    }
 
     if (g_log.syslog_)
       g_log.syslog_->write(g_log_messsage_buffer);

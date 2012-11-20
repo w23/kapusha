@@ -151,7 +151,7 @@ namespace kapusha {
     glutMotionFunc(mouse_move);
     glutPassiveMotionFunc(mouse_move);
     
-    glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
+    glutIgnoreKeyRepeat(1);
     
     last_draw = glutGet(GLUT_ELAPSED_TIME);
     glutMainLoop();

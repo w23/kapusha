@@ -5,6 +5,7 @@
 namespace kapusha {
   
   //! very basic object that could be shared across many
+  //! \warning thread-unsafe by design!
   class IShared {
   public:
     //! initial retain count should be zero
@@ -17,13 +18,11 @@ namespace kapusha {
     
     //! increase retain count (gain ownership)
     void retain() {
-      //! \todo thread safety: atomics
       ++retain_count_;
     }
     
     //! drop ownership, deletes object if there are no other owner
     void release() {
-      //! \todo thread safety: atomics
       if(!--retain_count_)
         delete this;
     }
@@ -39,8 +38,7 @@ namespace kapusha {
   template <typename T>
   class shared {
   public:
-    shared() : t_(0) {}
-    shared(T* t) : t_(t) { t_->retain(); }
+    shared(T* t = 0) : t_(t) { if (t_) t_->retain(); }
     shared(const shared& other)
       : t_(other.get())
     {
@@ -64,8 +62,12 @@ namespace kapusha {
     }
     
     T *get() const { return t_; }
-    T *operator*() { return t_; }
-    T *operator->() { return t_; }
+    T *operator*() const { return t_; }
+    T *operator->() const { return t_; }
+    shared<T> operator=(const shared<T>& right) {
+      reset(*right);
+      return *this;
+    }
     
   private:
     T* t_;

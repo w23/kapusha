@@ -20,7 +20,7 @@ namespace kapusha {
                               Buffer* buffer, unsigned components,
                               unsigned offset, unsigned stride)
   {
-    KP_ASSERT(material_);
+    KP_ASSERT(*material_);
 
     int i = 0;
     for (; i < MAX_ATTRIBS; ++i)
@@ -35,23 +35,19 @@ namespace kapusha {
     attribs_[i].stride = stride;
   }
 
-  void Batch::prepare() const
+  void Batch::draw() const
   {
-    KP_ASSERT(material_);
+    KP_ASSERT(*material_);
     material_->use();
-
+    
     for (int i = 0; i < MAX_ATTRIBS; ++i)
       if (attribs_[i].index != -1)
         attribs_[i].bind();
-  }
-
-  void Batch::draw() const
-  {
-    if (indices_)
+    
+    if (*indices_)
     {
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_->name());
-      GL_ASSERT
-
+      indices_->bind(Buffer::BindingIndex);
+      
       glDrawElements(gl_geometry_type_, count_, GL_UNSIGNED_INT,
         reinterpret_cast<void*>(first_));
       GL_ASSERT
@@ -59,18 +55,27 @@ namespace kapusha {
       glDrawArrays(gl_geometry_type_, first_, count_);
       GL_ASSERT
     }
+    
+    for (int i = 0; i < MAX_ATTRIBS; ++i)
+      if (attribs_[i].index != -1)
+        attribs_[i].unbind();
   }
 
   void Batch::Attrib::bind() const
   {
-    glBindBuffer(GL_ARRAY_BUFFER, buffer->name());
-    GL_ASSERT
+    buffer->bind();
 
     glVertexAttribPointer(index, components, GL_FLOAT, GL_FALSE,
       stride, reinterpret_cast<void*>(offset));
     GL_ASSERT
 
     glEnableVertexAttribArray(index);
+    GL_ASSERT
+  }
+  
+  void Batch::Attrib::unbind() const
+  {
+    glDisableVertexAttribArray(index);
     GL_ASSERT
   }
 

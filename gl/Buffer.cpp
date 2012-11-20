@@ -18,9 +18,7 @@ namespace kapusha {
 
   void Buffer::load(Stream *data, unsigned size)
   {
-    glBindBuffer(GL_ARRAY_BUFFER, name_);
-    GL_ASSERT
-
+    bind();
     if (data->size() >= size)
     {
       glBufferData(GL_ARRAY_BUFFER, size, data->read(size), GL_STATIC_DRAW);
@@ -34,10 +32,18 @@ namespace kapusha {
 
   void Buffer::load(void *data, unsigned size)
   {
-    glBindBuffer(GL_ARRAY_BUFFER, name_);
-    GL_ASSERT
-
+    bind();
     glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+    GL_ASSERT
+  }
+  
+  void Buffer::bind(Binding binding) const
+  {
+    static unsigned binding_to_gl_tbl[] = {
+      GL_ARRAY_BUFFER,
+      GL_ELEMENT_ARRAY_BUFFER
+    };
+    glBindBuffer(binding_to_gl_tbl[binding], name_);
     GL_ASSERT
   }
 }

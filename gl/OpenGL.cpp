@@ -12,8 +12,10 @@ namespace kapusha {
     __V_GL_V_PAIR(INVALID_ENUM),
     __V_GL_V_PAIR(INVALID_VALUE),
     __V_GL_V_PAIR(INVALID_OPERATION),
+#if !KAPUSHA_GLES
     __V_GL_V_PAIR(STACK_OVERFLOW),
     __V_GL_V_PAIR(STACK_UNDERFLOW),
+#endif
     __V_GL_V_PAIR(OUT_OF_MEMORY)
   };
 #undef __V_GL_V_PAIR

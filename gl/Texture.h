@@ -1,10 +1,10 @@
 #pragma once
-
 #include "../math/types.h"
+#include "../sys/IShared.h"
 
 namespace kapusha {
 
-  class Texture {
+  class Texture : public IShared {
   public:
     struct ImageDesc {
       math::vec2i size;
@@ -50,5 +50,7 @@ namespace kapusha {
     unsigned name_;
     ImageDesc desc_;
   };
+  
+  typedef shared<Texture> STexture;
 
 } // namespace kapusha

@@ -11,12 +11,12 @@ namespace kapusha {
     Object(Batch *batch);
     ~Object() {}
     
-    Batch* getBatch() const { return batch_; }
+    Batch* getBatch() const { return batch_.get(); }
     
     void draw(const math::mat4f& view, const math::mat4f& proj) const;
     
   private:
-    Batch *batch_;
+    SBatch batch_;
     int mview_loc_;
     int mproj_loc_;
   };

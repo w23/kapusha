@@ -23,6 +23,38 @@
 		E18DE05B163D9C9A00869CF5 /* StreamFile_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */; };
 		E18DE08F1642E81200869CF5 /* runGlut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE08D1642E81200869CF5 /* runGlut.cpp */; };
 		E18DE0901642E81200869CF5 /* runGlut.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DE08E1642E81200869CF5 /* runGlut.h */; };
+		E1948105165BCDDB001B0619 /* runGlut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE08D1642E81200869CF5 /* runGlut.cpp */; };
+		E1948106165BCDDB001B0619 /* runGlut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE08D1642E81200869CF5 /* runGlut.cpp */; };
+		E1993176164E141500E8D9CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993175164E141500E8D9CB /* UIKit.framework */; };
+		E1993178164E141500E8D9CB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993177164E141500E8D9CB /* Foundation.framework */; };
+		E199317A164E141500E8D9CB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993179164E141500E8D9CB /* CoreGraphics.framework */; };
+		E199317C164E141500E8D9CB /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E199317B164E141500E8D9CB /* GLKit.framework */; };
+		E199317E164E141500E8D9CB /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E199317D164E141500E8D9CB /* OpenGLES.framework */; };
+		E1993184164E141500E8D9CB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1993182164E141500E8D9CB /* InfoPlist.strings */; };
+		E1993186164E141500E8D9CB /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1993185164E141500E8D9CB /* main.mm */; };
+		E199318A164E141500E8D9CB /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1993189164E141500E8D9CB /* AppDelegate.mm */; };
+		E199318C164E141500E8D9CB /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = E199318B164E141500E8D9CB /* Default.png */; };
+		E199318E164E141500E8D9CB /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E199318D164E141500E8D9CB /* Default@2x.png */; };
+		E1993190164E141500E8D9CB /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E199318F164E141500E8D9CB /* Default-568h@2x.png */; };
+		E1993197164E141500E8D9CB /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1993196164E141500E8D9CB /* ViewController.mm */; };
+		E19931A8164E144F00E8D9CB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993177164E141500E8D9CB /* Foundation.framework */; };
+		E19931B3164E14F400E8D9CB /* libkapusha.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E19931A7164E144F00E8D9CB /* libkapusha.a */; };
+		E19931BB164E4EB800E8D9CB /* Batch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD6163D8EED00869CF5 /* Batch.cpp */; };
+		E19931BC164E4EC000E8D9CB /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD4163D8EED00869CF5 /* Buffer.cpp */; };
+		E19931BD164E4EC000E8D9CB /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B6816444BBA0038E873 /* Camera.cpp */; };
+		E19931BE164E4EC000E8D9CB /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B60164436330038E873 /* Material.cpp */; };
+		E19931BF164E4EC000E8D9CB /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B6F164462670038E873 /* Object.cpp */; };
+		E19931C0164E4EC000E8D9CB /* OpenGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD8163D8EED00869CF5 /* OpenGL.cpp */; };
+		E19931C1164E4EC000E8D9CB /* Program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDA163D8EED00869CF5 /* Program.cpp */; };
+		E19931C2164E4EC000E8D9CB /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDC163D8EED00869CF5 /* Texture.cpp */; };
+		E19931C3164E4EC700E8D9CB /* Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDF163D8EED00869CF5 /* Stream.cpp */; };
+		E19931C4164E4EC700E8D9CB /* StreamFile_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */; };
+		E19931C5164E4ECC00E8D9CB /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFE6163D8EED00869CF5 /* math.cpp */; };
+		E19931C6164E4ED900E8D9CB /* IViewport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B8A1646731E0038E873 /* IViewport.cpp */; };
+		E19931C7164E4ED900E8D9CB /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFED163D8EED00869CF5 /* Log.cpp */; };
+		E19931C9164E4F5800E8D9CB /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E19931C8164E4F5800E8D9CB /* OpenGLES.framework */; };
+		E19931CA164E97C400E8D9CB /* fsquad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE039163D923000869CF5 /* fsquad.cpp */; };
+		E19931CB164E97C400E8D9CB /* flyby_static_geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B73164594C10038E873 /* flyby_static_geometry.cpp */; };
 		E1E74B62164436330038E873 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B60164436330038E873 /* Material.cpp */; };
 		E1E74B63164436330038E873 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = E1E74B61164436330038E873 /* Material.h */; };
 		E1E74B6A16444BBA0038E873 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B6816444BBA0038E873 /* Camera.cpp */; };
@@ -45,6 +77,15 @@
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		E19931A5164E144F00E8D9CB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E1E74B76164595030038E873 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -89,7 +130,7 @@
 		E18DDFFC163D8F3B00869CF5 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		E18DDFFD163D8F3B00869CF5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E18DE007163D8F5400869CF5 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = DEVELOPER_DIR; };
-		E18DE036163D923000869CF5 /* KapushaTestGLUT */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = KapushaTestGLUT; path = kapusha_test_fullscreen_quad; sourceTree = BUILT_PRODUCTS_DIR; };
+		E18DE036163D923000869CF5 /* kapusha_test_fullscreen_quad */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = kapusha_test_fullscreen_quad; sourceTree = BUILT_PRODUCTS_DIR; };
 		E18DE039163D923000869CF5 /* fsquad.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fsquad.cpp; sourceTree = "<group>"; };
 		E18DE042163D925600869CF5 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/GLUT.framework; sourceTree = DEVELOPER_DIR; };
 		E18DE044163D9BE500869CF5 /* StreamFile_posix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamFile_posix.h; sourceTree = "<group>"; };
@@ -97,6 +138,26 @@
 		E18DE05C163D9E4600869CF5 /* StreamFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamFile.h; sourceTree = "<group>"; };
 		E18DE08D1642E81200869CF5 /* runGlut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = runGlut.cpp; sourceTree = "<group>"; };
 		E18DE08E1642E81200869CF5 /* runGlut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = runGlut.h; sourceTree = "<group>"; };
+		E1993173164E141500E8D9CB /* kapusha-samples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "kapusha-samples.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1993175164E141500E8D9CB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		E1993177164E141500E8D9CB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		E1993179164E141500E8D9CB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		E199317B164E141500E8D9CB /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = Library/Frameworks/GLKit.framework; sourceTree = DEVELOPER_DIR; };
+		E199317D164E141500E8D9CB /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		E1993181164E141500E8D9CB /* kapusha-samples-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "kapusha-samples-Info.plist"; sourceTree = "<group>"; };
+		E1993183164E141500E8D9CB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E1993185164E141500E8D9CB /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		E1993187164E141500E8D9CB /* kapusha-samples-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "kapusha-samples-Prefix.pch"; sourceTree = "<group>"; };
+		E1993188164E141500E8D9CB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		E1993189164E141500E8D9CB /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		E199318B164E141500E8D9CB /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		E199318D164E141500E8D9CB /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		E199318F164E141500E8D9CB /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		E1993195164E141500E8D9CB /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		E1993196164E141500E8D9CB /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		E19931A7164E144F00E8D9CB /* libkapusha.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libkapusha.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E19931C8164E4F5800E8D9CB /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		E1BD0C1D164F72A900A3454C /* Render.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Render.h; sourceTree = "<group>"; };
 		E1E74B60164436330038E873 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
 		E1E74B61164436330038E873 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
 		E1E74B6816444BBA0038E873 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
@@ -129,6 +190,28 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E1993170164E141500E8D9CB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E19931B3164E14F400E8D9CB /* libkapusha.a in Frameworks */,
+				E1993176164E141500E8D9CB /* UIKit.framework in Frameworks */,
+				E1993178164E141500E8D9CB /* Foundation.framework in Frameworks */,
+				E199317A164E141500E8D9CB /* CoreGraphics.framework in Frameworks */,
+				E199317C164E141500E8D9CB /* GLKit.framework in Frameworks */,
+				E199317E164E141500E8D9CB /* OpenGLES.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E19931A4164E144F00E8D9CB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E19931C9164E4F5800E8D9CB /* OpenGLES.framework in Frameworks */,
+				E19931A8164E144F00E8D9CB /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E1E74B75164595030038E873 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -158,6 +241,7 @@
 		E18DDFD3163D8EED00869CF5 /* gl */ = {
 			isa = PBXGroup;
 			children = (
+				E1BD0C1D164F72A900A3454C /* Render.h */,
 				E18DDFD6163D8EED00869CF5 /* Batch.cpp */,
 				E18DDFD7163D8EED00869CF5 /* Batch.h */,
 				E18DDFD4163D8EED00869CF5 /* Buffer.cpp */,
@@ -226,8 +310,10 @@
 			isa = PBXGroup;
 			children = (
 				E18DDFF5163D8F3A00869CF5 /* libKapusha.a */,
-				E18DE036163D923000869CF5 /* KapushaTestGLUT */,
+				E18DE036163D923000869CF5 /* kapusha_test_fullscreen_quad */,
 				E1E74B78164595030038E873 /* kapusha_test_object */,
+				E1993173164E141500E8D9CB /* kapusha-samples.app */,
+				E19931A7164E144F00E8D9CB /* libkapusha.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -235,9 +321,15 @@
 		E18DDFF7163D8F3A00869CF5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E19931C8164E4F5800E8D9CB /* OpenGLES.framework */,
 				E18DE042163D925600869CF5 /* GLUT.framework */,
 				E18DE007163D8F5400869CF5 /* OpenGL.framework */,
 				E18DDFF8163D8F3A00869CF5 /* Cocoa.framework */,
+				E1993175164E141500E8D9CB /* UIKit.framework */,
+				E1993177164E141500E8D9CB /* Foundation.framework */,
+				E1993179164E141500E8D9CB /* CoreGraphics.framework */,
+				E199317B164E141500E8D9CB /* GLKit.framework */,
+				E199317D164E141500E8D9CB /* OpenGLES.framework */,
 				E18DDFFA163D8F3A00869CF5 /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -256,10 +348,38 @@
 		E18DE038163D923000869CF5 /* tests */ = {
 			isa = PBXGroup;
 			children = (
+				E199317F164E141500E8D9CB /* kapusha-samples */,
 				E18DE039163D923000869CF5 /* fsquad.cpp */,
 				E1E74B73164594C10038E873 /* flyby_static_geometry.cpp */,
 			);
 			path = tests;
+			sourceTree = "<group>";
+		};
+		E199317F164E141500E8D9CB /* kapusha-samples */ = {
+			isa = PBXGroup;
+			children = (
+				E1993188164E141500E8D9CB /* AppDelegate.h */,
+				E1993189164E141500E8D9CB /* AppDelegate.mm */,
+				E1993195164E141500E8D9CB /* ViewController.h */,
+				E1993196164E141500E8D9CB /* ViewController.mm */,
+				E1993180164E141500E8D9CB /* Supporting Files */,
+			);
+			name = "kapusha-samples";
+			path = "../kapusha-samples";
+			sourceTree = "<group>";
+		};
+		E1993180164E141500E8D9CB /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E1993181164E141500E8D9CB /* kapusha-samples-Info.plist */,
+				E1993182164E141500E8D9CB /* InfoPlist.strings */,
+				E1993185164E141500E8D9CB /* main.mm */,
+				E1993187164E141500E8D9CB /* kapusha-samples-Prefix.pch */,
+				E199318B164E141500E8D9CB /* Default.png */,
+				E199318D164E141500E8D9CB /* Default@2x.png */,
+				E199318F164E141500E8D9CB /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -310,8 +430,42 @@
 			);
 			name = kapusha_test_fullscreen_quad;
 			productName = KapushaTestGLUT;
-			productReference = E18DE036163D923000869CF5 /* KapushaTestGLUT */;
+			productReference = E18DE036163D923000869CF5 /* kapusha_test_fullscreen_quad */;
 			productType = "com.apple.product-type.tool";
+		};
+		E1993172164E141500E8D9CB /* kapusha-samples */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E19931A0164E141500E8D9CB /* Build configuration list for PBXNativeTarget "kapusha-samples" */;
+			buildPhases = (
+				E199316F164E141500E8D9CB /* Sources */,
+				E1993170164E141500E8D9CB /* Frameworks */,
+				E1993171164E141500E8D9CB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "kapusha-samples";
+			productName = "kapusha-samples";
+			productReference = E1993173164E141500E8D9CB /* kapusha-samples.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E19931A6164E144F00E8D9CB /* kapusha */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E19931B0164E144F00E8D9CB /* Build configuration list for PBXNativeTarget "kapusha" */;
+			buildPhases = (
+				E19931A3164E144F00E8D9CB /* Sources */,
+				E19931A4164E144F00E8D9CB /* Frameworks */,
+				E19931A5164E144F00E8D9CB /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = kapusha;
+			productName = kapusha;
+			productReference = E19931A7164E144F00E8D9CB /* libkapusha.a */;
+			productType = "com.apple.product-type.library.static";
 		};
 		E1E74B77164595030038E873 /* kapusha_test_object */ = {
 			isa = PBXNativeTarget;
@@ -353,9 +507,25 @@
 				E18DDFF4163D8F3A00869CF5 /* Kapusha */,
 				E18DE035163D923000869CF5 /* kapusha_test_fullscreen_quad */,
 				E1E74B77164595030038E873 /* kapusha_test_object */,
+				E1993172164E141500E8D9CB /* kapusha-samples */,
+				E19931A6164E144F00E8D9CB /* kapusha */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E1993171164E141500E8D9CB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1993184164E141500E8D9CB /* InfoPlist.strings in Resources */,
+				E199318C164E141500E8D9CB /* Default.png in Resources */,
+				E199318E164E141500E8D9CB /* Default@2x.png in Resources */,
+				E1993190164E141500E8D9CB /* Default-568h@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E18DDFF1163D8F3A00869CF5 /* Sources */ = {
@@ -384,6 +554,39 @@
 			buildActionMask = 2147483647;
 			files = (
 				E18DE03A163D923000869CF5 /* fsquad.cpp in Sources */,
+				E1948105165BCDDB001B0619 /* runGlut.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E199316F164E141500E8D9CB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1993186164E141500E8D9CB /* main.mm in Sources */,
+				E199318A164E141500E8D9CB /* AppDelegate.mm in Sources */,
+				E1993197164E141500E8D9CB /* ViewController.mm in Sources */,
+				E19931CA164E97C400E8D9CB /* fsquad.cpp in Sources */,
+				E19931CB164E97C400E8D9CB /* flyby_static_geometry.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E19931A3164E144F00E8D9CB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E19931C6164E4ED900E8D9CB /* IViewport.cpp in Sources */,
+				E19931C7164E4ED900E8D9CB /* Log.cpp in Sources */,
+				E19931BB164E4EB800E8D9CB /* Batch.cpp in Sources */,
+				E19931BC164E4EC000E8D9CB /* Buffer.cpp in Sources */,
+				E19931BD164E4EC000E8D9CB /* Camera.cpp in Sources */,
+				E19931BE164E4EC000E8D9CB /* Material.cpp in Sources */,
+				E19931BF164E4EC000E8D9CB /* Object.cpp in Sources */,
+				E19931C0164E4EC000E8D9CB /* OpenGL.cpp in Sources */,
+				E19931C1164E4EC000E8D9CB /* Program.cpp in Sources */,
+				E19931C2164E4EC000E8D9CB /* Texture.cpp in Sources */,
+				E19931C3164E4EC700E8D9CB /* Stream.cpp in Sources */,
+				E19931C4164E4EC700E8D9CB /* StreamFile_posix.cpp in Sources */,
+				E19931C5164E4ECC00E8D9CB /* math.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,10 +595,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1E74B82164596410038E873 /* flyby_static_geometry.cpp in Sources */,
+				E1948106165BCDDB001B0619 /* runGlut.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		E1993182164E141500E8D9CB /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E1993183164E141500E8D9CB /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		E18DDFCE163D8ED100869CF5 /* Debug */ = {
@@ -486,6 +701,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					"SAMPLE_STANDALONE_GLUT=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -514,6 +730,7 @@
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = "SAMPLE_STANDALONE_GLUT=1";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -521,6 +738,135 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		E199319E164E141500E8D9CB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "kapusha-samples/kapusha-samples-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "kapusha-samples/kapusha-samples-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		E199319F164E141500E8D9CB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "kapusha-samples/kapusha-samples-Prefix.pch";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "kapusha-samples/kapusha-samples-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		E19931B1164E144F00E8D9CB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/kapusha.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		E19931B2164E144F00E8D9CB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/kapusha.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -543,6 +889,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					"SAMPLE_STANDALONE_GLUT=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -571,6 +918,7 @@
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = "SAMPLE_STANDALONE_GLUT=1";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -607,6 +955,24 @@
 			buildConfigurations = (
 				E18DE03E163D923000869CF5 /* Debug */,
 				E18DE03F163D923000869CF5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E19931A0164E141500E8D9CB /* Build configuration list for PBXNativeTarget "kapusha-samples" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E199319E164E141500E8D9CB /* Debug */,
+				E199319F164E141500E8D9CB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E19931B0164E144F00E8D9CB /* Build configuration list for PBXNativeTarget "kapusha" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E19931B1164E144F00E8D9CB /* Debug */,
+				E19931B2164E144F00E8D9CB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

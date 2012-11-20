@@ -17,7 +17,7 @@ namespace kapusha {
   class Texture;
   
   //! Basic material that contains uniform values for specific program
-  class Material {
+  class Material : public IShared {
   public:
     Material(Program *program);
     virtual ~Material();
@@ -26,7 +26,7 @@ namespace kapusha {
     void use() const;
     
     //! Get material program
-    Program *getProgram() const { return shader_program_; }
+    Program *getProgram() const { return shader_program_.get(); }
     int getUniformLocation(const char* name) {
       return shader_program_->getUniformLocation(name);
     }
@@ -48,7 +48,7 @@ namespace kapusha {
     void setTexture(const char *name, const Texture *texture);
     
   private:
-    Program *shader_program_;
+    SProgram shader_program_;
     
     struct Uniform {
       enum Type {
@@ -81,5 +81,7 @@ namespace kapusha {
     void setUniform(int location, Uniform::Type type,
                     const float* data, int components, int size);
   };
+  
+  typedef shared<Material> SMaterial;
   
 }

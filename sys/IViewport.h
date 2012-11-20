@@ -33,6 +33,7 @@ namespace kapusha {
     virtual void init(ISystem* system) = 0;
     
     //! Viewport window size has changed
+    //! it is also called for the first time just after init()
     //! \param width new width in pixels
     //! \param height new height in pixels
     virtual void resize(int width, int height) = 0;
@@ -41,6 +42,12 @@ namespace kapusha {
     //! \param ms Monotonic time in milliseconds since some referential point
     //! \param dt Time since previous draw(), in seconds
     virtual void draw(int ms, float dt) = 0;
+    
+    //! Deinitialize
+    //! Called just before the current gl context will become invalid.
+    //! \warning this is not equal to dtor, as init() could be called again
+    //! for a new context
+    virtual void close() = 0;
   
   public: // User input
     //! Some user-input Event
@@ -48,7 +55,7 @@ namespace kapusha {
     public:
       Event(int type, int time = 0) : type_(type), time_(time) {}
       
-      //! Fet type of the event
+      //! Get type of the event
       int type() const { return type_; }
       
       //! Get time in milliseconds when this event was registered by system.
@@ -125,6 +132,8 @@ namespace kapusha {
           None = 0,
           Move = 1,
           Pressed = 2,
+          //! mouse-specific
+          LeftButton = Pressed,
           RightButton = 4,
           MiddleButton = 8,
           WheelUp = 16,
@@ -145,7 +154,7 @@ namespace kapusha {
       : Event(Event::Pointer, 0)
       , combined_flags_(0) {}
       
-      //! \mouse event
+      //! mouse event
       PointerEvent(math::vec2f pos, int flags)
       : Event(Event::Pointer, 0)
       , combined_flags_(flags)

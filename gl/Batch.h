@@ -1,13 +1,12 @@
 #pragma once
+#include "Buffer.h"
+#include "Material.h"
 
 namespace kapusha {
 
-  class Buffer;
-  class Material;
-
 #define MAX_ATTRIBS 8
 
-  class Batch {
+  class Batch : public IShared {
   public:
     // match GL_... types exactly
     enum GeometryType {
@@ -29,7 +28,7 @@ namespace kapusha {
       material_ = material;
     }
     
-    Material* getMaterial() const { return material_; }
+    Material* getMaterial() const { return material_.get(); }
 
     void setAttribSource(const char* attrib_name,
                          Buffer* buffer, unsigned components = 3,
@@ -43,27 +42,29 @@ namespace kapusha {
       gl_geometry_type_ = type;
     }
 
-    void prepare() const;
     void draw() const;
 
   private:
     struct Attrib {
       int index;
-      Buffer* buffer;
+      SBuffer buffer;
       int components;
       int offset;
       int stride;
 
       Attrib() : index(-1) {}
       void bind() const;
+      void unbind() const;
     };
     Attrib attribs_[MAX_ATTRIBS];
     
-    Material *material_;
+    SMaterial material_;
 
-    Buffer *indices_;
+    SBuffer indices_;
     unsigned first_, count_;
     unsigned gl_geometry_type_;
   };
+  
+  typedef shared<Batch> SBatch;
 
 } // namespace kapusha

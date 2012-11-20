@@ -4,8 +4,15 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #elif defined(__APPLE__)
+#include "TargetConditionals.h"
+#if TARGET_OS_IPHONE || TARGET_OS_IPHONE_SIMULATOR
+#define KAPUSHA_GLES 1
+#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
+#else
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
+#endif
 #elif defined(__linux__)
 #define GL_GLEXT_PROTOTYPES 1
 #include <GL/gl.h>
@@ -14,11 +21,13 @@
 #error please include opengl in platform-specific way
 #endif
 
-#if DEBUG
 namespace kapusha {
+
+#if DEBUG
   void glAssert(const char*, int);
-}
 #define GL_ASSERT glAssert(__FILE__,__LINE__);
 #else
 #define GL_ASSERT {}
 #endif
+  
+} // namespace kapusha

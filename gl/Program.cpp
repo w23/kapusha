@@ -74,10 +74,6 @@ namespace kapusha {
     program_name_ = glCreateProgram();
     glAttachShader(program_name_, shader_vertex_);
     glAttachShader(program_name_, shader_fragment_);
-    
-    glBindAttribLocation(program_name_, 0, "vertex");
-    GL_ASSERT
-    
     glLinkProgram(program_name_);
     
     // errcheck
