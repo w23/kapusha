@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "../../sys/osx/KPViewport.h"
+#import "../../sys/osx/KPView.h"
 
 namespace fsquad {
   kapusha::IViewport *makeViewport();
@@ -18,7 +18,7 @@ namespace flyby {
 
 
 @interface AppDelegate ()
-@property (assign) IBOutlet KPViewport *viewport;
+@property (assign) IBOutlet KPView *viewport;
 @end
 
 @implementation AppDelegate
@@ -30,7 +30,8 @@ namespace flyby {
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-  [self.viewport setViewport:flyby::makeViewport()];
+  [self.window setAcceptsMouseMovedEvents:YES];
+  [self.viewport setViewport:fsquad::makeViewport()];
 }
 
 - (BOOL)windowShouldClose:(id)sender

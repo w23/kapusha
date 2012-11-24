@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E14B5358165D59F300B55FEC /* KPViewport.h in Headers */ = {isa = PBXBuildFile; fileRef = E14B5356165D59F300B55FEC /* KPViewport.h */; };
-		E14B5359165D59F300B55FEC /* KPViewport.mm in Sources */ = {isa = PBXBuildFile; fileRef = E14B5357165D59F300B55FEC /* KPViewport.mm */; };
+		E14B5358165D59F300B55FEC /* KPView.h in Headers */ = {isa = PBXBuildFile; fileRef = E14B5356165D59F300B55FEC /* KPView.h */; };
+		E14B5359165D59F300B55FEC /* KPView.mm in Sources */ = {isa = PBXBuildFile; fileRef = E14B5357165D59F300B55FEC /* KPView.mm */; };
 		E14B536C165D5C4500B55FEC /* fsquad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE039163D923000869CF5 /* fsquad.cpp */; };
 		E14B536D165D5C4500B55FEC /* flyby_static_geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B73164594C10038E873 /* flyby_static_geometry.cpp */; };
+		E15E63FB165E84150032BBC2 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E15E63F9165E84150032BBC2 /* Input.cpp */; };
+		E15E63FC165E84150032BBC2 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E15E63F9165E84150032BBC2 /* Input.cpp */; };
+		E15E63FD165E84150032BBC2 /* Input.h in Headers */ = {isa = PBXBuildFile; fileRef = E15E63FA165E84150032BBC2 /* Input.h */; };
 		E1993176164E141500E8D9CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993175164E141500E8D9CB /* UIKit.framework */; };
 		E1993178164E141500E8D9CB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993177164E141500E8D9CB /* Foundation.framework */; };
 		E199317A164E141500E8D9CB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993179164E141500E8D9CB /* CoreGraphics.framework */; };
@@ -36,7 +39,6 @@
 		E19931C3164E4EC700E8D9CB /* Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDF163D8EED00869CF5 /* Stream.cpp */; };
 		E19931C4164E4EC700E8D9CB /* StreamFile_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */; };
 		E19931C5164E4ECC00E8D9CB /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFE6163D8EED00869CF5 /* math.cpp */; };
-		E19931C6164E4ED900E8D9CB /* IViewport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B8A1646731E0038E873 /* IViewport.cpp */; };
 		E19931C7164E4ED900E8D9CB /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFED163D8EED00869CF5 /* Log.cpp */; };
 		E19931C9164E4F5800E8D9CB /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E19931C8164E4F5800E8D9CB /* OpenGLES.framework */; };
 		E19931CA164E97C400E8D9CB /* fsquad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE039163D923000869CF5 /* fsquad.cpp */; };
@@ -85,7 +87,6 @@
 		E1A77CF8165D54DB009FF8F3 /* Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDF163D8EED00869CF5 /* Stream.cpp */; };
 		E1A77CF9165D54DB009FF8F3 /* StreamFile_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */; };
 		E1A77CFA165D54DB009FF8F3 /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFE6163D8EED00869CF5 /* math.cpp */; };
-		E1A77CFB165D54DB009FF8F3 /* IViewport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B8A1646731E0038E873 /* IViewport.cpp */; };
 		E1A77CFC165D54DB009FF8F3 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFED163D8EED00869CF5 /* Log.cpp */; };
 		E1A77CFE165D5741009FF8F3 /* kapusha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1A77CC9165D528A009FF8F3 /* kapusha.framework */; };
 /* End PBXBuildFile section */
@@ -103,8 +104,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		E14B5356165D59F300B55FEC /* KPViewport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPViewport.h; sourceTree = "<group>"; };
-		E14B5357165D59F300B55FEC /* KPViewport.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KPViewport.mm; sourceTree = "<group>"; };
+		E14B5356165D59F300B55FEC /* KPView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPView.h; sourceTree = "<group>"; };
+		E14B5357165D59F300B55FEC /* KPView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KPView.mm; sourceTree = "<group>"; };
+		E15E63F9165E84150032BBC2 /* Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Input.cpp; sourceTree = "<group>"; };
+		E15E63FA165E84150032BBC2 /* Input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Input.h; sourceTree = "<group>"; };
 		E18DDFD4163D8EED00869CF5 /* Buffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Buffer.cpp; sourceTree = "<group>"; };
 		E18DDFD5163D8EED00869CF5 /* Buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
 		E18DDFD6163D8EED00869CF5 /* Batch.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Batch.cpp; sourceTree = "<group>"; };
@@ -182,7 +185,6 @@
 		E1E74B6F164462670038E873 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
 		E1E74B70164462670038E873 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
 		E1E74B73164594C10038E873 /* flyby_static_geometry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = flyby_static_geometry.cpp; sourceTree = "<group>"; };
-		E1E74B8A1646731E0038E873 /* IViewport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IViewport.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -304,11 +306,12 @@
 			isa = PBXGroup;
 			children = (
 				E1E74B6E1644551C0038E873 /* Shared.h */,
-				E1E74B8A1646731E0038E873 /* IViewport.cpp */,
 				E18DDFEC163D8EED00869CF5 /* IViewport.h */,
 				E18DDFED163D8EED00869CF5 /* Log.cpp */,
 				E18DDFEE163D8EED00869CF5 /* Log.h */,
 				E18DDFEF163D8EED00869CF5 /* Core.h */,
+				E15E63F9165E84150032BBC2 /* Input.cpp */,
+				E15E63FA165E84150032BBC2 /* Input.h */,
 			);
 			name = core;
 			path = src/core;
@@ -356,7 +359,7 @@
 			isa = PBXGroup;
 			children = (
 				E1A77CA4165D39F9009FF8F3 /* osx */,
-				E199317F164E141500E8D9CB /* kapusha-samples */,
+				E199317F164E141500E8D9CB /* ios */,
 				E18DE039163D923000869CF5 /* fsquad.cpp */,
 				E1E74B73164594C10038E873 /* flyby_static_geometry.cpp */,
 			);
@@ -364,7 +367,7 @@
 			path = src/samples;
 			sourceTree = "<group>";
 		};
-		E199317F164E141500E8D9CB /* kapusha-samples */ = {
+		E199317F164E141500E8D9CB /* ios */ = {
 			isa = PBXGroup;
 			children = (
 				E1993188164E141500E8D9CB /* AppDelegate.h */,
@@ -373,8 +376,7 @@
 				E1993196164E141500E8D9CB /* ViewController.mm */,
 				E1993180164E141500E8D9CB /* Supporting Files */,
 			);
-			name = "kapusha-samples";
-			path = "../kapusha-samples";
+			path = ios;
 			sourceTree = "<group>";
 		};
 		E1993180164E141500E8D9CB /* Supporting Files */ = {
@@ -420,8 +422,8 @@
 				E1A77CCD165D528A009FF8F3 /* kapusha-Info.plist */,
 				E1A77CCE165D528A009FF8F3 /* InfoPlist.strings */,
 				E1A77CD1165D528A009FF8F3 /* kapusha-Prefix.pch */,
-				E14B5356165D59F300B55FEC /* KPViewport.h */,
-				E14B5357165D59F300B55FEC /* KPViewport.mm */,
+				E14B5356165D59F300B55FEC /* KPView.h */,
+				E14B5357165D59F300B55FEC /* KPView.mm */,
 			);
 			path = osx;
 			sourceTree = "<group>";
@@ -465,7 +467,8 @@
 				E1A77CEC165D52BE009FF8F3 /* IViewport.h in Headers */,
 				E1A77CED165D52BE009FF8F3 /* Log.h in Headers */,
 				E1A77CEE165D52BE009FF8F3 /* Core.h in Headers */,
-				E14B5358165D59F300B55FEC /* KPViewport.h in Headers */,
+				E14B5358165D59F300B55FEC /* KPView.h in Headers */,
+				E15E63FD165E84150032BBC2 /* Input.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -618,7 +621,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E19931C6164E4ED900E8D9CB /* IViewport.cpp in Sources */,
 				E19931C7164E4ED900E8D9CB /* Log.cpp in Sources */,
 				E19931BB164E4EB800E8D9CB /* Batch.cpp in Sources */,
 				E19931BC164E4EC000E8D9CB /* Buffer.cpp in Sources */,
@@ -631,6 +633,7 @@
 				E19931C3164E4EC700E8D9CB /* Stream.cpp in Sources */,
 				E19931C4164E4EC700E8D9CB /* StreamFile_posix.cpp in Sources */,
 				E19931C5164E4ECC00E8D9CB /* math.cpp in Sources */,
+				E15E63FB165E84150032BBC2 /* Input.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -660,9 +663,9 @@
 				E1A77CF8165D54DB009FF8F3 /* Stream.cpp in Sources */,
 				E1A77CF9165D54DB009FF8F3 /* StreamFile_posix.cpp in Sources */,
 				E1A77CFA165D54DB009FF8F3 /* math.cpp in Sources */,
-				E1A77CFB165D54DB009FF8F3 /* IViewport.cpp in Sources */,
 				E1A77CFC165D54DB009FF8F3 /* Log.cpp in Sources */,
-				E14B5359165D59F300B55FEC /* KPViewport.mm in Sources */,
+				E14B5359165D59F300B55FEC /* KPView.mm in Sources */,
+				E15E63FC165E84150032BBC2 /* Input.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

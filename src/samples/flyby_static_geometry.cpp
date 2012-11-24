@@ -12,19 +12,17 @@ namespace flyby {
   public:
     Viewport();
     virtual ~Viewport() {}
-    virtual void init(ISystem* system);
+    virtual void init(IViewportController* system);
     virtual void resize(vec2i size);
     virtual void draw(int ms, float dt);
     virtual void close();
-    virtual void keyEvent(const KeyEvent& event);
-    virtual void pointerEvent(const PointerEvent& event);
     
   private:
     Object* createGround() const;
     Object* createDust() const;
     
   private:
-    ISystem *system_;
+    IViewportController *system_;
     Object* ground_;
     Object* object_;
     Camera camera_;
@@ -142,7 +140,7 @@ namespace flyby {
     return new Object(batch);
   }
 
-  void Viewport::init(ISystem *system)
+  void Viewport::init(IViewportController *system)
   {
     system_ = system;
     
@@ -190,6 +188,7 @@ namespace flyby {
     system_->redraw();
   }
 
+  /*
   void Viewport::keyEvent(const kapusha::IViewport::KeyEvent &event)
   {
     switch (event.key()) {
@@ -229,6 +228,7 @@ namespace flyby {
     yaw_speed_ = -rel.x;
     pitch_speed_ = rel.y;
   }
+   */
 
   IViewport *makeViewport()
   {

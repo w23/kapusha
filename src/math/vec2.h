@@ -24,6 +24,10 @@ namespace kapusha {
     vec2(const vec2<T>& v)
     : x(v.x), y(v.y) {}
     
+    template <typename R>
+    vec2(const vec2<R>& v)
+    : x(v.x), y(v.y) {}
+    
     vec2<T>& operator=(const vec2<T>& v)
     {
       x = v.x;
