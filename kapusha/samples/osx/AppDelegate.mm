@@ -1,11 +1,3 @@
-//
-//  AppDelegate.m
-//  kapusha-samples-osx
-//
-//  Created by Ivan Avdeev on 21.11.12.
-//
-//
-
 #import "AppDelegate.h"
 #import "../../core/Log.h"
 #import "../../sys/osx/KPView.h"
@@ -39,6 +31,9 @@ public:
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+  // \hack force likning KPView class from libkapusha
+  [KPView class];
+  
   KP_LOG_OPEN("Kapusha.log", new CocoaLog);
   [self.window setAcceptsMouseMovedEvents:YES];
   [self.viewport setViewport:flyby::makeViewport()];

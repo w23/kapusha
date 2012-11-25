@@ -59,6 +59,11 @@ namespace kapusha {
       //vec2f speed;
       //float pressure;
       
+      inline bool isPressed() const { return flags & (LeftButton|RightButton|MiddleButton); }
+      inline bool isLeftPressed() const { return flags & LeftButton; }
+      inline bool isRightPressed() const { return flags & RightButton; }
+      inline bool isMiddlePressed() const { return flags & MiddleButton; }
+      
       Pointer(vec2f _pos = vec2f(0), int _flags = None)
       : flags(_flags), point(_pos) {}
       

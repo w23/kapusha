@@ -1,3 +1,4 @@
+#include <mach/mach_time.h>
 #import "KPView.h"
 #import "../../core/IViewport.h"
 
@@ -9,11 +10,55 @@ class CocoaViewportController;
 {
   CocoaViewportController *viewport_controller_;
   IViewport *viewport_;
+  u32 prevFrameTime_;
+  
   NSTimer *timer_;
-  BOOL redraw_;
+  float frameTime_;
+  //! \todo CVDisplayLinkRef displayLink_;
+  // http://developer.apple.com/library/mac/#qa/qa1385/_index.html
+  // why not now? threading! too lazy to think atm
 }
-- (void) redraw;
+@property (assign, nonatomic) BOOL warpMouse;
+- (void) limitFps:(int)fps;
+
+- (void) draw;
+
+- (void) startDrawing;
+- (void) stopDrawing;
+
+- (void) doWarpMouse;
 @end
+
+////////////////////////////////////////////////////////////////////////////////
+
+class MachTime {
+public:
+  MachTime()
+  : start_(mach_absolute_time())
+  {
+    mach_timebase_info(&timebase_);
+  }
+  
+  void reset()
+  {
+    start_ = mach_absolute_time();
+  }
+  
+  u64 now_ns() const
+  {
+    uint64_t now = mach_absolute_time() - start_;
+    return now * timebase_.numer / timebase_.denom;
+  }
+  
+  u32 now_ms() const
+  {
+    return now_ns() / 1000000;
+  }
+private:
+  uint64_t start_;
+  mach_timebase_info_data_t timebase_;
+};
+MachTime g_machTime;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -178,10 +223,16 @@ public:
   
 public: // IViewportController
   virtual void quit(int code) {}
-  virtual void redraw() {
-    [view_ redraw];
+  virtual void limitFramesPerSecond(int fps)
+  {
+    [view_ limitFps:fps];
   }
-  virtual void pointerReset(bool reset) {}
+  
+  virtual void limitlessPointer(bool limitless)
+  {
+    view_.warpMouse = limitless;
+  }
+  
   virtual const PointerState& pointerState() const { return pointerState_; }
   virtual const KeyState& keyState() const { return keyState_; }
     
@@ -233,35 +284,71 @@ private:
   {
     [self prepareOpenGL];
     [self reshape];
-    [self drawRect:[self bounds]];
-    timer_ = [NSTimer timerWithTimeInterval:(1.0f/60.0f)
-                                     target:self
-                                   selector:@selector(timer:)
-                                   userInfo:nil
-                                    repeats:YES];
-	[[NSRunLoop currentRunLoop] addTimer:timer_ forMode:NSDefaultRunLoopMode];
+    [self draw];
+
+    if (frameTime_ != 0)
+      [self startDrawing];
   }
 }
 
-- (void) redraw
+- (void) limitFps:(int)fps
 {
-  redraw_ = YES;
+  if (fps > 0)
+  {
+    frameTime_ = 1.f / (float)fps;
+    [self startDrawing];
+  } else {
+    [self stopDrawing];
+  }
 }
 
-- (void) timer:(id)obj
+- (void) startDrawing
 {
-  [self drawRect:[self bounds]];
+  if (timer_) [timer_ invalidate];
+  timer_ = [NSTimer scheduledTimerWithTimeInterval:frameTime_
+                                            target:self
+                                          selector:@selector(timerDraw)
+                                          userInfo:nil
+                                           repeats:YES];
 }
 
+- (void) stopDrawing
+{
+  [timer_ invalidate];
+  timer_ = nil;
+}
+
+- (void) timerDraw
+{
+  [self draw];
+}
+
+- (void) draw
+{
+  if (viewport_)
+  {
+    u32 time = g_machTime.now_ms();
+    viewport_->draw(time, (time - prevFrameTime_) / 1000.f);
+    [[self openGLContext] flushBuffer];
+    prevFrameTime_ = time;
+  }
+}
+
+ 
 #pragma mark - delegate methods
 
 - (void) prepareOpenGL
 {
+  g_machTime.reset();
+  prevFrameTime_ = g_machTime.now_ms();
+  
   delete viewport_controller_;
   viewport_controller_ = 0;
   
+  [self limitFps:60];
+  
   if (viewport_)
-    viewport_controller_ = new CocoaViewportController(self, viewport_);
+    viewport_controller_ = new CocoaViewportController(self, viewport_);  
 }
 
 - (void) reshape
@@ -273,12 +360,7 @@ private:
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-  if (viewport_)
-  {
-    redraw_ = NO;
-    viewport_->draw(1.f, .1f);
-    [[self openGLContext] flushBuffer];
-  }
+  [self draw];
 }
 
 - (BOOL)acceptsFirstResponder {
@@ -290,8 +372,6 @@ private:
 - (BOOL)resignFirstResponder {
   return YES;
 }
-
-#pragma mark Mouse events
 
 - (vec2f) viewportMouseLocation:(NSEvent *)event
 {
@@ -306,16 +386,33 @@ private:
   return (u32)cocoaTime * 1000;
 }
 
+- (void) doWarpMouse
+{
+  KP_ASSERT(!"warping mouse is broken!");
+  /* \fixme
+  NSPoint point;
+  point.x = self.bounds.size.width / 2.;
+  point.y = self.bounds.size.height / 2.;
+  NSPoint windowPoint = [self convertPoint:point toView:nil];
+  NSPoint screenPoint = [[self window] convertBaseToScreen:windowPoint];
+  CGWarpMouseCursorPosition(screenPoint);
+   */
+}
+
+#pragma mark Mouse events
+
 - (void) mouseMoved:(NSEvent *)theEvent
 {
   viewport_controller_->mouseMoved([self viewportMouseLocation:theEvent],
                                    [self viewportTime:[theEvent timestamp]]);
+  if (_warpMouse) [self doWarpMouse];
 }
 
 - (void) mouseDragged:(NSEvent *)theEvent
 {
   viewport_controller_->mouseMoved([self viewportMouseLocation:theEvent],
                                    [self viewportTime:[theEvent timestamp]]);
+  if (_warpMouse) [self doWarpMouse];
 }
 
 - (void) mouseDown:(NSEvent *)theEvent
@@ -323,6 +420,7 @@ private:
   viewport_controller_->mouseClicked([self viewportMouseLocation:theEvent],
                                      PointerState::Pointer::LeftButton,
                                      [self viewportTime:[theEvent timestamp]]);
+  if (_warpMouse) [self doWarpMouse];
 }
 
 - (void) mouseUp:(NSEvent *)theEvent
@@ -330,6 +428,7 @@ private:
   viewport_controller_->mouseUnclicked([self viewportMouseLocation:theEvent],
                                        PointerState::Pointer::LeftButton,
                                        [self viewportTime:[theEvent timestamp]]);
+  if (_warpMouse) [self doWarpMouse];
 }
 
 //! \todo right, middle buttons, wheel

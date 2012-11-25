@@ -11,13 +11,19 @@ namespace kapusha {
     //! \param code Return code
     virtual void quit(int code = 0) = 0;
     
-    //! Request system to IViewport::draw() when appropriate
-    //! Call this every IViewport::draw() call to make constant animation
-    virtual void redraw() = 0;
+    //! Set limit to number of IViewport::draw() calls per second
+    //! This function is thread-safe
+    //! \param fps maximum frames per second
+    //! \warning special value of 0 forces one draw() and stops internal timer
+    virtual void limitFramesPerSecond(int fps) = 0;
 
-    //! Reset pointer position to center
-    //! Useful for mouse-aiming
-    virtual void pointerReset(bool reset) = 0;
+    //! Set the mouse cursor free of any window/screen boundaries
+    /*! \warning actually this pins the mouse cursors at the viewport center,
+     * therefore stripping any sense from Pointer::point field.
+     * Use Pointer::movement instead
+     */
+    //! \param limitless Set this true if you want mouse-aiming
+    virtual void limitlessPointer(bool limitless) = 0;
     
     //! Current pointer state
     //! \return current pointer input state

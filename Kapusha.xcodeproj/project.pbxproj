@@ -7,13 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E14B5358165D59F300B55FEC /* KPView.h in Headers */ = {isa = PBXBuildFile; fileRef = E14B5356165D59F300B55FEC /* KPView.h */; };
-		E14B5359165D59F300B55FEC /* KPView.mm in Sources */ = {isa = PBXBuildFile; fileRef = E14B5357165D59F300B55FEC /* KPView.mm */; };
+		E131D5041662033F00B0320A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E131D5031662033F00B0320A /* Cocoa.framework */; };
+		E131D5051662034600B0320A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
+		E131D5061662036500B0320A /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFED163D8EED00869CF5 /* Log.cpp */; };
+		E131D5071662036500B0320A /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E15E63F9165E84150032BBC2 /* Input.cpp */; };
+		E131D5081662036500B0320A /* Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDF163D8EED00869CF5 /* Stream.cpp */; };
+		E131D5091662036500B0320A /* StreamFile_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */; };
+		E131D50A1662036500B0320A /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFE6163D8EED00869CF5 /* math.cpp */; };
+		E131D50B1662036500B0320A /* Batch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD6163D8EED00869CF5 /* Batch.cpp */; };
+		E131D50C1662036500B0320A /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD4163D8EED00869CF5 /* Buffer.cpp */; };
+		E131D50D1662036500B0320A /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B6816444BBA0038E873 /* Camera.cpp */; };
+		E131D50E1662036500B0320A /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B60164436330038E873 /* Material.cpp */; };
+		E131D50F1662036500B0320A /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B6F164462670038E873 /* Object.cpp */; };
+		E131D5101662036500B0320A /* OpenGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD8163D8EED00869CF5 /* OpenGL.cpp */; };
+		E131D5111662036500B0320A /* Program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDA163D8EED00869CF5 /* Program.cpp */; };
+		E131D5121662036500B0320A /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDC163D8EED00869CF5 /* Texture.cpp */; };
+		E131D5131662036F00B0320A /* KPView.mm in Sources */ = {isa = PBXBuildFile; fileRef = E14B5357165D59F300B55FEC /* KPView.mm */; };
+		E131D514166204C500B0320A /* libkapusha.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E131D4FF166201F400B0320A /* libkapusha.a */; };
 		E14B536C165D5C4500B55FEC /* fsquad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE039163D923000869CF5 /* fsquad.cpp */; };
 		E14B536D165D5C4500B55FEC /* flyby_static_geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B73164594C10038E873 /* flyby_static_geometry.cpp */; };
 		E15E63FB165E84150032BBC2 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E15E63F9165E84150032BBC2 /* Input.cpp */; };
-		E15E63FC165E84150032BBC2 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E15E63F9165E84150032BBC2 /* Input.cpp */; };
-		E15E63FD165E84150032BBC2 /* Input.h in Headers */ = {isa = PBXBuildFile; fileRef = E15E63FA165E84150032BBC2 /* Input.h */; };
 		E1993176164E141500E8D9CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993175164E141500E8D9CB /* UIKit.framework */; };
 		E1993178164E141500E8D9CB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993177164E141500E8D9CB /* Foundation.framework */; };
 		E199317A164E141500E8D9CB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993179164E141500E8D9CB /* CoreGraphics.framework */; };
@@ -50,45 +63,6 @@
 		E1A77CB2165D39F9009FF8F3 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1A77CB1165D39F9009FF8F3 /* AppDelegate.mm */; };
 		E1A77CB5165D39F9009FF8F3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1A77CB3165D39F9009FF8F3 /* MainMenu.xib */; };
 		E1A77CBB165D3ADA009FF8F3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
-		E1A77CCA165D528A009FF8F3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DDFF8163D8F3A00869CF5 /* Cocoa.framework */; };
-		E1A77CD0165D528A009FF8F3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1A77CCE165D528A009FF8F3 /* InfoPlist.strings */; };
-		E1A77CD8165D52BE009FF8F3 /* Render.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BD0C1D164F72A900A3454C /* Render.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CD9165D52BE009FF8F3 /* Batch.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DDFD7163D8EED00869CF5 /* Batch.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CDA165D52BE009FF8F3 /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DDFD5163D8EED00869CF5 /* Buffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CDB165D52BE009FF8F3 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = E1E74B6916444BBA0038E873 /* Camera.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CDC165D52BE009FF8F3 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = E1E74B61164436330038E873 /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CDD165D52BE009FF8F3 /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = E1E74B70164462670038E873 /* Object.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CDE165D52BE009FF8F3 /* OpenGL.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DDFD9163D8EED00869CF5 /* OpenGL.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CDF165D52BE009FF8F3 /* Program.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DDFDB163D8EED00869CF5 /* Program.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CE0165D52BE009FF8F3 /* Texture.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DDFDD163D8EED00869CF5 /* Texture.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CE1165D52BE009FF8F3 /* Stream.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DDFE0163D8EED00869CF5 /* Stream.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CE2165D52BE009FF8F3 /* StreamFile.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DE05C163D9E4600869CF5 /* StreamFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CE3165D52BE009FF8F3 /* StreamFile_posix.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DE044163D9BE500869CF5 /* StreamFile_posix.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CE4165D52BE009FF8F3 /* mat2.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DDFE4163D8EED00869CF5 /* mat2.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CE5165D52BE009FF8F3 /* mat4.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DDFE5163D8EED00869CF5 /* mat4.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CE6165D52BE009FF8F3 /* rect2.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DDFE7163D8EED00869CF5 /* rect2.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CE7165D52BE009FF8F3 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DDFE8163D8EED00869CF5 /* types.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CE8165D52BE009FF8F3 /* vec2.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DDFE9163D8EED00869CF5 /* vec2.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CE9165D52BE009FF8F3 /* vec3.h in Headers */ = {isa = PBXBuildFile; fileRef = E1E74B6D164454B30038E873 /* vec3.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CEA165D52BE009FF8F3 /* vec4.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DDFEA163D8EED00869CF5 /* vec4.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CEB165D52BE009FF8F3 /* Shared.h in Headers */ = {isa = PBXBuildFile; fileRef = E1E74B6E1644551C0038E873 /* Shared.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CEC165D52BE009FF8F3 /* IViewport.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DDFEC163D8EED00869CF5 /* IViewport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CED165D52BE009FF8F3 /* Log.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DDFEE163D8EED00869CF5 /* Log.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CEE165D52BE009FF8F3 /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = E18DDFEF163D8EED00869CF5 /* Core.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E1A77CEF165D52D3009FF8F3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
-		E1A77CF0165D54DB009FF8F3 /* Batch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD6163D8EED00869CF5 /* Batch.cpp */; };
-		E1A77CF1165D54DB009FF8F3 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD4163D8EED00869CF5 /* Buffer.cpp */; };
-		E1A77CF2165D54DB009FF8F3 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B6816444BBA0038E873 /* Camera.cpp */; };
-		E1A77CF3165D54DB009FF8F3 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B60164436330038E873 /* Material.cpp */; };
-		E1A77CF4165D54DB009FF8F3 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B6F164462670038E873 /* Object.cpp */; };
-		E1A77CF5165D54DB009FF8F3 /* OpenGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD8163D8EED00869CF5 /* OpenGL.cpp */; };
-		E1A77CF6165D54DB009FF8F3 /* Program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDA163D8EED00869CF5 /* Program.cpp */; };
-		E1A77CF7165D54DB009FF8F3 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDC163D8EED00869CF5 /* Texture.cpp */; };
-		E1A77CF8165D54DB009FF8F3 /* Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDF163D8EED00869CF5 /* Stream.cpp */; };
-		E1A77CF9165D54DB009FF8F3 /* StreamFile_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */; };
-		E1A77CFA165D54DB009FF8F3 /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFE6163D8EED00869CF5 /* math.cpp */; };
-		E1A77CFC165D54DB009FF8F3 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFED163D8EED00869CF5 /* Log.cpp */; };
-		E1A77CFE165D5741009FF8F3 /* kapusha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1A77CC9165D528A009FF8F3 /* kapusha.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -104,6 +78,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E131D4FF166201F400B0320A /* libkapusha.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libkapusha.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E131D5031662033F00B0320A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		E14B5356165D59F300B55FEC /* KPView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPView.h; sourceTree = "<group>"; };
 		E14B5357165D59F300B55FEC /* KPView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KPView.mm; sourceTree = "<group>"; };
 		E15E63F9165E84150032BBC2 /* Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Input.cpp; sourceTree = "<group>"; };
@@ -171,7 +147,6 @@
 		E1A77CB0165D39F9009FF8F3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E1A77CB1165D39F9009FF8F3 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		E1A77CB4165D39F9009FF8F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		E1A77CC9165D528A009FF8F3 /* kapusha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = kapusha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1A77CCD165D528A009FF8F3 /* kapusha-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "kapusha-Info.plist"; sourceTree = "<group>"; };
 		E1A77CCF165D528A009FF8F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E1A77CD1165D528A009FF8F3 /* kapusha-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "kapusha-Prefix.pch"; sourceTree = "<group>"; };
@@ -188,6 +163,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E131D4FC166201F400B0320A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E131D5051662034600B0320A /* OpenGL.framework in Frameworks */,
+				E131D5041662033F00B0320A /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E1993170164E141500E8D9CB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -214,18 +198,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1A77CFE165D5741009FF8F3 /* kapusha.framework in Frameworks */,
+				E131D514166204C500B0320A /* libkapusha.a in Frameworks */,
 				E1A77CBB165D3ADA009FF8F3 /* OpenGL.framework in Frameworks */,
 				E1A77CA3165D39F9009FF8F3 /* Cocoa.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E1A77CC5165D528A009FF8F3 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E1A77CEF165D52D3009FF8F3 /* OpenGL.framework in Frameworks */,
-				E1A77CCA165D528A009FF8F3 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,7 +243,7 @@
 				E18DDFDD163D8EED00869CF5 /* Texture.h */,
 			);
 			name = render;
-			path = src/render;
+			path = kapusha/render;
 			sourceTree = "<group>";
 		};
 		E18DDFDE163D8EED00869CF5 /* io */ = {
@@ -283,7 +258,7 @@
 				E18DDFE2163D8EED00869CF5 /* StreamFile_win.h */,
 			);
 			name = io;
-			path = src/io;
+			path = kapusha/io;
 			sourceTree = "<group>";
 		};
 		E18DDFE3163D8EED00869CF5 /* math */ = {
@@ -299,7 +274,7 @@
 				E18DDFEA163D8EED00869CF5 /* vec4.h */,
 			);
 			name = math;
-			path = src/math;
+			path = kapusha/math;
 			sourceTree = "<group>";
 		};
 		E18DDFEB163D8EED00869CF5 /* core */ = {
@@ -314,7 +289,7 @@
 				E15E63FA165E84150032BBC2 /* Input.h */,
 			);
 			name = core;
-			path = src/core;
+			path = kapusha/core;
 			sourceTree = "<group>";
 		};
 		E18DDFF6163D8F3A00869CF5 /* Products */ = {
@@ -323,7 +298,7 @@
 				E1993173164E141500E8D9CB /* samples-ios.app */,
 				E19931A7164E144F00E8D9CB /* libkapusha.a */,
 				E1A77CA1165D39F9009FF8F3 /* kapusha-samples.app */,
-				E1A77CC9165D528A009FF8F3 /* kapusha.framework */,
+				E131D4FF166201F400B0320A /* libkapusha.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -331,6 +306,7 @@
 		E18DDFF7163D8F3A00869CF5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E131D5031662033F00B0320A /* Cocoa.framework */,
 				E19931C8164E4F5800E8D9CB /* OpenGLES.framework */,
 				E18DE042163D925600869CF5 /* GLUT.framework */,
 				E18DE007163D8F5400869CF5 /* OpenGL.framework */,
@@ -364,7 +340,7 @@
 				E1E74B73164594C10038E873 /* flyby_static_geometry.cpp */,
 			);
 			name = samples;
-			path = src/samples;
+			path = kapusha/samples;
 			sourceTree = "<group>";
 		};
 		E199317F164E141500E8D9CB /* ios */ = {
@@ -434,47 +410,39 @@
 				E1A77CCB165D528A009FF8F3 /* osx */,
 			);
 			name = sys;
-			path = src/sys;
+			path = kapusha/sys;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		E1A77CC6165D528A009FF8F3 /* Headers */ = {
+		E131D4FD166201F400B0320A /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1A77CD8165D52BE009FF8F3 /* Render.h in Headers */,
-				E1A77CD9165D52BE009FF8F3 /* Batch.h in Headers */,
-				E1A77CDA165D52BE009FF8F3 /* Buffer.h in Headers */,
-				E1A77CDB165D52BE009FF8F3 /* Camera.h in Headers */,
-				E1A77CDC165D52BE009FF8F3 /* Material.h in Headers */,
-				E1A77CDD165D52BE009FF8F3 /* Object.h in Headers */,
-				E1A77CDE165D52BE009FF8F3 /* OpenGL.h in Headers */,
-				E1A77CDF165D52BE009FF8F3 /* Program.h in Headers */,
-				E1A77CE0165D52BE009FF8F3 /* Texture.h in Headers */,
-				E1A77CE1165D52BE009FF8F3 /* Stream.h in Headers */,
-				E1A77CE2165D52BE009FF8F3 /* StreamFile.h in Headers */,
-				E1A77CE3165D52BE009FF8F3 /* StreamFile_posix.h in Headers */,
-				E1A77CE4165D52BE009FF8F3 /* mat2.h in Headers */,
-				E1A77CE5165D52BE009FF8F3 /* mat4.h in Headers */,
-				E1A77CE6165D52BE009FF8F3 /* rect2.h in Headers */,
-				E1A77CE7165D52BE009FF8F3 /* types.h in Headers */,
-				E1A77CE8165D52BE009FF8F3 /* vec2.h in Headers */,
-				E1A77CE9165D52BE009FF8F3 /* vec3.h in Headers */,
-				E1A77CEA165D52BE009FF8F3 /* vec4.h in Headers */,
-				E1A77CEB165D52BE009FF8F3 /* Shared.h in Headers */,
-				E1A77CEC165D52BE009FF8F3 /* IViewport.h in Headers */,
-				E1A77CED165D52BE009FF8F3 /* Log.h in Headers */,
-				E1A77CEE165D52BE009FF8F3 /* Core.h in Headers */,
-				E14B5358165D59F300B55FEC /* KPView.h in Headers */,
-				E15E63FD165E84150032BBC2 /* Input.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		E131D4FE166201F400B0320A /* kapusha-osx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E131D500166201F400B0320A /* Build configuration list for PBXNativeTarget "kapusha-osx" */;
+			buildPhases = (
+				E131D4FB166201F400B0320A /* Sources */,
+				E131D4FC166201F400B0320A /* Frameworks */,
+				E131D4FD166201F400B0320A /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "kapusha-osx";
+			productName = kapusha;
+			productReference = E131D4FF166201F400B0320A /* libkapusha.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		E1993172164E141500E8D9CB /* samples-ios */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E19931A0164E141500E8D9CB /* Build configuration list for PBXNativeTarget "samples-ios" */;
@@ -526,24 +494,6 @@
 			productReference = E1A77CA1165D39F9009FF8F3 /* kapusha-samples.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E1A77CC8165D528A009FF8F3 /* kapusha-osx */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E1A77CD5165D528A009FF8F3 /* Build configuration list for PBXNativeTarget "kapusha-osx" */;
-			buildPhases = (
-				E1A77CC4165D528A009FF8F3 /* Sources */,
-				E1A77CC5165D528A009FF8F3 /* Frameworks */,
-				E1A77CC6165D528A009FF8F3 /* Headers */,
-				E1A77CC7165D528A009FF8F3 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "kapusha-osx";
-			productName = "kapusha-osx";
-			productReference = E1A77CC9165D528A009FF8F3 /* kapusha.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -566,8 +516,8 @@
 			targets = (
 				E19931A6164E144F00E8D9CB /* kapusha-ios */,
 				E1993172164E141500E8D9CB /* samples-ios */,
-				E1A77CC8165D528A009FF8F3 /* kapusha-osx */,
 				E1A77CA0165D39F9009FF8F3 /* samples-osx */,
+				E131D4FE166201F400B0320A /* kapusha-osx */,
 			);
 		};
 /* End PBXProject section */
@@ -594,17 +544,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E1A77CC7165D528A009FF8F3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E1A77CD0165D528A009FF8F3 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		E131D4FB166201F400B0320A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E131D5131662036F00B0320A /* KPView.mm in Sources */,
+				E131D5061662036500B0320A /* Log.cpp in Sources */,
+				E131D5071662036500B0320A /* Input.cpp in Sources */,
+				E131D5081662036500B0320A /* Stream.cpp in Sources */,
+				E131D5091662036500B0320A /* StreamFile_posix.cpp in Sources */,
+				E131D50A1662036500B0320A /* math.cpp in Sources */,
+				E131D50B1662036500B0320A /* Batch.cpp in Sources */,
+				E131D50C1662036500B0320A /* Buffer.cpp in Sources */,
+				E131D50D1662036500B0320A /* Camera.cpp in Sources */,
+				E131D50E1662036500B0320A /* Material.cpp in Sources */,
+				E131D50F1662036500B0320A /* Object.cpp in Sources */,
+				E131D5101662036500B0320A /* OpenGL.cpp in Sources */,
+				E131D5111662036500B0320A /* Program.cpp in Sources */,
+				E131D5121662036500B0320A /* Texture.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E199316F164E141500E8D9CB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -645,27 +608,6 @@
 				E14B536D165D5C4500B55FEC /* flyby_static_geometry.cpp in Sources */,
 				E1A77CAB165D39F9009FF8F3 /* main.m in Sources */,
 				E1A77CB2165D39F9009FF8F3 /* AppDelegate.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E1A77CC4165D528A009FF8F3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E1A77CF0165D54DB009FF8F3 /* Batch.cpp in Sources */,
-				E1A77CF1165D54DB009FF8F3 /* Buffer.cpp in Sources */,
-				E1A77CF2165D54DB009FF8F3 /* Camera.cpp in Sources */,
-				E1A77CF3165D54DB009FF8F3 /* Material.cpp in Sources */,
-				E1A77CF4165D54DB009FF8F3 /* Object.cpp in Sources */,
-				E1A77CF5165D54DB009FF8F3 /* OpenGL.cpp in Sources */,
-				E1A77CF6165D54DB009FF8F3 /* Program.cpp in Sources */,
-				E1A77CF7165D54DB009FF8F3 /* Texture.cpp in Sources */,
-				E1A77CF8165D54DB009FF8F3 /* Stream.cpp in Sources */,
-				E1A77CF9165D54DB009FF8F3 /* StreamFile_posix.cpp in Sources */,
-				E1A77CFA165D54DB009FF8F3 /* math.cpp in Sources */,
-				E1A77CFC165D54DB009FF8F3 /* Log.cpp in Sources */,
-				E14B5359165D59F300B55FEC /* KPView.mm in Sources */,
-				E15E63FC165E84150032BBC2 /* Input.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -715,6 +657,67 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		E131D501166201F400B0320A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = kapusha;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		E131D502166201F400B0320A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = kapusha;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 		E18DDFCE163D8ED100869CF5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -878,7 +881,7 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "src/samples/osx/kapusha-samples-Prefix.pch";
+				GCC_PREFIX_HEADER = "kapusha/samples/osx/kapusha-samples-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -888,7 +891,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "src/samples/osx/kapusha-samples-Info.plist";
+				INFOPLIST_FILE = "kapusha/samples/osx/kapusha-samples-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "kapusha-samples";
@@ -914,12 +917,12 @@
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "src/samples/osx/kapusha-samples-Prefix.pch";
+				GCC_PREFIX_HEADER = "kapusha/samples/osx/kapusha-samples-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "src/samples/osx/kapusha-samples-Info.plist";
+				INFOPLIST_FILE = "kapusha/samples/osx/kapusha-samples-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "kapusha-samples";
 				SDKROOT = macosx;
@@ -927,84 +930,18 @@
 			};
 			name = Release;
 		};
-		E1A77CD6165D528A009FF8F3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "src/sys/osx/kapusha-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "src/sys/osx/kapusha-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = kapusha;
-				SDKROOT = macosx;
-				WRAPPER_EXTENSION = framework;
-			};
-			name = Debug;
-		};
-		E1A77CD7165D528A009FF8F3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "src/sys/osx/kapusha-Prefix.pch";
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "src/sys/osx/kapusha-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				PRODUCT_NAME = kapusha;
-				SDKROOT = macosx;
-				WRAPPER_EXTENSION = framework;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E131D500166201F400B0320A /* Build configuration list for PBXNativeTarget "kapusha-osx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E131D501166201F400B0320A /* Debug */,
+				E131D502166201F400B0320A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E18DDFCC163D8ED100869CF5 /* Build configuration list for PBXProject "Kapusha" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1037,15 +974,6 @@
 			buildConfigurations = (
 				E1A77CB6165D39F9009FF8F3 /* Debug */,
 				E1A77CB7165D39F9009FF8F3 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E1A77CD5165D528A009FF8F3 /* Build configuration list for PBXNativeTarget "kapusha-osx" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E1A77CD6165D528A009FF8F3 /* Debug */,
-				E1A77CD7165D528A009FF8F3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
