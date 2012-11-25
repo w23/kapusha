@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "../../core/Log.h"
 #import "../../sys/osx/KPView.h"
 
 namespace fsquad {
@@ -16,6 +17,14 @@ namespace flyby {
   kapusha::IViewport *makeViewport();
 }
 
+class CocoaLog : public kapusha::Log::ISystemLog
+{
+public:
+  virtual void write(const char* msg)
+  {
+    NSLog(@"%s", msg);
+  }
+};
 
 @interface AppDelegate ()
 @property (assign) IBOutlet KPView *viewport;
@@ -30,8 +39,9 @@ namespace flyby {
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+  KP_LOG_OPEN("Kapusha.log", new CocoaLog);
   [self.window setAcceptsMouseMovedEvents:YES];
-  [self.viewport setViewport:fsquad::makeViewport()];
+  [self.viewport setViewport:flyby::makeViewport()];
 }
 
 - (BOOL)windowShouldClose:(id)sender

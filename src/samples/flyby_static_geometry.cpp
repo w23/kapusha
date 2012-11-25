@@ -12,8 +12,10 @@ namespace flyby {
   public:
     Viewport();
     virtual ~Viewport() {}
-    virtual void init(IViewportController* system);
+    virtual void init(IViewportController* ctrl);
     virtual void resize(vec2i size);
+    virtual void inputPointer(const PointerState& pointers);
+    virtual void inputKey(const KeyState& keys);
     virtual void draw(int ms, float dt);
     virtual void close();
     
@@ -22,7 +24,7 @@ namespace flyby {
     Object* createDust() const;
     
   private:
-    IViewportController *system_;
+    IViewportController *ctrl_;
     Object* ground_;
     Object* object_;
     Camera camera_;
@@ -140,9 +142,9 @@ namespace flyby {
     return new Object(batch);
   }
 
-  void Viewport::init(IViewportController *system)
+  void Viewport::init(IViewportController *ctrl)
   {
-    system_ = system;
+    ctrl_ = ctrl;
     
     object_ = createDust();
     ground_ = createGround();
@@ -185,50 +187,47 @@ namespace flyby {
     ground_->draw(camera_.getView(), camera_.getProjection());
     object_->draw(camera_.getView(), camera_.getProjection());
     
-    system_->redraw();
+    ctrl_->redraw();
   }
 
-  /*
-  void Viewport::keyEvent(const kapusha::IViewport::KeyEvent &event)
+  void Viewport::inputKey(const kapusha::KeyState &keys)
   {
-    switch (event.key()) {
-      case 'w':
-        forward_speed_ += event.isPressed() ? 1.f : -1.f;
+    switch (keys.getLastKey()) {
+      case 'W':
+        forward_speed_ += keys.isLastKeyPressed() ? 1.f : -1.f;
         break;
-      case 's':
-        forward_speed_ += event.isPressed() ? -1.f : 1.f;
+      case 'S':
+        forward_speed_ += keys.isLastKeyPressed() ? -1.f : 1.f;
         break;
-      case 'a':
-        right_speed_ += event.isPressed() ? -1.f : 1.f;
+      case 'A':
+        right_speed_ += keys.isLastKeyPressed() ? -1.f : 1.f;
         break;
-      case 'd':
-        right_speed_ += event.isPressed() ? 1.f : -1.f;
+      case 'D':
+        right_speed_ += keys.isLastKeyPressed() ? 1.f : -1.f;
         break;
-      case KeyEvent::KeyUp:
-        pitch_speed_ += event.isPressed() ? 1.f : -1.f;
+      case KeyState::KeyUp:
+        pitch_speed_ += keys.isLastKeyPressed() ? 1.f : -1.f;
         break;
-      case KeyEvent::KeyDown:
-        pitch_speed_ += event.isPressed() ? -1.f : 1.f;
+      case KeyState::KeyDown:
+        pitch_speed_ += keys.isLastKeyPressed() ? -1.f : 1.f;
         break;
-      case KeyEvent::KeyLeft:
-        yaw_speed_ += event.isPressed() ? 1.f : -1.f;
+      case KeyState::KeyLeft:
+        yaw_speed_ += keys.isLastKeyPressed() ? 1.f : -1.f;
         break;
-      case KeyEvent::KeyRight:
-        yaw_speed_ += event.isPressed() ? -1.f : 1.f;
+      case KeyState::KeyRight:
+        yaw_speed_ += keys.isLastKeyPressed() ? -1.f : 1.f;
         break;
 
       default:
-        L("key %d is unknown", event.key());
+        L("key %d is unknown", keys.getLastKey());
     }
   }
 
-  void Viewport::pointerEvent(const PointerEvent &event)
+  void Viewport::inputPointer(const kapusha::PointerState &pointers)
   {
-    vec2f rel = viewport_.relative(event.main().point)*2.f - 1.f;
-    yaw_speed_ = -rel.x;
-    pitch_speed_ = rel.y;
+    yaw_speed_ = -pointers.main().point.x;
+    pitch_speed_ = pointers.main().point.y;
   }
-   */
 
   IViewport *makeViewport()
   {

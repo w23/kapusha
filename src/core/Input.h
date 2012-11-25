@@ -105,7 +105,9 @@ namespace kapusha {
     //! Key codes, they're mostly ASCII
     //! \fixme more
     enum Keys {
+      KeyUnknown = 0,
       KeyBackspace = 8,
+      KeyTab = 9,
       KeyEnter = 13,
       KeySpace = ' ',
       KeyEsc = 27,
@@ -115,23 +117,69 @@ namespace kapusha {
       KeyUp = 38,
       KeyRight = 39,
       KeyDown = 40,
+      KeyComma = 44,  // ','
+      KeyMinus = 45,  // '-'
+      KeyDot = 46,    // '.'
+      KeySlash = 47,  // '/'
+      Key0 = '0',
+      Key1 = '1',
+      Key2 = '2',
+      Key3 = '3',
+      Key4 = '4',
+      Key5 = '5',
+      Key6 = '6',
+      Key7 = '7',
+      Key8 = '8',
+      Key9 = '9',
+      KeyEqual = 61, // '='
       KeyA = 'A',
+      KeyB = 'B',
+      KeyC = 'C',
+      KeyD = 'D',
+      KeyE = 'E',
+      KeyF = 'F',
+      KeyG = 'G',
+      KeyH = 'H',
+      KeyI = 'I',
+      KeyJ = 'J',
+      KeyK = 'K',
+      KeyL = 'L',
+      KeyM = 'M',
+      KeyN = 'N',
+      KeyO = 'O',
+      KeyP = 'P',
+      KeyQ = 'Q',
+      KeyR = 'R',
+      KeyS = 'S',
+      KeyT = 'T',
+      KeyU = 'U',
+      KeyV = 'V',
+      KeyW = 'W',
+      KeyX = 'X',
+      KeyY = 'Y',
+      KeyZ = 'Z',
       //! modifiers are keys too
+      KeyDel = 127,
       KeyShift = 128,
       KeyAlt,
       KeyCtrl,
-      KeyMax
+      KeyOpt = KeyAlt,
+      KeyMax = 256
     };
     
   public:
     KeyState() : last_key_(0), last_pressed_(false) { reset(); }
     
-    inline void key(int key, bool pressed, u32 time)
+    inline bool key(int key, bool pressed, u32 time)
     {
+      if (key == KeyUnknown)
+        return false;
+
       press_vector_[key] = pressed;
       last_pressed_ = pressed;
       last_key_ = key;
       update(time);
+      return true;
     }
     
     void reset()
