@@ -14,6 +14,20 @@ namespace kapusha {
     mouseUpdate(to, Pointer::Move, 0, time);
   }
   
+  void PointerState::mouseMove(vec2f to, vec2f d, u32 time)
+  {
+    pointers_[0].clearEventFlags();
+    
+    int old_flags = pointers_[0].flags;
+    
+    pointers_[0].update(to, d, Pointer::Move, 0);
+    
+    combined_flags_ = pointers_[0].flags;
+    changed_flags_ = old_flags ^ combined_flags_;
+    
+    InputState::update(time);
+  }
+  
   void PointerState::mouseClick(vec2f at, int button, u32 time)
   {
     mouseUpdate(at, button, 0, time);

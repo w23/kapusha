@@ -48,6 +48,7 @@ namespace kapusha {
       };
       //! current state & events
       int flags;
+      int change;
       
       //! current position
       vec2f point;
@@ -64,14 +65,28 @@ namespace kapusha {
       inline bool isRightPressed() const { return flags & RightButton; }
       inline bool isMiddlePressed() const { return flags & MiddleButton; }
       
+      inline bool wasPressed() const {
+        return isPressed() && (change & (LeftButton|RightButton|MiddleButton));
+      }
+      inline bool wasUnpressed() const {
+        return !isPressed() && (change & (LeftButton|RightButton|MiddleButton));
+      }
+      
       Pointer(vec2f _pos = vec2f(0), int _flags = None)
-      : flags(_flags), point(_pos) {}
+      : flags(_flags), change(0), point(_pos), movement(0) {}
+      
+      void update(vec2f position, vec2f _movement, int _flags, int flags_remove = 0)
+      {
+        movement = _movement;
+        point = position;
+        int newflags = (flags | _flags) ^ flags_remove;
+        change = flags ^ newflags;
+        flags = newflags;
+      }
       
       void update(vec2f position, int _flags, int flags_remove = 0)
       {
-        movement = position - point;
-        point = position;
-        flags = (flags | _flags) ^ flags_remove;
+        update(position, position - point, _flags, flags_remove);
       }
       
     protected:
@@ -80,11 +95,22 @@ namespace kapusha {
       void clearAllFlags() { flags = 0; }
     };
     
-  public:
-    PointerState() : combined_flags_(0), changed_flags_(0) {}
-    const Pointer& main() const { return pointers_[0]; }
+  public: // IViewport user interface
+    inline const Pointer& main() const { return pointers_[0]; }
     
+    inline bool isPressed() const { return main().isPressed(); }
+    inline bool isLeftPressed() const { return main().isLeftPressed(); }
+    inline bool isRightPressed() const { return main().isRightPressed(); }
+    inline bool isMiddlePressed() const { return main().isMiddlePressed(); }
+    inline bool wasPressed() const { return main().wasPressed(); }
+    inline bool wasUnpressed() const { return main().wasUnpressed(); }
+    
+    
+    //! \fixme make protected and force all implementation to subclass
+  public: // new event
+    PointerState() : combined_flags_(0), changed_flags_(0) {}
     void mouseMove(vec2f to, u32 time = 0);
+    void mouseMove(vec2f to, vec2f d, u32 time = 0);
     void mouseClick(vec2f at, int button, u32 time = 0);
     void mouseUnclick(vec2f at, int button, u32 time = 0);
     

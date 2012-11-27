@@ -11,11 +11,9 @@ namespace kapusha {
     //! \param code Return code
     virtual void quit(int code = 0) = 0;
     
-    //! Set limit to number of IViewport::draw() calls per second
-    //! This function is thread-safe
-    //! \param fps maximum frames per second
-    //! \warning special value of 0 forces one draw() and stops internal timer
-    virtual void limitFramesPerSecond(int fps) = 0;
+    //! Request redraw
+    //! \warning It is safe to call this from any thread
+    virtual void requestRedraw() = 0;
 
     //! Set the mouse cursor free of any window/screen boundaries
     /*! \warning actually this pins the mouse cursors at the viewport center,
@@ -24,6 +22,10 @@ namespace kapusha {
      */
     //! \param limitless Set this true if you want mouse-aiming
     virtual void limitlessPointer(bool limitless) = 0;
+    
+    //! Hide mouse cursor
+    //! \param hide does cursor need to be hidden
+    virtual void hideCursor(bool hide) = 0;
     
     //! Current pointer state
     //! \return current pointer input state
