@@ -187,7 +187,7 @@ namespace flyby {
     ground_->draw(camera_.getView(), camera_.getProjection());
     object_->draw(camera_.getView(), camera_.getProjection());
     
-    ctrl_->redraw();
+    ctrl_->requestRedraw();
   }
 
   void Viewport::inputKey(const kapusha::KeyState &keys)

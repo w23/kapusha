@@ -82,7 +82,7 @@ namespace fsquad {
     batch_->getMaterial()->setUniform("ptr", system_->pointerState().main().point);
     batch_->draw();
     
-    system_->redraw();
+    system_->requestRedraw();
   }
   
   IViewport *makeViewport() {
