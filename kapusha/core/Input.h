@@ -135,6 +135,7 @@ namespace kapusha {
     
     //! Key codes, they're mostly ASCII
     //! \fixme more
+    //! \fixme SDL_keysym seems to have the most appropriate mapping. should i adopt it?
     enum Keys {
       KeyUnknown = 0,
       KeyBackspace = 8,

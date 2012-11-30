@@ -8,12 +8,41 @@ namespace kapusha {
   class SDLKeyState : public KeyState
   {
   public:
-    void processEvent(const SDL_Event& e);
+    bool processEvent(const SDL_Event& e);
   };
 
-  void SDLKeyState::processEvent(const SDL_Event& e)
+  bool SDLKeyState::processEvent(const SDL_Event& e)
   {
-    //! \fixme
+    int keycode = KeyUnknown;
+    bool pressed = false;
+
+    switch (e.type)
+    {
+    case SDL_KEYDOWN:
+      pressed = true;
+    case SDL_KEYUP:
+      //! \todo mapping array?
+      if (e.key.keysym.sym < 64)
+        keycode = e.key.keysym.sym;
+      else if (e.key.keysym.sym > 96 && e.key.keysym.sym < 123)
+        keycode = e.key.keysym.sym + KeyA - SDLK_a;
+      else switch (e.key.keysym.sym) {
+        case SDLK_DELETE: keycode = KeyDel; break;
+        case SDLK_UP: keycode = KeyUp; break;
+        case SDLK_DOWN: keycode = KeyDown; break;
+        case SDLK_LEFT: keycode = KeyLeft; break;
+        case SDLK_RIGHT: keycode = KeyRight; break;
+        case SDLK_LSHIFT: keycode = KeyShift; break;
+        //! \todo more
+        default: return false;
+      }
+      break;
+
+    default:
+      return false;
+    }
+
+    return key(keycode, pressed, SDL_GetTicks());
   }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -23,20 +52,66 @@ namespace kapusha {
   public:
     SDLPointerState() : delta_only_(false) {}
     void resize(vec2i size) {
-      scale_ = vec2f(1.f) / vec2f(size);
+      scale_ = vec2f(1.f) / vec2f(size.x, -size.y);
     }
     void setDeltaOnly(bool delta) {
       delta_only_ = delta;
     }
-    void processEvent(const SDL_Event& e);
+    bool processEvent(const SDL_Event& e);
   private:
+    inline vec2f transform(int x, int y) {
+      return vec2f(x, y) * scale_ * 2.f + vec2f(-1.f, 1.f);
+    }
+
     vec2f scale_;
     bool delta_only_;
   };
 
-  void SDLPointerState::processEvent(const SDL_Event& e)
+  bool SDLPointerState::processEvent(const SDL_Event& e)
   {
-    //! \fixme
+    int now = SDL_GetTicks();
+    switch (e.type)
+    {
+      case SDL_MOUSEMOTION:
+        if (delta_only_)
+          mouseMove(transform(e.motion.x, e.motion.y),
+                    vec2f(e.motion.xrel, e.motion.yrel) * scale_, now);
+        else
+          mouseMove(transform(e.motion.x, e.motion.y), now);
+        break;
+
+      case SDL_MOUSEBUTTONDOWN:
+      case SDL_MOUSEBUTTONUP:
+      {
+        int button;
+        vec2f pos = transform(e.button.x, e.button.y);
+
+        switch(e.button.button)
+        {
+          case SDL_BUTTON_LEFT:
+            button = Pointer::LeftButton;
+            break;
+          case SDL_BUTTON_RIGHT:
+            button = Pointer::RightButton;
+            break;
+          case SDL_BUTTON_MIDDLE:
+            button = Pointer::MiddleButton;
+            break;
+          default: //! \fixme wheel support
+            return false;
+        }
+
+        if (e.button.state == SDL_PRESSED)
+          mouseClick(pos, button, now);
+        else
+          mouseUnclick(pos, button, now);
+      }
+        break;
+
+      default:
+        return false;
+    }
+    return true;
   }
  
 
@@ -100,15 +175,15 @@ namespace kapusha {
       {
         case SDL_KEYDOWN:
         case SDL_KEYUP:
-          key_state_.processEvent(e);
-          viewport_->inputKey(key_state_);
+          if (key_state_.processEvent(e))
+            viewport_->inputKey(key_state_);
           break;
 
         case SDL_MOUSEMOTION:
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
-          pointer_state_.processEvent(e);
-          viewport_->inputPointer(pointer_state_);
+          if (pointer_state_.processEvent(e))
+            viewport_->inputPointer(pointer_state_);
           break;
 
         case SDL_VIDEORESIZE:
