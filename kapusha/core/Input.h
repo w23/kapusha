@@ -60,10 +60,10 @@ namespace kapusha {
       //vec2f speed;
       //float pressure;
       
-      inline bool isPressed() const { return flags & (LeftButton|RightButton|MiddleButton); }
-      inline bool isLeftPressed() const { return flags & LeftButton; }
-      inline bool isRightPressed() const { return flags & RightButton; }
-      inline bool isMiddlePressed() const { return flags & MiddleButton; }
+      inline bool isPressed() const { return (flags & (LeftButton|RightButton|MiddleButton)) != 0; }
+      inline bool isLeftPressed() const { return (flags & LeftButton) != 0; }
+      inline bool isRightPressed() const { return (flags & RightButton) != 0; }
+      inline bool isMiddlePressed() const { return (flags & MiddleButton) != 0; }
       
       inline bool wasPressed() const {
         return isPressed() && (change & (LeftButton|RightButton|MiddleButton));
