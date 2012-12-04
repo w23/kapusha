@@ -26,7 +26,7 @@ namespace kapusha {
     
     template <typename R>
     vec2(const vec2<R>& v)
-    : x(v.x), y(v.y) {}
+    : x(static_cast<T>(v.x)), y(static_cast<T>(v.y)) {}
     
     vec2<T>& operator=(const vec2<T>& v)
     {
