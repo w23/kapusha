@@ -7,4 +7,3 @@
 #include "Material.h"
 #include "Buffer.h"
 #include "Batch.h"
-#include "Object.h"

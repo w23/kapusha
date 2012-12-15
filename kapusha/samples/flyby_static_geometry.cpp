@@ -2,7 +2,7 @@
 #include "../math/types.h"
 #include "../core/IViewport.h"
 #include "../render/Render.h"
-#include "../render/Camera.h"
+#include "../ooo/Ooo.h"
 
 namespace flyby {
 
@@ -184,8 +184,8 @@ namespace flyby {
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    ground_->draw(camera_.getView(), camera_.getProjection());
-    object_->draw(camera_.getView(), camera_.getProjection());
+    ground_->draw(camera_.getMatrix(), camera_.getProjection());
+    object_->draw(camera_.getMatrix(), camera_.getProjection());
     
     ctrl_->requestRedraw();
   }

@@ -31,8 +31,8 @@ namespace kapusha {
       m[12] = r0.w; m[13] = r1.w; m[14] = r2.w; m[15] = r3.w;
     }
     
-    mat4x4<T>& cols(const vec4<T>& c0, const vec4<T>& c1, const vec4<T>& c2,
-                    const vec4<T>& c3 = vec4<T>(0,0,0,1))
+    inline mat4x4<T>& cols(const vec4<T>& c0, const vec4<T>& c1, const vec4<T>& c2,
+                           const vec4<T>& c3 = vec4<T>(0,0,0,1))
     {
       m[0]  = c0.x; m[1]  = c0.y; m[2]  = c0.z; m[3]  = c0.w;
       m[4]  = c1.x; m[5]  = c1.y; m[6]  = c1.z; m[7]  = c1.w;
@@ -41,12 +41,22 @@ namespace kapusha {
       return *this;
     }
     
-    vec4<T>& col(int n)
-    {
+    inline vec4<T>& col(int n) {
       return *(static_cast<vec4<T>*>(&m[n*4]));
     }
     
-    mat4x4<T>& translation(const vec4<T>& v)
+    inline vec4<T> row(int n) {
+      return vec4<T>(m[n], m[n+4], m[n+8], m[n+12]);
+    }
+    
+    inline void setRow(vec4<T> row, int n) {
+      m[n] = row.x;
+      m[n+4] = row.y;
+      m[n+8] = row.z;
+      m[n+12] = row.w;
+    }
+    
+    inline mat4x4<T>& translation(const vec4<T>& v)
     {
       *this = mat4x4().cols(vec4<T>(1,0,0,0),
                             vec4<T>(0,1,0,0),

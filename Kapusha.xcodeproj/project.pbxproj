@@ -63,6 +63,10 @@
 		E1A77CB2165D39F9009FF8F3 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1A77CB1165D39F9009FF8F3 /* AppDelegate.mm */; };
 		E1A77CB5165D39F9009FF8F3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1A77CB3165D39F9009FF8F3 /* MainMenu.xib */; };
 		E1A77CBB165D3ADA009FF8F3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
+		E1D556E3167C6A8900A360F6 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E2167C6A8900A360F6 /* Node.cpp */; };
+		E1D556E4167C6A8900A360F6 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E2167C6A8900A360F6 /* Node.cpp */; };
+		E1D556E6167C996600A360F6 /* Reframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E5167C996600A360F6 /* Reframe.cpp */; };
+		E1D556E7167C996600A360F6 /* Reframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E5167C996600A360F6 /* Reframe.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -151,14 +155,19 @@
 		E1A77CCF165D528A009FF8F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E1A77CD1165D528A009FF8F3 /* kapusha-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "kapusha-Prefix.pch"; sourceTree = "<group>"; };
 		E1BD0C1D164F72A900A3454C /* Render.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Render.h; sourceTree = "<group>"; };
+		E1D556E0167B9D0E00A360F6 /* Reframe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Reframe.h; path = kapusha/ooo/Reframe.h; sourceTree = "<group>"; };
+		E1D556E1167BA4F000A360F6 /* Node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Node.h; path = kapusha/ooo/Node.h; sourceTree = "<group>"; };
+		E1D556E2167C6A8900A360F6 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Node.cpp; path = kapusha/ooo/Node.cpp; sourceTree = "<group>"; };
+		E1D556E5167C996600A360F6 /* Reframe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Reframe.cpp; path = kapusha/ooo/Reframe.cpp; sourceTree = "<group>"; };
+		E1D556E8167CAF8E00A360F6 /* Ooo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Ooo.h; path = kapusha/ooo/Ooo.h; sourceTree = "<group>"; };
 		E1E74B60164436330038E873 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
 		E1E74B61164436330038E873 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
-		E1E74B6816444BBA0038E873 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
-		E1E74B6916444BBA0038E873 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
+		E1E74B6816444BBA0038E873 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Camera.cpp; path = kapusha/ooo/Camera.cpp; sourceTree = "<group>"; };
+		E1E74B6916444BBA0038E873 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Camera.h; path = kapusha/ooo/Camera.h; sourceTree = "<group>"; };
 		E1E74B6D164454B30038E873 /* vec3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vec3.h; sourceTree = "<group>"; };
 		E1E74B6E1644551C0038E873 /* Shared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Shared.h; sourceTree = "<group>"; };
-		E1E74B6F164462670038E873 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
-		E1E74B70164462670038E873 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
+		E1E74B6F164462670038E873 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Object.cpp; path = kapusha/ooo/Object.cpp; sourceTree = "<group>"; };
+		E1E74B70164462670038E873 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Object.h; path = kapusha/ooo/Object.h; sourceTree = "<group>"; };
 		E1E74B73164594C10038E873 /* flyby_static_geometry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = flyby_static_geometry.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -210,6 +219,7 @@
 		E18DDFC7163D8ED100869CF5 = {
 			isa = PBXGroup;
 			children = (
+				E1D556DE167B988800A360F6 /* ooo */,
 				E18DDFEB163D8EED00869CF5 /* core */,
 				E18DDFDE163D8EED00869CF5 /* io */,
 				E18DDFE3163D8EED00869CF5 /* math */,
@@ -229,12 +239,8 @@
 				E18DDFD7163D8EED00869CF5 /* Batch.h */,
 				E18DDFD4163D8EED00869CF5 /* Buffer.cpp */,
 				E18DDFD5163D8EED00869CF5 /* Buffer.h */,
-				E1E74B6816444BBA0038E873 /* Camera.cpp */,
-				E1E74B6916444BBA0038E873 /* Camera.h */,
 				E1E74B60164436330038E873 /* Material.cpp */,
 				E1E74B61164436330038E873 /* Material.h */,
-				E1E74B6F164462670038E873 /* Object.cpp */,
-				E1E74B70164462670038E873 /* Object.h */,
 				E18DDFD8163D8EED00869CF5 /* OpenGL.cpp */,
 				E18DDFD9163D8EED00869CF5 /* OpenGL.h */,
 				E18DDFDA163D8EED00869CF5 /* Program.cpp */,
@@ -413,6 +419,22 @@
 			path = kapusha/sys;
 			sourceTree = "<group>";
 		};
+		E1D556DE167B988800A360F6 /* ooo */ = {
+			isa = PBXGroup;
+			children = (
+				E1E74B6816444BBA0038E873 /* Camera.cpp */,
+				E1E74B6916444BBA0038E873 /* Camera.h */,
+				E1D556E2167C6A8900A360F6 /* Node.cpp */,
+				E1D556E1167BA4F000A360F6 /* Node.h */,
+				E1E74B6F164462670038E873 /* Object.cpp */,
+				E1E74B70164462670038E873 /* Object.h */,
+				E1D556E5167C996600A360F6 /* Reframe.cpp */,
+				E1D556E0167B9D0E00A360F6 /* Reframe.h */,
+				E1D556E8167CAF8E00A360F6 /* Ooo.h */,
+			);
+			name = ooo;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -565,6 +587,8 @@
 				E131D5101662036500B0320A /* OpenGL.cpp in Sources */,
 				E131D5111662036500B0320A /* Program.cpp in Sources */,
 				E131D5121662036500B0320A /* Texture.cpp in Sources */,
+				E1D556E4167C6A8900A360F6 /* Node.cpp in Sources */,
+				E1D556E7167C996600A360F6 /* Reframe.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -597,6 +621,8 @@
 				E19931C4164E4EC700E8D9CB /* StreamFile_posix.cpp in Sources */,
 				E19931C5164E4ECC00E8D9CB /* math.cpp in Sources */,
 				E15E63FB165E84150032BBC2 /* Input.cpp in Sources */,
+				E1D556E3167C6A8900A360F6 /* Node.cpp in Sources */,
+				E1D556E6167C996600A360F6 /* Reframe.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../math/types.h"
+#include "Node.h"
 
 namespace kapusha {
   
   class Batch;
   
-  class Object {
+  class Object : public Node {
   public:
     Object(Batch *batch);
     ~Object() {}

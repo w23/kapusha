@@ -20,7 +20,7 @@ namespace kapusha {
                               Buffer* buffer, unsigned components,
                               unsigned offset, unsigned stride)
   {
-    KP_ASSERT(*material_);
+    KP_ASSERT(material_);
 
     int i = 0;
     for (; i < MAX_ATTRIBS; ++i)
@@ -37,14 +37,14 @@ namespace kapusha {
 
   void Batch::draw() const
   {
-    KP_ASSERT(*material_);
+    KP_ASSERT(material_);
     material_->use();
     
     for (int i = 0; i < MAX_ATTRIBS; ++i)
       if (attribs_[i].index != -1)
         attribs_[i].bind();
     
-    if (*indices_)
+    if (indices_)
     {
       indices_->bind(Buffer::BindingIndex);
       

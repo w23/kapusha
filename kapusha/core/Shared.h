@@ -62,12 +62,13 @@ namespace kapusha {
     }
     
     T *get() const { return t_; }
-    T *operator*() const { return t_; }
+    T &operator*() const { return *t_; }
     T *operator->() const { return t_; }
     shared<T>& operator=(const shared<T>& right) {
-      reset(*right);
+      reset(right.get());
       return *this;
     }
+    explicit operator bool() const { return t_; }
     
   private:
     T* t_;
