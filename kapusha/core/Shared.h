@@ -38,14 +38,14 @@ namespace kapusha {
   template <typename T>
   class shared {
   public:
-    shared(T* t = 0) : t_(t) { if (t_) t_->retain(); }
-    shared(const shared& other)
+    inline shared(T* t = 0) : t_(t) { if (t_) t_->retain(); }
+    inline shared(const shared& other)
       : t_(other.get())
     {
       if (t_)
         t_->retain();
     }
-    ~shared() {
+    inline ~shared() {
       if (t_)
         t_->release();
     }
@@ -61,14 +61,14 @@ namespace kapusha {
         t_->retain();
     }
     
-    T *get() const { return t_; }
-    T &operator*() const { return *t_; }
-    T *operator->() const { return t_; }
-    shared<T>& operator=(const shared<T>& right) {
+    inline T *get() const { return t_; }
+    inline T &operator*() const { return *t_; }
+    inline T *operator->() const { return t_; }
+    inline shared<T>& operator=(const shared<T>& right) {
       reset(right.get());
       return *this;
     }
-    explicit operator bool() const { return t_; }
+    inline explicit operator bool() const { return t_; }
     
   private:
     T* t_;

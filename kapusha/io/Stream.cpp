@@ -45,19 +45,19 @@ namespace kapusha {
   
 ////////////////////////////////////////////////////////////////////////////////
   
-  static void seekInMemory(StreamSeekable* stream, off_t offset,
-                           StreamSeekable::Reference ref)
+  static void seekInMemory(Stream* stream, off_t offset,
+                           Stream::Reference ref)
   {
     StreamMemory* memory = static_cast<StreamMemory*>(stream);
     
     // translate offset to absolute
     switch (ref)
     {
-      case StreamSeekable::ReferenceEnd:
+      case Stream::ReferenceEnd:
         offset += memory->size_;
-      case StreamSeekable::ReferenceStart:
+      case Stream::ReferenceStart:
         break;
-      case StreamSeekable::ReferenceCursor:
+      case Stream::ReferenceCursor:
         // check whether we're inside the valid memory now
         if (memory->start_ == memory->pointer_)
           offset += memory->cursor_ - memory->start_;

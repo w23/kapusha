@@ -44,7 +44,7 @@ namespace kapusha {
     //! Called when GL context is up and set, just before the mainloop
     //! \param system Pointer to ISystem interface, while you don't own it,
     //! it will be valid for the whole lifetime of this viewport.
-    virtual void init(IViewportController* system) = 0;
+    virtual void init(IViewportController* controller) = 0;
     
     //! Viewport window size has changed
     //! it is also called for the first time just after init()
