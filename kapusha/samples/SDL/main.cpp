@@ -1,3 +1,5 @@
+#include <iostream>
+#include <kapusha/core/Core.h>
 #include <kapusha/sys/SDL/KPSDL.h>
 
 namespace kapusha {
@@ -8,7 +10,19 @@ namespace flyby {
   kapusha::IViewport *makeViewport();
 }
 
+namespace fsquad {
+  kapusha::IViewport *makeViewport();
+}
+
+class StderrLog : public kapusha::Log::ISystemLog {
+public:
+  void write(const char* msg) {
+    std::cerr << msg << std::endl;
+  }
+};
+
 int main(int argc, char* argv[])
 {
-  return kapusha::KPSDL(flyby::makeViewport(), 800, 600);
+  KP_LOG_OPEN(0, new StderrLog);
+  return kapusha::KPSDL(fsquad::makeViewport(), 800, 600);
 }

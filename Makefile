@@ -19,6 +19,10 @@ SOURCES := \
 	kapusha/io/Stream.cpp \
 	kapusha/sys/SDL/KPSDL.cpp
 
+ifeq ($(RPI),1)
+SOURCES += kapusha/sys/SDL/RPi.cpp
+endif
+
 #MODULES=$(addprefix build/, $(patsubst %.cpp, %.o, $(SOURCES)))
 MODULES=$(patsubst %.cpp, %.o, $(SOURCES))
 

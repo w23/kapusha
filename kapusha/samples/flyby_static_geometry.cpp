@@ -182,7 +182,9 @@ namespace flyby {
     camera_.rotateYaw(yaw_speed_ * dt);
     camera_.update();
     
+    GL_ASSERT
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    GL_ASSERT
 
     ground_->draw(camera_.getView(), camera_.getProjection());
     object_->draw(camera_.getView(), camera_.getProjection());
