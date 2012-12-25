@@ -1,10 +1,6 @@
 #include <SDL/SDL.h>
 #include <kapusha/core/IViewport.h>
 
-#if KAPUSHA_RPI
-#include "RPi.h"
-#endif
-
 namespace kapusha {
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -213,17 +209,8 @@ namespace kapusha {
     //! \fixme error check
     SDL_Init(SDL_INIT_VIDEO);
 
-    u32 flags = SDL_DOUBLEBUF | (fullscreen ? SDL_FULLSCREEN : 0);
+    u32 flags = SDL_OPENGL | SDL_DOUBLEBUF | (fullscreen ? SDL_FULLSCREEN : 0);
       //! \todo | SDL_RESIZABLE
-
-#if KAPUSHA_RPI
-    RPiGLES rpigles;
-    KP_ASSERT(rpigles.initGL(width, height));
-    width = rpigles.width();
-    height = rpigles.height();
-#else // !KAPUSHA_RPI
-
-    flags |= SDL_OPENGL;
 
     if (width == -1 || height == -1)
     {
@@ -234,8 +221,6 @@ namespace kapusha {
 
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-#endif // !KAPUSHA_RPI
 
     SDL_SetVideoMode(width, height, 32, flags);
 
@@ -249,17 +234,9 @@ namespace kapusha {
         float dt = (now - prev) / 1000.f;
         viewport->draw(now, dt);
         prev = now;
-#if KAPUSHA_RPI
-        rpigles.swap();
-#else
         SDL_GL_SwapBuffers();
-#endif
       }
     }
-
-#if KAPUSHA_RPI
-    rpigles.closeGL();
-#endif
 
     SDL_Quit();
     return 0;

@@ -16,11 +16,13 @@ SOURCES := \
 	kapusha/render/OpenGL.cpp \
 	kapusha/math/math.cpp \
 	kapusha/io/StreamFile_posix.cpp \
-	kapusha/io/Stream.cpp \
-	kapusha/sys/SDL/KPSDL.cpp
+	kapusha/io/Stream.cpp
 
 ifeq ($(RPI),1)
-SOURCES += kapusha/sys/SDL/RPi.cpp
+SOURCES += kapusha/sys/rpi/RPi.cpp
+SOURCES += kapusha/sys/rpi/EGL.cpp
+else
+SOURCES += kapusha/sys/SDL/KPSDL.cpp
 endif
 
 #MODULES=$(addprefix build/, $(patsubst %.cpp, %.o, $(SOURCES)))
