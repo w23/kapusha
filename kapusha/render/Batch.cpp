@@ -3,6 +3,7 @@
 #include "Material.h"
 #include "Buffer.h"
 #include "Batch.h"
+#include "Render.h"
 
 namespace kapusha {
 
@@ -35,23 +36,25 @@ namespace kapusha {
     attribs_[i].stride = stride;
   }
 
-  void Batch::draw() const
+  void Batch::draw(Render *r) const
   {
     KP_ASSERT(*material_);
-    material_->use();
+    r->useMaterial(*material_);
     
     for (int i = 0; i < MAX_ATTRIBS; ++i)
       if (attribs_[i].index != -1)
-        attribs_[i].bind();
+        attribs_[i].bind(r);
     
     if (*indices_)
     {
-      indices_->bind(Buffer::BindingIndex);
+      r->bufferIndex().bind(*indices_);
       
+      r->commit();
       glDrawElements(gl_geometry_type_, count_, GL_UNSIGNED_INT,
         reinterpret_cast<void*>(first_));
       GL_ASSERT
     } else {
+      r->commit();
       glDrawArrays(gl_geometry_type_, first_, count_);
       GL_ASSERT
     }
@@ -61,10 +64,9 @@ namespace kapusha {
         attribs_[i].unbind();
   }
 
-  void Batch::Attrib::bind() const
+  void Batch::Attrib::bind(Render *r) const
   {
-    buffer->bind();
-
+    r->bufferArray().bind(*buffer).commit();
     glVertexAttribPointer(index, components, GL_FLOAT, GL_FALSE,
       stride, reinterpret_cast<void*>(offset));
     GL_ASSERT

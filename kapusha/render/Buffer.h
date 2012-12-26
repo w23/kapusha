@@ -13,19 +13,23 @@ namespace kapusha {
     };
     
   public:
-    Buffer();
+    Buffer(Binding binding_hint = BindingArray);
     ~Buffer();
 
     void load(Stream* data, unsigned size);
     void load(void* data, unsigned size);
-    
-    void bind(Binding binding = BindingArray) const;
 
+    //! \todo protected:
+    unsigned name() const { return name_; }
+    
   private: // noncopyable
     Buffer& operator=(const Buffer& right) { return *this; }
     Buffer(const Buffer& right) {}
 
   private:
+    void bind() const;
+
+    Binding bindingHint_;
     unsigned name_;
   };
   

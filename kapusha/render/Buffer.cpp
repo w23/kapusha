@@ -2,9 +2,12 @@
 #include "../io/Stream.h"
 #include "Buffer.h"
 
+#include "Render.h"
+
 namespace kapusha {
 
-  Buffer::Buffer()
+  Buffer::Buffer(Binding binding_hint)
+    : bindingHint_(binding_hint)
   {
     glGenBuffers(1, &name_);
     GL_ASSERT
@@ -12,6 +15,7 @@ namespace kapusha {
 
   Buffer::~Buffer()
   {
+    //! \todo? ensure it is not bound anywhere
     glDeleteBuffers(1, &name_);
     GL_ASSERT
   }
@@ -37,13 +41,17 @@ namespace kapusha {
     GL_ASSERT
   }
   
-  void Buffer::bind(Binding binding) const
+  void Buffer::bind() const
   {
-    static unsigned binding_to_gl_tbl[] = {
-      GL_ARRAY_BUFFER,
-      GL_ELEMENT_ARRAY_BUFFER
-    };
-    glBindBuffer(binding_to_gl_tbl[binding], name_);
-    GL_ASSERT
+    //! \fixme implement this
+    //switch (bindingHint_)
+    //{
+    //  case BindingArray:
+        Render::currentRender()->bufferArray().bind(this).commit();
+    //    break;
+    //  case BindingIndex:
+    //    Render::currentRender()->bufferIndex().bind(this).commit();
+    //    break;
+    //}
   }
 }

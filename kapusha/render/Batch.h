@@ -6,6 +6,8 @@ namespace kapusha {
 
 #define MAX_ATTRIBS 8
 
+  class Render;
+
   class Batch : public Shared {
   public:
     // match GL_... types exactly
@@ -42,7 +44,7 @@ namespace kapusha {
       gl_geometry_type_ = type;
     }
 
-    void draw() const;
+    void draw(Render *r) const;
 
   private:
     struct Attrib {
@@ -53,7 +55,7 @@ namespace kapusha {
       int stride;
 
       Attrib() : index(-1) {}
-      void bind() const;
+      void bind(Render *r) const;
       void unbind() const;
     };
     Attrib attribs_[MAX_ATTRIBS];

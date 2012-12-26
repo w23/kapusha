@@ -2,6 +2,7 @@
 #include "../core/Core.h"
 #include "Texture.h"
 #include "Material.h"
+#include "Render.h"
 
 namespace kapusha {
   
@@ -15,10 +16,10 @@ namespace kapusha {
   {
   }
   
-  void Material::use() const
+  void Material::use(Render *r) const
   {
-    shader_program_->use();
-    
+    r->program().use(*shader_program_).commit();
+
     for (int i = 0, data = 0; i < MAX_MATERIAL_UNIFORMS; ++i)
     {
       switch(uniforms_[i].type)
@@ -45,7 +46,7 @@ namespace kapusha {
       if (!uniforms_texture_[i].empty())
       {
         shader_program_->setUniform(uniforms_texture_[i].location, i);
-        uniforms_texture_[i].texture->use(i);
+        r->texture().bind(uniforms_texture_[i].texture, i);
       }
   } // use()
   

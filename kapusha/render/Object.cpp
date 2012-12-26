@@ -2,6 +2,7 @@
 #include "Material.h"
 #include "Program.h"
 #include "Object.h"
+#include "Render.h"
 
 namespace kapusha {
   
@@ -16,7 +17,7 @@ namespace kapusha {
   {
     batch_->getMaterial()->setUniform(mview_loc_, view);
     batch_->getMaterial()->setUniform(mproj_loc_, proj);
-    batch_->draw();
+    batch_->draw(Render::currentRender());
   }
 
 }

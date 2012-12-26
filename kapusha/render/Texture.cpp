@@ -1,6 +1,7 @@
 #include "../core/Log.h"
 #include "OpenGL.h"
 #include "Texture.h"
+#include "Render.h"
 
 namespace kapusha {
   
@@ -42,7 +43,7 @@ namespace kapusha {
     
     if (pixels || desc != desc_)
     {
-      glBindTexture(GL_TEXTURE_2D, name_);
+      bind();
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
                    desc.size.x, desc.size.y, 0,
                    desc.getGlFormat(), GL_UNSIGNED_BYTE,
@@ -62,13 +63,8 @@ namespace kapusha {
     }
   }
   
-  void Texture::use(int slot) const
+  void Texture::bind() const
   {
-    if (name_)
-    {
-      glActiveTexture(GL_TEXTURE0 + slot);
-      glBindTexture(GL_TEXTURE_2D, name_);
-      GL_ASSERT
-    }
+    Render::currentRender()->texture().bind(this).commit();
   }
 } // namespace kapusha

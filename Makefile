@@ -14,6 +14,7 @@ SOURCES := \
 	kapusha/render/Camera.cpp \
 	kapusha/render/Object.cpp \
 	kapusha/render/OpenGL.cpp \
+	kapusha/render/Render.cpp \
 	kapusha/math/math.cpp \
 	kapusha/io/StreamFile_posix.cpp \
 	kapusha/io/Stream.cpp \
