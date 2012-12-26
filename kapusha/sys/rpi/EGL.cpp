@@ -31,10 +31,10 @@ namespace kapusha {
 
   const EGLint EGL::s_config_attrs[] =
   {
-      EGL_RED_SIZE, 5,
-      EGL_GREEN_SIZE, 6,
-      EGL_BLUE_SIZE, 5,
-      EGL_DEPTH_SIZE, 16,
+      EGL_RED_SIZE, 8,
+      EGL_GREEN_SIZE, 8,
+      EGL_BLUE_SIZE, 8,
+      EGL_ALPHA_SIZE, 8,
       EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
       EGL_NONE
    };
@@ -75,7 +75,7 @@ namespace kapusha {
     result = eglChooseConfig(display_, s_config_attrs,
                              &config, 1, &num_config);
     if (EGL_FALSE == result) FAIL("eglChooseConfig");
-
+    
     context_ = eglCreateContext(display_, config,
                                 EGL_NO_CONTEXT, s_context_attrs);
     if (EGL_NO_CONTEXT == context_) FAIL("eglCreateContext");

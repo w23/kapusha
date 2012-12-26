@@ -1,71 +1,89 @@
+#include <time.h>
+#include "../../core/IViewport.h"
+#include "VideoCore.h"
+#include "EGL.h"
 #include "RPi.h"
-#include <bcm_host.h>
 
 namespace kapusha {
 
-  VideoCore::VideoCore()
+  class RaspberryController : public IViewportController
   {
-    bcm_host_init();
-    KP_ENSURE(graphics_get_display_size(0,
-                                        &displaySize_.x,
-                                        &displaySize_.y) >= 0);
-    window_.element = 0;
+  public:
+    RaspberryController(IViewport *viewport);
+
+  public: // IViewportController
+    virtual void quit(int code);
+    virtual void requestRedraw() { /*! \todo */ }
+    virtual void limitlessPointer(bool) { /*! \todo */ }
+    virtual void hideCursor(bool) { /*! \todo sw-cursor? */ }
+    virtual const PointerState& pointerState() const { return pointerState_; }
+    virtual const KeyState& keyState() const { return keyState_; }
+
+    int run();
+    int now() const;
+
+  private:
+    VideoCore videoCore_;
+    EGL egl_;
+    IViewport *viewport_;
+
+    bool continue_;
+    int returnCode_;
+
+    //! \todo evdev
+    PointerState pointerState_;
+    KeyState keyState_;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+
+  RaspberryController::RaspberryController(IViewport *viewport)
+    : viewport_(viewport)
+    , continue_(true)
+  {
   }
 
-  VideoCore::~VideoCore()
+  void RaspberryController::quit(int code)
   {
-    //! \fixme what to do here?
+    continue_ = false;
+    returnCode_ = code;
   }
 
-  EGL_DISPMANX_WINDOW_T *VideoCore::openWindow()
+  int RaspberryController::run()
   {
-    KP_ASSERT(!window_.element);
-    DISPMANX_ELEMENT_HANDLE_T dispman_element;
-    DISPMANX_DISPLAY_HANDLE_T dispman_display;
-    DISPMANX_UPDATE_HANDLE_T dispman_update;
-    VC_RECT_T dst_rect;
-    VC_RECT_T src_rect;
-    
-    dst_rect.x = dst_rect.y = 0;
-    dst_rect.width = displaySize_.x;
-    dst_rect.height = displaySize_.y;
-      
-    src_rect.x = src_rect.y = 0;
-    src_rect.width = displaySize_.x << 16;
-    src_rect.height = displaySize_.y << 16;
-
-    dispman_display = vc_dispmanx_display_open(0);
-    dispman_update = vc_dispmanx_update_start(0);
-    dispman_element = vc_dispmanx_element_add(
-      dispman_update, dispman_display, 0, &dst_rect, 0, &src_rect,
-      DISPMANX_PROTECTION_NONE, 0, 0, DISPMANX_NO_ROTATE);
-      
-    window_.element = dispman_element;
-    window_.width = displaySize_.x;
-    window_.height = displaySize_.y;
-    vc_dispmanx_update_submit_sync(dispman_update);
-
-    return &window_;
-  }
-
-///////////////////////////////////////////////////////////////////////////////
-
-  bool RPi::initGL(vec2u& size)
-  {
-    size = videocore_.displaySize();
-    EGL_DISPMANX_WINDOW_T *win = videocore_.openWindow();
+    EGL_DISPMANX_WINDOW_T *win = videoCore_.openWindow();
     KP_ASSERT(win);
 
-    return egl_.init(EGL_DEFAULT_DISPLAY, win);
+    KP_ENSURE(egl_.init(EGL_DEFAULT_DISPLAY, win));
+
+    viewport_->init(this);
+    viewport_->resize(videoCore_.displaySize());
+
+    int tprev = now();
+    while(continue_)
+    {
+      int tnow = now();
+      viewport_->draw(tnow, (tnow - tprev) / 1000.f);
+      KP_ASSERT(egl_.swap());
+      tprev = tnow;
+    }
+
+    viewport_->close();
+    return returnCode_;
   }
 
-  void RPi::closeGL()
+  int RaspberryController::now() const
   {
-    //! \fixme what here?
+    timespec ts;
+    KP_ENSURE(0 == clock_gettime(CLOCK_MONOTONIC_RAW, &ts));
+    return ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
   }
 
-  bool RPi::swap() const
+  ///////////////////////////////////////////////////////////////////////////////
+
+  int RunRaspberryRun(IViewport *viewport)
   {
-    return egl_.swap();
+    RaspberryController rpictl(viewport);
+    return rpictl.run();
   }
 }

@@ -19,10 +19,11 @@ SOURCES := \
 	kapusha/io/Stream.cpp
 
 ifeq ($(RPI),1)
-SOURCES += kapusha/sys/rpi/RPi.cpp
-SOURCES += kapusha/sys/rpi/EGL.cpp
+  SOURCES += kapusha/sys/rpi/VideoCore.cpp
+  SOURCES += kapusha/sys/rpi/EGL.cpp
+  SOURCES += kapusha/sys/rpi/RPi.cpp
 else
-SOURCES += kapusha/sys/SDL/KPSDL.cpp
+  SOURCES += kapusha/sys/SDL/KPSDL.cpp
 endif
 
 #MODULES=$(addprefix build/, $(patsubst %.cpp, %.o, $(SOURCES)))
