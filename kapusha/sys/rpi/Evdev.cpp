@@ -233,8 +233,10 @@ namespace kapusha {
     KP_ASSERT(fileMouse_ != -1);
     KP_ASSERT(fileKeyboard_ != -1);
 
+#if !DEBUG
     ioctl(fileMouse_, EVIOCGRAB, 1);
     ioctl(fileKeyboard_, EVIOCGRAB, 1);
+#endif
 
     timeval tv;
     gettimeofday(&tv, 0);
@@ -276,6 +278,7 @@ namespace kapusha {
     
     int selval = select(maxFds_, &fds, 0, 0, ptv);
     KP_ASSERT(selval != -1);
+    if (selval < 1) return;
     
     if (FD_ISSET(fileMouse_, &fds))
     {

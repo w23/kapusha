@@ -9,7 +9,7 @@
 #define KP_ENSURE(a) assert((a))
 #else
 #define KP_ASSERT(a) {}
-#define KP_ENSURE(a) a
+#define KP_ENSURE(a) (void)(a)
 #endif
 
 //! \todo custom assert to be able to dump stack trace to log file
