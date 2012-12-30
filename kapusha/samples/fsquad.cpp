@@ -20,10 +20,12 @@ namespace fsquad {
   private:
     IViewportController *system_;
     Batch *batch_;
+    Render *render_;
   };
 
   void Viewport::init(IViewportController *system)
   {
+    render_ = new Render;
     system_ = system;
     batch_ = new Batch();
     
@@ -67,12 +69,13 @@ namespace fsquad {
     fsrect->load(rect, sizeof rect);
     batch_->setAttribSource("vtx", fsrect, 2);
     
-    batch_->setGeometry(Batch::GeometryTriangleFan, 0, 4, 0);
+    batch_->setGeometry(Batch::GeometryTriangleFan, 0, 4);
   }
 
   void Viewport::close()
   {
     delete batch_;
+    delete render_;
   }
 
   void Viewport::resize(vec2i size)
@@ -91,7 +94,7 @@ namespace fsquad {
 
 //    batch_->getMaterial()->setUniform("time", time);
     batch_->getMaterial()->setUniform("ptr", system_->pointerState().main().point);
-    batch_->draw();
+    batch_->draw(render_);
     
     system_->requestRedraw();
   }
@@ -100,14 +103,3 @@ namespace fsquad {
     return new Viewport;
   }
 } // namespace fsquad
-
-#if SAMPLE_STANDALONE_GLUT
-namespace kapusha {
-int runGlut(int argc, const char* argv[], kapusha::IViewport*);
-}
-int main(int argc, const char* argv[])
-{
-  return kapusha::runGlut(argc, argv, new fsquad::Viewport);
-}
-#endif
-

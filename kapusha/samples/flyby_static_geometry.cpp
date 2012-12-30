@@ -25,9 +25,10 @@ namespace flyby {
     
   private:
     IViewportController *ctrl_;
-    Object* ground_;
-    Object* object_;
+    Object *ground_;
+    Object *object_;
     Camera camera_;
+    Render *render_;
     
     float forward_speed_;
     float right_speed_;
@@ -83,7 +84,7 @@ namespace flyby {
     fsrect->load(rect, sizeof rect);
     batch->setAttribSource("vtx", fsrect, 3);
     
-    batch->setGeometry(Batch::GeometryTriangleFan, 0, 4, 0);
+    batch->setGeometry(Batch::GeometryTriangleFan, 0, 4);
     
     return new Object(batch);
   }
@@ -145,6 +146,7 @@ namespace flyby {
   void Viewport::init(IViewportController *ctrl)
   {
     ctrl_ = ctrl;
+    render_ = new Render();
     
     object_ = createDust();
     ground_ = createGround();
@@ -165,6 +167,7 @@ namespace flyby {
   {
     delete object_;
     delete ground_;
+    delete render_;
   }
 
   void Viewport::resize(vec2i size)

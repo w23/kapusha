@@ -169,10 +169,16 @@ namespace kapusha {
     inline bool isKeyPressed(int key) const { return press_vector_[key]; }
     inline bool isLastKeyPressed() const { return last_pressed_; }
     inline int getLastKey() const { return last_key_; }
+
+    // useful shortcuts
+    inline bool isShiftPressed() const {
+      return press_vector_[KeyLeftShift] || press_vector_[KeyRightShift];
+    }
     
     //! Key codes, they're mostly ASCII
     //! \fixme more
     //! \fixme SDL_keysym seems to have the most appropriate mapping. should i adopt it?
+    //! \fixme this is a total mess
     enum Keys {
       KeyUnknown = 0,
       KeyBackspace = 8,
@@ -229,7 +235,7 @@ namespace kapusha {
       KeyZ = 'Z',
       //! modifiers are keys too
       KeyDel = 127,
-      KeyShift = 128,
+      KeyIns,
       KeyLeftAlt,
       KeyLeftCtrl,
       KeyLeftMeta,
@@ -243,7 +249,7 @@ namespace kapusha {
       KeyF11, KeyF12,
       KeyKeypadAsterisk,
       KeyHome, KeyEnd,
-      KeyIns, KeyCapslock,
+      KeyCapslock,
       KeyMax = 256
     };
     

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../core/Log.h"
 #include "OpenGL.h"
 #include "Buffer.h"
 #include "Texture.h"
@@ -109,7 +110,7 @@ namespace kapusha {
     public:
       inline TextureBinding& bind(const Texture* t, int unit = -1)
       {
-        unitNew_ = (unit == -1) ? unitCurrent_ : unit;
+        unitNew_ = (unit == -1) ? unitCurrent_ : (GL_TEXTURE0 + unit);
         new_ = t->name();
         return *this;
       }
@@ -117,6 +118,7 @@ namespace kapusha {
       {
         if (unitCurrent_ != unitNew_)
         {
+          GL_ASSERT
           glActiveTexture(unitNew_);
           GL_ASSERT
           unitCurrent_ = unitNew_;

@@ -31,13 +31,13 @@ namespace kapusha {
 
   const EGLint EGL::s_config_attrs[] =
   {
-      EGL_RED_SIZE, 8,
-      EGL_GREEN_SIZE, 8,
-      EGL_BLUE_SIZE, 8,
-      EGL_ALPHA_SIZE, 8,
-      EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-      EGL_NONE
-   };
+    EGL_RED_SIZE, 5,
+    EGL_GREEN_SIZE, 6,
+    EGL_BLUE_SIZE, 5,
+    EGL_DEPTH_SIZE, 16,
+    EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+    EGL_NONE
+  };
    
    const EGLint EGL::s_context_attrs[] = 
    {

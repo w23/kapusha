@@ -41,13 +41,17 @@ namespace kapusha {
   void Texture::upload(const ImageDesc& desc, void* pixels)
   {
     if (!name_ || (!own_ && name_))
+    {
       glGenTextures(1, &name_);
+      GL_ASSERT
+    }
 
     own_ = true;
     
     if (pixels || desc != desc_)
     {
       bind();
+      L("Loading texture: %dx%d format = %d", desc.size.x, desc.size.y, desc.format);
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
                    desc.size.x, desc.size.y, 0,
                    desc.getGlFormat(), GL_UNSIGNED_BYTE,

@@ -70,11 +70,11 @@ namespace kapusha {
 
           if (relativeOnly_)
           {
-            pointers_[0].movement = d;
+            pointers_[0].movement += d;
             pointers_[0].point = vec2f(0);
           } else {
             vec2f newpos = (pointers_[0].point + d).clamp(-1.f, 1.f);
-            pointers_[0].movement = newpos - pointers_[0].point;
+            pointers_[0].movement += newpos - pointers_[0].point;
             pointers_[0].point = newpos;
           }
         }

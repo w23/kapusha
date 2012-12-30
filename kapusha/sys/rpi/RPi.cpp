@@ -15,7 +15,7 @@ namespace kapusha {
   public: // IViewportController
     virtual void quit(int code);
     virtual void requestRedraw() { /*! \todo */ }
-    virtual void limitlessPointer(bool) { /*! \todo */ }
+    virtual void limitlessPointer(bool rel) { evdev_.setRelativeOnly(rel); }
     virtual void hideCursor(bool) { /*! \todo sw-cursor? */ }
     virtual const PointerState& pointerState() const { return evdev_.pointerState(); }
     virtual const KeyState& keyState() const { return evdev_.keyState(); }
@@ -66,7 +66,7 @@ namespace kapusha {
       evdev_.run(false);
       int tnow = now();
       viewport_->draw(tnow, (tnow - tprev) / 1000.f);
-      KP_ASSERT(egl_.swap());
+      KP_ENSURE(egl_.swap());
       tprev = tnow;
     }
 

@@ -15,9 +15,9 @@ namespace kapusha {
       } format;
       
       ImageDesc() : size(0), format(Format_Unknown) {}
-      ImageDesc(unsigned w, unsigned h, PixelFormat fmt = Format_BGRA32)
+      ImageDesc(unsigned w, unsigned h, PixelFormat fmt = Format_RGBA32)
       : size(w,h), format(fmt) {}
-      ImageDesc(vec2i sz, PixelFormat fmt = Format_BGRA32)
+      ImageDesc(vec2i sz, PixelFormat fmt = Format_RGBA32)
       : size(sz), format(fmt) {}
       
       bool operator==(const ImageDesc& other) const
