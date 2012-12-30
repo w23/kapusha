@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/select.h>
+#include <sys/ioctl.h>
 
 #include "../../core/Core.h"
 #include "../../core/IViewport.h"
@@ -232,6 +233,9 @@ namespace kapusha {
     KP_ASSERT(fileMouse_ != -1);
     KP_ASSERT(fileKeyboard_ != -1);
 
+    ioctl(fileMouse_, EVIOCGRAB, 1);
+    ioctl(fileKeyboard_, EVIOCGRAB, 1);
+
     timeval tv;
     gettimeofday(&tv, 0);
     localSecOffset_ = tv.tv_sec;
@@ -239,6 +243,8 @@ namespace kapusha {
 
   Evdev::~Evdev()
   {
+    ioctl(fileMouse_, EVIOCGRAB, 0);
+    ioctl(fileKeyboard_, EVIOCGRAB, 0);
     close(fileMouse_);
     close(fileKeyboard_);
   }
