@@ -2,6 +2,7 @@
 #include "../../core/IViewport.h"
 #include "VideoCore.h"
 #include "EGL.h"
+#include "Evdev.h"
 #include "RPi.h"
 
 namespace kapusha {
@@ -16,8 +17,8 @@ namespace kapusha {
     virtual void requestRedraw() { /*! \todo */ }
     virtual void limitlessPointer(bool) { /*! \todo */ }
     virtual void hideCursor(bool) { /*! \todo sw-cursor? */ }
-    virtual const PointerState& pointerState() const { return pointerState_; }
-    virtual const KeyState& keyState() const { return keyState_; }
+    virtual const PointerState& pointerState() const { return evdev_.pointerState(); }
+    virtual const KeyState& keyState() const { return evdev_.keyState(); }
 
     int run();
     int now() const;
@@ -26,19 +27,19 @@ namespace kapusha {
     VideoCore videoCore_;
     EGL egl_;
     IViewport *viewport_;
+    Evdev evdev_;
 
     bool continue_;
     int returnCode_;
 
-    //! \todo evdev
-    PointerState pointerState_;
-    KeyState keyState_;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
 
   RaspberryController::RaspberryController(IViewport *viewport)
     : viewport_(viewport)
+    , evdev_(viewport, videoCore_.displaySize(),
+             "/dev/input/event0", "/dev/input/event1")
     , continue_(true)
   {
   }
@@ -62,6 +63,7 @@ namespace kapusha {
     int tprev = now();
     while(continue_)
     {
+      evdev_.run(false);
       int tnow = now();
       viewport_->draw(tnow, (tnow - tprev) / 1000.f);
       KP_ASSERT(egl_.swap());

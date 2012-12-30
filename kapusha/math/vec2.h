@@ -162,6 +162,14 @@ namespace kapusha {
     {
       return vec2(x<0?-x:x, y<0?-y:y);
     }
+
+    vec2 clamp(T min, T max) const
+    {
+      vec2<T> ret;
+      ret.x = (x < min) ? min : ((x > max) ? max : x);
+      ret.y = (y < min) ? min : ((y > max) ? max : y);
+      return ret;
+    }
   };
     
     template <typename T>
