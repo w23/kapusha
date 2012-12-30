@@ -50,7 +50,7 @@ namespace kapusha {
       r->bufferIndex().bind(*indices_);
       
       r->commit();
-      glDrawElements(gl_geometry_type_, count_, GL_UNSIGNED_INT,
+      glDrawElements(gl_geometry_type_, count_, indexType_,
         reinterpret_cast<void*>(first_));
       GL_ASSERT
     } else {
