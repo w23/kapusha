@@ -176,13 +176,16 @@ namespace flyby {
 
   void Viewport::draw(int ms, float dt)
   {
+   // L("frame delta = %f (%f fps)", dt, 1.f / dt);
     camera_.moveForward(forward_speed_ * dt);
     camera_.moveRigth(right_speed_ * dt);
     camera_.rotatePitch(pitch_speed_ * dt);
     camera_.rotateYaw(yaw_speed_ * dt);
     camera_.update();
     
+    GL_ASSERT
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    GL_ASSERT
 
     ground_->draw(camera_.getView(), camera_.getProjection());
     object_->draw(camera_.getView(), camera_.getProjection());
@@ -217,6 +220,9 @@ namespace flyby {
       case KeyState::KeyRight:
         yaw_speed_ += keys.isLastKeyPressed() ? -1.f : 1.f;
         break;
+      case KeyState::KeyEsc:
+        ctrl_->quit(0);
+        break;
 
       default:
         L("key %d is unknown", keys.getLastKey());
@@ -234,13 +240,3 @@ namespace flyby {
     return new Viewport;
   }
 } // namespace flyby
-
-#if SAMPLE_STANDALONE_GLUT
-namespace kapusha {
-  int runGlut(int argc, const char* argv[], kapusha::IViewport*);
-}
-int main(int argc, const char* argv[])
-{
-  return kapusha::runGlut(argc, argv, new flyby::Viewport);
-}
-#endif

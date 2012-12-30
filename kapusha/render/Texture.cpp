@@ -4,6 +4,10 @@
 #include "Render.h"
 
 namespace kapusha {
+
+#ifndef GL_BGRA
+#define GL_BGRA GL_BGRA_EXT
+#endif
   
   unsigned Texture::ImageDesc::getGlFormat() const
   {

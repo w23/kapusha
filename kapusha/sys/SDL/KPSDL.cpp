@@ -209,6 +209,9 @@ namespace kapusha {
     //! \fixme error check
     SDL_Init(SDL_INIT_VIDEO);
 
+    u32 flags = SDL_OPENGL | SDL_DOUBLEBUF | (fullscreen ? SDL_FULLSCREEN : 0);
+      //! \todo | SDL_RESIZABLE
+
     if (width == -1 || height == -1)
     {
       const SDL_VideoInfo* vinfo = SDL_GetVideoInfo();
@@ -219,9 +222,7 @@ namespace kapusha {
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    SDL_SetVideoMode(width, height, 32, SDL_DOUBLEBUF | SDL_OPENGL
-      //! \todo | SDL_RESIZABLE
-                     | (fullscreen ? SDL_FULLSCREEN : 0));
+    SDL_SetVideoMode(width, height, 32, flags);
 
     {
       SDLViewportController viewctl(viewport, vec2i(width, height));

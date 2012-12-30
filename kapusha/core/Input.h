@@ -12,13 +12,18 @@ namespace kapusha {
   
   //! Basic input state with timestamp
   class InputState {
-  public:
-    inline void update(u32 time) {
-      delta_ = time - last_changed_;
+  protected:
+    inline void accumulate(u32 time) {
+      delta_ += time - last_changed_;
       last_changed_ = time;
+    }
+    inline void update(u32 time) {
+      delta_ = 0;
+      accumulate(time);
     }
     inline u32 timestamp() const { return last_changed_; }
     inline u32 delta() const { return  delta_; }
+    inline void deltaReset() { delta_ = 0; }
     
   private:
     u32 last_changed_;
@@ -26,7 +31,7 @@ namespace kapusha {
   };
 
 ////////////////////////////////////////////////////////////////////////////////
-  //! State of a input by pointers
+  //! State of an input by pointers
   class PointerState : public InputState
   {
   public:
@@ -41,13 +46,16 @@ namespace kapusha {
         
         //! touch down or left mouse button
         Pressed = 2,
+        
         //! mouse-specific
         LeftButton = Pressed,
         RightButton = 4,
-        MiddleButton = 8,
+        MiddleButton = 8
       };
-      //! current state & events
+      //! current state
       int flags;
+
+      //! event
       int change;
       
       //! current position
@@ -60,22 +68,25 @@ namespace kapusha {
       //vec2f speed;
       //float pressure;
       
-      inline bool isPressed() const { return (flags & (LeftButton|RightButton|MiddleButton)) != 0; }
+      inline bool isPressed() const { 
+        return (flags & (LeftButton|RightButton|MiddleButton)) != 0;
+      }
       inline bool isLeftPressed() const { return (flags & LeftButton) != 0; }
       inline bool isRightPressed() const { return (flags & RightButton) != 0; }
-      inline bool isMiddlePressed() const { return (flags & MiddleButton) != 0; }
+      inline bool isMiddlePressed() const {
+        return (flags & MiddleButton) != 0;
+      }
       
       inline bool wasPressed() const {
         return isPressed() && (change & (LeftButton|RightButton|MiddleButton));
       }
       inline bool wasUnpressed() const {
-        return !isPressed() && (change & (LeftButton|RightButton|MiddleButton));
+        return !isPressed() && 
+          (change & (LeftButton|RightButton|MiddleButton));
       }
       
-      Pointer(vec2f _pos = vec2f(0), int _flags = None)
-      : flags(_flags), change(0), point(_pos), movement(0) {}
-      
-      void update(vec2f position, vec2f _movement, int _flags, int flags_remove = 0)
+      void update(vec2f position, vec2f _movement,
+                  int _flags, int flags_remove = 0)
       {
         movement = _movement;
         point = position;
@@ -91,8 +102,16 @@ namespace kapusha {
       
     protected:
       friend class PointerState;
+      Pointer(vec2f _pos = vec2f(0), int _flags = None)
+      : flags(_flags), change(0), point(_pos), movement(0) {}
       void clearEventFlags() { flags ^= Move; }
       void clearAllFlags() { flags = 0; }
+      
+      //! do this in the beginning of a new event
+      void beginUpdate() {
+        change = 0;
+        movement = 0;
+      }
     };
     
   public: // IViewport user interface
@@ -107,7 +126,7 @@ namespace kapusha {
     
     
     //! \fixme make protected and force all implementation to subclass
-  public: // new event
+  public:
     PointerState() : combined_flags_(0), changed_flags_(0) {}
     void mouseMove(vec2f to, u32 time = 0);
     void mouseMove(vec2f to, vec2f d, u32 time = 0);
@@ -116,6 +135,24 @@ namespace kapusha {
     
   private:
     void mouseUpdate(vec2f at, int flags_add, int flags_remove, u32 time);
+
+  protected:
+    //! call this before updating the state with new events
+    void beginUpdate() {
+      deltaReset();
+      changed_flags_ = 0;
+      for (int i = 0; i < MAX_POINTERS_IN_EVENT; ++i)
+        pointers_[i].beginUpdate();
+    }
+    //! call this after all the new events were consumed
+    void endUpdate() {
+      for (int i = 0; i < MAX_POINTERS_IN_EVENT; ++i)
+      {
+        combined_flags_ |= pointers_[i].flags;
+        changed_flags_ |= pointers_[i].change;
+        //! \todo calculate center and area
+      }
+    }
     
   protected:
     int combined_flags_;
@@ -193,17 +230,29 @@ namespace kapusha {
       //! modifiers are keys too
       KeyDel = 127,
       KeyShift = 128,
-      KeyAlt,
-      KeyCtrl,
-      KeyOpt = KeyAlt,
+      KeyLeftAlt,
+      KeyLeftCtrl,
+      KeyLeftMeta,
+      KeyLeftShift,
+      KeyRightAlt,
+      KeyRightCtrl,
+      KeyRightMeta,
+      KeyRightShift,
+      KeyOpt = KeyLeftAlt,
+      KeyF1, KeyF2, KeyF3, KeyF4, KeyF5, KeyF6, KeyF7, KeyF8, KeyF9, KeyF10,
+      KeyF11, KeyF12,
+      KeyKeypadAsterisk,
+      KeyHome, KeyEnd,
+      KeyIns, KeyCapslock,
       KeyMax = 256
     };
     
   public:
     KeyState() : last_key_(0), last_pressed_(false) { reset(); }
     
-    inline bool key(int key, bool pressed, u32 time)
+    inline bool key(unsigned key, bool pressed, u32 time)
     {
+      KP_ASSERT(key < KeyMax);
       if (key == KeyUnknown)
         return false;
 
