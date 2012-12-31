@@ -47,6 +47,7 @@
     <ClCompile Include="kapusha\render\Object.cpp" />
     <ClCompile Include="kapusha\render\OpenGL.cpp" />
     <ClCompile Include="kapusha\render\Program.cpp" />
+    <ClCompile Include="kapusha\render\Render.cpp" />
     <ClCompile Include="kapusha\render\Texture.cpp" />
     <ClCompile Include="kapusha\io\Stream.cpp" />
     <ClCompile Include="kapusha\io\StreamFile_win.cpp" />

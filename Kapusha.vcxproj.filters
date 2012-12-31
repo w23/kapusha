@@ -149,5 +149,8 @@
     <ClCompile Include="kapusha\sys\win\Window.cpp">
       <Filter>sys</Filter>
     </ClCompile>
+    <ClCompile Include="kapusha\render\Render.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
