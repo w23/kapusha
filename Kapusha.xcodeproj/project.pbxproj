@@ -63,6 +63,8 @@
 		E1A77CB2165D39F9009FF8F3 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1A77CB1165D39F9009FF8F3 /* AppDelegate.mm */; };
 		E1A77CB5165D39F9009FF8F3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1A77CB3165D39F9009FF8F3 /* MainMenu.xib */; };
 		E1A77CBB165D3ADA009FF8F3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
+		E1A8E7E016915BD10084718E /* Render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1A8E7DF16915BD10084718E /* Render.cpp */; };
+		E1A8E7E116915BD10084718E /* Render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1A8E7DF16915BD10084718E /* Render.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -150,6 +152,7 @@
 		E1A77CCD165D528A009FF8F3 /* kapusha-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "kapusha-Info.plist"; sourceTree = "<group>"; };
 		E1A77CCF165D528A009FF8F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E1A77CD1165D528A009FF8F3 /* kapusha-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "kapusha-Prefix.pch"; sourceTree = "<group>"; };
+		E1A8E7DF16915BD10084718E /* Render.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Render.cpp; sourceTree = "<group>"; };
 		E1BD0C1D164F72A900A3454C /* Render.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Render.h; sourceTree = "<group>"; };
 		E1E74B60164436330038E873 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
 		E1E74B61164436330038E873 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
@@ -224,7 +227,6 @@
 		E18DDFD3163D8EED00869CF5 /* render */ = {
 			isa = PBXGroup;
 			children = (
-				E1BD0C1D164F72A900A3454C /* Render.h */,
 				E18DDFD6163D8EED00869CF5 /* Batch.cpp */,
 				E18DDFD7163D8EED00869CF5 /* Batch.h */,
 				E18DDFD4163D8EED00869CF5 /* Buffer.cpp */,
@@ -239,6 +241,8 @@
 				E18DDFD9163D8EED00869CF5 /* OpenGL.h */,
 				E18DDFDA163D8EED00869CF5 /* Program.cpp */,
 				E18DDFDB163D8EED00869CF5 /* Program.h */,
+				E1A8E7DF16915BD10084718E /* Render.cpp */,
+				E1BD0C1D164F72A900A3454C /* Render.h */,
 				E18DDFDC163D8EED00869CF5 /* Texture.cpp */,
 				E18DDFDD163D8EED00869CF5 /* Texture.h */,
 			);
@@ -565,6 +569,7 @@
 				E131D5101662036500B0320A /* OpenGL.cpp in Sources */,
 				E131D5111662036500B0320A /* Program.cpp in Sources */,
 				E131D5121662036500B0320A /* Texture.cpp in Sources */,
+				E1A8E7E116915BD10084718E /* Render.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -597,6 +602,7 @@
 				E19931C4164E4EC700E8D9CB /* StreamFile_posix.cpp in Sources */,
 				E19931C5164E4ECC00E8D9CB /* math.cpp in Sources */,
 				E15E63FB165E84150032BBC2 /* Input.cpp in Sources */,
+				E1A8E7E016915BD10084718E /* Render.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

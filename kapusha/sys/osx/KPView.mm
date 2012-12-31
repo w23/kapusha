@@ -88,13 +88,13 @@ public:
       int kbit;
       switch (keyc)
       {
-        case KeyShift:
+        case KeyLeftShift:
           kbit = NSShiftKeyMask;
           break;
-        case KeyCtrl:
+        case KeyLeftCtrl:
           kbit = NSControlKeyMask;
           break;
-        case KeyAlt:
+        case KeyLeftAlt:
           kbit = NSAlternateKeyMask;
           break;
         default:
@@ -166,13 +166,13 @@ const int CocoaKeyState::s_to_kapusha[128] = {
   KeyEsc,     //0x35 = kVK_Escape
   KeyUnknown, //0x36
   KeyUnknown, //0x37 = kVK_Command
-  KeyShift,   //0x38 = kVK_Shift
+  KeyLeftShift, //0x38 = kVK_Shift
   KeyUnknown, //0x39 = kVK_CapsLock
   KeyOpt,     //0x3A = kVK_Option
-  KeyCtrl,    //0x3B = kVK_Control
-  KeyUnknown, //0x3C = kVK_RightShift
+  KeyLeftCtrl,  //0x3B = kVK_Control
+  KeyRightShift, //0x3C = kVK_RightShift
   KeyUnknown, //0x3D = kVK_RightOption
-  KeyUnknown, //0x3E = kVK_RightControl
+  KeyRightCtrl, //0x3E = kVK_RightControl
   KeyUnknown, //0x3F = kVK_Function
   KeyUnknown, //0x40 = kVK_F17
   KeyUnknown, //0x41 = kVK_ANSI_KeypadDecimal
@@ -206,32 +206,32 @@ const int CocoaKeyState::s_to_kapusha[128] = {
   KeyUnknown, //0x5D = kVK_JIS_Yen
   KeyUnknown, //0x5E = kVK_JIS_Underscore
   KeyUnknown, //0x5F = kVK_JIS_KeypadComma
-  KeyUnknown, //0x60 = kVK_F5
-  KeyUnknown, //0x61 = kVK_F6
-  KeyUnknown, //0x62 = kVK_F7
-  KeyUnknown, //0x63 = kVK_F3
-  KeyUnknown, //0x64 = kVK_F8
-  KeyUnknown, //0x65 = kVK_F9
+  KeyF5,      //0x60 = kVK_F5
+  KeyF6,      //0x61 = kVK_F6
+  KeyF7,      //0x62 = kVK_F7
+  KeyF3,      //0x63 = kVK_F3
+  KeyF8,      //0x64 = kVK_F8
+  KeyF9,      //0x65 = kVK_F9
   KeyUnknown, //0x66 = kVK_JIS_Eisu
-  KeyUnknown, //0x67 = kVK_F11
+  KeyF11,     //0x67 = kVK_F11
   KeyUnknown, //0x68 = kVK_JIS_Kana
   KeyUnknown, //0x69 = kVK_F13
   KeyUnknown, //0x6A = kVK_F16
   KeyUnknown, //0x6B = kVK_F14
   KeyUnknown, //0x6C
-  KeyUnknown, //0x6D = kVK_F10
+  KeyF10,     //0x6D = kVK_F10
   KeyUnknown, //0x6E
-  KeyUnknown, //0x6F = kVK_F12
+  KeyF12,     //0x6F = kVK_F12
   KeyUnknown, //0x71 = kVK_F15
   KeyUnknown, //0x72 = kVK_Help
-  KeyUnknown, //0x73 = kVK_Home
+  KeyHome,    //0x73 = kVK_Home
   KeyPageUp,  //0x74 = kVK_PageUp
   KeyUnknown, //0x75 = kVK_ForwardDelete
-  KeyUnknown, //0x76 = kVK_F4
-  KeyUnknown, //0x77 = kVK_End
-  KeyUnknown, //0x78 = kVK_F2
+  KeyF4,      //0x76 = kVK_F4
+  KeyEnd,     //0x77 = kVK_End
+  KeyF2,      //0x78 = kVK_F2
   KeyPageDown,//0x79 = kVK_PageDown
-  KeyUnknown, //0x7A = kVK_F1
+  KeyF1,      //0x7A = kVK_F1
   KeyLeft,    //0x7B = kVK_LeftArrow
   KeyRight,   //0x7C = kVK_RightArrow
   KeyDown,    //0x7D = kVK_DownArrow
