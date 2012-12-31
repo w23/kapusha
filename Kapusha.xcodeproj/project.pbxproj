@@ -694,6 +694,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = kapusha;
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -721,6 +722,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = kapusha;
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
