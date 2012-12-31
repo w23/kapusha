@@ -6,52 +6,42 @@ namespace kapusha {
 
   class Texture : public Shared {
   public:
-    struct ImageDesc {
+    struct Meta {
       vec2i size;
       enum PixelFormat {
-        Format_Unknown,
-        Format_RGBA32,
-        Format_BGRA32
+        None = 0,
+        RGBA8888,
+        BGRA8888,
+        RGB565
       } format;
       
-      ImageDesc() : size(0), format(Format_Unknown) {}
-      ImageDesc(unsigned w, unsigned h, PixelFormat fmt = Format_RGBA32)
-      : size(w,h), format(fmt) {}
-      ImageDesc(vec2i sz, PixelFormat fmt = Format_RGBA32)
-      : size(sz), format(fmt) {}
+      Meta() : size(0), format(None) {}
+      Meta(unsigned w, unsigned h, PixelFormat fmt = RGBA8888)
+        : size(w,h), format(fmt) {}
+      Meta(vec2i sz, PixelFormat fmt = RGBA8888)
+        : size(sz), format(fmt) {}
       
-      bool operator==(const ImageDesc& other) const
-      {
-        return
-          size == other.size &&
-          format == other.format;
+      bool operator==(const Meta& other) const {
+        return size == other.size && format == other.format;
       }
-      
-      bool operator!=(const ImageDesc& other) const
-      {
-        return !(*this == other);
-      }
-      
-      unsigned getGlFormat() const;
+      bool operator!=(const Meta& other) const { return !(*this == other); }
     };
 
   public:
     Texture();
-    Texture(const ImageDesc& desc, unsigned existing_name = 0, bool take_ownership = false);
+    //Texture(const Meta& Meta, unsigned existing_name = 0, bool take_ownership = false);
     ~Texture();
   
-    void upload(const ImageDesc& desc, void* pixels);
-    const ImageDesc& desc() const { return desc_; }
-
-    //! \todo protected:
-    unsigned name() const { return name_; }
+    void upload(const Meta& meta, void* pixels);
+    
+    const Meta& getMeta() const { return meta_; }
+    unsigned getName() const { return name_; }
     
   private:
     void bind() const;
 
-    bool own_;
     unsigned name_;
-    ImageDesc desc_;
+    Meta meta_;
   };
   
   typedef shared<Texture> STexture;

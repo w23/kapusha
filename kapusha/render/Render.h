@@ -111,7 +111,7 @@ namespace kapusha {
       inline TextureBinding& bind(const Texture* t, int unit = -1)
       {
         unitNew_ = (unit == -1) ? unitCurrent_ : (GL_TEXTURE0 + unit);
-        new_ = t->name();
+        new_ = t->getName();
         return *this;
       }
       void commit()
