@@ -11,17 +11,20 @@ namespace kapusha {
   class Node : public Reframe
   {
   public:
+    Node() : diameter_(0) {}
     virtual ~Node() {}
     
     virtual void render(const Camera& cam, const mat4f& m);
     
     void addChild(Node *node);
     
-  protected:
-    SNode child, next;
+    void setBoundingDiameter(float diameter) { diameter_ = diameter; }
     
-  private:
-    float binding_size_;
+    //! \todo calculateDiameter(); from children
+    
+  protected:
+    float diameter_;
+    SNode child, next;
   };
   
 } // namespace kapusha

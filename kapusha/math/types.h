@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "../core/types.h"
 #include "vec2.h"
 #include "vec3.h"
 #include "vec4.h"
@@ -19,6 +20,7 @@ namespace kapusha {
   typedef vec3<int> vec3i;
 
   typedef vec4<float> vec4f;
+  typedef vec4<u8> vec4b;
   
   typedef mat2x2<float> mat2f;
   typedef mat4x4<float> mat4f;

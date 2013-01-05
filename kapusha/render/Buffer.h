@@ -19,6 +19,9 @@ namespace kapusha {
     void load(Stream* data, unsigned size);
     void load(void* data, unsigned size);
     
+    void* map(unsigned size);
+    void unmap();
+    
     void bind(Binding binding = BindingArray) const;
 
   private: // noncopyable
