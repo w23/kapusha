@@ -1,16 +1,12 @@
 #include <iostream>
-#include <kapusha/core/Core.h>
-#include <kapusha/sys/SDL/KPSDL.h>
+#include <kapusha/core/IViewport.h>
+#include <kapusha/sys/rpi/RPi.h>
 
-namespace kapusha {
-  class IViewport;
-}
-
-namespace flyby {
+namespace fsquad {
   kapusha::IViewport *makeViewport();
 }
 
-namespace fsquad {
+namespace flyby {
   kapusha::IViewport *makeViewport();
 }
 
@@ -23,6 +19,6 @@ public:
 
 int main(int argc, char* argv[])
 {
-  KP_LOG_OPEN(0, new StderrLog);
-  return kapusha::KPSDL(fsquad::makeViewport(), 800, 600);
+  KP_LOG_OPEN("samples.log", 0);//new StderrLog);
+  return kapusha::RunRaspberryRun(flyby::makeViewport());
 }

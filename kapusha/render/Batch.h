@@ -1,10 +1,13 @@
 #pragma once
+#include "OpenGL.h"
 #include "Buffer.h"
 #include "Material.h"
 
 namespace kapusha {
 
 #define MAX_ATTRIBS 8
+
+  class Render;
 
   class Batch : public Shared {
   public:
@@ -34,15 +37,23 @@ namespace kapusha {
                          Buffer* buffer, unsigned components = 3,
                          unsigned offset = 0, unsigned stride = 0);
 
+    enum IndexType {
+      IndexU8 = GL_UNSIGNED_BYTE,
+      IndexU16 = GL_UNSIGNED_SHORT,
+      IndexU32 = GL_UNSIGNED_INT
+    };
+
     void setGeometry(GeometryType type,
-                     unsigned first, unsigned count, Buffer *index = 0) {
+                     unsigned first, unsigned count,
+                     IndexType itype = IndexU16, Buffer *index = 0) {
       indices_ = index;
       first_ = first;
       count_ = count;
       gl_geometry_type_ = type;
+      indexType_ = itype;
     }
 
-    void draw() const;
+    void draw(Render *r) const;
 
   private:
     struct Attrib {
@@ -53,7 +64,7 @@ namespace kapusha {
       int stride;
 
       Attrib() : index(-1) {}
-      void bind() const;
+      void bind(Render *r) const;
       void unbind() const;
     };
     Attrib attribs_[MAX_ATTRIBS];
@@ -63,6 +74,7 @@ namespace kapusha {
     SBuffer indices_;
     unsigned first_, count_;
     unsigned gl_geometry_type_;
+    unsigned indexType_;
   };
   
   typedef shared<Batch> SBatch;

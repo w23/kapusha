@@ -20,29 +20,40 @@ namespace fsquad {
   private:
     IViewportController *system_;
     Batch *batch_;
+    Render *render_;
   };
 
   void Viewport::init(IViewportController *system)
   {
+    render_ = new Render;
     system_ = system;
     batch_ = new Batch();
     
     const char* svtx =
     "uniform vec2 aspect;\n"
+    "uniform vec2 ptr;\n"
     "attribute vec4 vtx;\n"
+#if KAPUSHA_GLES
+    "varying mediump vec2 p;\n"
+#else
     "varying vec2 p;\n"
+#endif
     "void main(){\n"
       "gl_Position = vtx;\n"
-      "p = vtx.xy * aspect;\n"
+      "p = (vtx.xy + ptr) * aspect;\n"
     "}"
     ;
     const char* sfrg =
     "uniform vec2 aspect;\n"
     "uniform float time;\n"
-    "uniform vec2 ptr;\n"
+#if KAPUSHA_GLES
+    "varying mediump vec2 p;\n"
+#else
     "varying vec2 p;\n"
+#endif
     "void main(){\n"
-    "gl_FragColor = vec4(1.-length(ptr*aspect-p));\n"
+    //"gl_FragColor = vec4(1.-length(ptr*aspect-p));\n"
+    "gl_FragColor = vec4(abs(p),0.,0.);\n"
     "}"
     ;
     Material *mat = new Material(new Program(svtx, sfrg));
@@ -58,12 +69,13 @@ namespace fsquad {
     fsrect->load(rect, sizeof rect);
     batch_->setAttribSource("vtx", fsrect, 2);
     
-    batch_->setGeometry(Batch::GeometryTriangleFan, 0, 4, 0);
+    batch_->setGeometry(Batch::GeometryTriangleFan, 0, 4);
   }
 
   void Viewport::close()
   {
     delete batch_;
+    delete render_;
   }
 
   void Viewport::resize(vec2i size)
@@ -75,12 +87,14 @@ namespace fsquad {
 
   void Viewport::draw(int ms, float dt)
   {
+    GL_ASSERT
     glClear(GL_COLOR_BUFFER_BIT);
+    GL_ASSERT
 //    float time = ms / 1000.f;
 
 //    batch_->getMaterial()->setUniform("time", time);
     batch_->getMaterial()->setUniform("ptr", system_->pointerState().main().point);
-    batch_->draw();
+    batch_->draw(render_);
     
     system_->requestRedraw();
   }
@@ -89,14 +103,3 @@ namespace fsquad {
     return new Viewport;
   }
 } // namespace fsquad
-
-#if SAMPLE_STANDALONE_GLUT
-namespace kapusha {
-int runGlut(int argc, const char* argv[], kapusha::IViewport*);
-}
-int main(int argc, const char* argv[])
-{
-  return kapusha::runGlut(argc, argv, new fsquad::Viewport);
-}
-#endif
-

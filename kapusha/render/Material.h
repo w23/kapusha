@@ -13,7 +13,8 @@ namespace kapusha {
 
 //! maximum number of textures
 #define MAX_TEXTURE_UNIFORM_STORAGE 4
-
+  
+  class Render;
   class Texture;
   
   //! Basic material that contains uniform values for specific program
@@ -23,7 +24,7 @@ namespace kapusha {
     virtual ~Material();
     
     //! Make current material -- sets program and uniforms
-    void use() const;
+    void use(Render *r) const;
     
     //! Get material program
     Program *getProgram() const { return shader_program_.get(); }

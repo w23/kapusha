@@ -32,7 +32,7 @@ namespace kapusha {
         case SDLK_DOWN: keycode = KeyDown; break;
         case SDLK_LEFT: keycode = KeyLeft; break;
         case SDLK_RIGHT: keycode = KeyRight; break;
-        case SDLK_LSHIFT: keycode = KeyShift; break;
+        case SDLK_LSHIFT: keycode = KeyLeftShift; break;
         //! \todo more
         default: return false;
       }
@@ -147,6 +147,7 @@ namespace kapusha {
 
   private:
     IViewport *viewport_;
+    vec2i size_;
     bool should_loop_;
     SDLKeyState key_state_;
     SDLPointerState pointer_state_;
@@ -154,6 +155,7 @@ namespace kapusha {
 
   SDLViewportController::SDLViewportController(IViewport *viewport, vec2i size)
     : viewport_(viewport)
+    , size_(size)
     , should_loop_(true)
   {
     viewport_->init(this);
@@ -189,6 +191,8 @@ namespace kapusha {
         case SDL_VIDEORESIZE:
           {
             vec2i size(e.resize.w, e.resize.h);
+            if (size != size_)
+              SDL_SetVideoMode(e.resize.w, e.resize.h, 32, SDL_OPENGL | SDL_DOUBLEBUF | SDL_RESIZABLE);
             viewport_->resize(size);
             pointer_state_.resize(size);
           }
@@ -209,6 +213,8 @@ namespace kapusha {
     //! \fixme error check
     SDL_Init(SDL_INIT_VIDEO);
 
+    u32 flags = SDL_OPENGL | SDL_DOUBLEBUF | (fullscreen ? SDL_FULLSCREEN : SDL_RESIZABLE);
+
     if (width == -1 || height == -1)
     {
       const SDL_VideoInfo* vinfo = SDL_GetVideoInfo();
@@ -219,9 +225,7 @@ namespace kapusha {
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    SDL_SetVideoMode(width, height, 32, SDL_DOUBLEBUF | SDL_OPENGL
-      //! \todo | SDL_RESIZABLE
-                     | (fullscreen ? SDL_FULLSCREEN : 0));
+    SDL_SetVideoMode(width, height, 32, flags);
 
     {
       SDLViewportController viewctl(viewport, vec2i(width, height));

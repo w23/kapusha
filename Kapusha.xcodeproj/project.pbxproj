@@ -67,6 +67,8 @@
 		E1D556E4167C6A8900A360F6 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E2167C6A8900A360F6 /* Node.cpp */; };
 		E1D556E6167C996600A360F6 /* Reframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E5167C996600A360F6 /* Reframe.cpp */; };
 		E1D556E7167C996600A360F6 /* Reframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E5167C996600A360F6 /* Reframe.cpp */; };
+		E1A8E7E016915BD10084718E /* Render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1A8E7DF16915BD10084718E /* Render.cpp */; };
+		E1A8E7E116915BD10084718E /* Render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1A8E7DF16915BD10084718E /* Render.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -155,6 +157,7 @@
 		E1A77CCD165D528A009FF8F3 /* kapusha-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "kapusha-Info.plist"; sourceTree = "<group>"; };
 		E1A77CCF165D528A009FF8F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E1A77CD1165D528A009FF8F3 /* kapusha-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "kapusha-Prefix.pch"; sourceTree = "<group>"; };
+		E1A8E7DF16915BD10084718E /* Render.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Render.cpp; sourceTree = "<group>"; };
 		E1BD0C1D164F72A900A3454C /* Render.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Render.h; sourceTree = "<group>"; };
 		E1D556E0167B9D0E00A360F6 /* Reframe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Reframe.h; path = kapusha/ooo/Reframe.h; sourceTree = "<group>"; };
 		E1D556E1167BA4F000A360F6 /* Node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Node.h; path = kapusha/ooo/Node.h; sourceTree = "<group>"; };
@@ -235,7 +238,6 @@
 		E18DDFD3163D8EED00869CF5 /* render */ = {
 			isa = PBXGroup;
 			children = (
-				E1BD0C1D164F72A900A3454C /* Render.h */,
 				E18DDFD6163D8EED00869CF5 /* Batch.cpp */,
 				E18DDFD7163D8EED00869CF5 /* Batch.h */,
 				E18DDFD4163D8EED00869CF5 /* Buffer.cpp */,
@@ -246,6 +248,8 @@
 				E18DDFD9163D8EED00869CF5 /* OpenGL.h */,
 				E18DDFDA163D8EED00869CF5 /* Program.cpp */,
 				E18DDFDB163D8EED00869CF5 /* Program.h */,
+				E1A8E7DF16915BD10084718E /* Render.cpp */,
+				E1BD0C1D164F72A900A3454C /* Render.h */,
 				E18DDFDC163D8EED00869CF5 /* Texture.cpp */,
 				E18DDFDD163D8EED00869CF5 /* Texture.h */,
 			);
@@ -591,6 +595,7 @@
 				E131D5121662036500B0320A /* Texture.cpp in Sources */,
 				E1D556E4167C6A8900A360F6 /* Node.cpp in Sources */,
 				E1D556E7167C996600A360F6 /* Reframe.cpp in Sources */,
+				E1A8E7E116915BD10084718E /* Render.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -625,6 +630,7 @@
 				E15E63FB165E84150032BBC2 /* Input.cpp in Sources */,
 				E1D556E3167C6A8900A360F6 /* Node.cpp in Sources */,
 				E1D556E6167C996600A360F6 /* Reframe.cpp in Sources */,
+				E1A8E7E016915BD10084718E /* Render.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -716,6 +722,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = kapusha;
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -743,6 +750,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = kapusha;
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};

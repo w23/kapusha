@@ -1,74 +1,69 @@
-#include "../core/Log.h"
+#include "../core/Core.h"
 #include "OpenGL.h"
 #include "Texture.h"
+#include "Render.h"
 
 namespace kapusha {
-  
-  unsigned Texture::ImageDesc::getGlFormat() const
-  {
-    switch (format) {
-      case Format_BGRA32:
-        return GL_BGRA;
-      case Format_RGBA32:
-        return GL_RGBA;
-      default:
-        return GL_INVALID_ENUM;
-    }
-  }
+
+#ifndef GL_BGRA
+#define GL_BGRA GL_BGRA_EXT
+#endif
   
   Texture::Texture()
-  : own_(true), name_(0) {}
-  
-  Texture::Texture(const ImageDesc& desc, unsigned existing_name,
-                   bool take_ownership)
-  : own_(false), name_(existing_name), desc_(desc)
   {
-    if (!existing_name)
-      upload(desc, 0);
+    glGenTextures(1, &name_);
   }
   
   Texture::~Texture()
   {
-    if (own_ && name_)
-      glDeleteTextures(1, &name_);
+    glDeleteTextures(1, &name_);
   }
   
-  void Texture::upload(const ImageDesc& desc, void* pixels)
+  void Texture::upload(const Meta& meta, void* pixels)
   {
-    if (!name_ || (!own_ && name_))
-      glGenTextures(1, &name_);
+    meta_ = meta;
 
-    own_ = true;
+    L("Loading texture: %dx%d format = %d",
+      meta.size.x, meta.size.y, meta.format);
     
-    if (pixels || desc != desc_)
+    //! \todo table, not switch?
+    unsigned internal, format, type;
+    switch (meta.format)
     {
-      glBindTexture(GL_TEXTURE_2D, name_);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-                   desc.size.x, desc.size.y, 0,
-                   desc.getGlFormat(), GL_UNSIGNED_BYTE,
-                   pixels);
-      GL_ASSERT
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      GL_ASSERT
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-      GL_ASSERT
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-      GL_ASSERT
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-      GL_ASSERT
-      
-      desc_ = desc;
+      case Meta::RGBA8888:
+        internal = GL_RGBA, format = GL_RGBA, type = GL_UNSIGNED_BYTE;
+        break;
+      case Meta::BGRA8888:
+        internal = GL_RGBA, format = GL_BGRA, type = GL_UNSIGNED_BYTE;
+        break;
+      case Meta::RGB565:
+        internal = GL_RGB, format = GL_RGB, type = GL_UNSIGNED_SHORT_5_6_5;
+        break;
+      default:
+        KP_ASSERT(!"Unsupported texture format");
+        return;
     }
+    
+    bind();
+    glTexImage2D(GL_TEXTURE_2D, 0, internal,
+                 meta.size.x, meta.size.y, 0,
+                 format, type,
+                 pixels);
+    GL_ASSERT
+    
+    //! \todo move this to some other place
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    GL_ASSERT
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    GL_ASSERT
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    GL_ASSERT
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    GL_ASSERT
   }
   
-  void Texture::use(int slot) const
+  void Texture::bind() const
   {
-    if (name_)
-    {
-      glActiveTexture(GL_TEXTURE0 + slot);
-      glBindTexture(GL_TEXTURE_2D, name_);
-      GL_ASSERT
-    }
+    Render::currentRender()->texture().bind(this).commit();
   }
 } // namespace kapusha

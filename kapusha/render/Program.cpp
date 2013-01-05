@@ -144,13 +144,6 @@ namespace kapusha {
     return shader;
   }
   
-  void Program::use() const
-  {
-    KP_ASSERT(program_name_);
-    glUseProgram(program_name_);
-    GL_ASSERT
-  }
-  
   int Program::getAttributeLocation(const char *name) const
   {
     KP_ASSERT(program_name_);

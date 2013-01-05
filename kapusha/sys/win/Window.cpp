@@ -31,9 +31,10 @@ namespace kapusha {
     KeyEnter,   // VK_RETURN         0x0D
     KeyUnknown, //                   0x0E ???
     KeyUnknown, //                   0x0F ???
-    KeyShift,   // VK_SHIFT          0x10
-    KeyCtrl,    // VK_CONTROL        0x11
-    KeyAlt,     // VK_MENU           0x12
+    //! \fixme
+    KeyLeftShift, // VK_SHIFT          0x10
+    KeyLeftCtrl,  // VK_CONTROL        0x11
+    KeyLeftAlt,   // VK_MENU           0x12
     KeyUnknown, // VK_PAUSE          0x13
     KeyUnknown, // VK_CAPITAL        0x14
     KeyUnknown, // VK_HANGUL         0x15 also: VK_KANA
@@ -95,18 +96,18 @@ namespace kapusha {
     KeyUnknown, // VK_SUBTRACT       0x6D
     KeyUnknown, // VK_DECIMAL        0x6E
     KeyUnknown, // VK_DIVIDE         0x6F
-    KeyUnknown, // VK_F1             0x70
-    KeyUnknown, // VK_F2             0x71
-    KeyUnknown, // VK_F3             0x72
-    KeyUnknown, // VK_F4             0x73
-    KeyUnknown, // VK_F5             0x74
-    KeyUnknown, // VK_F6             0x75
-    KeyUnknown, // VK_F7             0x76
-    KeyUnknown, // VK_F8             0x77
-    KeyUnknown, // VK_F9             0x78
-    KeyUnknown, // VK_F10            0x79
-    KeyUnknown, // VK_F11            0x7A
-    KeyUnknown, // VK_F12            0x7B
+    KeyF1,      // VK_F1             0x70
+    KeyF2,      // VK_F2             0x71
+    KeyF3,      // VK_F3             0x72
+    KeyF4,      // VK_F4             0x73
+    KeyF5,      // VK_F5             0x74
+    KeyF6,      // VK_F6             0x75
+    KeyF7,      // VK_F7             0x76
+    KeyF8,      // VK_F8             0x77
+    KeyF9,      // VK_F9             0x78
+    KeyF10,     // VK_F10            0x79
+    KeyF11,     // VK_F11            0x7A
+    KeyF12,     // VK_F12            0x7B
     KeyUnknown, // VK_F13            0x7C
     KeyUnknown, // VK_F14            0x7D
     KeyUnknown, // VK_F15            0x7E
@@ -143,12 +144,12 @@ namespace kapusha {
     KeyUnknown, //                   0x9D ???
     KeyUnknown, //                   0x9E ???
     KeyUnknown, //                   0x9F ???
-    KeyShift,   // VK_LSHIFT         0xA0
-    KeyUnknown, // VK_RSHIFT         0xA1
-    KeyCtrl,    // VK_LCONTROL       0xA2
-    KeyUnknown, // VK_RCONTROL       0xA3
-    KeyAlt,     // VK_LMENU          0xA4
-    KeyUnknown, // VK_RMENU          0xA5
+    KeyLeftShift,   // VK_LSHIFT         0xA0
+    KeyRightShift,  // VK_RSHIFT         0xA1
+    KeyLeftCtrl,    // VK_LCONTROL       0xA2
+    KeyRightCtrl,   // VK_RCONTROL       0xA3
+    KeyLeftAlt,     // VK_LMENU          0xA4
+    KeyRightAlt,    // VK_RMENU          0xA5
     KeyUnknown, // VK_BROWSER_BACK        0xA6
     KeyUnknown, // VK_BROWSER_FORWARD     0xA7
     KeyUnknown, // VK_BROWSER_REFRESH     0xA8
@@ -248,7 +249,7 @@ namespace kapusha {
     case WM_KEYDOWN:
       if (lParam & (1<<30)) // ignore repeat
         break;
-      down = true;  
+      down = true;
     case WM_KEYUP:
         if (wParam < 256)
           return key(winkey_to_kapusha_[wParam], down, GetTickCount());
