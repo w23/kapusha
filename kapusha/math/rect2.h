@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <limits>
 #include "vec2.h"
 
 namespace kapusha {
@@ -24,9 +25,17 @@ namespace kapusha {
     rect2(vec2<T> sz_)
     : min(0), max(sz_) {}
     
-    void clear()
-    {
+    void clear() {
       min = max = vec2<T>(0);
+    }
+    
+    void empty() {
+      min.x = min.y = std::numeric_limits<T>::max();
+      max.x = max.y = std::numeric_limits<T>::min();
+    }
+    
+    bool isEmpty() const {
+      return min.x > max.x || min.y > max.y;
     }
     
     T left() const { return min.x; }
@@ -91,9 +100,14 @@ namespace kapusha {
       (max.y > other_rect.min.y);
     }
     
-    vec2<T> relative(const vec2<T>& v) const
+    vec2<T> toRelative(const vec2<T>& v) const
     {
-      return vec2<T>((v.x-min.x)/width(), (v.y-min.y)/height());
+      return (v - min) / size();
+    }
+    
+    vec2<T> fromRelative(const vec2<T>& v) const
+    {
+      return min + size() * v;
     }
   };
 } // namespace math

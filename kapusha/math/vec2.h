@@ -137,6 +137,11 @@ namespace kapusha {
       return *this;
     }
     
+    T product() const
+    {
+      return x * y;
+    }
+    
     bool operator==(const vec2<T>& v) const
     {
       return v.x == x && v.y == y;
@@ -150,6 +155,11 @@ namespace kapusha {
     bool operator<(const vec2<T>& v) const
     {
       return length_sq() < v.length_sq();
+    }
+    
+    vec2<T> yx() const
+    {
+      return vec2(y, x);
     }
     
     vec2<T> rotated(T angle)

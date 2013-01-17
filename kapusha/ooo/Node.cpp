@@ -8,19 +8,19 @@ namespace kapusha {
     //! \fixme check for this node visibility
     
     mat4f current(getMatrix() * m);
-    Node *n = child.get();
+    Node *n = child_.get();
     while (n)
     {
       n->render(cam, current);
-      n = n->next.get();
+      n = n->next_.get();
     }
   }
   
   void Node::addChild(Node *node)
   {
-    KP_ASSERT(!node->next.get());
-    node->next = child;
-    child = node;
+    KP_ASSERT(!node->next_.get());
+    node->next_ = child_;
+    child_ = node;
   }
   
 } // namespace kapusha

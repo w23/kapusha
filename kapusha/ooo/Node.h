@@ -24,7 +24,7 @@ namespace kapusha {
     
   protected:
     float diameter_;
-    SNode child, next;
+    SNode child_, next_;
   };
   
 } // namespace kapusha
