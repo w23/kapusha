@@ -180,6 +180,12 @@ namespace kapusha {
       ret.y = (y < min) ? min : ((y > max) ? max : y);
       return ret;
     }
+    
+    vec2 clamp(vec2 min, vec2 max) const
+    {
+      return vec2((x < min.x) ? min.x : ((x > max.x) ? max.x : x),
+                  (y < min.y) ? min.y : ((y > max.y) ? max.y : y));
+    }
   };
     
     template <typename T>
