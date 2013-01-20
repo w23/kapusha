@@ -44,4 +44,10 @@ namespace kapusha {
   //! \param max maximum value
   //! \return random float value in [min..max]
   extern float frand(float min, float max);
+  
+  //! clamp a value to range
+  template <typename T>
+  inline T clamp(T value, T min, T max) {
+    return (value < min) ? min : ((value > max) ? max : value);
+  }
 } // namespace math
