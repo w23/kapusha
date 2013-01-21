@@ -1,4 +1,5 @@
 #include <mach/mach_time.h>
+#include "../../render/Render.h"
 #import "KPView.h"
 #import "../../core/IViewport.h"
 
@@ -399,6 +400,8 @@ void KPViewDrawObserverCallback(CFRunLoopObserverRef observer,
 {
   g_machTime.reset();
   prevFrameTime_ = g_machTime.now_ms();
+  if (!Render::currentRender())
+    new Render;
   
   delete viewport_controller_;
   viewport_controller_ = 0;

@@ -48,7 +48,7 @@ namespace flyby {
     Batch* batch = new Batch();
 
     const char* svtx =
-    "uniform mat4 um4_view, um4_proj;\n"
+    "uniform mat4 um4_mvp;\n"
     "attribute vec4 vtx;\n"
 #if KAPUSHA_GLES
     "varying mediump vec2 p;\n"
@@ -56,7 +56,7 @@ namespace flyby {
     "varying vec2 p;\n"
 #endif
     "void main(){\n"
-    "gl_Position = um4_proj * um4_view * vtx;\n"
+    "gl_Position = um4_mvp * vtx;\n"
     "p = vtx.xz;\n"
     "}"
     ;
@@ -94,7 +94,7 @@ namespace flyby {
     Batch* batch = new Batch();
     
     const char* svtx =
-    "uniform mat4 um4_view, um4_proj;\n"
+    "uniform mat4 um4_mvp;\n"
     "attribute vec4 vtx;\n"
 #if KAPUSHA_GLES
     "varying lowp float light;\n"
@@ -102,7 +102,7 @@ namespace flyby {
     "varying float light;\n"
 #endif
     "void main(){\n"
-    "gl_Position = um4_proj * um4_view * vtx;\n"
+    "gl_Position = um4_mvp * vtx;\n"
     "gl_PointSize = 10. / gl_Position.z;\n"
     "light = (20. - length(vtx)) / 20.;\n"
     "}"
@@ -190,8 +190,8 @@ namespace flyby {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     GL_ASSERT
 
-    ground_->draw(camera_.getMatrix(), camera_.getProjection());
-    object_->draw(camera_.getMatrix(), camera_.getProjection());
+    ground_->draw(camera_.getMvp());
+    object_->draw(camera_.getMvp());
     
     ctrl_->requestRedraw();
   }

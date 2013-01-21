@@ -5,18 +5,16 @@
 #include "Render.h"
 
 namespace kapusha {
-  
-  Object::Object(Batch *batch)
-    : batch_(batch)
-  {
-    mview_loc_ = batch_->getMaterial()->getUniformLocation("um4_view");
-    mproj_loc_ = batch_->getMaterial()->getUniformLocation("um4_proj");
+  Object::Object(const SBatch &batch, const char *mvp) : batch_(batch) {
+    mvp_loc_ = batch_->getMaterial()->getUniformLocation(mvp);
   }
+  
+  Object::Object(const SBatch &batch, int mvp_loc)
+  : batch_(batch), mvp_loc_(mvp_loc) {}
 
-  void Object::draw(const mat4f& view, const mat4f& proj) const
-  {
-    batch_->getMaterial()->setUniform(mview_loc_, view);
-    batch_->getMaterial()->setUniform(mproj_loc_, proj);
+  //void Object::draw(const mat4f& view, const mat4f& proj) const {
+  void Object::draw(const mat4f& mvp) const {
+    batch_->getMaterial()->setUniform(mvp_loc_, mvp);
     batch_->draw(Render::currentRender());
   }
 

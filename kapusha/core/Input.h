@@ -9,7 +9,6 @@
 #endif
 
 namespace kapusha {
-  
   //! Basic input state with timestamp
   class InputState {
   protected:
@@ -24,29 +23,23 @@ namespace kapusha {
     inline u32 timestamp() const { return last_changed_; }
     inline u32 delta() const { return  delta_; }
     inline void deltaReset() { delta_ = 0; }
-    
   private:
     u32 last_changed_;
     u32 delta_;
   };
-
 ////////////////////////////////////////////////////////////////////////////////
   //! State of an input by pointers
-  class PointerState : public InputState
-  {
+  class PointerState : public InputState {
   public:
     //! Single pointer
     struct Pointer {
       enum {
         //! pointer is inactive
         None = 0,
-        
         //! pointer has moved
         Move = 1, //! event flag, cleared
-        
         //! touch down or left mouse button
         Pressed = 2,
-        
         //! mouse-specific
         LeftButton = Pressed,
         RightButton = 4,
@@ -54,29 +47,18 @@ namespace kapusha {
       };
       //! current state
       int flags;
-
       //! event
       int change;
-      
       //! current position
       vec2f point;
-      
       //! change of position
       vec2f movement;
-      
-      //! \todo
-      //vec2f speed;
-      //float pressure;
-      
-      inline bool isPressed() const { 
+      inline bool isPressed() const {
         return (flags & (LeftButton|RightButton|MiddleButton)) != 0;
       }
       inline bool isLeftPressed() const { return (flags & LeftButton) != 0; }
       inline bool isRightPressed() const { return (flags & RightButton) != 0; }
-      inline bool isMiddlePressed() const {
-        return (flags & MiddleButton) != 0;
-      }
-      
+      inline bool isMiddlePressed() const { return (flags & MiddleButton) != 0;}
       inline bool wasPressed() const {
         return isPressed() && (change & (LeftButton|RightButton|MiddleButton));
       }
@@ -84,47 +66,37 @@ namespace kapusha {
         return !isPressed() && 
           (change & (LeftButton|RightButton|MiddleButton));
       }
-      
       void update(vec2f position, vec2f _movement,
-                  int _flags, int flags_remove = 0)
-      {
+                  int _flags, int flags_remove = 0) {
         movement = _movement;
         point = position;
         int newflags = (flags | _flags) ^ flags_remove;
         change = flags ^ newflags;
         flags = newflags;
       }
-      
-      void update(vec2f position, int _flags, int flags_remove = 0)
-      {
+      void update(vec2f position, int _flags, int flags_remove = 0) {
         update(position, position - point, _flags, flags_remove);
       }
-      
     protected:
       friend class PointerState;
       Pointer(vec2f _pos = vec2f(0), int _flags = None)
       : flags(_flags), change(0), point(_pos), movement(0) {}
       void clearEventFlags() { flags ^= Move; }
       void clearAllFlags() { flags = 0; }
-      
       //! do this in the beginning of a new event
       void beginUpdate() {
         change = 0;
         movement = 0;
       }
     };
-    
   public: // IViewport user interface
     inline const Pointer& main() const { return pointers_[0]; }
-    
     inline bool isPressed() const { return main().isPressed(); }
     inline bool isLeftPressed() const { return main().isLeftPressed(); }
     inline bool isRightPressed() const { return main().isRightPressed(); }
     inline bool isMiddlePressed() const { return main().isMiddlePressed(); }
     inline bool wasPressed() const { return main().wasPressed(); }
     inline bool wasUnpressed() const { return main().wasUnpressed(); }
-    
-    
     //! \fixme make protected and force all implementation to subclass
   public:
     PointerState() : combined_flags_(0), changed_flags_(0) {}
@@ -132,10 +104,8 @@ namespace kapusha {
     void mouseMove(vec2f to, vec2f d, u32 time = 0);
     void mouseClick(vec2f at, int button, u32 time = 0);
     void mouseUnclick(vec2f at, int button, u32 time = 0);
-    
   private:
     void mouseUpdate(vec2f at, int flags_add, int flags_remove, u32 time);
-
   protected:
     //! call this before updating the state with new events
     void beginUpdate() {
@@ -146,14 +116,12 @@ namespace kapusha {
     }
     //! call this after all the new events were consumed
     void endUpdate() {
-      for (int i = 0; i < MAX_POINTERS_IN_EVENT; ++i)
-      {
+      for (int i = 0; i < MAX_POINTERS_IN_EVENT; ++i) {
         combined_flags_ |= pointers_[i].flags;
         changed_flags_ |= pointers_[i].change;
         //! \todo calculate center and area
       }
     }
-    
   protected:
     int combined_flags_;
     int changed_flags_;

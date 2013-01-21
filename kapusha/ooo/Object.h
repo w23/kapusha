@@ -1,24 +1,19 @@
 #pragma once
-
+#include "../render/Batch.h"
 #include "Node.h"
 
 namespace kapusha {
-  
-  class Batch;
-  
   class Object : public Node {
   public:
-    Object(Batch *batch);
-    ~Object() {}
-    
+    Object(const SBatch &batch, const char *mvp = "um4_mvp");
+    Object(const SBatch &batch, int mvp_loc);
+    virtual ~Object() {}
     Batch* getBatch() const { return batch_.get(); }
-    
-    void draw(const mat4f& view, const mat4f& proj) const;
-    
+    //void draw(const mat4f& view, const mat4f& proj) const;
+    void draw(const mat4f& mvp) const;
   private:
     SBatch batch_;
-    int mview_loc_;
-    int mproj_loc_;
+    int mvp_loc_;
   };
   
 }
