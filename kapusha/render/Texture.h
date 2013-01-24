@@ -12,7 +12,8 @@ namespace kapusha {
         None = 0,
         RGBA8888,
         BGRA8888,
-        RGB565
+        RGB565,
+        R8
       } format;
       
       Meta() : size(0), format(None) {}

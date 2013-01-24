@@ -39,6 +39,9 @@ namespace kapusha {
       case Meta::RGB565:
         internal = GL_RGB, format = GL_RGB, type = GL_UNSIGNED_SHORT_5_6_5;
         break;
+      case Meta::R8:
+        internal = GL_LUMINANCE, format = GL_LUMINANCE, type = GL_UNSIGNED_BYTE;
+        break;
       default:
         KP_ASSERT(!"Unsupported texture format");
         return;
