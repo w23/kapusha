@@ -19,7 +19,7 @@ namespace kapusha {
     glDeleteTextures(1, &name_);
   }
   
-  void Texture::upload(const Meta& meta, void* pixels)
+  void Texture::upload(const Meta& meta, const void* pixels)
   {
     meta_ = meta;
 

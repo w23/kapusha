@@ -33,7 +33,7 @@ namespace kapusha {
     //Texture(const Meta& Meta, unsigned existing_name = 0, bool take_ownership = false);
     ~Texture();
   
-    void upload(const Meta& meta, void* pixels);
+    void upload(const Meta& meta, const void* pixels);
     
     const Meta& getMeta() const { return meta_; }
     unsigned getName() const { return name_; }

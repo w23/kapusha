@@ -13,7 +13,7 @@ namespace kapusha {
             vec3f up      = vec3f(0.f, 1.f, 0.f));
     
     inline void translate(vec3f translation) {
-      translation_ += vec4f(translation);
+      translation_ = vec4f(translation);
     }
     
     inline void move(vec3f units) {

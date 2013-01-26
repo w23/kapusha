@@ -61,11 +61,14 @@ namespace kapusha {
     vec2<T> topRight() const { return max; }
     vec2<T> bottomRight() const { return vec2<T>(max.x, min.y); }
     
-    rect2<T> operator*=(T k)
-    {
+    rect2<T> operator*=(T k) {
       min *= k;
       max *= k;
       return *this;
+    }
+    
+    rect2<T> operator+(vec2<T> v) const {
+      return rect2(min + v, max + v);
     }
     
     bool doesContain(const vec2<T> p) const
