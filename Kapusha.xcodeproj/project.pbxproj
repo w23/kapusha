@@ -31,6 +31,26 @@
 		E189E87B169AB3F300541FE1 /* Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDF163D8EED00869CF5 /* Stream.cpp */; };
 		E189E87C169AB3F300541FE1 /* StreamFile_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */; };
 		E189E87D169AB3F300541FE1 /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFE6163D8EED00869CF5 /* math.cpp */; };
+		E197CBDB16B3AD88003FDEF6 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFED163D8EED00869CF5 /* Log.cpp */; };
+		E197CBDC16B3AD88003FDEF6 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E15E63F9165E84150032BBC2 /* Input.cpp */; };
+		E197CBDD16B3AD88003FDEF6 /* Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDF163D8EED00869CF5 /* Stream.cpp */; };
+		E197CBDE16B3AD88003FDEF6 /* StreamFile_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */; };
+		E197CBDF16B3AD88003FDEF6 /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFE6163D8EED00869CF5 /* math.cpp */; };
+		E197CBE016B3AD88003FDEF6 /* Batch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD6163D8EED00869CF5 /* Batch.cpp */; };
+		E197CBE116B3AD88003FDEF6 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD4163D8EED00869CF5 /* Buffer.cpp */; };
+		E197CBE216B3AD88003FDEF6 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B6816444BBA0038E873 /* Camera.cpp */; };
+		E197CBE316B3AD88003FDEF6 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B60164436330038E873 /* Material.cpp */; };
+		E197CBE416B3AD88003FDEF6 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E74B6F164462670038E873 /* Object.cpp */; };
+		E197CBE516B3AD88003FDEF6 /* OpenGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFD8163D8EED00869CF5 /* OpenGL.cpp */; };
+		E197CBE616B3AD88003FDEF6 /* Program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDA163D8EED00869CF5 /* Program.cpp */; };
+		E197CBE716B3AD88003FDEF6 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDC163D8EED00869CF5 /* Texture.cpp */; };
+		E197CBE816B3AD88003FDEF6 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E2167C6A8900A360F6 /* Node.cpp */; };
+		E197CBE916B3AD88003FDEF6 /* Reframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E5167C996600A360F6 /* Reframe.cpp */; };
+		E197CBEA16B3AD88003FDEF6 /* Render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1A8E7DF16915BD10084718E /* Render.cpp */; };
+		E197CBEC16B3AD88003FDEF6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
+		E197CBF316B3ADA9003FDEF6 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE042163D925600869CF5 /* GLUT.framework */; };
+		E197CBF616B3AED8003FDEF6 /* Glut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E197CBF416B3AED8003FDEF6 /* Glut.cpp */; };
+		E197CBF716B3AED8003FDEF6 /* Glut.h in Headers */ = {isa = PBXBuildFile; fileRef = E197CBF516B3AED8003FDEF6 /* Glut.h */; };
 		E1993176164E141500E8D9CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993175164E141500E8D9CB /* UIKit.framework */; };
 		E1993178164E141500E8D9CB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993177164E141500E8D9CB /* Foundation.framework */; };
 		E199317A164E141500E8D9CB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993179164E141500E8D9CB /* CoreGraphics.framework */; };
@@ -131,6 +151,9 @@
 		E18DE044163D9BE500869CF5 /* StreamFile_posix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamFile_posix.h; sourceTree = "<group>"; };
 		E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamFile_posix.cpp; sourceTree = "<group>"; };
 		E18DE05C163D9E4600869CF5 /* StreamFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamFile.h; sourceTree = "<group>"; };
+		E197CBF216B3AD88003FDEF6 /* libkapusha-glut.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libkapusha-glut.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E197CBF416B3AED8003FDEF6 /* Glut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Glut.cpp; sourceTree = "<group>"; };
+		E197CBF516B3AED8003FDEF6 /* Glut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Glut.h; sourceTree = "<group>"; };
 		E1993173164E141500E8D9CB /* samples-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "samples-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1993175164E141500E8D9CB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		E1993177164E141500E8D9CB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -194,6 +217,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E197CBEB16B3AD88003FDEF6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E197CBF316B3ADA9003FDEF6 /* GLUT.framework in Frameworks */,
+				E197CBEC16B3AD88003FDEF6 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,6 +356,7 @@
 				E1A77CA1165D39F9009FF8F3 /* kapusha-samples.app */,
 				E131D4FF166201F400B0320A /* libkapusha.a */,
 				E189E890169AB3F300541FE1 /* libkapushacore.a */,
+				E197CBF216B3AD88003FDEF6 /* libkapusha-glut.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -366,6 +399,15 @@
 			);
 			name = samples;
 			path = kapusha/samples;
+			sourceTree = "<group>";
+		};
+		E197CBD616B3A882003FDEF6 /* glut */ = {
+			isa = PBXGroup;
+			children = (
+				E197CBF416B3AED8003FDEF6 /* Glut.cpp */,
+				E197CBF516B3AED8003FDEF6 /* Glut.h */,
+			);
+			path = glut;
 			sourceTree = "<group>";
 		};
 		E199317F164E141500E8D9CB /* ios */ = {
@@ -432,6 +474,7 @@
 		E1A77CFD165D5531009FF8F3 /* sys */ = {
 			isa = PBXGroup;
 			children = (
+				E197CBD616B3A882003FDEF6 /* glut */,
 				E1A77CCB165D528A009FF8F3 /* osx */,
 			);
 			name = sys;
@@ -471,6 +514,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E197CBEE16B3AD88003FDEF6 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E197CBF716B3AED8003FDEF6 /* Glut.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -506,6 +557,23 @@
 			name = "kapusha-core-osx";
 			productName = kapusha;
 			productReference = E189E890169AB3F300541FE1 /* libkapushacore.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		E197CBD816B3AD88003FDEF6 /* kapusha-glut */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E197CBEF16B3AD88003FDEF6 /* Build configuration list for PBXNativeTarget "kapusha-glut" */;
+			buildPhases = (
+				E197CBD916B3AD88003FDEF6 /* Sources */,
+				E197CBEB16B3AD88003FDEF6 /* Frameworks */,
+				E197CBEE16B3AD88003FDEF6 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "kapusha-glut";
+			productName = kapusha;
+			productReference = E197CBF216B3AD88003FDEF6 /* libkapusha-glut.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		E1993172164E141500E8D9CB /* samples-ios */ = {
@@ -584,6 +652,7 @@
 				E1A77CA0165D39F9009FF8F3 /* samples-osx */,
 				E131D4FE166201F400B0320A /* kapusha-osx */,
 				E189E876169AB3F300541FE1 /* kapusha-core-osx */,
+				E197CBD816B3AD88003FDEF6 /* kapusha-glut */,
 			);
 		};
 /* End PBXProject section */
@@ -645,6 +714,30 @@
 				E189E87B169AB3F300541FE1 /* Stream.cpp in Sources */,
 				E189E87C169AB3F300541FE1 /* StreamFile_posix.cpp in Sources */,
 				E189E87D169AB3F300541FE1 /* math.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E197CBD916B3AD88003FDEF6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E197CBDB16B3AD88003FDEF6 /* Log.cpp in Sources */,
+				E197CBDC16B3AD88003FDEF6 /* Input.cpp in Sources */,
+				E197CBDD16B3AD88003FDEF6 /* Stream.cpp in Sources */,
+				E197CBDE16B3AD88003FDEF6 /* StreamFile_posix.cpp in Sources */,
+				E197CBDF16B3AD88003FDEF6 /* math.cpp in Sources */,
+				E197CBE016B3AD88003FDEF6 /* Batch.cpp in Sources */,
+				E197CBE116B3AD88003FDEF6 /* Buffer.cpp in Sources */,
+				E197CBE216B3AD88003FDEF6 /* Camera.cpp in Sources */,
+				E197CBE316B3AD88003FDEF6 /* Material.cpp in Sources */,
+				E197CBE416B3AD88003FDEF6 /* Object.cpp in Sources */,
+				E197CBE516B3AD88003FDEF6 /* OpenGL.cpp in Sources */,
+				E197CBE616B3AD88003FDEF6 /* Program.cpp in Sources */,
+				E197CBE716B3AD88003FDEF6 /* Texture.cpp in Sources */,
+				E197CBE816B3AD88003FDEF6 /* Node.cpp in Sources */,
+				E197CBE916B3AD88003FDEF6 /* Reframe.cpp in Sources */,
+				E197CBEA16B3AD88003FDEF6 /* Render.cpp in Sources */,
+				E197CBF616B3AED8003FDEF6 /* Glut.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -878,6 +971,69 @@
 			};
 			name = Release;
 		};
+		E197CBF016B3AD88003FDEF6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "kapusha-glut";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		E197CBF116B3AD88003FDEF6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "kapusha-glut";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		E199319E164E141500E8D9CB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1104,6 +1260,15 @@
 			buildConfigurations = (
 				E18DDFCE163D8ED100869CF5 /* Debug */,
 				E18DDFCF163D8ED100869CF5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E197CBEF16B3AD88003FDEF6 /* Build configuration list for PBXNativeTarget "kapusha-glut" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E197CBF016B3AD88003FDEF6 /* Debug */,
+				E197CBF116B3AD88003FDEF6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
