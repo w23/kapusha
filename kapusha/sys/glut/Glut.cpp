@@ -12,7 +12,10 @@ namespace kapusha {
     ~GlutController() { controller_ = 0; }
     int run(int argc, char *argv[]);
     virtual void quit(int code) { exit(code); }
-    virtual void requestRedraw() { need_redraw_ = true; }
+    virtual void requestRedraw() {
+      if (!need_redraw_)
+        glutPostRedisplay();
+      need_redraw_ = true; }
     virtual void limitlessPointer(bool limitless) {}
     virtual void hideCursor(bool hide) {}
     virtual const PointerState& pointerState() const { return pointers_; }
@@ -47,6 +50,7 @@ namespace kapusha {
     glutKeyboardFunc(keyboardFunc);
     glutMouseFunc(mouseFunc);
     glutMotionFunc(motionFunc);
+    glutPassiveMotionFunc(motionFunc);
     //glutWMCloseFunc(close_cb);
     viewport_->init(this);
     lastframetime_ = glutGet(GLUT_ELAPSED_TIME);
@@ -65,10 +69,12 @@ namespace kapusha {
   }
   
   void GlutController::reshape(int w, int h) {
-    viewport_->resize(vec2i(w, h));
+    viewport_->resize(size_ = vec2i(w, h));
   }
   
   void GlutController::motion(int x, int y) {
+    pointers_.mouseMove(vec2f(x, y) / size_, glutGet(GLUT_ELAPSED_TIME));
+    viewport_->inputPointer(pointers_);
   }
   
   int runGlut(int argc, char *argv[], vec2i size, IViewport *viewport) {
