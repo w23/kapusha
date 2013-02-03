@@ -1,30 +1,14 @@
 #pragma once
-
 #include "Reframe.h"
 
+//! \todo
 namespace kapusha {
-  
-  class Camera;
-  class Node;
-  typedef shared<Node> SNode;
-  
-  class Node : public Reframe
-  {
+  class Node : public Shareable {
   public:
-    Node() : diameter_(0) {}
+    Node() {}
     virtual ~Node() {}
-    
-    virtual void render(const Camera& cam, const mat4f& m);
-    
-    void addChild(Node *node);
-    
-    void setBoundingDiameter(float diameter) { diameter_ = diameter; }
-    
-    //! \todo calculateDiameter(); from children
-    
   protected:
-    float diameter_;
-    SNode child_, next_;
+    Reframe frame_;
+    //rect3f aabb_;
   };
-  
 } // namespace kapusha

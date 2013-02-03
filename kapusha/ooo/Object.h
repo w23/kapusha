@@ -1,19 +1,22 @@
 #pragma once
 #include "../render/Batch.h"
-#include "Node.h"
+#include "../render/Limits.h"
+#include "Reframe.h"
 
 namespace kapusha {
-  class Object : public Node {
+  class Object : public Shareable {
   public:
-    Object(const SBatch &batch, const char *mvp = "um4_mvp");
-    Object(const SBatch &batch, int mvp_loc);
+    Object() : frame_(vec3f(0.)) {}
     virtual ~Object() {}
-    Batch* getBatch() const { return batch_.get(); }
-    //void draw(const mat4f& view, const mat4f& proj) const;
-    void draw(const mat4f& mvp) const;
+    int addBatch(Batch *batch, const char *mvp = "um4_mvp");
+    int addBatch(Batch *batch, int mvp_loc);
+    void draw(Render *render, const mat4f& mvp);
   private:
-    SBatch batch_;
-    int mvp_loc_;
-  };
-  
-}
+    Reframe frame_;
+    struct BatchAttachment {
+      SBatch batch;
+      Program::UniformState state;
+    } batches_[MAX_OBJECT_BATCHES];
+  }; // class Object
+  typedef shared<Object> SObject;
+} // namespace kapusha

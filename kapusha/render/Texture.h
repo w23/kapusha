@@ -3,8 +3,7 @@
 #include "../core/Shared.h"
 
 namespace kapusha {
-
-  class Texture : public Shared {
+  class Texture : public Shareable {
   public:
     struct Meta {
       vec2i size;
@@ -15,13 +14,11 @@ namespace kapusha {
         RGB565,
         R8
       } format;
-      
       Meta() : size(0), format(None) {}
       Meta(unsigned w, unsigned h, PixelFormat fmt = RGBA8888)
         : size(w,h), format(fmt) {}
       Meta(vec2i sz, PixelFormat fmt = RGBA8888)
         : size(sz), format(fmt) {}
-      
       bool operator==(const Meta& other) const {
         return size == other.size && format == other.format;
       }
@@ -30,21 +27,14 @@ namespace kapusha {
 
   public:
     Texture();
-    //Texture(const Meta& Meta, unsigned existing_name = 0, bool take_ownership = false);
     ~Texture();
-  
     void upload(const Meta& meta, const void* pixels);
-    
     const Meta& getMeta() const { return meta_; }
     unsigned getName() const { return name_; }
-    
   private:
     void bind() const;
-
     unsigned name_;
     Meta meta_;
-  };
-  
+  }; // class Texture
   typedef shared<Texture> STexture;
-
 } // namespace kapusha

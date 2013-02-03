@@ -56,7 +56,7 @@ public:
   
   u32 now_ms() const
   {
-    return now_ns() / 1000000;
+    return static_cast<u32>(now_ns() / 1000000ULL);
   }
   
   static u32 sys_to_ms(NSTimeInterval nsti)
@@ -400,8 +400,6 @@ void KPViewDrawObserverCallback(CFRunLoopObserverRef observer,
 {
   g_machTime.reset();
   prevFrameTime_ = g_machTime.now_ms();
-  if (!Render::currentRender())
-    new Render;
   
   delete viewport_controller_;
   viewport_controller_ = 0;

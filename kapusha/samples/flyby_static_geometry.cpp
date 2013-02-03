@@ -40,14 +40,9 @@ namespace flyby {
 
   Viewport::Viewport()
   : forward_speed_(0), right_speed_(0), pitch_speed_(0), yaw_speed_(0)
-  {
-  }
-
-  Object* Viewport::createGround() const
-  {
-    Batch* batch = new Batch();
-
-    const char* svtx =
+  {}
+  Object* Viewport::createGround() const {
+    static const char* svtx =
     "uniform mat4 um4_mvp;\n"
     "attribute vec4 vtx;\n"
 #if KAPUSHA_GLES
@@ -61,7 +56,7 @@ namespace flyby {
     "}"
     ;
     
-    const char* sfrg =
+    static const char* sfrg =
 #if KAPUSHA_GLES
     "varying mediump vec2 p;\n"
 #else
@@ -71,9 +66,7 @@ namespace flyby {
       "gl_FragColor = vec4(mod(floor(p.x)+floor(p.y),2.)) * (20. - length(p)) / 20.;\n"
     "}"
     ;
-    Material *mat = new Material(new Program(svtx, sfrg));
-    batch->setMaterial(mat);
-    
+    Batch* batch = new Batch(new Material(new Program(svtx, sfrg)));
     vec3f rect[4] = {
       vec3f(-100.f, -2.f, -100.f),
       vec3f(-100.f, -2.f,  100.f),
@@ -83,17 +76,14 @@ namespace flyby {
     Buffer *fsrect = new Buffer();
     fsrect->load(rect, sizeof rect);
     batch->setAttribSource("vtx", fsrect, 3);
-    
     batch->setGeometry(Batch::GeometryTriangleFan, 0, 4);
-    
-    return new Object(batch);
+    Object *ret = new Object;
+    ret->addBatch(batch);
+    return ret;
   }
 
-  Object* Viewport::createDust() const
-  {
-    Batch* batch = new Batch();
-    
-    const char* svtx =
+  Object* Viewport::createDust() const {
+    static const char* svtx =
     "uniform mat4 um4_mvp;\n"
     "attribute vec4 vtx;\n"
 #if KAPUSHA_GLES
@@ -107,7 +97,7 @@ namespace flyby {
     "light = (20. - length(vtx)) / 20.;\n"
     "}"
     ;
-    const char* sfrg =
+    static const char* sfrg =
 #if KAPUSHA_GLES
     "varying lowp float light;\n"
 #else
@@ -117,30 +107,22 @@ namespace flyby {
     "gl_FragColor = vec4(1.) * light;\n"
     "}"
     ;
-    Material *mat = new Material(new Program(svtx, sfrg));
-    batch->setMaterial(mat);
-    
+    Batch* batch = new Batch(new Material(new Program(svtx, sfrg)));
     const int particles = 8192;
     const float radius = 10.f;
-    
     vec3f *vertices = new vec3f[particles], *p = vertices;
-    
     for (int i = 0; i < particles; ++i, ++p)
-    {
       *p = vec3f(frand(-radius, radius),
                        frand(-2, radius),
                        frand(-radius, radius));
-    }
-    
     Buffer *fsrect = new Buffer();
     fsrect->load(vertices, sizeof(*vertices) * particles);
-    
     delete vertices;
-    
     batch->setAttribSource("vtx", fsrect, 3, 0, sizeof(vec3f));
-    
     batch->setGeometry(Batch::GeometryPoints, 0, particles);
-    return new Object(batch);
+    Object *ret = new Object;
+    ret->addBatch(batch);
+    return ret;
   }
 
   void Viewport::init(IViewportController *ctrl)
@@ -190,9 +172,8 @@ namespace flyby {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     GL_ASSERT
 
-    ground_->draw(camera_.getMvp());
-    object_->draw(camera_.getMvp());
-    
+    ground_->draw(render_, camera_.getMvp());
+    object_->draw(render_, camera_.getMvp());
     ctrl_->requestRedraw();
   }
 

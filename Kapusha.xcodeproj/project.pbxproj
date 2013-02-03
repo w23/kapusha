@@ -108,6 +108,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E12C83C016BD500E000C2818 /* Limits.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Limits.h; sourceTree = "<group>"; };
 		E131D4FF166201F400B0320A /* libkapusha.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libkapusha.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E131D5031662033F00B0320A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		E14B5356165D59F300B55FEC /* KPView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPView.h; sourceTree = "<group>"; };
@@ -267,15 +268,15 @@
 		E18DDFC7163D8ED100869CF5 = {
 			isa = PBXGroup;
 			children = (
-				E1D556DE167B988800A360F6 /* ooo */,
 				E18DDFEB163D8EED00869CF5 /* core */,
+				E18DDFF7163D8F3A00869CF5 /* Frameworks */,
 				E18DDFDE163D8EED00869CF5 /* io */,
 				E18DDFE3163D8EED00869CF5 /* math */,
+				E1D556DE167B988800A360F6 /* ooo */,
+				E18DDFF6163D8F3A00869CF5 /* Products */,
 				E18DDFD3163D8EED00869CF5 /* render */,
 				E18DE038163D923000869CF5 /* samples */,
 				E1A77CFD165D5531009FF8F3 /* sys */,
-				E18DDFF7163D8F3A00869CF5 /* Frameworks */,
-				E18DDFF6163D8F3A00869CF5 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -296,6 +297,7 @@
 				E1BD0C1D164F72A900A3454C /* Render.h */,
 				E18DDFDC163D8EED00869CF5 /* Texture.cpp */,
 				E18DDFDD163D8EED00869CF5 /* Texture.h */,
+				E12C83C016BD500E000C2818 /* Limits.h */,
 			);
 			name = render;
 			path = kapusha/render;
