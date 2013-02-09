@@ -152,6 +152,13 @@ namespace kapusha {
     } GL_ASSERT
   }
   
+  void Program::UniformState::clear() {
+    for (int i = 0; i < MAX_STATE_UNIFORMS; ++i)
+      uniforms_[i].type = Uniform::None;
+    for (int i = 0; i < MAX_STATE_UNIFORM_SAMPLERS; ++i)
+      samplers_[i].sampler.reset();
+  }
+  
   void Program::UniformState::setSampler(int location, Texture *sampler) {
     for (int i = 0; i < MAX_STATE_UNIFORM_SAMPLERS; ++i)
       if (samplers_[i].empty() || samplers_[i].location == location) {

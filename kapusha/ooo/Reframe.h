@@ -7,7 +7,7 @@ namespace kapusha {
   public:
     Reframe() = default;
     Reframe(vec3f pos,
-            vec3f forward = vec3f(0.f, 0.f, 1.f),
+            vec3f forward = vec3f(0.f, 0.f, -1.f),
             vec3f up      = vec3f(0.f, 1.f, 0.f));
     void lookAt(vec3f pos,
                 vec3f at = vec3f(0.f, 0.f, 0.f),
@@ -18,6 +18,7 @@ namespace kapusha {
     inline void move(vec3f units) {
       translation_ += vec4f(units);
     }
+    inline mat4f &matrix() { return combined_; }
     void orient(vec3f forward, vec3f up);
     void moveForward(float units);
     void moveRigth(float units);
@@ -27,6 +28,7 @@ namespace kapusha {
     void rotateYaw(float radians);
 	void rotateAxis(vec3f axis, float radians);
     void update();
+    //! \todo reverseUpdate(); //! recalc vectors from combined matrix
     inline vec3f translation() const { return translation_.xyz(); }
     inline vec4f& translation() { return translation_; }
     inline vec3f right() const { return right_.xyz(); }

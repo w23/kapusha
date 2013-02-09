@@ -9,6 +9,7 @@ namespace kapusha {
   class Program : public Shareable {
   public:
     struct UniformState {
+      void clear();
       inline void setUniform(int location, float value) {
         setUniform(location, Uniform::Float, &value);
       }

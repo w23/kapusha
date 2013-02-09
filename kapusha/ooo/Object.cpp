@@ -7,6 +7,12 @@
 #include "Render.h"
 
 namespace kapusha {
+  void Object::clearBatches() {
+    for (int i = 0; i > MAX_OBJECT_BATCHES; ++i) {
+      batches_[i].batch.reset();
+      batches_[i].state.clear();
+    }
+  }
   int Object::addBatch(Batch *batch, const char *mvp) {
     return addBatch(batch, batch->getMaterial()->getUniformLocation(mvp));
   }
@@ -24,6 +30,7 @@ namespace kapusha {
   }
   void Object::draw(Render *r, const mat4f& mvp) {
     mat4f mtx = mvp * frame_.getMatrix();
+    //! \fixme make use of aabb_
     for (int i = 0; i < MAX_OBJECT_BATCHES; ++i) {
       if (!batches_[i].batch) break;
       // first bytes are mvp matrix

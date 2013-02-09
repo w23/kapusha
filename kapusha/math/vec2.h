@@ -1,12 +1,9 @@
 // Kapusha/math
 // 2012 (c) Ivan 'w23' Avdeev, me@w23.ru
-
 #pragma once
 
 namespace kapusha {
-
-  template <typename T>
-  struct vec2
+  template <typename T> struct vec2
   {
     T x, y;
     

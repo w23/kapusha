@@ -1,4 +1,5 @@
 #pragma once
+#include "OpenGL.h"
 #include "../math/types.h"
 #include "../core/Shared.h"
 
@@ -26,7 +27,11 @@ namespace kapusha {
     };
 
   public:
-    Texture();
+    enum MagFilter {
+      Linear = GL_LINEAR,
+      Nearest = GL_NEAREST
+    };
+    Texture(MagFilter mag = Linear);
     ~Texture();
     void upload(const Meta& meta, const void* pixels);
     const Meta& getMeta() const { return meta_; }
@@ -35,6 +40,7 @@ namespace kapusha {
     void bind() const;
     unsigned name_;
     Meta meta_;
+    MagFilter mag_;
   }; // class Texture
   typedef shared<Texture> STexture;
 } // namespace kapusha

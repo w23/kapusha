@@ -7,7 +7,7 @@
 #endif
 
 namespace kapusha {
-  Texture::Texture() { glGenTextures(1, &name_); }
+  Texture::Texture(MagFilter mag) : mag_(mag) { glGenTextures(1, &name_); }
   Texture::~Texture() { glDeleteTextures(1, &name_); }
   void Texture::upload(const Meta& meta, const void* pixels) {
     meta_ = meta;
@@ -38,7 +38,7 @@ namespace kapusha {
                  format, type,
                  pixels); GL_ASSERT
     //! \todo move this to some other place
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GL_ASSERT
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_); GL_ASSERT
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GL_ASSERT
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); GL_ASSERT
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); GL_ASSERT
