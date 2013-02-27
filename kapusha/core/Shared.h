@@ -20,6 +20,7 @@ namespace kapusha {
   //! a useful container for automagically controlling ownership
   //! \warning also thread-unsafe by design!
   //! this R/T shit is me trying to avoid copies of exactly the same code all over the place (possibly without any success)
+  //! \fixme yep, this was futile. every instantiation adds same 34 bytes for the reset() function alone
   template <typename R, typename T = Shareable> class shared {
   public:
     inline shared(R* r = 0) : t_(static_cast<T*>(r)) { if (t_) t_->retain(); }
