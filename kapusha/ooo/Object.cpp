@@ -1,10 +1,6 @@
 #include <cstring>
 #include "../core/Core.h"
-#include "Batch.h"
-#include "Material.h"
-#include "Program.h"
 #include "Object.h"
-#include "Render.h"
 
 namespace kapusha {
   void Object::clearBatches() {
