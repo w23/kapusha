@@ -46,8 +46,9 @@ namespace kapusha {
       ret.z = x * b.y - y * b.x;
       return ret;
     }
-    bool operator==(const vec3<T>& other) const {
-      return other.x == x && other.y == y && other.z == z;
+    bool operator==(const vec3<T> &r) const {
+      return r.x == x && r.y == y && r.z == z;
     }
+    bool operator!=(const vec3<T> &r) const { return !(*this == r); }
   }; // vec3
 } // namespace math

@@ -43,7 +43,7 @@ namespace kapusha {
       *this = mat4x4().cols(vec4<T>(1,0,0,0),
                             vec4<T>(0,1,0,0),
                             vec4<T>(0,0,1,0),
-                            vec4<T>(-v.x,-v.y,-v.z,1));
+                            vec4<T>(v.x,v.y,v.z,1));
       return *this;
     }
     // very useful operators

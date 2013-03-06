@@ -19,9 +19,12 @@ namespace kapusha {
       return mat2x2(m[0]*r.m[0] + m[2]*r.m[1], m[0]*r.m[2] + m[2]*r.m[3],
                     m[1]*r.m[0] + m[3]*r.m[1], m[1]*r.m[2] + m[3]*r.m[3]);
     }
-    static mat2x2 rotation(float angle) {
-      float s = sinf(angle), c = cosf(angle);
+    vec2<T> operator*(const vec2<T> &r) const {
+      return vec2<T>(m[0]*r.x + m[2]*r.y, m[1]*r.x + m[3]*r.y);
+    }
+    static mat2x2 rotation(T angle) {
+      T s = sin(angle), c = cos(angle);
       return mat2x2(c, -s, s, c);
     }
   }; // struct mat2x2
-} // namespace math
+} // namespace kapusha

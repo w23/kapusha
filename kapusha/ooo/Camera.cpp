@@ -26,7 +26,9 @@ namespace kapusha {
   }
   
   void Camera::update() {
+    translation_ = -translation_; //! \fixme this is dirty!
     Reframe::update();
+    translation_ = -translation_; //! \fixme this is dirty!
     mvp_ = projection_ * getMatrix();
   }
   

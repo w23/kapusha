@@ -35,7 +35,7 @@ namespace kapusha {
     inline vec3f up() const { return up_.xyz(); }
     inline vec3f forward() const { return forward_.xyz(); }
     inline const mat4f& getMatrix() const { return combined_; }
-  private:
+  protected:
     vec4f translation_, right_, up_, forward_;
     mat4f combined_;
   };
