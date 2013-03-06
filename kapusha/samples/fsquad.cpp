@@ -27,9 +27,7 @@ namespace fsquad {
   {
     render_ = new Render;
     system_ = system;
-    batch_ = new Batch();
-    
-    const char* svtx =
+    static const char* svtx =
     "uniform vec2 aspect;\n"
     "uniform vec2 ptr;\n"
     "attribute vec4 vtx;\n"
@@ -43,7 +41,7 @@ namespace fsquad {
       "p = (vtx.xy + ptr) * aspect;\n"
     "}"
     ;
-    const char* sfrg =
+    static const char* sfrg =
     "uniform vec2 aspect;\n"
     "uniform float time;\n"
 #if KAPUSHA_GLES
@@ -56,9 +54,6 @@ namespace fsquad {
     "gl_FragColor = vec4(abs(p),0.,0.);\n"
     "}"
     ;
-    Material *mat = new Material(new Program(svtx, sfrg));
-    batch_->setMaterial(mat);
-    
     vec2f rect[4] = {
       vec2f(-1.f, -1.f),
       vec2f(-1.f,  1.f),
@@ -67,8 +62,8 @@ namespace fsquad {
     };
     Buffer *fsrect = new Buffer();
     fsrect->load(rect, sizeof rect);
+    batch_ = new Batch(new Material(new Program(svtx, sfrg)));
     batch_->setAttribSource("vtx", fsrect, 2);
-    
     batch_->setGeometry(Batch::GeometryTriangleFan, 0, 4);
   }
 

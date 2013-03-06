@@ -1,4 +1,5 @@
 #include <mach/mach_time.h>
+#include "../../render/Render.h"
 #import "KPView.h"
 #import "../../core/IViewport.h"
 
@@ -55,7 +56,7 @@ public:
   
   u32 now_ms() const
   {
-    return now_ns() / 1000000;
+    return static_cast<u32>(now_ns() / 1000000ULL);
   }
   
   static u32 sys_to_ms(NSTimeInterval nsti)

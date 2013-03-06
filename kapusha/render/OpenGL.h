@@ -26,7 +26,6 @@
 #endif
 
 namespace kapusha {
-
 #if DEBUG
   void glAssert(const char*, int);
 #define GL_ASSERT ::kapusha::glAssert(__FILE__,__LINE__);

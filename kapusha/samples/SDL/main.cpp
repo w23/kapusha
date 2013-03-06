@@ -1,6 +1,6 @@
 #include <iostream>
 #include <kapusha/core/Core.h>
-#include <kapusha/sys/SDL/KPSDL.h>
+#include <kapusha/sys/sdl/KPSDL.h>
 
 namespace kapusha {
   class IViewport;
@@ -24,5 +24,5 @@ public:
 int main(int argc, char* argv[])
 {
   KP_LOG_OPEN(0, new StderrLog);
-  return kapusha::KPSDL(fsquad::makeViewport(), 800, 600);
+  return kapusha::KPSDL(flyby::makeViewport(), 800, 600);
 }

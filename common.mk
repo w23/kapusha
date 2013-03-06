@@ -1,6 +1,6 @@
-CXX=g++
-LD=g++
-CXXFLAGS=-Wall -Werror -fno-exceptions -fno-rtti -I$(ROOT)
+CXX?=g++
+LD?=g++
+CXXFLAGS=-std=c++11 -Wall -Werror -fno-exceptions -fno-rtti -I$(ROOT)
 LDFLAGS=-lm
 
 ifeq ($(DEBUG),1)

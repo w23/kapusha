@@ -41,7 +41,23 @@ namespace kapusha {
     GL_ASSERT
   }
   
-  void Buffer::bind() const
+  void* Buffer::map(unsigned int size)
+  {
+    bind();
+    glBufferData(GL_ARRAY_BUFFER, size, 0, GL_STATIC_DRAW);
+    GL_ASSERT
+    
+    void *ret = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+    GL_ASSERT
+    return ret;
+  }
+  
+  void Buffer::unmap()
+  {
+    glUnmapBuffer(GL_ARRAY_BUFFER);
+  }
+  
+  void Buffer::bind(Binding binding) const
   {
     //! \fixme implement this
     //switch (bindingHint_)

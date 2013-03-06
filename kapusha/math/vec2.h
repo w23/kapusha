@@ -1,12 +1,9 @@
 // Kapusha/math
 // 2012 (c) Ivan 'w23' Avdeev, me@w23.ru
-
 #pragma once
 
 namespace kapusha {
-
-  template <typename T>
-  struct vec2
+  template <typename T> struct vec2
   {
     T x, y;
     
@@ -137,6 +134,11 @@ namespace kapusha {
       return *this;
     }
     
+    T product() const
+    {
+      return x * y;
+    }
+    
     bool operator==(const vec2<T>& v) const
     {
       return v.x == x && v.y == y;
@@ -150,6 +152,11 @@ namespace kapusha {
     bool operator<(const vec2<T>& v) const
     {
       return length_sq() < v.length_sq();
+    }
+    
+    vec2<T> yx() const
+    {
+      return vec2(y, x);
     }
     
     vec2<T> rotated(T angle)
@@ -169,6 +176,12 @@ namespace kapusha {
       ret.x = (x < min) ? min : ((x > max) ? max : x);
       ret.y = (y < min) ? min : ((y > max) ? max : y);
       return ret;
+    }
+    
+    vec2 clamp(vec2 min, vec2 max) const
+    {
+      return vec2((x < min.x) ? min.x : ((x > max.x) ? max.x : x),
+                  (y < min.y) ? min.y : ((y > max.y) ? max.y : y));
     }
   };
     

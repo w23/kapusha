@@ -1,11 +1,9 @@
 // Kapusha/math
 // 2012 (c) Ivan 'w23' Avdeev, me@w23.ru
-
-#include <stdlib.h>
+#include <cstdlib>
 #include "types.h"
 
 namespace kapusha {
-  
   const float c_pi = 3.14159265358979323844f;
   const float c_2pi = c_pi * 2.f;
   const float c_pi2 = c_pi * .5f;
@@ -13,10 +11,7 @@ namespace kapusha {
   const float c_kdeg2rad = c_pi / 180.f;
   const float c_krad2deg = 180.f / c_pi;
 
-
-  template<>
-  mat4f& mat4f::rotationAroundAxis(vec3f axis, float angle)
-  {
+  template<> mat4f& mat4f::rotationAroundAxis(vec3f axis, float angle) {
     float s = sinf(angle), c = cosf(angle), c1 = 1.f - c;
     vec3f a2 = axis * axis;
     float xy = axis.x * axis.y;
@@ -39,14 +34,6 @@ namespace kapusha {
     return *this;
   }
   
-  float frand()
-  {
-    return (float)rand() / RAND_MAX;
-  }
-  
-  float frand(float min, float max)
-  {
-    return min + frand() * (max - min);
-  }
-
+  float frand() { return (float)rand() / RAND_MAX; }
+  float frand(float min, float max) { return min + frand() * (max - min); }
 } // namespace math
