@@ -1,9 +1,7 @@
 #pragma once
-
 #include "Input.h"
 
 namespace kapusha {
-
   //! An interface for doing OS/platform-specific stuff
   class IViewportController {
   public:

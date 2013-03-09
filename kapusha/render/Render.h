@@ -34,6 +34,8 @@ namespace kapusha {
       }
     public:
       inline void set(bool v) { new_ = v; }
+      inline void enable() { set(true); }
+      inline void disable() { set(false); }
       inline void on() { set(true); }
       inline void off() { set(false); }
     }; // class BoolState
@@ -95,8 +97,7 @@ namespace kapusha {
           unitCurrent_ = unitNew_;
           //! \fixme suboptimal
           if (current_ == new_) {
-            glBindTexture(GL_TEXTURE_2D, current_);
-            GL_ASSERT
+            glBindTexture(GL_TEXTURE_2D, current_); GL_ASSERT
           }
         }
         if (current_ != new_) {
@@ -110,7 +111,6 @@ namespace kapusha {
     Render();
     ~Render();
     void commit();
-
     BoolState& cullFace() { return cullFace_; }
     BoolState& depthTest() { return depthTest_; }
     BoolState& blend() { return blend_; }
@@ -119,6 +119,7 @@ namespace kapusha {
     ProgramBinding& program() { return program_; }
     void useMaterial(Material *m) { materialNew_ = m; }
     TextureBinding& texture() { return texture_; }
+    
   private:
     static Render *currentRender_;
     BoolState cullFace_;
