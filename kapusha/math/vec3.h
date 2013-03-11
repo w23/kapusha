@@ -14,8 +14,8 @@ namespace kapusha {
     template <typename U> vec3(const vec3<U>& v) : x(v.x), y(v.y), z(v.z) {}
     vec2<T> xy() const { return vec2<T>(x, y); }
     vec3<T> xzy() const { return vec3<T>(x, z, y); }
-    T length_sq() { return x*x + y*y + z*z; }
-    T length() { return sqrt(length_sq()); }
+    T length_sq() const { return x*x + y*y + z*z; }
+    T length() const { return sqrt(length_sq()); }
     vec3<T> normalize() {
       T l = length();
       x /= l; y /= l; z /= l;
@@ -50,5 +50,6 @@ namespace kapusha {
       return r.x == x && r.y == y && r.z == z;
     }
     bool operator!=(const vec3<T> &r) const { return !(*this == r); }
+    vec3 normalized() const { return *this * (1 / length()); }
   }; // vec3
 } // namespace math
