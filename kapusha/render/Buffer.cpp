@@ -25,12 +25,14 @@ namespace kapusha {
     bind();
     glBufferData(bindingHint_, size, data, usage); GL_ASSERT
   }
+#if !KAPUSHA_GLES
   void* Buffer::map(Access access) {
     bind();
     void *ret = glMapBuffer(GL_ARRAY_BUFFER, access); GL_ASSERT
     return ret;
   }
   void Buffer::unmap() { glUnmapBuffer(bindingHint_); }
+#endif //!KAPUSHA_GLES
   void Buffer::bind() const {
     Render *r = Render::currentRender();
     switch (bindingHint_) {
