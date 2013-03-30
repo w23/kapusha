@@ -29,6 +29,10 @@ namespace kapusha {
       x += b.x; y += b.y; z += b.z;
       return *this;
     }
+    vec3<T>& operator-=(const vec3<T>& b) {
+      x -= b.x; y -= b.y; z -= b.z;
+      return *this;
+    }
     vec3<T> operator+(const vec3<T>& b) const {
       return vec3<T>(x+b.x, y+b.y, z+b.z);
     }
