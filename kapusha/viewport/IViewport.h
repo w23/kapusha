@@ -14,12 +14,9 @@ namespace kapusha {
     virtual void requestRedraw() = 0;
 
     //! Set the mouse cursor free of any window/screen boundaries
-    /*! \warning actually this pins the mouse cursors at the viewport center,
-     * therefore stripping any sense from Pointer::point field.
-     * Use Pointer::movement instead
-     */
-    //! \param limitless Set this true if you want mouse-aiming
-    virtual void limitlessPointer(bool limitless) = 0;
+    //! \warning Pointer::getPosition() will return garbage
+    //! \param relative_only Set this true if you want mouse-aiming
+    virtual void setRelativeOnlyPointer(bool relative_only) = 0;
     
     //! Hide mouse cursor
     //! \param hide does cursor need to be hidden

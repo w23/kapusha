@@ -4,11 +4,12 @@ include common.mk
 #! \fixme dependencies
 
 SOURCES := \
-	kapusha/core/Input.cpp \
-	kapusha/core/Log.cpp \
+	kapusha/core/assert.cpp \
+	kapusha/core/log.cpp \
 	kapusha/math/math.cpp \
 	kapusha/io/StreamFile_posix.cpp \
 	kapusha/io/Stream.cpp \
+	kapusha/viewport/input.cpp \
 	kapusha/render/Program.cpp \
 	kapusha/render/Material.cpp \
 	kapusha/render/Batch.cpp \

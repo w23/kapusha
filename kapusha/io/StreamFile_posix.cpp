@@ -1,4 +1,3 @@
-#include "../core/Log.h"
 #include "StreamFile_posix.h"
 #include <fcntl.h> // ::open
 #include <sys/stat.h> // ::stat

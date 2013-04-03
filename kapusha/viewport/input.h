@@ -1,94 +1,68 @@
 #pragma once
-#include "Core.h"
+#include "../core/core.h"
+#include "../core/limits.h"
 #include "../math/types.h"
-
-#if KAPUSHA_MULTITOUCH
-#define MAX_POINTERS_IN_EVENT 8
-#else
-#define MAX_POINTERS_IN_EVENT 1
-#endif
 
 namespace kapusha {
   //! Basic input state with timestamp
   class InputState {
   protected:
-    inline void accumulate(u32 time) {
-      delta_ += time - last_changed_;
-      last_changed_ = time;
-    }
-    inline void update(u32 time) {
-      delta_ = 0;
-      accumulate(time);
-    }
-    inline u32 timestamp() const { return last_changed_; }
-    inline u32 delta() const { return  delta_; }
-    inline void deltaReset() { delta_ = 0; }
+    inline void accumulate(u32 time) { timestampDelta_ += time - timestamp_, timestamp_ = time; }
+    inline void update(u32 time) { timestampDelta_ = 0, accumulate(time); }
+    inline u32 getTimestamp() const { return timestamp_; }
+    inline u32 getDelta() const { return timestampDelta_; }
+    inline void resetDelta() { timestampDelta_ = 0; }
   private:
-    u32 last_changed_;
-    u32 delta_;
-  };
+    u32 timestamp_;
+    u32 timestampDelta_;
+  }; // class InputState
 ////////////////////////////////////////////////////////////////////////////////
   //! State of an input by pointers
   class PointerState : public InputState {
   public:
     //! Single pointer
     struct Pointer {
-      enum {
-        //! pointer is inactive
-        None = 0,
-        //! pointer has moved
-        Move = 1, //! event flag, cleared
-        //! touch down or left mouse button
-        Pressed = 2,
-        //! mouse-specific
-        LeftButton = Pressed,
+      enum Flags {
+        None = 0, //! pointer is inactive
+        Moved = 1, //! pointer has moved (event flag)
+        Pressed = 2, //! touch down or 
+        LeftButton = Pressed, //! left mouse button
         RightButton = 4,
-        MiddleButton = 8
+        MiddleButton = 8,
+        Cancelled = 16, //! pointer was cancelled (event flag)
+        AnyButton = LeftButton | RightButton | MiddleButton,
+        _Event = Moved | Cancelled,
       };
-      //! current state
-      int flags;
-      //! event
-      int change;
-      //! current position
-      vec2f point;
-      //! change of position
-      vec2f movement;
-      inline bool isPressed() const {
-        return (flags & (LeftButton|RightButton|MiddleButton)) != 0;
-      }
-      inline bool isLeftPressed() const { return (flags & LeftButton) != 0; }
-      inline bool isRightPressed() const { return (flags & RightButton) != 0; }
-      inline bool isMiddlePressed() const { return (flags & MiddleButton) != 0;}
-      inline bool wasPressed() const {
-        return isPressed() && (change & (LeftButton|RightButton|MiddleButton));
-      }
-      inline bool wasUnpressed() const {
-        return !isPressed() && 
-          (change & (LeftButton|RightButton|MiddleButton));
-      }
-      void update(vec2f position, vec2f _movement,
-                  int _flags, int flags_remove = 0) {
-        movement = _movement;
-        point = position;
-        int newflags = (flags | _flags) ^ flags_remove;
-        change = flags ^ newflags;
-        flags = newflags;
-      }
-      void update(vec2f position, int _flags, int flags_remove = 0) {
-        update(position, position - point, _flags, flags_remove);
-      }
+      inline bool isPressed() const { return (flags_ & AnyButton) != 0; }
+      inline bool isLeftPressed() const { return (flags_ & LeftButton) != 0; }
+      inline bool isRightPressed() const { return (flags_ & RightButton) != 0; }
+      inline bool isMiddlePressed() const { return (flags_ & MiddleButton) != 0;}
+      inline bool wasPressed() const { return isPressed() && (flagsChanged_ & AnyButton); }
+      inline bool wasUnpressed() const { return !isPressed() && (flagsChanged_ & AnyButton); }
+      inline bool wasMoved() const { return (flags_ & Moved) != 0; }
+      inline bool wasCancelled() const { return (flags_ & Cancelled) != 0; }
+      inline vec2f getPosition() const { return point_; }
+      inline vec2f getDelta() const { return pointDelta_; }
     protected:
       friend class PointerState;
-      Pointer(vec2f _pos = vec2f(0), int _flags = None)
-      : flags(_flags), change(0), point(_pos), movement(0) {}
-      void clearEventFlags() { flags ^= Move; }
-      void clearAllFlags() { flags = 0; }
-      //! do this in the beginning of a new event
-      void beginUpdate() {
-        change = 0;
-        movement = 0;
+      int flags_, flagsChanged_;
+      vec2f point_, pointDelta_; //! in normalized viewport coordinates
+      Pointer() : flags_(0), flagsChanged_(0), point_(0), pointDelta_(0) {}
+      inline void prepare() { flags_ ^= _Event; }
+      inline void clear() { flags_ = 0; }
+      inline void updateFlags(int flags_add, int flags_remove = 0) {
+        int newflags = (flags_ | flags_add) ^ flags_remove;
+        flagsChanged_ = flags_ ^ newflags, flags_ = newflags;
       }
-    };
+      void updateWithDelta(vec2f delta, int flags_add, int flags_remove = 0) {
+        pointDelta_ = delta, point_ += delta;
+        updateFlags(flags_add, flags_remove);
+      }
+      void updateWithPosition(vec2f position, int flags_add, int flags_remove = 0) {
+        pointDelta_ = position - point_, point_ = position;
+        updateFlags(flags_add, flags_remove);
+      }
+    }; // struct Pointer
   public: // IViewport user interface
     inline const Pointer& main() const { return pointers_[0]; }
     inline bool isPressed() const { return main().isPressed(); }
@@ -97,37 +71,28 @@ namespace kapusha {
     inline bool isMiddlePressed() const { return main().isMiddlePressed(); }
     inline bool wasPressed() const { return main().wasPressed(); }
     inline bool wasUnpressed() const { return main().wasUnpressed(); }
-    //! \fixme make protected and force all implementation to subclass
-  public:
-    PointerState() : combined_flags_(0), changed_flags_(0) {}
-    void mouseMove(vec2f to, u32 time = 0);
-    void mouseMove(vec2f to, vec2f d, u32 time = 0);
-    void mouseClick(vec2f at, int button, u32 time = 0);
-    void mouseUnclick(vec2f at, int button, u32 time = 0);
-  private:
-    void mouseUpdate(vec2f at, int flags_add, int flags_remove, u32 time);
-  protected:
-    //! call this before updating the state with new events
-    void beginUpdate() {
-      deltaReset();
-      changed_flags_ = 0;
-      for (int i = 0; i < MAX_POINTERS_IN_EVENT; ++i)
-        pointers_[i].beginUpdate();
+    inline bool wasCancelled() const { return main().wasCancelled(); }
+  protected: // implementers
+    int flagsCombined_;
+    int flagsChanged_;
+    //! \todo mat3f windowToViewport_; isntead. PREREQ: change mat order to less of an opengl one
+    vec2f scale_, shift_;
+    Pointer pointers_[KAPUSHA_MAX_POINTERS_IN_EVENT];
+    PointerState() : flagsCombined_(0), flagsChanged_(0) {}
+    inline void resizeWindow(vec2f bottomLeft, vec2f topRight) {
+      scale_ = vec2f(2.f) / (topRight - bottomLeft), shift_ = bottomLeft;
     }
-    //! call this after all the new events were consumed
-    void endUpdate() {
-      for (int i = 0; i < MAX_POINTERS_IN_EVENT; ++i) {
-        combined_flags_ |= pointers_[i].flags;
-        changed_flags_ |= pointers_[i].change;
-        //! \todo calculate center and area
-      }
-    }
-  protected:
-    int combined_flags_;
-    int changed_flags_;
-    Pointer pointers_[MAX_POINTERS_IN_EVENT];
-  };
-  
+    void mouseMoveTo(vec2f w_to, u32 time);
+    void mouseMoveBy(vec2f w_by, u32 time);
+    void mouseDown(int button, u32 time);
+    void mouseUp(int button, u32 time);
+    //! (sys impl) call this before updating the state with new events
+    void beginUpdate();
+    void pointerMoveTo(int index, vec2f w_at, int flags_add, int flags_remove);
+    void pointerMoveBy(int index, vec2f w_by, int flags_add, int flags_remove);
+    //! (sys impl) call this after all the new events were consumed
+    void endUpdate(u32 time);
+  }; // class PointerState
 ////////////////////////////////////////////////////////////////////////////////
   //! Event of keys
   class KeyState : public InputState {

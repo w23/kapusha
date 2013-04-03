@@ -1,5 +1,5 @@
 #include <cstdlib>
-#include "../core/Log.h"
+#include "../core/core.h"
 #include "OpenGL.h"
 
 namespace kapusha {

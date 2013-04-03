@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../core/Log.h"
+#include "../core/core.h"
 #include "OpenGL.h"
 #include "Buffer.h"
 #include "Texture.h"

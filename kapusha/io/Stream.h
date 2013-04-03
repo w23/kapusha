@@ -1,10 +1,8 @@
 #pragma once
-
-#include <algorithm>
-#include "../core/Core.h"
+#include <sys/types.h>
+#include "../core/core.h"
 
 namespace kapusha {
-
   // hi, ryg!
   class Stream {
   public:

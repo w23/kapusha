@@ -6,121 +6,39 @@ namespace kapusha {
   template <typename T> struct vec2
   {
     T x, y;
-    
     typedef T type;
-    
     vec2() {}
-    
     vec2(T v) : x(v), y(v) {}
-    
-    vec2(T _x, T _y)
-    : x(_x), y(_y)
-    {
+    vec2(T _x, T _y) : x(_x), y(_y) {}
+    vec2(const vec2<T>& v) : x(v.x), y(v.y) {}
+    template <typename R> vec2(const vec2<R>& v)
+      : x(static_cast<T>(v.x)), y(static_cast<T>(v.y)) {}
+    vec2<T>& operator=(const vec2<T>& v) {
+      x = v.x, y = v.y; return *this;
+    }    
+    template <typename Q> vec2<T>& operator=(const vec2<Q>& v) {
+      x = v.x, y = v.y; return *this;
     }
-    
-    vec2(const vec2<T>& v)
-    : x(v.x), y(v.y) {}
-    
-    template <typename R>
-    vec2(const vec2<R>& v)
-    : x(static_cast<T>(v.x)), y(static_cast<T>(v.y)) {}
-    
-    vec2<T>& operator=(const vec2<T>& v)
-    {
-      x = v.x;
-      y = v.y;
-      return *this;
+    vec2& operator+=(const vec2<T>& v) {
+      x += v.x, y += v.y; return *this;
     }
-    
-    template <typename Q>
-    vec2<T>& operator=(const vec2<Q>& v)
-    {
-      x = v.x;
-      y = v.y;
-      return *this;
-    }
-    
-    vec2& operator+=(const vec2<T>& v)
-    {
-      x += v.x;
-      y += v.y;
-      return *this;
-    }
-    
-    vec2 operator+(const vec2<T>& v) const
-    {
-      return vec2(x+v.x, y+v.y);
-    }
-    
-    vec2& operator-=(const vec2<T>& v)
-    {
-      x -= v.x;
-      y -= v.y;
-      return *this;
-    }
-    
-    vec2 operator-(const vec2<T>& v) const
-    {
-      return vec2(x-v.x, y-v.y);
-    }
-    
-    vec2 operator-() const
-    {
-      return vec2(-x, -y);
-    }
-    
-    vec2& operator*=(const vec2<T>& v)
-    {
-      x *= v.x;
-      y *= v.y;
-      return *this;
-    }
-    
-    vec2& operator/=(T v)
-    {
-      x /= v;
-      y /= v;
-      return *this;
-    }
-    
-    vec2& operator*=(T v)
-    {
-      x *= v;
-      y *= v;
-      return *this;
-    }
-    
-    template <typename R>
-    vec2 operator*(const vec2<R>& v) const
-    {
+    vec2 operator+(const vec2<T>& v) const { return vec2(x+v.x, y+v.y); }    
+    vec2& operator-=(const vec2<T>& v) { x -= v.x, y -= v.y; return *this; }
+    vec2 operator-(const vec2<T>& v) const { return vec2(x-v.x, y-v.y); }
+    vec2 operator-() const { return vec2(-x, -y); }
+    vec2& operator*=(const vec2<T>& v) { x *= v.x, y *= v.y; return *this; }
+    vec2& operator/=(T v) { x /= v, y /= v; return *this; }
+    vec2& operator*=(T v) { x *= v, y *= v; return *this; }
+    template <typename R> vec2 operator*(const vec2<R>& v) const {
       return vec2(x*v.x, y*v.y);
     }
-    
-    vec2 operator*(T v) const
-    {
-      return vec2(x*v, y*v);
-    }
-    
-    template <typename R>
-    vec2 operator/(const vec2<R>& v) const
-    {
+    vec2 operator*(T v) const { return vec2(x*v, y*v); }
+    template <typename R> vec2 operator/(const vec2<R>& v) const {
       return vec2(x/v.x, y/v.y);
-    }
-    
-    vec2 operator/(T v) const
-    {
-      return vec2(x/v, y/v);
-    }
-    
-    T dot(const vec2<T>& v) const
-    {
-      return x*v.x + y*v.y;
-    }
-    
-    T length_sq() const
-    {
-      return dot(*this);
-    }
+    }    
+    vec2 operator/(T v) const { return vec2(x/v, y/v); }
+    T dot(const vec2<T>& v) const { return x*v.x + y*v.y; }    
+    T length_sq() const { return dot(*this); }
     
     T length() const
     {

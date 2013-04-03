@@ -1,5 +1,5 @@
-CXX?=g++
-LD?=g++
+CXX?=clang
+LD?=clang
 CXXFLAGS=-std=c++11 -Wall -Werror -fno-exceptions -fno-rtti -I$(ROOT)
 LDFLAGS=-lm
 
