@@ -64,6 +64,9 @@ namespace kapusha {
       }
     }; // struct Pointer
   public: // IViewport user interface
+    inline void resizeViewport(vec2f bottomLeft, vec2f topRight) {
+      scale_ = vec2f(2.f) / (topRight - bottomLeft); shift_ = bottomLeft;
+    }
     inline const Pointer& main() const { return pointers_[0]; }
     inline bool isPressed() const { return main().isPressed(); }
     inline bool isLeftPressed() const { return main().isLeftPressed(); }
@@ -79,9 +82,6 @@ namespace kapusha {
     vec2f scale_, shift_;
     Pointer pointers_[KAPUSHA_MAX_POINTERS_IN_EVENT];
     PointerState() : flagsCombined_(0), flagsChanged_(0) {}
-    inline void resizeWindow(vec2f bottomLeft, vec2f topRight) {
-      scale_ = vec2f(2.f) / (topRight - bottomLeft), shift_ = bottomLeft;
-    }
     void mouseMoveTo(vec2f w_to, u32 time);
     void mouseMoveBy(vec2f w_by, u32 time);
     void mouseDown(int button, u32 time);
@@ -96,11 +96,9 @@ namespace kapusha {
 ////////////////////////////////////////////////////////////////////////////////
   //! Event of keys
   class KeyState : public InputState {
-    
-    //! 
   public:
     inline bool isKeyPressed(int key) const { return press_vector_[key]; }
-    inline bool isLastKeyPressed() const { return last_pressed_; }
+    inline bool isLastKeyPressed() const { return press_vector_[last_key_]; }
     inline int getLastKey() const { return last_key_; }
 
     // useful shortcuts
@@ -187,35 +185,27 @@ namespace kapusha {
     };
     
   public:
-    KeyState() : last_key_(0), last_pressed_(false) { reset(); }
+    KeyState() : last_key_(0) { reset(); }
     
-    inline bool key(unsigned key, bool pressed, u32 time)
-    {
+    inline bool key(unsigned key, bool pressed, u32 time) {
       KP_ASSERT(key < KeyMax);
-      if (key == KeyUnknown)
-        return false;
-
+      if (key == KeyUnknown) return false;
       press_vector_[key] = pressed;
-      last_pressed_ = pressed;
       last_key_ = key;
       update(time);
       return true;
     }
     
-    void reset()
-    {
+    void reset() {
       for (int i = 0; i < KeyMax; ++i)
         press_vector_[i] = false;
     }
     
   private:
     int last_key_;
-    bool last_pressed_;
-    
-    //! \todo bit field
+    //! \fixme bit field
     bool press_vector_[KeyMax];
   };
   
-  //! \todo stated: key, scroll, text input, orientation
-  
+  //! \todo stated: key, scroll, text input, orientation, leapmotion
 } // namespace kapusha

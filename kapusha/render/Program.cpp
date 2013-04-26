@@ -1,5 +1,5 @@
 #include <string.h>
-#include "../core/Core.h"
+#include "../core/core.h"
 #include "OpenGL.h"
 #include "Render.h"
 #include "Program.h"

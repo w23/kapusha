@@ -1,5 +1,5 @@
 #pragma once
-#include "Input.h"
+#include "input.h"
 
 namespace kapusha {
   //! An interface for doing OS/platform-specific stuff

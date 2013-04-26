@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include "../core/Core.h"
+#include "../core/core.h"
 #include "../math/types.h"
-#include "../core/IViewport.h"
+#include "../viewport/IViewport.h"
 #include "../render/Render.h"
 
 namespace fsquad {
@@ -88,7 +88,7 @@ namespace fsquad {
 //    float time = ms / 1000.f;
 
 //    batch_->getMaterial()->setUniform("time", time);
-    batch_->getMaterial()->setUniform("ptr", system_->pointerState().main().point);
+    batch_->getMaterial()->setUniform("ptr", system_->pointerState().main().getPosition());
     batch_->draw(render_);
     
     system_->requestRedraw();

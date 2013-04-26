@@ -1,5 +1,4 @@
 #pragma once
-#include "../core/Shared.h"
 #include "../math/types.h"
 
 namespace kapusha {

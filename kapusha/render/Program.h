@@ -1,5 +1,5 @@
 #pragma once
-#include "../core/Shared.h"
+#include "../core/shared.h"
 #include "Limits.h"
 #include "Texture.h"
 

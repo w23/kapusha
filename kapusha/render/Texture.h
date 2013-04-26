@@ -1,7 +1,7 @@
 #pragma once
 #include "OpenGL.h"
 #include "../math/types.h"
-#include "../core/Shared.h"
+#include "../core/shared.h"
 
 namespace kapusha {
   class Texture : public Shareable {

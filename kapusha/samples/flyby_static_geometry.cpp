@@ -1,6 +1,6 @@
-#include "../core/Core.h"
+#include "../core/core.h"
 #include "../math/types.h"
-#include "../core/IViewport.h"
+#include "../viewport/IViewport.h"
 #include "../render/Render.h"
 #include "../ooo/Ooo.h"
 
@@ -215,8 +215,8 @@ namespace flyby {
 
   void Viewport::inputPointer(const kapusha::PointerState &pointers)
   {
-    yaw_speed_ = -pointers.main().point.x;
-    pitch_speed_ = pointers.main().point.y;
+    yaw_speed_ = -pointers.main().getPosition().x;
+    pitch_speed_ = pointers.main().getPosition().y;
   }
 
   IViewport *makeViewport()

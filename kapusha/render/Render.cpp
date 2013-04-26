@@ -1,4 +1,4 @@
-#include "../core/Core.h"
+#include "../core/core.h"
 #include "Render.h"
 
 namespace kapusha {

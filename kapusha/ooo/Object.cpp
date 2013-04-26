@@ -1,5 +1,5 @@
 #include <cstring>
-#include "../core/Core.h"
+#include "../core/core.h"
 #include "Object.h"
 
 namespace kapusha {

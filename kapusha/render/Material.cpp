@@ -1,5 +1,5 @@
 #include <string.h>
-#include "../core/Core.h"
+#include "../core/core.h"
 #include "Texture.h"
 #include "Material.h"
 #include "Render.h"

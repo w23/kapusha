@@ -1,4 +1,4 @@
-#include "../core/Core.h"
+#include "../core/core.h"
 #include "OpenGL.h"
 #include "Material.h"
 #include "Buffer.h"
