@@ -14,19 +14,21 @@ namespace kapusha {
         setUniform(location, Uniform::Float, &value);
       }
       inline void setUniform(int location, const vec2f &value) {
-        setUniform(location, Uniform::Vec2, &value.x);
+        setUniform(location, Uniform::Vec2, value.tptr());
       }
       inline void setUniform(int location, const vec3f &value) {
-        setUniform(location, Uniform::Vec3, &value.x);
+        setUniform(location, Uniform::Vec3, value.tptr());
       }
       inline void setUniform(int location, const vec4f &value) {
-        setUniform(location, Uniform::Vec4, &value.x);
+        setUniform(location, Uniform::Vec4, value.tptr());
       }
       inline void setUniform(int location, const mat2f &value) {
-        setUniform(location, Uniform::Mat2, value.m);
+	mat2f trans(value.transposed());
+        setUniform(location, Uniform::Mat2, trans.tptr());
       }
       inline void setUniform(int location, const mat4f &value) {
-        setUniform(location, Uniform::Mat4, value.m);
+	mat4f trans(value.transposed());
+        setUniform(location, Uniform::Mat4, trans.tptr());
       }
       void setSampler(int location, Texture *sampler);
       

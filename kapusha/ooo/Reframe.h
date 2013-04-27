@@ -25,7 +25,7 @@ namespace kapusha {
     void rotatePitch(float radians);
     void rotateRoll(float radians);
     void rotateYaw(float radians);
-	void rotateAxis(vec3f axis, float radians);
+    void rotateAxis(vec3f axis, float radians);
     void update();
     //! \todo reverseUpdate(); //! recalc vectors from combined matrix
     inline vec3f translation() const { return translation_.xyz(); }

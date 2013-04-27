@@ -14,6 +14,7 @@ namespace kapusha {
       m[0] = row0.x; m[2] = row0.y;
       m[1] = row1.x; m[3] = row1.y;
     }
+    const T *tptr() const { return m; }
     T det() const { return m[0] * m[3] - m[1] * m[2]; }
     mat2x2 operator*(const mat2x2& r) const {
       return mat2x2(m[0]*r.m[0] + m[2]*r.m[1], m[0]*r.m[2] + m[2]*r.m[3],

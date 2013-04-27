@@ -22,28 +22,4 @@ namespace kapusha {
   typedef rect2<int> rect2i;
   typedef rect2<float> rect2f;
   typedef rect4<float> rect4f;
-  
-  extern const float c_pi;
-  extern const float c_2pi;
-  extern const float c_pi2;
-  extern const float c_pi4;
-  extern const float c_kdeg2rad;
-  extern const float c_krad2deg;
-  
-  //! float random
-  //! \return random float value in [0..1]
-  extern float frand();
-  
-  //! float random in range
-  //! \param min minimum value
-  //! \param max maximum value
-  //! \return random float value in [min..max]
-  extern float frand(float min, float max);
-  template <typename T>
-  inline T clamp(T value, T min, T max) {
-    return (value < min) ? min : ((value > max) ? max : value);
-  }
-  template <typename T> inline T max(T a, T b) { return (a < b) ? b : a; }
-  template <typename T> inline T min(T a, T b) { return (a < b) ? a : b; }
-  
-} // namespace math
+} // namespace kapusha
