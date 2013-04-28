@@ -1,7 +1,7 @@
-CXX?=clang
-LD?=clang
-CXXFLAGS=-std=c++11 -Wall -Werror -fno-exceptions -fno-rtti -I$(ROOT)
-LDFLAGS=-lm
+CXX ?= clang
+LD ?= clang
+CXXFLAGS += $(CFLAGS) -std=c++11 -Wall -Werror -fno-exceptions -fno-rtti -I$(ROOT)
+LDFLAGS += -lm
 
 ifeq ($(DEBUG),1)
 	CXXFLAGS += -g -DDEBUG=1
