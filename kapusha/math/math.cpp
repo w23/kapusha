@@ -26,4 +26,4 @@ namespace kapusha {
   
   float frand() { return (float)rand() / RAND_MAX; }
   float frand(float min, float max) { return min + frand() * (max - min); }
-} // namespace math
+} // namespace kapusha

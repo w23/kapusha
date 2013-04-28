@@ -4,28 +4,35 @@
 #include "vec2.h"
 
 namespace kapusha {
-  // OpenGL columns order
   template <typename T> struct mat2x2 {
-    T m[4];
-    mat2x2() {}
-    mat2x2(T v) { m[0] = m[3] = v; m[1] = m[2] = 0; }
-    mat2x2(T A, T B, T C, T D) { m[0] = A; m[2] = B; m[1] = C; m[3] = D; }
+    vec2<T> rows[2];
+
+    inline mat2x2() {}
+    inline mat2x2(T v) { rows[0] = vec2<T>(v, 0); rows[1] = vec2<T>(0, v); }
     mat2x2(const vec2<T>& row0, const vec2<T>& row1) {
-      m[0] = row0.x; m[2] = row0.y;
-      m[1] = row1.x; m[3] = row1.y;
+      rows[0] = row0; rows[1] = row1;
     }
-    const T *tptr() const { return m; }
-    T det() const { return m[0] * m[3] - m[1] * m[2]; }
-    mat2x2 operator*(const mat2x2& r) const {
-      return mat2x2(m[0]*r.m[0] + m[2]*r.m[1], m[0]*r.m[2] + m[2]*r.m[3],
-                    m[1]*r.m[0] + m[3]*r.m[1], m[1]*r.m[2] + m[3]*r.m[3]);
+    inline const T *tptr() const { return rows[0].tptr(); }
+
+    T det() const { vec2<T> v(rows[0].d * rows[1].yx); return v.x - v.y; }
+    mat2x2 transposed() const {
+      return mat2x2(vec2<T>(rows[0].x, rows[1].x),
+		    vec2<T>(rows[0].y, rows[1].y));
     }
+
     vec2<T> operator*(const vec2<T> &r) const {
-      return vec2<T>(m[0]*r.x + m[2]*r.y, m[1]*r.x + m[3]*r.y);
+      return vec2<T>(rows[0].dot(r), rows[1].dot(r));
     }
-    static mat2x2 rotation(T angle) {
+    mat2x2 operator*(const mat2x2& r) const {
+      mat2x2 m;
+      m.rows[0] = *this * r.rows[0]; m.rows[1] = *this * r.rows[1];
+      *this = m.transposed();
+    }
+
+    mat2x2 &makeRotation(T angle) {
       T s = sin(angle), c = cos(angle);
-      return mat2x2(c, -s, s, c);
+      rows[0] = vec2<T>(c, -s); rows[1] = vec2<T>(s, c);
+      return *this;
     }
   }; // struct mat2x2
 } // namespace kapusha

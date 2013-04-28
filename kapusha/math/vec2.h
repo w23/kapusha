@@ -1,7 +1,7 @@
 // Kapusha/math
 // 2012 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
-#include <kapusha/math/math.h>
+#include <kapusha/math.h>
 
 namespace kapusha {
   template <typename T> struct vec2 {
