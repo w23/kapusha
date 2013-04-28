@@ -8,15 +8,14 @@
 namespace kapusha {
   Batch::Batch(Material* material) : material_(material) {}
   Batch::~Batch() {}
-  void Batch::setAttribSource(const char* attrib_name,
+  void Batch::setAttribSource(int attrib_location,
                               Buffer* buffer, unsigned components,
                               unsigned offset, unsigned stride) {
     KP_ASSERT(material_);
     int i = 0;
     for (; i < MAX_BATCH_ATTRIBS; ++i) if (attribs_[i].index == -1) break;
     KP_ASSERT(i < MAX_BATCH_ATTRIBS);
-    attribs_[i].index =
-      material_->getProgram()->getAttributeLocation(attrib_name);
+    attribs_[i].index = attrib_location;
     attribs_[i].buffer = buffer;
     attribs_[i].components = components;
     attribs_[i].offset = offset;

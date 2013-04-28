@@ -1,8 +1,8 @@
 #include <cstdlib>
 #include "core.h"
 namespace kapusha {
-  void assert(const char *expr, const char *file, const char *line, const char *func) {
-    L("%s:%s (%s): KP_ASSERT(%s) FAILED", file, line, func, expr);
+  void assert_perror(const char *expr, const char *file, int line, const char *func) {
+    L("%s:%d (%s): KP_ASSERT(%s) FAILED", file, line, func, expr);
     abort();
   }
 } 

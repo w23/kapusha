@@ -1,6 +1,5 @@
 #pragma once
-
-#include "../core/core.h"
+#include "../core.h"
 #include "OpenGL.h"
 #include "Buffer.h"
 #include "Texture.h"
@@ -10,7 +9,6 @@
 #include "Batch.h"
 
 namespace kapusha {
-
   //! Render pipeline state singleton
   class Render {
   public:
@@ -19,10 +17,10 @@ namespace kapusha {
 
   public: // helper shit
     class BoolState {
-      friend class Render;
       unsigned name_;
       bool current_, new_;
     protected:
+      friend class Render;
       inline BoolState(unsigned name, bool def = false)
         : name_(name), current_(def), new_(def) {}
       void commit() {
@@ -41,9 +39,9 @@ namespace kapusha {
     }; // class BoolState
 
     class BufferBinding {
-      friend class Render;
       unsigned type_, current_, new_;
     protected:
+      friend class Render;
       inline BufferBinding(unsigned type) : type_(type), current_(0), new_(0) {}
     public:
       void commit() {
@@ -59,9 +57,9 @@ namespace kapusha {
     }; // class BufferBinding
 
     class ProgramBinding {
-      friend class Render;
       unsigned current_, new_;
     protected:
+      friend class Render;
       ProgramBinding() : current_(0), new_(0) {}
     public:
       inline ProgramBinding& use(const Program *p) {
@@ -77,11 +75,11 @@ namespace kapusha {
 
     //! \fixme 2d textures only atm
     class TextureBinding {
-      friend class Render;
       //! \fixme unit is shared between 1d/2d/... textures. do something
       int unitCurrent_, unitNew_;
       unsigned current_, new_;
     protected:
+      friend class Render;
       TextureBinding() 
         : unitCurrent_(GL_TEXTURE0), unitNew_(GL_TEXTURE0)
         , current_(0), new_(0) {}
@@ -134,5 +132,4 @@ namespace kapusha {
     Material *materialNew_;
     TextureBinding texture_;
   };
-
 } // namespace lapusha

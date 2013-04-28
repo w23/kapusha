@@ -69,11 +69,19 @@ namespace kapusha {
     Program(const char* vertex, const char* fragment);
     ~Program();
     inline bool isValid() const { return program_name_ != 0; }
-    int getAttributeLocation(const char* name) const;
+    void bindAttributeLocation(const char* name, int location);
     int getUniformLocation(const char* name) const;
     void use(Render *render, const UniformState *new_state = 0);
     //Program& operator=(const UniformState& newState);
     
+
+    //! \todo protected:
+    unsigned name() const { return program_name_; }
+    
+  private: // this object is noncopyable
+    Program& operator=(const Program& other) { return *this; }
+    Program(const Program& other) {}
+    static unsigned compileShader(unsigned name, const char* source);
     //! set scalar/vector float uniform value
     //! expects: program already in use
     //! \param location Uniform location obtained via getUniformLocation
@@ -92,14 +100,6 @@ namespace kapusha {
     //! \param count Size of array, if uniform is an array
     void setUniformMatrix(int location, const float* values,
                           int components = 4, int count = 1) const;
-
-    //! \todo protected:
-    unsigned name() const { return program_name_; }
-    
-  private: // this object is noncopyable
-    Program& operator=(const Program& other) { return *this; }
-    Program(const Program& other) {}
-    static unsigned compileShader(unsigned name, const char* source);
     unsigned shader_vertex_;
     unsigned shader_fragment_;
     unsigned program_name_;

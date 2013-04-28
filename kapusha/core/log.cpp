@@ -7,7 +7,7 @@ namespace kapusha {
   static FILE *g_log_file;
   static char g_log_messsage_buffer[KAPUSHA_MAX_LOG_MESSAGE_SIZE];
   void log::open(const char* filename) {
-    KP_ASSERT(!g_log_file_);
+    KP_ASSERT(!g_log_file);
     if (filename) {
       g_log_file = fopen(filename, "a");
       KP_ASSERT(g_log_file);

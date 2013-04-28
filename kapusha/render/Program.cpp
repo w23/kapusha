@@ -110,11 +110,9 @@ namespace kapusha {
     return shader;
   } // Program::compileShader
   
-  int Program::getAttributeLocation(const char *name) const {
+  void Program::bindAttributeLocation(const char *name, int location) {
     KP_ASSERT(program_name_);
-    int loc = glGetAttribLocation(program_name_, name); GL_ASSERT
-    KP_ASSERT(loc != -1);
-    return loc;
+    glBindAttribLocation(program_name_, location, name); GL_ASSERT
   }
   
   int Program::getUniformLocation(const char *name) const {

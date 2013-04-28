@@ -33,7 +33,7 @@ namespace kapusha {
       geometryType_ = gtype;
       indexType_ = itype;
     }
-    void setAttribSource(const char* attrib_name,
+    void setAttribSource(int attrib_location,
                          Buffer* buffer, unsigned components = 3,
                          unsigned offset = 0, unsigned stride = 0);
     Material* getMaterial() const { return material_.get(); }

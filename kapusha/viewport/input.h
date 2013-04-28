@@ -1,7 +1,7 @@
 #pragma once
-#include "../core/core.h"
+#include "../core.h"
 #include "../core/limits.h"
-#include "../math/types.h"
+#include "../math.h"
 
 namespace kapusha {
   //! Basic input state with timestamp
