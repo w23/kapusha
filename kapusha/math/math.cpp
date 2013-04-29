@@ -11,9 +11,9 @@ namespace kapusha {
   const float c_kdeg2rad = c_pi / 180.f;
   const float c_krad2deg = 180.f / c_pi;
 
-  template<> mat4f& mat4f::makeRotation(vec4f axis, float angle) {
+  template<> mat4f& mat4f::makeRotation(vec3f axis, float angle) {
     const float s = sinf(angle), c = cosf(angle), c1 = 1.f - c;
-    const vec4f a2 = axis * axis;
+    const vec3f a2 = axis * axis;
     const float xy = axis.x * axis.y;
     const float xz = axis.x * axis.z;
     const float yz = axis.y * axis.z;

@@ -2,12 +2,12 @@ ROOT=..
 include $(ROOT)/common.mk
 
 SAMPLES = triangle \
-	  fullscreen_shader \
-	  flyby_dust
+	fullscreen_shader \
+	flyby_dust
 
 RUNNER = main_sdl
 
 all_samples: $(SAMPLES)
 
-%: %.o $(RUNNER).o
+%: %.o $(RUNNER).o $(ROOT)/libkapusha.a
 	$(LD) $(LDFLAGS) $(RUNNER).o $< -L$(ROOT) -lkapusha -o $@

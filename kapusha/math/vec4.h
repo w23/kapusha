@@ -1,4 +1,4 @@
-// Kapusha/math
+// kapusha/math
 // 2012 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
 #include <kapusha/math.h>

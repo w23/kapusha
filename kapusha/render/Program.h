@@ -23,11 +23,11 @@ namespace kapusha {
         setUniform(location, Uniform::Vec4, value.tptr());
       }
       inline void setUniform(int location, const mat2f &value) {
-	mat2f trans(value.transposed());
+        mat2f trans(value.transposed());
         setUniform(location, Uniform::Mat2, trans.tptr());
       }
       inline void setUniform(int location, const mat4f &value) {
-	mat4f trans(value.transposed());
+        mat4f trans(value.transposed());
         setUniform(location, Uniform::Mat4, trans.tptr());
       }
       void setSampler(int location, Texture *sampler);

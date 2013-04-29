@@ -4,7 +4,7 @@
 
 namespace kapusha {
   void log::sys_write(const char *message) {
-    fprintf(stderr, "%s", message);
+    fprintf(stderr, "%s\n", message);
   }
 ///////////////////////////////////////////////////////////////////////////////
   class SDLKeyState : public KeyState {
