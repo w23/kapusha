@@ -19,7 +19,7 @@ namespace kapusha {
   private:
     Reframe frame_;
     rect4f aabb_;
-    float boundingRadius_;
+    //float boundingRadius_;
     struct BatchAttachment {
       SBatch batch;
       Program::UniformState state;
