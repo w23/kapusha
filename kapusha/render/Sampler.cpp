@@ -1,15 +1,25 @@
-#include "../core/core.h"
+#include "../core.h"
 #include "OpenGL.h"
-#include "Texture.h"
-#include "Render.h"
+#include "Sampler.h"
 #ifndef GL_BGRA
 #define GL_BGRA GL_BGRA_EXT
 #endif
 
 namespace kapusha {
-  Texture::Texture(MagFilter mag) : mag_(mag) { glGenTextures(1, &name_); }
-  Texture::~Texture() { glDeleteTextures(1, &name_); }
-  void Texture::upload(const Meta& meta, const void* pixels) {
+  Sampler::Sampler(FilterMode magnification, FilterMode minification) {
+    glGenTextures(1, &name_);
+    setMagFilter(magnification);
+    setMagFilter(minification);
+  }
+  Sampler::~Sampler() { glDeleteTextures(1, &name_); }
+  void Sampler::setMagFilter(FilterMode filter) {
+    KP_ASSERT(filter != Linear && filter != Nearest);
+    magnification_ = filter;
+  }
+  void Sampler::setMinFilter(FilterMode filter) {
+    minification_ = filter;
+  }
+  void Sampler::upload(const Meta& meta, const void* pixels) {
     meta_ = meta;
     L("Loading texture: %dx%d format = %d",
       meta.size.x, meta.size.y, meta.format);
@@ -38,13 +48,13 @@ namespace kapusha {
                  format, type,
                  pixels); GL_ASSERT
     //! \todo move this to some other place
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_); GL_ASSERT
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GL_ASSERT
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magnification_); GL_ASSERT
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minification_); GL_ASSERT
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); GL_ASSERT
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); GL_ASSERT
   }
-  
-  void Texture::bind() const {
-    Render::currentRender()->texture().bind(this).commit();
+  void Sampler::bind(int unit) const {
+    if (unit != -1) glActiveSampler(GL_TEXTURE0 + unit);
+    glBindTexture(GL_TEXTURE_2D, name_);
   }
 } // namespace kapusha

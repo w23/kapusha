@@ -1,10 +1,9 @@
 #pragma once
 #include "OpenGL.h"
-#include "../math/types.h"
-#include "../core/shared.h"
+#include "../math.h"
 
 namespace kapusha {
-  class Texture : public Shareable {
+  class Sampler : public Shareable {
   public:
     struct Meta {
       vec2i size;
@@ -16,8 +15,6 @@ namespace kapusha {
         R8
       } format;
       Meta() : size(0), format(None) {}
-      Meta(unsigned w, unsigned h, PixelFormat fmt = RGBA8888)
-        : size(w,h), format(fmt) {}
       Meta(vec2i sz, PixelFormat fmt = RGBA8888)
         : size(sz), format(fmt) {}
       bool operator==(const Meta& other) const {
@@ -25,22 +22,27 @@ namespace kapusha {
       }
       bool operator!=(const Meta& other) const { return !(*this == other); }
     };
-
   public:
-    enum MagFilter {
+    enum FilterMode {
       Linear = GL_LINEAR,
-      Nearest = GL_NEAREST
+      Nearest = GL_NEAREST,
+      NearestMipmapNearest = GL_NEAREST_MIPMAP_NEAREST,
+      LinearMipmapNearest = GL_LINEAR_MIPMAP_NEAREST,
+      NearestMipmapLinear = GL_NEAREST_MIPMAP_LINEAR,
+      LinearMipmapLinear = GL_LINEAR_MIPMAP_LINEAR
     };
-    Texture(MagFilter mag = Linear);
-    ~Texture();
+    Sampler(FilterMode magnification = Linear,
+            FilterMode minification = LinearMipmapLinear);
+    ~Sampler();
+    void setMagFilter(FilterMode filter);
+    void setMinFilter(FilterMode filter);
     void upload(const Meta& meta, const void* pixels);
     const Meta& getMeta() const { return meta_; }
-    unsigned getName() const { return name_; }
+    void bind(int unit = -1) const;
   private:
-    void bind() const;
     unsigned name_;
     Meta meta_;
-    MagFilter mag_;
-  }; // class Texture
-  typedef shared<Texture> STexture;
+    FilterMode magnification_, minification_;
+  }; // class Sampler
+  typedef shared<Sampler> SSampler;
 } // namespace kapusha
