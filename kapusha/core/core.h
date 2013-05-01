@@ -4,3 +4,4 @@
 #include "types.h"
 #include "assert.h"
 #include "log.h"
+#include "shared.h"

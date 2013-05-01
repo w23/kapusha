@@ -1,7 +1,6 @@
 #include "OpenGL.h"
 #include "../io/Stream.h"
 #include "Buffer.h"
-#include "Render.h"
 
 namespace kapusha {
   Buffer::Buffer(Binding binding_hint) : bindingHint_(binding_hint) {
@@ -25,17 +24,8 @@ namespace kapusha {
     bind();
     glBufferData(bindingHint_, size, data, usage); GL_ASSERT
   }
-  void* Buffer::map(Access access) {
-    bind();
-    void *ret = glMapBuffer(GL_ARRAY_BUFFER, access); GL_ASSERT
-    return ret;
-  }
-  void Buffer::unmap() { glUnmapBuffer(bindingHint_); }
-  void Buffer::bind() const {
-    Render *r = Render::currentRender();
-    switch (bindingHint_) {
-      case BindingArray: r->bufferArray().bind(this).commit(); break;
-      case BindingIndex: r->bufferIndex().bind(this).commit(); break;
-    }
+  void Buffer::bind(Binding binding) const {
+    if (binding == BindingNative) binding = bindingHint_;
+    glBindBuffer(binding, name_); GL_ASSERT
   }
 }

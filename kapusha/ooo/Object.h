@@ -15,14 +15,14 @@ namespace kapusha {
     int addBatch(Batch *batch, int mvp_loc);
     inline void setAabb(const rect4f aabb) { aabb_ = aabb; }
     inline const rect4f &getAabb() const { return aabb_; }
-    void draw(Render *render, const mat4f& mvp);
+    void draw(const mat4f& mvp);
   private:
     Reframe frame_;
     rect4f aabb_;
     //float boundingRadius_;
     struct BatchAttachment {
       SBatch batch;
-      Program::UniformState state;
+      int mvp_loc;
     } batches_[MAX_OBJECT_BATCHES];
   }; // class Object
   typedef shared<Object> SObject;

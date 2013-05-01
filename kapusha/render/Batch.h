@@ -4,7 +4,6 @@
 #include "Material.h"
 
 namespace kapusha {
-  class Render;
   class Batch : public Shareable {
   public:
     enum GeometryType {
@@ -22,8 +21,8 @@ namespace kapusha {
       IndexU32 = GL_UNSIGNED_INT
     };
   public:
-    Batch(Material* material);
-    ~Batch();
+    Batch() {}
+    ~Batch() {}
     inline void setMaterial(Material* material) { material_ = material; }
     inline void setGeometry(GeometryType gtype, unsigned first, unsigned count,
                             IndexType itype = IndexU16, Buffer *index = 0) {
@@ -36,9 +35,12 @@ namespace kapusha {
     void setAttribSource(int attrib_location,
                          Buffer* buffer, unsigned components = 3,
                          unsigned offset = 0, unsigned stride = 0);
+    void setAttribSource(const char *attrib_name,
+                         Buffer* buffer, unsigned components = 3,
+                         unsigned offset = 0, unsigned stride = 0);
     Material* getMaterial() const { return material_.get(); }
-    Program::UniformState& getUniforms() { return uniforms_; }
-    void draw(Render *r, const Program::UniformState* state = 0) const;
+    Program::UniformState& uniforms() { return uniforms_; }
+    void draw() const;
   private:
     struct Attrib {
       int index;
@@ -47,7 +49,7 @@ namespace kapusha {
       int offset;
       int stride;
       Attrib() : index(-1) {}
-      inline void bind(Render *r) const;
+      inline void bind() const;
       inline void unbind() const;
     };
     Attrib attribs_[MAX_BATCH_ATTRIBS];

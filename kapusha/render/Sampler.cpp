@@ -54,7 +54,7 @@ namespace kapusha {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); GL_ASSERT
   }
   void Sampler::bind(int unit) const {
-    if (unit != -1) glActiveSampler(GL_TEXTURE0 + unit);
+    if (unit != -1) glActiveTexture(GL_TEXTURE0 + unit);
     glBindTexture(GL_TEXTURE_2D, name_);
   }
 } // namespace kapusha

@@ -14,7 +14,7 @@ namespace kapusha {
     void release() { if(!--retainCount_) delete this; }
     inline int getRetainCount() const { return retainCount_; }
   private:
-    volatile int retainCount_;
+    int retainCount_;
   };
   
   //! convenience store

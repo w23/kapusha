@@ -22,10 +22,12 @@ namespace kapusha {
       OneMinusConstColor = GL_ONE_MINUS_CONSTANT_COLOR,
       OneMinusConstAlpha = GL_ONE_MINUS_CONSTANT_COLOR,
       OneMinusSourceColor = GL_ONE_MINUS_SRC_COLOR,
-      OneMinusSourceAlpha = GL_ONE_MINUS_SRC_ALPHA
+      OneMinusSourceAlpha = GL_ONE_MINUS_SRC_ALPHA,
       OneMinusDestColor = GL_ONE_MINUS_DST_COLOR,
-      OneMinusDestAlpha = GL_ONE_MINUS_DST_ALPHA,
-      AlphaSaturate = GL_ALPHA_SATURATE
+      OneMinusDestAlpha = GL_ONE_MINUS_DST_ALPHA
+#ifdef GL_ALPHA_SATURATE
+      , AlphaSaturate = GL_ALPHA_SATURATE
+#endif // GL_ALPHA_SATURATE
     };
     enum Equation {
       Add = GL_FUNC_ADD,
@@ -36,7 +38,7 @@ namespace kapusha {
                       Function funcSource = ConstOne,
                       Function funcDest = ConstZero,
                vec4f color = vec4f(0.f))
-      : mode_(mode), funcSrcColor_(funcSource), fundSrcAlpha_(funcSource)
+      : mode_(mode), funcSrcColor_(funcSource), funcSrcAlpha_(funcSource)
       , funcDstColor_(funcDest), funcDstAlpha_(funcDest), color_(color) {}
     inline void setMode(Mode mode) { mode_ = mode; }
     inline void enable() { setMode(Enabled); }

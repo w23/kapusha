@@ -1,7 +1,6 @@
 #include <string.h>
-#include "../core/core.h"
+#include "../core.h"
 #include "OpenGL.h"
-#include "Render.h"
 #include "Program.h"
 
 namespace kapusha {
@@ -114,50 +113,30 @@ namespace kapusha {
     KP_ASSERT(program_name_);
     glBindAttribLocation(program_name_, location, name); GL_ASSERT
   }
-  
+  int Program::getAttributeLocation(const char *name) const {
+    KP_ASSERT(program_name_);
+    int loc = glGetAttribLocation(program_name_, name); GL_ASSERT
+    KP_ASSERT(loc != -1);
+    return loc;
+  }
   int Program::getUniformLocation(const char *name) const {
     KP_ASSERT(program_name_);
     int loc = glGetUniformLocation(program_name_, name); GL_ASSERT
     KP_ASSERT(loc != -1);
     return loc;
   }
-  
-  void Program::setUniform(int location, const float* value,
-                           int components, int count) const {
-    KP_ASSERT(program_name_);
-    switch (components) {
-    case 1: glUniform1fv(location, count, value); break;
-    case 2: glUniform2fv(location, count, value); break;
-    case 3: glUniform3fv(location, count, value); break;
-    case 4: glUniform4fv(location, count, value); break;
-    default: KP_ASSERT(!"Invalid number of components");
-    } GL_ASSERT
+  void Program::use(const UniformState *state) const {
+    glUseProgram(program_name_);
+    if (state) state->apply();
   }
-
-  void Program::setUniform(int location, int value) const {
-    KP_ASSERT(program_name_);
-    glUniform1i(location, value); GL_ASSERT
-  }
-  
-  void Program::setUniformMatrix(int location, const float* value,
-                                int components, int count) const {
-    KP_ASSERT(program_name_);
-    switch (components) {
-    case 4: glUniformMatrix2fv(location, count, GL_FALSE, value); break;
-    case 9: glUniformMatrix3fv(location, count, GL_FALSE, value); break;
-    case 16: glUniformMatrix4fv(location, count, GL_FALSE, value); break;
-    default: KP_ASSERT(!"Invalid number of matrix components");
-    } GL_ASSERT
-  }
-  
+// UniformState ///////////////////////////////////////////////////////////////  
   void Program::UniformState::clear() {
     for (int i = 0; i < MAX_STATE_UNIFORMS; ++i)
       uniforms_[i].type = Uniform::None;
     for (int i = 0; i < MAX_STATE_UNIFORM_SAMPLERS; ++i)
       samplers_[i].sampler.reset();
   }
-  
-  void Program::UniformState::setSampler(int location, Texture *sampler) {
+  void Program::UniformState::setUniform(int location, Sampler *sampler) {
     for (int i = 0; i < MAX_STATE_UNIFORM_SAMPLERS; ++i)
       if (samplers_[i].empty() || samplers_[i].location == location) {
         samplers_[i].location = location;
@@ -166,7 +145,6 @@ namespace kapusha {
       }
     KP_ASSERT(!"Not enough uniform storage for texture");
   }
-  
   void Program::UniformState::setUniform(int location, Uniform::Type type,
                                          const float* data) {
     const int size = type & Uniform::_MaskComponents;
@@ -188,31 +166,29 @@ namespace kapusha {
     }
     KP_ASSERT(!"Not enough uniform slots");
   }
-  
-  //Program& Program::operator=(const kapusha::Program::UniformState &newState) {
-  void Program::use(Render *r, const UniformState *new_state) {
-    r->program().use(this).commit();
-    if (!new_state) return;
-    for (int i = 0, offset = 0; i < MAX_STATE_UNIFORMS; ++i) {
-      const UniformState::Uniform& u = new_state->uniforms_[i];
+  void Program::UniformState::apply() const {
+    const float *data = storage_;
+    for (int i = 0; i < MAX_STATE_UNIFORMS; ++i) {
+      const Uniform& u = uniforms_[i];
       const int size = u.type & UniformState::Uniform::_MaskComponents;
       if (u.type == UniformState::Uniform::None) break;
-      switch(u.type & UniformState::Uniform::_MaskType) {
-        case UniformState::Uniform::_TypeVec:
-          setUniform(u.location, new_state->storage_ + offset, size);
-          break;
-        case UniformState::Uniform::_TypeMat:
-          setUniformMatrix(u.location, new_state->storage_ + offset, size);
-          break;
+      switch(u.type) {
+        case Uniform::Float: glUniform1fv(u.location, 1, data); GL_ASSERT; break;
+        case Uniform::Vec2: glUniform2fv(u.location, 1, data); GL_ASSERT; break;
+        case Uniform::Vec3: glUniform3fv(u.location, 1, data); GL_ASSERT; break;
+        case Uniform::Vec4: glUniform4fv(u.location, 1, data); GL_ASSERT; break;
+        case Uniform::Mat2: glUniformMatrix2fv(u.location, 1, GL_FALSE, data); GL_ASSERT; break;
+        //case Uniform::Mat3: glUniformMatrix3fv(u.location, 1, GL_FALSE, data); break;
+        case Uniform::Mat4: glUniformMatrix4fv(u.location, 1, GL_FALSE, data); GL_ASSERT; break;
         default:
           KP_ASSERT(!"Unsupported uniform type");
       } // switch
-      offset += size;
+      data += size;
     } // for state uniforms
     for (int i = 0; i < MAX_STATE_UNIFORM_SAMPLERS; ++i) {
-      if (new_state->samplers_[i].empty()) break;
-      setUniform(new_state->samplers_[i].location, i);
-      r->texture().bind(new_state->samplers_[i].sampler.get(), i);
+      if (samplers_[i].empty()) break;
+      glUniform1i(samplers_[i].location, i); GL_ASSERT
+      samplers_[i].sampler->bind(i);
     } // for uniform samplers
-  } // Program::use
+  } // UniformState::apply()
 } // namespace kapusha

@@ -13,10 +13,9 @@ SOURCES := \
 	kapusha/render/Program.cpp \
 	kapusha/render/Material.cpp \
 	kapusha/render/Batch.cpp \
-	kapusha/render/Texture.cpp \
+	kapusha/render/Sampler.cpp \
 	kapusha/render/Buffer.cpp \
 	kapusha/render/OpenGL.cpp \
-	kapusha/render/Render.cpp \
 	kapusha/ooo/Reframe.cpp \
 	kapusha/ooo/Object.cpp \
 	kapusha/ooo/Camera.cpp

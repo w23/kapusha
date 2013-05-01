@@ -1,6 +1,7 @@
 #pragma once
 #include "OpenGL.h"
 #include "../math.h"
+#include "../core.h"
 
 namespace kapusha {
   class Sampler : public Shareable {

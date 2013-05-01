@@ -3,11 +3,11 @@
 #include "OpenGL.h"
 
 namespace kapusha {
-  class Render;
   class Stream;
   class Buffer : public Shareable {
   public:
     enum Binding {
+      BindingNative = -1,
       BindingArray = GL_ARRAY_BUFFER,
       BindingIndex = GL_ELEMENT_ARRAY_BUFFER
     };
@@ -35,8 +35,7 @@ namespace kapusha {
     inline void alloc(unsigned size, Usage usage = StaticDraw) {
       load(static_cast<void*>(0), size, usage);
     }
-    void* map(Access access = WriteOnly);
-    void unmap();
+    void bind(Binding binding = BindingNative) const;
   protected:
     friend class Render;
     unsigned name() const { return name_; }
@@ -44,7 +43,6 @@ namespace kapusha {
     Buffer& operator=(const Buffer& right) { return *this; }
     Buffer(const Buffer& right) {}
   private:
-    void bind() const;
     Binding bindingHint_;
     unsigned name_;
   };
