@@ -76,7 +76,8 @@ namespace kapusha {
     PointerState()
       : flagsCombined_(0), flagsChanged_(0), scale_(1.f), shift_(0.f) {}
     inline void resizeViewport(vec2f bottomLeft, vec2f topRight) {
-      scale_ = vec2f(2.f) / (topRight - bottomLeft); shift_ = bottomLeft;
+      scale_ = vec2f(2.f) / (topRight - bottomLeft);
+      shift_ = vec2f(1.f) - topRight * scale_;
     }
     void mouseMoveTo(vec2f w_to, u32 time);
     void mouseMoveBy(vec2f w_by, u32 time);

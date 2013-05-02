@@ -14,7 +14,8 @@ namespace kapusha {
   }
   void PointerState::pointerMoveTo(int index, vec2f w_at,
                                    int flags_add, int flags_remove) {
-    pointers_[index].updateWithPosition((w_at - shift_) * scale_, flags_add, flags_remove);
+    pointers_[index].updateWithPosition(w_at * scale_ + shift_,
+                                        flags_add, flags_remove);
   }
   void PointerState::pointerMoveBy(int index, vec2f w_by,
                                    int flags_add, int flags_remove) {
