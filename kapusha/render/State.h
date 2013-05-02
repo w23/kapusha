@@ -2,6 +2,7 @@
 // 2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
 #include "OpenGL.h"
+#include "../math.h"
 
 namespace kapusha {
   struct BlendState {

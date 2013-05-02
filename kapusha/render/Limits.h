@@ -1,3 +1,5 @@
+// kapusha/render
+// 2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
 
 //! maximum number of stored uniforms

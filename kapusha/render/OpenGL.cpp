@@ -1,3 +1,5 @@
+// kapusha/render
+// 2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #include <cstdlib>
 #include "../core/core.h"
 #include "OpenGL.h"

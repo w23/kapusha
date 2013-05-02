@@ -1,48 +1,26 @@
 #import "AppDelegate.h"
-#import "../../core/Log.h"
-#import "../../sys/osx/KPView.h"
+#import <kapusha/core.h>
+#import <kapusha/sys/osx/KPView.h>
 
-namespace fsquad {
-  kapusha::IViewport *makeViewport();
-}
-namespace flyby {
-  kapusha::IViewport *makeViewport();
-}
-
-class CocoaLog : public kapusha::Log::ISystemLog
-{
-public:
-  virtual void write(const char* msg)
-  {
-    NSLog(@"%s", msg);
-  }
-};
+extern kapusha::IViewport *makeViewport();
 
 @interface AppDelegate ()
 @property (assign) IBOutlet KPView *viewport;
 @end
 
 @implementation AppDelegate
-
-- (void)dealloc
-{
-    [super dealloc];
-}
-
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{
+- (void)dealloc { [super dealloc]; }
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
   // \hack force likning KPView class from libkapusha
   [KPView class];
   
-  KP_LOG_OPEN("Kapusha.log", new CocoaLog);
+  KP_LOG_OPEN("/tmp/Kapusha.log");
   [self.window setAcceptsMouseMovedEvents:YES];
-  [self.viewport setViewport:flyby::makeViewport()];
+  [self.viewport setViewport:makeViewport()];
 }
 
-- (BOOL)windowShouldClose:(id)sender
-{
+- (BOOL)windowShouldClose:(id)sender {
   [[NSApplication sharedApplication] terminate:self];
   return YES;
 }
-
 @end

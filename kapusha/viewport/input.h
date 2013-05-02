@@ -64,9 +64,6 @@ namespace kapusha {
       }
     }; // struct Pointer
   public: // IViewport user interface
-    inline void resizeViewport(vec2f bottomLeft, vec2f topRight) {
-      scale_ = vec2f(2.f) / (topRight - bottomLeft); shift_ = bottomLeft;
-    }
     inline const Pointer& main() const { return pointers_[0]; }
     inline bool isPressed() const { return main().isPressed(); }
     inline bool isLeftPressed() const { return main().isLeftPressed(); }
@@ -76,12 +73,11 @@ namespace kapusha {
     inline bool wasUnpressed() const { return main().wasUnpressed(); }
     inline bool wasCancelled() const { return main().wasCancelled(); }
   protected: // implementers
-    int flagsCombined_;
-    int flagsChanged_;
-    //! \todo mat3f windowToViewport_; isntead. PREREQ: change mat order to less of an opengl one
-    vec2f scale_, shift_;
-    Pointer pointers_[KAPUSHA_MAX_POINTERS_IN_EVENT];
-    PointerState() : flagsCombined_(0), flagsChanged_(0) {}
+    PointerState()
+      : flagsCombined_(0), flagsChanged_(0), scale_(1.f), shift_(0.f) {}
+    inline void resizeViewport(vec2f bottomLeft, vec2f topRight) {
+      scale_ = vec2f(2.f) / (topRight - bottomLeft); shift_ = bottomLeft;
+    }
     void mouseMoveTo(vec2f w_to, u32 time);
     void mouseMoveBy(vec2f w_by, u32 time);
     void mouseDown(int button, u32 time);
@@ -92,6 +88,11 @@ namespace kapusha {
     void pointerMoveBy(int index, vec2f w_by, int flags_add, int flags_remove);
     //! (sys impl) call this after all the new events were consumed
     void endUpdate(u32 time);
+    int flagsCombined_;
+    int flagsChanged_;
+    //! \todo mat3f windowToViewport_; isntead. PREREQ: change mat order to less of an opengl one
+    vec2f scale_, shift_;
+    Pointer pointers_[KAPUSHA_MAX_POINTERS_IN_EVENT];
   }; // class PointerState
 ////////////////////////////////////////////////////////////////////////////////
   //! Event of keys

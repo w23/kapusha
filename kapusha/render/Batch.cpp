@@ -1,4 +1,6 @@
-#include "../core/core.h"
+// kapusha/render
+// 2013 (c) Ivan 'w23' Avdeev, me@w23.ru
+#include "../core.h"
 #include "OpenGL.h"
 #include "Material.h"
 #include "Buffer.h"

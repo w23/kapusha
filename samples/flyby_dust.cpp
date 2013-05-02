@@ -23,7 +23,6 @@ private:
   Object *ground_;
   Object *object_;
   Camera camera_;
-  Render *render_;
   
   float forward_speed_;
   float right_speed_;
@@ -34,8 +33,7 @@ private:
 };
 
 Viewport::Viewport()
-: forward_speed_(0), right_speed_(0), pitch_speed_(0), yaw_speed_(0)
-{}
+  : forward_speed_(0), right_speed_(0), pitch_speed_(0), yaw_speed_(0) {}
 Object* Viewport::createGround() const {
   static const char* svtx =
   "uniform mat4 um4_mvp;\n"
@@ -63,7 +61,8 @@ Object* Viewport::createGround() const {
   ;
   Program *prog = new Program(svtx, sfrg);
   prog->bindAttributeLocation("vtx", 0);
-  Batch* batch = new Batch(new Material(prog));
+  Batch* batch = new Batch();
+  batch->setMaterial(new Material(prog));
   vec3f rect[4] = {
     vec3f(-100.f, -2.f, -100.f),
     vec3f(-100.f, -2.f,  100.f),
@@ -106,7 +105,8 @@ Object* Viewport::createDust() const {
   ;
   Program *prog = new Program(svtx, sfrg);
   prog->bindAttributeLocation("vtx", 0);
-  Batch* batch = new Batch(new Material(prog));
+  Batch* batch = new Batch();
+  batch->setMaterial(new Material(prog));
   const int particles = 8192;
   const float radius = 10.f;
   vec3f *vertices = new vec3f[particles], *p = vertices;
@@ -127,7 +127,6 @@ Object* Viewport::createDust() const {
 void Viewport::init(IViewportController *ctrl)
 {
   ctrl_ = ctrl;
-  render_ = new Render();
   
   object_ = createDust();
   ground_ = createGround();
@@ -148,7 +147,6 @@ void Viewport::close()
 {
   delete object_;
   delete ground_;
-  delete render_;
 }
 
 void Viewport::resize(vec2i size)
@@ -171,8 +169,8 @@ void Viewport::draw(int ms, float dt)
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   GL_ASSERT
 
-  ground_->draw(render_, camera_.getMvp());
-  object_->draw(render_, camera_.getMvp());
+  ground_->draw(camera_.getViewProjection());
+  object_->draw(camera_.getViewProjection());
   ctrl_->requestRedraw();
 }
 

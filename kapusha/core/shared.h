@@ -47,7 +47,7 @@ namespace kapusha {
     inline T *get() const { return static_cast<T*>(t_); }
     inline T &operator*() const { return *static_cast<T*>(t_); }
     inline T *operator->() const { return static_cast<T*>(t_); }
-    shared &operator=(T *t) { reset(t); return *this; }
+    inline shared &operator=(T* t) { reset(t); return *this; }
   };
   typedef shared<Shareable> SAnything;
 } // namespace kapusha

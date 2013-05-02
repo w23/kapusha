@@ -1,7 +1,7 @@
 // kapusha/render
 // 2013 (c) Ivan 'w23' Avdeev, me@w23.ru
-#pragma once
 #include "OpenGL.h"
+#include "State.h"
 
 namespace kapusha {
   void BlendState::apply() const {
@@ -11,7 +11,7 @@ namespace kapusha {
     glBlendColor(color_.x, color_.y, color_.z, color_.w);
     glBlendEquationSeparate(equColor_, equAlpha_);
     glBlendFuncSeparate(funcSrcColor_, funcDstColor_,
-                        funcSrdAlpha_, funcDstAlpha_);
+                        funcSrcAlpha_, funcDstAlpha_);
   }
   void DepthState::apply() const {
     if (mode_ == Whatever) return;
