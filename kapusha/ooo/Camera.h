@@ -23,18 +23,22 @@ namespace kapusha {
 
     void lookAt(vec3f pos, vec3f at, vec3f up = vec3f(0.f, 1.f, 0.f));
     inline void setPosition(vec3f pos) { frame_.setTranslation(-pos); }
-    void move(vec3f units);
-    void moveForward(float units);
-    void moveRigth(float units);
-    void moveUp(float units);
+    inline void move(vec3f units) { frame_.move(-units); }
+    inline void moveForward(float units) { frame_.moveForward(-units); }
+    inline void moveRigth(float units) { frame_.moveRight(-units); }
+    inline void moveUp(float units) { frame_.moveUp(-units); }
 
     void setAtPosition(vec3f at);
-    void setOrientation(vec3f forward = vec3f(0.f, 0.f, -1.f),
-                        vec3f up = vec3f(0.f, 1.f, 0.f));
-    void rotatePitch(float radians);
-    void rotateRoll(float radians);
-    void rotateYaw(float radians);
-    void rotateAxis(vec3f axis, float radians);
+    inline void setOrientation(vec3f forward = vec3f(0.f, 0.f, -1.f),
+                               vec3f up = vec3f(0.f, 1.f, 0.f)) {
+      frame_.setOrientation(forward, up);
+    }
+    inline void rotatePitch(float radians) { frame_.rotatePitch(radians); }
+    inline void rotateRoll(float radians) { frame_.rotateRoll(radians); }
+    inline void rotateYaw(float radians) { frame_.rotateYaw(radians); }
+    inline void rotateAxis(vec3f axis, float radians) {
+      frame_.rotateAxis(axis, radians);
+    }
 
     void update();
     inline const mat4f &getProjection() const { return projection_; }

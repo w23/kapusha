@@ -219,7 +219,7 @@ public:
       PointerState::mouseMoveTo(locationInView(view, event),
                                 MachTime::sys_to_ms(event.timestamp));
     else
-      PointerState::mouseMoveBy(vec2f(event.deltaX, event.deltaY),
+      PointerState::mouseMoveBy(vec2f(event.deltaX, -event.deltaY),
                                 MachTime::sys_to_ms(event.timestamp));
   }
   void mouseDown(NSView *view, NSEvent *event) {
@@ -250,7 +250,7 @@ public: // IViewportController
   void requestRedraw() { [view_ requestRedraw]; }
   void setRelativeOnlyPointer(bool relative_only) {
     [view_ mouseAlwaysRelative:relative_only];
-    
+    pointerState_.setRelative(relative_only);
   }
   void hideCursor(bool hide) {
     if (hide) CGDisplayHideCursor(kCGDirectMainDisplay);

@@ -37,8 +37,12 @@ namespace kapusha {
       inline bool isLeftPressed() const { return (flags_ & LeftButton) != 0; }
       inline bool isRightPressed() const { return (flags_ & RightButton) != 0; }
       inline bool isMiddlePressed() const { return (flags_ & MiddleButton) != 0;}
-      inline bool wasPressed() const { return isPressed() && (flagsChanged_ & AnyButton); }
-      inline bool wasUnpressed() const { return !isPressed() && (flagsChanged_ & AnyButton); }
+      inline bool wasPressed(Flags button = AnyButton) const {
+        return isPressed() && (flagsChanged_ & button);
+      }
+      inline bool wasReleased(Flags button = AnyButton) const {
+        return !isPressed() && (flagsChanged_ & button);
+      }
       inline bool wasMoved() const { return (flags_ & Moved) != 0; }
       inline bool wasCancelled() const { return (flags_ & Cancelled) != 0; }
       inline vec2f getPosition() const { return point_; }
@@ -70,7 +74,7 @@ namespace kapusha {
     inline bool isRightPressed() const { return main().isRightPressed(); }
     inline bool isMiddlePressed() const { return main().isMiddlePressed(); }
     inline bool wasPressed() const { return main().wasPressed(); }
-    inline bool wasUnpressed() const { return main().wasUnpressed(); }
+    inline bool wasReleased() const { return main().wasReleased(); }
     inline bool wasCancelled() const { return main().wasCancelled(); }
   protected: // implementers
     PointerState()
