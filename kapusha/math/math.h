@@ -32,6 +32,10 @@ namespace kapusha {
 
   inline int recip(int i) { return 1 / i; /* lol */ }
   inline double recip(double d) { return 1. / d; }
+  
+  template <typename T, typename V> inline V lerp(V a, V b, T t) {
+    return a + (b - a) * t;
+  }
 } // namespace kapusha
 
 #include "types.h"

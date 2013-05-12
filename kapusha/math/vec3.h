@@ -18,7 +18,8 @@ namespace kapusha {
       : x(v.x), y(v.y), z(v.z) {}
     const T *tptr() const { return &x; }
     
-    vec2<T> xy() const { return vec2<T>(x, y); } 
+    vec2<T> xy() const { return vec2<T>(x, y); }
+    vec2<T> xz() const { return vec2<T>(x, z); }
     vec3 xzy() const { return vec3(x, z, y); }
     
     T dot(vec3 r) const { return x*r.x + y*r.y + z*r.z; }

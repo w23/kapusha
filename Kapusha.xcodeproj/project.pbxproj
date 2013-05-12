@@ -100,6 +100,13 @@
 		E1BE387F17362A4F0029FD4A /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE387B17362A4F0029FD4A /* geometry.cpp */; };
 		E1BE388017362A4F0029FD4A /* geometry.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE387C17362A4F0029FD4A /* geometry.h */; };
 		E1BE388117362A4F0029FD4A /* geometry.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE387C17362A4F0029FD4A /* geometry.h */; };
+		E1BE3885173F7AAA0029FD4A /* noise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE3883173F7AAA0029FD4A /* noise.cpp */; };
+		E1BE3886173F7AAA0029FD4A /* noise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE3883173F7AAA0029FD4A /* noise.cpp */; };
+		E1BE3887173F7AAA0029FD4A /* noise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE3883173F7AAA0029FD4A /* noise.cpp */; };
+		E1BE3888173F7AAA0029FD4A /* noise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE3883173F7AAA0029FD4A /* noise.cpp */; };
+		E1BE3889173F7AAA0029FD4A /* noise.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE3884173F7AAA0029FD4A /* noise.h */; };
+		E1BE388A173F7AAA0029FD4A /* noise.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE3884173F7AAA0029FD4A /* noise.h */; };
+		E1BE388B173F7AAA0029FD4A /* noise.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE3884173F7AAA0029FD4A /* noise.h */; };
 		E1D556E3167C6A8900A360F6 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E2167C6A8900A360F6 /* Node.cpp */; };
 		E1D556E4167C6A8900A360F6 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E2167C6A8900A360F6 /* Node.cpp */; };
 		E1D556E6167C996600A360F6 /* Reframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E5167C996600A360F6 /* Reframe.cpp */; };
@@ -218,6 +225,9 @@
 		E1BE3877173438B80029FD4A /* terrain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = terrain.cpp; sourceTree = "<group>"; };
 		E1BE387B17362A4F0029FD4A /* geometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = geometry.cpp; sourceTree = "<group>"; };
 		E1BE387C17362A4F0029FD4A /* geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = geometry.h; sourceTree = "<group>"; };
+		E1BE3883173F7AAA0029FD4A /* noise.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = noise.cpp; sourceTree = "<group>"; };
+		E1BE3884173F7AAA0029FD4A /* noise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = noise.h; sourceTree = "<group>"; };
+		E1BE388C173F7F850029FD4A /* math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = math.h; sourceTree = "<group>"; };
 		E1D556E0167B9D0E00A360F6 /* Reframe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Reframe.h; path = kapusha/ooo/Reframe.h; sourceTree = "<group>"; };
 		E1D556E1167BA4F000A360F6 /* Node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Node.h; path = kapusha/ooo/Node.h; sourceTree = "<group>"; };
 		E1D556E2167C6A8900A360F6 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Node.cpp; path = kapusha/ooo/Node.cpp; sourceTree = "<group>"; };
@@ -371,6 +381,7 @@
 		E18DDFE3163D8EED00869CF5 /* math */ = {
 			isa = PBXGroup;
 			children = (
+				E1BE388C173F7F850029FD4A /* math.h */,
 				E18DDFE4163D8EED00869CF5 /* mat2.h */,
 				E18DDFE5163D8EED00869CF5 /* mat4.h */,
 				E18DDFE6163D8EED00869CF5 /* math.cpp */,
@@ -544,6 +555,8 @@
 				E1BE3870173395610029FD4A /* SpectatorCameraController.h */,
 				E1BE387B17362A4F0029FD4A /* geometry.cpp */,
 				E1BE387C17362A4F0029FD4A /* geometry.h */,
+				E1BE3883173F7AAA0029FD4A /* noise.cpp */,
+				E1BE3884173F7AAA0029FD4A /* noise.h */,
 			);
 			name = utils;
 			path = kapusha/utils;
@@ -574,6 +587,7 @@
 			files = (
 				E1BE3874173395610029FD4A /* SpectatorCameraController.h in Headers */,
 				E1BE388017362A4F0029FD4A /* geometry.h in Headers */,
+				E1BE3889173F7AAA0029FD4A /* noise.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -581,6 +595,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1BE388A173F7AAA0029FD4A /* noise.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -591,6 +606,7 @@
 				E197CBF716B3AED8003FDEF6 /* Glut.h in Headers */,
 				E1BE3875173395610029FD4A /* SpectatorCameraController.h in Headers */,
 				E1BE388117362A4F0029FD4A /* geometry.h in Headers */,
+				E1BE388B173F7AAA0029FD4A /* noise.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -778,6 +794,7 @@
 				E19DA3651732325F005B1F74 /* State.cpp in Sources */,
 				E1BE3872173395610029FD4A /* SpectatorCameraController.cpp in Sources */,
 				E1BE387E17362A4F0029FD4A /* geometry.cpp in Sources */,
+				E1BE3886173F7AAA0029FD4A /* noise.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -790,6 +807,7 @@
 				E189E87C169AB3F300541FE1 /* StreamFile_posix.cpp in Sources */,
 				E189E87D169AB3F300541FE1 /* math.cpp in Sources */,
 				E172B428171604FD00475227 /* assert.cpp in Sources */,
+				E1BE3887173F7AAA0029FD4A /* noise.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -816,6 +834,7 @@
 				E19DA3661732325F005B1F74 /* State.cpp in Sources */,
 				E1BE3873173395610029FD4A /* SpectatorCameraController.cpp in Sources */,
 				E1BE387F17362A4F0029FD4A /* geometry.cpp in Sources */,
+				E1BE3888173F7AAA0029FD4A /* noise.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -853,6 +872,7 @@
 				E19DA3641732325F005B1F74 /* State.cpp in Sources */,
 				E1BE3871173395610029FD4A /* SpectatorCameraController.cpp in Sources */,
 				E1BE387D17362A4F0029FD4A /* geometry.cpp in Sources */,
+				E1BE3885173F7AAA0029FD4A /* noise.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
