@@ -11,6 +11,7 @@ namespace kapusha {
     inline vec3() {}
     inline vec3(T v) : x(v), y(v), z(v) {}
     inline vec3(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
+    inline vec3(const T* p) : x(p[0]), y(p[1]), z(p[2]) {}
     inline explicit vec3(const vec2<T>& v, T _z = 0)
       : x(v.x), y(v.y), z(_z) {}
     template <typename U> explicit vec3(const vec3<U>& v)
@@ -31,6 +32,7 @@ namespace kapusha {
       return vec3(y*r.z - z*r.y, z*r.x - x*r.z, x*r.y - y*r.x);
     }
     
+    vec3 &operator=(const T* ptr) { return *this = vec3(ptr[0],ptr[1],ptr[2]); }
     vec3 operator-() const { return vec3(-x, -y, -z); }
     vec3 operator+(const vec3& r) const { return vec3(x+r.x, y+r.y, z+r.z); }
     vec3 operator-(const vec3& r) const { return vec3(x-r.x, y-r.y, z-r.z); }
@@ -38,9 +40,9 @@ namespace kapusha {
     vec3 operator*(T r) const { return vec3(x*r, y*r, z*r); }
     vec3 operator/(const vec3& r) const { return *this * r.recip(); }
     vec3 operator/(T r) const { return *this * recip(r); }
-    vec3& operator+=(const vec3& r) { return *this = *this + r; }
-    vec3& operator*=(const vec3& r) { return *this = *this * r; }
-    vec3& operator/=(const vec3& r) { return *this = *this / r; }
+    vec3 &operator+=(const vec3& r) { return *this = *this + r; }
+    vec3 &operator*=(const vec3& r) { return *this = *this * r; }
+    vec3 &operator/=(const vec3& r) { return *this = *this / r; }
     bool operator==(const vec3 &r) const {
       return r.x == x && r.y == y && r.z == z;
     }
