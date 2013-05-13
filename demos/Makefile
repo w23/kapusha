@@ -3,7 +3,9 @@ include $(ROOT)/common.mk
 
 SAMPLES = triangle \
 	fullscreen_shader \
-	flyby_dust
+	flyby_dust \
+	terrain \
+	pathtracer
 
 RUNNER = main_sdl
 

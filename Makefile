@@ -14,11 +14,15 @@ SOURCES := \
 	kapusha/render/Material.cpp \
 	kapusha/render/Batch.cpp \
 	kapusha/render/Sampler.cpp \
+	kapusha/render/State.cpp \
 	kapusha/render/Buffer.cpp \
 	kapusha/render/OpenGL.cpp \
 	kapusha/ooo/Reframe.cpp \
 	kapusha/ooo/Object.cpp \
-	kapusha/ooo/Camera.cpp
+	kapusha/ooo/Camera.cpp \
+	kapusha/utils/SpectatorCameraController.cpp \
+	kapusha/utils/geometry.cpp \
+	kapusha/utils/noise.cpp
 	
 
 ifeq ($(RPI),1)
@@ -39,4 +43,4 @@ libkapusha.a: $(MODULES)
 	ar rcs libkapusha.a $(MODULES)
 
 clean:
-	@rm -rf $(MODULES) libkapusha.a
+	@rm -f $(MODULES) libkapusha.a

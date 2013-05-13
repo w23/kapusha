@@ -1,6 +1,9 @@
 #include "../core.h"
 #include "geometry.h"
 
+// oh lol
+template <typename T> void swap(T &a, T &b) { T tmp = a; a = b; b = tmp; }
+
 namespace kapusha {
   template <typename IndexType>
   void calculateNormals(float *vertices_ptr_in, int vertices_stride,
@@ -17,7 +20,7 @@ namespace kapusha {
       unsigned idx[3] = { indices[i], indices[i+1], indices[i+2] };
       // skip degenerate triangles
       if (idx[0] == idx[1] || idx[1] == idx[2] || idx[2] == idx[0]) continue;
-      if (i&1) std::swap(idx[0], idx[1]);
+      if (i&1) swap(idx[0], idx[1]);
       // calc triangle normal
       vec3f v0(vertices_ptr_in + idx[0]*vertices_stride),
             v1(vertices_ptr_in + idx[1]*vertices_stride),
