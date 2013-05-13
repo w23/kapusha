@@ -93,8 +93,6 @@
 		E1BE3873173395610029FD4A /* SpectatorCameraController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE386F173395610029FD4A /* SpectatorCameraController.cpp */; };
 		E1BE3874173395610029FD4A /* SpectatorCameraController.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE3870173395610029FD4A /* SpectatorCameraController.h */; };
 		E1BE3875173395610029FD4A /* SpectatorCameraController.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE3870173395610029FD4A /* SpectatorCameraController.h */; };
-		E1BE3878173438B80029FD4A /* terrain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE3877173438B80029FD4A /* terrain.cpp */; };
-		E1BE3879173438B80029FD4A /* terrain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE3877173438B80029FD4A /* terrain.cpp */; };
 		E1BE387D17362A4F0029FD4A /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE387B17362A4F0029FD4A /* geometry.cpp */; };
 		E1BE387E17362A4F0029FD4A /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE387B17362A4F0029FD4A /* geometry.cpp */; };
 		E1BE387F17362A4F0029FD4A /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE387B17362A4F0029FD4A /* geometry.cpp */; };
@@ -107,6 +105,8 @@
 		E1BE3889173F7AAA0029FD4A /* noise.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE3884173F7AAA0029FD4A /* noise.h */; };
 		E1BE388A173F7AAA0029FD4A /* noise.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE3884173F7AAA0029FD4A /* noise.h */; };
 		E1BE388B173F7AAA0029FD4A /* noise.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE3884173F7AAA0029FD4A /* noise.h */; };
+		E1BE388F17415A680029FD4A /* pathtracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE388D17415A680029FD4A /* pathtracer.cpp */; };
+		E1BE389017415E220029FD4A /* terrain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE3877173438B80029FD4A /* terrain.cpp */; };
 		E1D556E3167C6A8900A360F6 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E2167C6A8900A360F6 /* Node.cpp */; };
 		E1D556E4167C6A8900A360F6 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E2167C6A8900A360F6 /* Node.cpp */; };
 		E1D556E6167C996600A360F6 /* Reframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E5167C996600A360F6 /* Reframe.cpp */; };
@@ -228,6 +228,7 @@
 		E1BE3883173F7AAA0029FD4A /* noise.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = noise.cpp; sourceTree = "<group>"; };
 		E1BE3884173F7AAA0029FD4A /* noise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = noise.h; sourceTree = "<group>"; };
 		E1BE388C173F7F850029FD4A /* math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = math.h; sourceTree = "<group>"; };
+		E1BE388D17415A680029FD4A /* pathtracer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pathtracer.cpp; sourceTree = "<group>"; };
 		E1D556E0167B9D0E00A360F6 /* Reframe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Reframe.h; path = kapusha/ooo/Reframe.h; sourceTree = "<group>"; };
 		E1D556E1167BA4F000A360F6 /* Node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Node.h; path = kapusha/ooo/Node.h; sourceTree = "<group>"; };
 		E1D556E2167C6A8900A360F6 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Node.cpp; path = kapusha/ooo/Node.cpp; sourceTree = "<group>"; };
@@ -460,6 +461,7 @@
 				E19DA35317322D3D005B1F74 /* fullscreen_shader.cpp */,
 				E19DA35417322D3D005B1F74 /* triangle.cpp */,
 				E1BE3877173438B80029FD4A /* terrain.cpp */,
+				E1BE388D17415A680029FD4A /* pathtracer.cpp */,
 				E1A77CA4165D39F9009FF8F3 /* osx */,
 				E199317F164E141500E8D9CB /* ios */,
 			);
@@ -845,7 +847,7 @@
 				E1993186164E141500E8D9CB /* main.mm in Sources */,
 				E199318A164E141500E8D9CB /* AppDelegate.mm in Sources */,
 				E1993197164E141500E8D9CB /* ViewController.mm in Sources */,
-				E1BE3878173438B80029FD4A /* terrain.cpp in Sources */,
+				E1BE389017415E220029FD4A /* terrain.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -882,7 +884,7 @@
 			files = (
 				E1A77CAB165D39F9009FF8F3 /* main.m in Sources */,
 				E1A77CB2165D39F9009FF8F3 /* AppDelegate.mm in Sources */,
-				E1BE3879173438B80029FD4A /* terrain.cpp in Sources */,
+				E1BE388F17415A680029FD4A /* pathtracer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
