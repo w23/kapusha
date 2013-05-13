@@ -29,11 +29,10 @@ namespace kapusha {
     vec2 normalized() const { return *this * rlength(); }
     vec2 normalize() { return *this = normalized(); }
     vec2 abs() const { return vec2(abs(x), abs(y)); }
-    vec2 clamp(T min, T max) const {
+    vec2 clamped(T min, T max) const {
       return vec2(clamp(x, min, max), clamp(y, min, max));
     }
-    vec2 clamp(vec2 min, vec2 max) const
-    {
+    vec2 clamped(vec2 min, vec2 max) const {
       return vec2(clamp(x, min.x, max.x), clamp(y, min.y, max.y));
     }
 

@@ -1,16 +1,22 @@
 #include <kapusha/viewport.h>
 #include <kapusha/render.h>
+#include <kapusha/ooo.h>
+#include <kapusha/utils/SpectatorCameraController.h>
 
+//! \todo temporal blur
+
+// this source is almost a direct copy from stuff i did at
+// https://www.shadertoy.com/view/MdfGW8
+// all comments are stripped FOR CLARITY lols
 static const char *fragmentShaderPathTracer =
-"#define UNROLL 0\n"
-"#define DO_SPHERES 1\n"
 "#define SAMPLES 16\n"
 "#define SCENE_RADIUS 100.\n"
 "#define INFINITY 31337.\n"
 "#define ISEC_EPSILON .01\n"
 "#define REFLECT_EPSILON .01\n"
 "uniform float t;\n"
-"varying vec2 p;\n"
+"uniform vec3 uv3_pos;\n"
+"varying vec3 vv3_dir;\n"
 "struct ray_t { vec3 origin, dir; };\n"
 "struct isection_t { vec3 pos, normal; float path; };\n"
 "struct material_t { vec3 diffuse, emission; float specular; };\n"
@@ -63,18 +69,10 @@ static const char *fragmentShaderPathTracer =
 "  vec3 p = ray.origin + ray.dir * t;\n"
 "  return isection_t(p, normalize(p - sphere.center), t);\n"
 "}\n"
-"ray_t lookAtDir(in vec3 uv_dir, in vec3 pos, in vec3 at) {\n"
-"  vec3 f = normalize(at - pos);\n"
-"  vec3 r = cross(f, vec3(0.,1.,0.));\n"
-"  vec3 u = cross(r, f);\n"
-"  return ray_t(pos, normalize(uv_dir.x * r + uv_dir.y * u + uv_dir.z * f));\n"
-"}\n"
 "void main(void) {\n"
 "  init_stuff();\n"
-"  ray_t oray = lookAtDir(normalize(vec3(p, 2.)),\n"
-"                         .9*vec3(cos(t), .8*sin(t*.7), sin(t)),\n"
-"                         (spheres[0].center+spheres[1].center)*.5);\n"
 "  vec3 sumcolor = vec3(0.);\n"
+"  ray_t oray = ray_t(uv3_pos, normalize(vv3_dir));\n"
 "  float seed = float(t)*.24 + gl_FragCoord.x + gl_FragCoord.y;\n"
 "  for (int sample = 0; sample < SAMPLES; ++sample) {\n"
 "    seed += float(sample);\n"
@@ -87,29 +85,14 @@ static const char *fragmentShaderPathTracer =
 "    for (int i = 0; i < 4; ++i) {\n"
 "      isection_t ni, ci = isection_none();\n"
 "      material_t cm, nm;\n"
-"#if !UNROLL // Broken on win32/firefox\n"
 "      for (int j = 0; j < 6; ++j) {\n"
 "        ni = isec_plane(ray, planes[j]);\n"
 "        if (ni.path < ci.path) { ci = ni; cm = planes[j].material; }\n"
 "      }\n"
-"#if DO_SPHERES\n"
 "      for (int j = 0; j < 2; ++j) {\n"
 "        ni = isec_sphere(ray, spheres[j]);\n"
 "        if (ni.path < ci.path) { ci = ni; cm = spheres[j].material; }\n"
 "      }\n"
-"#endif // DO_SPHERES\n"
-"#else //if UNROLL\n"
-"      ni = isec_plane(ray, planes[0]); if (ni.path < ci.path) { ci = ni; cm = planes[0].material; }\n"
-"      ni = isec_plane(ray, planes[1]); if (ni.path < ci.path) { ci = ni; cm = planes[1].material; }\n"
-"      ni = isec_plane(ray, planes[2]); if (ni.path < ci.path) { ci = ni; cm = planes[2].material; }\n"
-"      ni = isec_plane(ray, planes[3]); if (ni.path < ci.path) { ci = ni; cm = planes[3].material; }\n"
-"      ni = isec_plane(ray, planes[4]); if (ni.path < ci.path) { ci = ni; cm = planes[4].material; }\n"
-"      ni = isec_plane(ray, planes[5]); if (ni.path < ci.path) { ci = ni; cm = planes[5].material; }\n"
-"#if DO_SPHERES\n"
-"      ni = isec_sphere(ray, spheres[0]); if (ni.path < ci.path) { ci = ni; cm = spheres[0].material; }\n"
-"      ni = isec_sphere(ray, spheres[1]); if (ni.path < ci.path) { ci = ni; cm = spheres[1].material; }\n"
-"#endif\n"
-"#endif\n"
 "      //if (ci.path > SCENE_RADIUS) break;\n"
 "      matstack[i] = cm;\n"
 "      vec3 nvec = vec3(hash(seed+=ci.pos.x),\n"
@@ -131,24 +114,32 @@ static const char *fragmentShaderPathTracer =
 using namespace kapusha;
 class Viewport : public IViewport {
 public:
+  Viewport() : camctl_(camera_) {}
   virtual ~Viewport() {}
-  virtual void init(IViewportController* system);
+  virtual void init(IViewportController* ctrl);
   virtual void resize(vec2i);
   virtual void draw(int ms, float dt);
+  void inputPointer(const PointerState& pointers);
   virtual void close();
 private:
-  IViewportController *system_;
+  Camera camera_;
+  SpectatorCameraController camctl_;
+  IViewportController *ctrl_;
   Batch *batch_;
 };
-void Viewport::init(IViewportController *system) {
-  system_ = system;
+void Viewport::init(IViewportController *ctrl) {
+  ctrl_ = ctrl;
   static const char* svtx =
   "uniform vec2 aspect;\n"
+  "uniform vec3 uv3_forward;\n"
   "attribute vec4 vtx;\n"
-  "varying vec2 p;\n"
+  "varying vec3 vv3_dir;\n"
   "void main(){\n"
   "gl_Position = vtx;\n"
-  "p = vtx.xy * aspect;\n"
+  "vec3 uv = vec3(vtx.xy * aspect, 2.);\n"
+  "vec3 r = cross(uv3_forward, vec3(0.,1.,0.));\n"
+  "vec3 u = cross(r, uv3_forward);\n"
+  "vv3_dir = uv.x * r + uv.y * u + uv.z * uv3_forward;\n"
   "}";
   vec2f rect[4] = {
     vec2f(-1.f, -1.f),
@@ -164,6 +155,8 @@ void Viewport::init(IViewportController *system) {
   batch_->setMaterial(new Material(prog));
   batch_->setAttribSource(0, fsrect, 2);
   batch_->setGeometry(Batch::GeometryTriangleFan, 0, 4);
+  camera_.lookAt(vec3f(.8f), vec3f(0.f));
+  camctl_.setSpeed(1.f);
 }
 void Viewport::close() { delete batch_; }
 void Viewport::resize(vec2i size) {
@@ -172,13 +165,31 @@ void Viewport::resize(vec2i size) {
   batch_->getMaterial()->setUniform("aspect", aspect);
 }
 void Viewport::draw(int ms, float dt) {
+  camctl_.frame(dt, ctrl_);
+  camera_.setPosition(camera_.position().clamped(vec3f(-.9f), vec3f(.9f)));
   GL_ASSERT
   glClear(GL_COLOR_BUFFER_BIT);
   GL_ASSERT
   float time = ms / 1000.f;
+  camera_.update();
   batch_->getMaterial()->setUniform("t", time);
+  batch_->getMaterial()->setUniform("uv3_pos", camera_.position());
+  batch_->getMaterial()->setUniform("uv3_forward", camera_.forward().normalized());
   batch_->draw();
-  system_->requestRedraw();
+  ctrl_->requestRedraw();
+}
+void Viewport::inputPointer(const PointerState& pointers) {
+  camctl_.pointers(pointers);
+  if (pointers.main().wasPressed(PointerState::Pointer::LeftButton)) {
+    ctrl_->setRelativeOnlyPointer(true);
+    ctrl_->hideCursor(true);
+    camctl_.enableOrientation(true);
+  }
+  if (pointers.main().wasReleased(PointerState::Pointer::LeftButton)) {
+    ctrl_->setRelativeOnlyPointer(false);
+    ctrl_->hideCursor(false);
+    camctl_.enableOrientation(false);
+  }
 }
 IViewport *makeViewport() {
   return new Viewport;

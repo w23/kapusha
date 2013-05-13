@@ -32,6 +32,14 @@ namespace kapusha {
     vec3 cross(const vec3& r) const {
       return vec3(y*r.z - z*r.y, z*r.x - x*r.z, x*r.y - y*r.x);
     }
+    vec3 clamped(T min, T max) const {
+      return vec3(clamp(x, min, max), clamp(y, min, max), clamp(z, min, max));
+    }
+    vec3 clamped(vec3 min, vec3 max) const {
+      return vec3(clamp(x, min.x, max.x),
+                  clamp(y, min.y, max.y),
+                  clamp(z, min.z, max.z));
+    }
     
     vec3 &operator=(const T* ptr) { return *this = vec3(ptr[0],ptr[1],ptr[2]); }
     vec3 operator-() const { return vec3(-x, -y, -z); }
