@@ -122,6 +122,7 @@ public:
   void inputPointer(const PointerState& pointers);
   virtual void close();
 private:
+  Context dummy_;
   Camera camera_;
   SpectatorCameraController camctl_;
   IViewportController *ctrl_;
@@ -148,12 +149,12 @@ void Viewport::init(IViewportController *ctrl) {
     vec2f( 1.f, -1.f)
   };
   Buffer *fsrect = new Buffer();
-  fsrect->load(rect, sizeof rect);
+  fsrect->load(&dummy_, rect, sizeof rect);
   Program *prog = new Program(svtx, fragmentShaderPathTracer);
-  prog->bindAttributeLocation("vtx", 0);
+  //prog->bindAttributeLocation("vtx", 0);
   batch_ = new Batch();
   batch_->setMaterial(new Material(prog));
-  batch_->setAttribSource(0, fsrect, 2);
+  batch_->setAttribSource("vtx", fsrect, 2);
   batch_->setGeometry(Batch::GeometryTriangleFan, 0, 4);
   camera_.lookAt(vec3f(.8f), vec3f(0.f));
   camctl_.setSpeed(1.f);
@@ -175,7 +176,7 @@ void Viewport::draw(int ms, float dt) {
   batch_->getMaterial()->setUniform("t", time);
   batch_->getMaterial()->setUniform("uv3_pos", camera_.position());
   batch_->getMaterial()->setUniform("uv3_forward", camera_.forward().normalized());
-  batch_->draw();
+  batch_->draw(&dummy_);
   ctrl_->requestRedraw();
 }
 void Viewport::inputPointer(const PointerState& pointers) {

@@ -20,14 +20,14 @@ namespace kapusha {
     KP_ASSERT(!"Too many batches attached to object");
     return -1;
   }
-  void Object::draw(const mat4f& mvp) {
+  void Object::draw(Context *ctx, const mat4f& mvp) {
     mat4f mtx = mvp * frame_.getMatrix();
     //! \fixme make use of aabb_
     for (int i = 0; i < MAX_OBJECT_BATCHES; ++i) {
       BatchAttachment &b = batches_[i];
       if (!b.batch) break;
       b.batch->uniforms().setUniform(b.mvp_loc, mtx);
-      b.batch->draw();
+      b.batch->draw(ctx);
     }
   }
 } // namespace kapusha

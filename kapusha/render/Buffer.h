@@ -3,9 +3,9 @@
 #pragma once
 #include "../core/shared.h"
 #include "OpenGL.h"
+#include "Context.h"
 
 namespace kapusha {
-  class Stream;
   class Buffer : public Shareable {
   public:
     enum Binding {
@@ -32,21 +32,23 @@ namespace kapusha {
   public:
     Buffer(Binding binding_hint = BindingArray);
     ~Buffer();
-    void load(Stream* data, unsigned size, Usage usage = StaticDraw);
-    void load(void* data, unsigned size, Usage usage = StaticDraw);
-    inline void alloc(unsigned size, Usage usage = StaticDraw) {
-      load(static_cast<void*>(0), size, usage);
+    void load(Context *ctx, void* data, unsigned size, Usage usage = StaticDraw);
+    inline void alloc(Context *ctx, unsigned size, Usage usage = StaticDraw) {
+      load(ctx, static_cast<void*>(0), size, usage);
     }
-    void bind(Binding binding = BindingNative) const;
-  protected:
-    friend class Render;
-    unsigned name() const { return name_; }
-  private: // noncopyable
-    Buffer& operator=(const Buffer& right) { return *this; }
-    Buffer(const Buffer& right) {}
+    inline void bind(Context *ctx, Binding binding = BindingNative) const {
+      ctx->bindBuffer(this, binding);
+    }
   private:
     Binding bindingHint_;
     unsigned name_;
+  private: // noncopyable
+    Buffer& operator=(const Buffer& right) { return *this; }
+    Buffer(const Buffer& right) {}
+  protected:
+    friend class Context;
+    inline unsigned name() const { return name_; }
+    inline Binding bindingHint() const { return bindingHint_; }
   };
   typedef shared<Buffer> SBuffer;
-} // kapusha
+} // namespace kapusha

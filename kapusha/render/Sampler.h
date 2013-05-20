@@ -4,13 +4,15 @@
 #include "OpenGL.h"
 #include "../math.h"
 #include "../core.h"
+#include "Context.h"
 
 namespace kapusha {
+  class Framebuffer;
   class Sampler : public Shareable {
   public:
     struct Meta {
       vec2i size;
-      enum PixelFormat {
+      enum SampleFormat {
         None = 0,
         RGBA8888,
         BGRA8888,
@@ -18,7 +20,7 @@ namespace kapusha {
         R8
       } format;
       Meta() : size(0), format(None) {}
-      Meta(vec2i sz, PixelFormat fmt = RGBA8888)
+      Meta(vec2i sz, SampleFormat fmt = RGBA8888)
         : size(sz), format(fmt) {}
       bool operator==(const Meta& other) const {
         return size == other.size && format == other.format;
@@ -38,14 +40,20 @@ namespace kapusha {
             FilterMode minification = LinearMipmapLinear);
     ~Sampler();
     void setMagFilter(FilterMode filter);
-    void setMinFilter(FilterMode filter);
-    void upload(const Meta& meta, const void* pixels);
+    inline void setMinFilter(FilterMode filter) { minification_ = filter; }
+    void upload(Context *ctx, const Meta& meta, const void* pixels);
     const Meta& getMeta() const { return meta_; }
-    void bind(int unit = -1) const;
+    inline void bind(Context *ctx, int unit = -1) const {
+      ctx->bindSampler(this, unit);
+    }
   private:
     unsigned name_;
     Meta meta_;
     FilterMode magnification_, minification_;
+  protected:
+    friend class Context;
+    friend class Framebuffer;
+    inline unsigned name() const { return name_; }
   }; // class Sampler
   typedef shared<Sampler> SSampler;
 } // namespace kapusha

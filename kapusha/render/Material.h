@@ -27,7 +27,7 @@ namespace kapusha {
     const Program::UniformState &getUniforms() const { return uniforms_; }
 
     //! Make current material -- sets program and uniforms
-    void use() const;
+    void use(Context *ctx) const;
   private:
     SProgram program_;
     Program::UniformState uniforms_;    

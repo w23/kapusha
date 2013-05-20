@@ -15,7 +15,7 @@ namespace kapusha {
     int addBatch(Batch *batch, int mvp_loc);
     inline void setAabb(const rect4f aabb) { aabb_ = aabb; }
     inline const rect4f &getAabb() const { return aabb_; }
-    void draw(const mat4f& mvp);
+    void draw(Context *ctx, const mat4f& mvp);
   private:
     Reframe frame_;
     rect4f aabb_;

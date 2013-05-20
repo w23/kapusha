@@ -82,7 +82,8 @@ namespace kapusha {
       GreaterOrEqual = GL_GEQUAL,
       Greater = GL_GREATER
     };
-    inline DepthState(Mode mode = Whatever, bool write = true, Comparison comp = Less)
+    inline DepthState(Mode mode = Whatever, bool write = true,
+                      Comparison comp = Less)
       : mode_(mode), write_(write), comparison_(comp) {}
     inline void setMode(Mode mode) { mode_ = mode; }
     inline void enable() { setMode(Enabled); }

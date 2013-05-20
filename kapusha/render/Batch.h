@@ -42,7 +42,7 @@ namespace kapusha {
                          unsigned offset = 0, unsigned stride = 0);
     Material* getMaterial() const { return material_.get(); }
     Program::UniformState& uniforms() { return uniforms_; }
-    void draw() const;
+    void draw(Context *ctx) const;
   private:
     struct Attrib {
       int index;
@@ -51,7 +51,7 @@ namespace kapusha {
       int offset;
       int stride;
       Attrib() : index(-1) {}
-      inline void bind() const;
+      inline void bind(Context *ctx) const;
       inline void unbind() const;
     };
     Attrib attribs_[MAX_BATCH_ATTRIBS];

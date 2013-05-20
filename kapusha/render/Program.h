@@ -1,8 +1,9 @@
 // kapusha/render
 // 2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
-#include "Limits.h"
+#include "limits.h"
 #include "Sampler.h"
+#include "Context.h"
 
 namespace kapusha {
   //! Simple class for handling shader programs
@@ -31,7 +32,7 @@ namespace kapusha {
         setUniform(location, Uniform::Mat4, trans.tptr());
       }
       void setUniform(int location, Sampler *sampler);
-      void apply() const;
+      void apply(Context *ctx) const;
     private:
       struct Uniform {
         enum Type {
@@ -69,20 +70,21 @@ namespace kapusha {
     //! \fixme separate shader objects (for sharing and shit)
     Program(const char* vertex, const char* fragment);
     ~Program();
-    inline bool isValid() const { return program_name_ != 0; }
     void bindAttributeLocation(const char* name, int location);
     int getAttributeLocation(const char* name) const;
     int getUniformLocation(const char* name) const;
-    void use(const UniformState *state = 0) const;
-
-  private: // this object is noncopyable
+    inline void use(Context *ctx) const { ctx->useProgram(this); }
+  private: // noncopyable
     Program& operator=(const Program& other) { return *this; }
     Program(const Program& other) {}
     static unsigned compileShader(unsigned name, const char* source);
+    unsigned name_;
     unsigned shader_vertex_;
     unsigned shader_fragment_;
-    unsigned program_name_;
     //! \todo UniformState current_state_;
+  protected:
+    friend class Context;
+    inline unsigned name() const { return name_; }
   }; // class Program
   typedef shared<Program> SProgram;
 } // namespace kapusha

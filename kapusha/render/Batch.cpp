@@ -26,14 +26,14 @@ namespace kapusha {
     setAttribSource(material_->getProgram()->getAttributeLocation(attrib_name),
                     buffer, components, offset, stride);
   }
-  void Batch::draw() const {
+  void Batch::draw(Context *ctx) const {
     KP_ASSERT(material_);
-    material_->use();
-    uniforms_.apply();
+    material_->use(ctx);
+    uniforms_.apply(ctx);
     for (int i = 0; i < MAX_BATCH_ATTRIBS; ++i)
-      if (attribs_[i].index != -1) attribs_[i].bind();
+      if (attribs_[i].index != -1) attribs_[i].bind(ctx);
     if (indices_) {
-      indices_->bind(Buffer::BindingIndex);
+      indices_->bind(ctx, Buffer::BindingIndex);
       glDrawElements(geometryType_, count_, indexType_,
         reinterpret_cast<void*>(first_));
       GL_ASSERT
@@ -45,8 +45,8 @@ namespace kapusha {
       if (attribs_[i].index != -1) attribs_[i].unbind();
   }
 
-  void Batch::Attrib::bind() const {
-    buffer->bind(Buffer::BindingArray);
+  void Batch::Attrib::bind(Context *ctx) const {
+    buffer->bind(ctx, Buffer::BindingArray);
     glVertexAttribPointer(index, components, GL_FLOAT, GL_FALSE,
       stride, reinterpret_cast<void*>(offset));
     GL_ASSERT

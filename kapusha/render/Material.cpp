@@ -4,8 +4,9 @@
 #include "Material.h"
 
 namespace kapusha {
-  void Material::use() const {
-    program_->use(&uniforms_);
+  void Material::use(Context *ctx) const {
+    program_->use(ctx);
+    uniforms_.apply(ctx);
     blend_.apply();
     depth_.apply();
   }

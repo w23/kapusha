@@ -2,11 +2,10 @@
 // 2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #include <string.h>
 #include "../core.h"
-#include "OpenGL.h"
+#include "Context.h"
 #include "Program.h"
 
 namespace kapusha {
-#if !KP_OPTIMIZE_FOR_SIZE || DEBUG
   struct _ShaderInfoLogHelper {
     static int length(unsigned object) {
       int result;
@@ -43,10 +42,9 @@ namespace kapusha {
   void printProgramInfoLog(unsigned program) {
     printInfoLog<_ProgramInfoLogHelper>(program);
   }
-#endif // !KP_OPTIMIZE_FOR_SIZE || DEBUG
   
   Program::Program(const char* vertex, const char* fragment)
-    : shader_vertex_(0), shader_fragment_(0), program_name_(0) {
+    : shader_vertex_(0), shader_fragment_(0), name_(0) {
     shader_vertex_ = compileShader(GL_VERTEX_SHADER, vertex);
     if (!shader_vertex_) return;
     shader_fragment_ = compileShader(GL_FRAGMENT_SHADER, fragment);
@@ -55,28 +53,26 @@ namespace kapusha {
       shader_vertex_ = 0;
       return;
     }
-    program_name_ = glCreateProgram();
-    glAttachShader(program_name_, shader_vertex_);
-    glAttachShader(program_name_, shader_fragment_);
-    glLinkProgram(program_name_);
-#if !KP_OPTIMIZE_FOR_SIZE || DEBUG
+    name_ = glCreateProgram();
+    glAttachShader(name_, shader_vertex_);
+    glAttachShader(name_, shader_fragment_);
+    glLinkProgram(name_);
     {
       int param;
-      glGetProgramiv(program_name_, GL_LINK_STATUS, &param);
+      glGetProgramiv(name_, GL_LINK_STATUS, &param);
       if (param != GL_TRUE) {
-        printProgramInfoLog(program_name_);
-        glDeleteProgram(program_name_);
+        printProgramInfoLog(name_);
+        glDeleteProgram(name_);
         glDeleteShader(shader_fragment_);
         glDeleteShader(shader_vertex_);
-        shader_fragment_ = shader_vertex_ = program_name_ = 0;
+        shader_fragment_ = shader_vertex_ = name_ = 0;
       }
     }
-#endif // !KP_OPTIMIZE_FOR_SIZE || DEBUG
     GL_ASSERT
   } // Program::Program
   
   Program::~Program(){
-    if (program_name_) glDeleteProgram(program_name_);
+    if (name_) glDeleteProgram(name_);
     if (shader_fragment_) glDeleteShader(shader_fragment_);
     if (shader_vertex_) glDeleteShader(shader_vertex_);
   }
@@ -85,7 +81,6 @@ namespace kapusha {
     unsigned shader = glCreateShader(type);
     glShaderSource(shader, 1, &source, 0);
     glCompileShader(shader);
-#if !KP_OPTIMIZE_FOR_SIZE || DEBUG
     int result;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
     if (result != GL_TRUE) {
@@ -106,30 +101,26 @@ namespace kapusha {
       glDeleteShader(shader);
       return 0;
     }
-#endif
     GL_ASSERT
     return shader;
   } // Program::compileShader
   
   void Program::bindAttributeLocation(const char *name, int location) {
-    KP_ASSERT(program_name_);
-    glBindAttribLocation(program_name_, location, name); GL_ASSERT
+    KP_ASSERT(!"this is currently broken, as relinking program is required");
+    KP_ASSERT(name_);
+    glBindAttribLocation(name_, location, name); GL_ASSERT
   }
   int Program::getAttributeLocation(const char *name) const {
-    KP_ASSERT(program_name_);
-    int loc = glGetAttribLocation(program_name_, name); GL_ASSERT
+    KP_ASSERT(name_);
+    int loc = glGetAttribLocation(name_, name); GL_ASSERT
     KP_ASSERT(loc != -1);
     return loc;
   }
   int Program::getUniformLocation(const char *name) const {
-    KP_ASSERT(program_name_);
-    int loc = glGetUniformLocation(program_name_, name); GL_ASSERT
+    KP_ASSERT(name_);
+    int loc = glGetUniformLocation(name_, name); GL_ASSERT
     KP_ASSERT(loc != -1);
     return loc;
-  }
-  void Program::use(const UniformState *state) const {
-    glUseProgram(program_name_);
-    if (state) state->apply();
   }
 // UniformState ///////////////////////////////////////////////////////////////  
   void Program::UniformState::clear() {
@@ -168,7 +159,7 @@ namespace kapusha {
     }
     KP_ASSERT(!"Not enough uniform slots");
   }
-  void Program::UniformState::apply() const {
+  void Program::UniformState::apply(Context *ctx) const {
     const float *data = storage_;
     for (int i = 0; i < MAX_STATE_UNIFORMS; ++i) {
       const Uniform& u = uniforms_[i];
@@ -190,7 +181,7 @@ namespace kapusha {
     for (int i = 0; i < MAX_STATE_UNIFORM_SAMPLERS; ++i) {
       if (samplers_[i].empty()) break;
       glUniform1i(samplers_[i].location, i); GL_ASSERT
-      samplers_[i].sampler->bind(i);
+      samplers_[i].sampler->bind(ctx, i);
     } // for uniform samplers
   } // UniformState::apply()
 } // namespace kapusha

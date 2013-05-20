@@ -16,3 +16,6 @@
 
 //! maximum number of batches per object
 #define MAX_OBJECT_BATCHES 8
+
+//! Maximum number of framebuffer attachments
+#define MAX_FRAMEBUFFER_ATTACHMENTS 4
