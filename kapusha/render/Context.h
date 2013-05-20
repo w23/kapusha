@@ -30,7 +30,7 @@ namespace kapusha {
     void bindSampler(const Sampler *sampler, int unit);
     
     //! Binds a framebuffer
-    void bindFramebuffer(Framebuffer *framebuffer);
+    void bindFramebuffer(const Framebuffer *framebuffer);
   private:
   };
 } // namespace kapusha

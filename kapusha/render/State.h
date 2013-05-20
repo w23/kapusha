@@ -7,9 +7,9 @@
 namespace kapusha {
   struct BlendState {
     enum Mode {
-      Whatever = 0,
-      Disabled = 1,
-      Enabled = 2
+      ModeWhatever = 0,
+      ModeDisabled = 1,
+      ModeEnabled = 2
     };
     enum Function {
       ConstOne = GL_ONE,
@@ -35,15 +35,16 @@ namespace kapusha {
       Subtract = GL_FUNC_SUBTRACT,
       ReverseSubtract = GL_FUNC_REVERSE_SUBTRACT
     };
-    inline BlendState(Mode mode = Whatever, Equation equ = Add,
+    inline BlendState(Mode mode = ModeWhatever, Equation equ = Add,
                       Function funcSource = ConstOne,
                       Function funcDest = ConstZero,
                vec4f color = vec4f(0.f))
       : mode_(mode), funcSrcColor_(funcSource), funcSrcAlpha_(funcSource)
-      , funcDstColor_(funcDest), funcDstAlpha_(funcDest), color_(color) {}
+      , funcDstColor_(funcDest), funcDstAlpha_(funcDest)
+      , equColor_(equ), equAlpha_(equ), color_(color) {}
     inline void setMode(Mode mode) { mode_ = mode; }
-    inline void enable() { setMode(Enabled); }
-    inline void disable() { setMode(Disabled); }
+    inline void enable() { setMode(ModeEnabled); }
+    inline void disable() { setMode(ModeDisabled); }
     inline void setFunction(Function source, Function destination) {
       funcSrcColor_ = funcSrcAlpha_ = source;
       funcDstColor_ = funcDstAlpha_ = destination;

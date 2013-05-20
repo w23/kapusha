@@ -25,7 +25,7 @@ namespace kapusha {
     void setUniform(const char *name, Sampler *sampler);
     Program::UniformState &getUniforms() { return uniforms_; }
     const Program::UniformState &getUniforms() const { return uniforms_; }
-
+    BlendState &blend() { return blend_; }
     //! Make current material -- sets program and uniforms
     void use(Context *ctx) const;
   private:

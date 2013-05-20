@@ -17,7 +17,7 @@ namespace kapusha {
     if (unit != -1) glActiveTexture(GL_TEXTURE0 + unit);
     glBindTexture(GL_TEXTURE_2D, sampler->name());
   }
-  void Context::bindFramebuffer(Framebuffer *framebuffer) {
+  void Context::bindFramebuffer(const Framebuffer *framebuffer) {
     if (framebuffer) glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->name());
     else glBindFramebuffer(GL_FRAMEBUFFER, 0);
   }

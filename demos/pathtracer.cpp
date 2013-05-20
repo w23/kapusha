@@ -9,7 +9,7 @@
 // https://www.shadertoy.com/view/MdfGW8
 // all comments are stripped FOR CLARITY lols
 static const char *fragmentShaderPathTracer =
-"#define SAMPLES 16\n"
+"#define SAMPLES 8\n"
 "#define REFLECTIONS 4\n"
 "#define SCENE_RADIUS 100.\n"
 "#define INFINITY 31337.\n"
@@ -106,7 +106,7 @@ static const char *fragmentShaderPathTracer =
 "      ray.origin = newpos + n * REFLECT_EPSILON;\n"
 "    }\n"
 "  }\n"
-"  gl_FragColor = vec4(pow(max(vec3(0.), sumcolor) / float(SAMPLES), vec3(.7)), 1.);\n"
+"  gl_FragColor = vec4(pow(max(vec3(0.), sumcolor) / float(SAMPLES), vec3(.7)), .2);\n"
 "}\n";
 
 using namespace kapusha;
@@ -151,7 +151,10 @@ void Viewport::init(IViewportController *ctrl) {
   Program *prog = new Program(svtx, fragmentShaderPathTracer);
   //prog->bindAttributeLocation("vtx", 0);
   batch_ = new Batch();
-  batch_->setMaterial(new Material(prog));
+  Material *mat = new Material(prog);
+  mat->blend().enable();
+  mat->blend().setFunction(BlendState::SourceAlpha, BlendState::OneMinusSourceAlpha);
+  batch_->setMaterial(mat);
   batch_->setAttribSource("vtx", fsrect, 2);
   batch_->setGeometry(Batch::GeometryTriangleFan, 0, 4);
   camera_.lookAt(vec3f(.8f), vec3f(0.f));
@@ -160,15 +163,13 @@ void Viewport::init(IViewportController *ctrl) {
 void Viewport::close() { delete batch_; }
 void Viewport::resize(vec2i size) {
   glViewport(0, 0, size.x, size.y);
+  glClear(GL_COLOR_BUFFER_BIT);
   vec2f aspect((float)size.x / size.y, 1.f);
   batch_->getMaterial()->setUniform("aspect", aspect);
 }
 void Viewport::draw(int ms, float dt) {
   camctl_.frame(dt, ctrl_);
   camera_.setPosition(camera_.position().clamped(vec3f(-.9f), vec3f(.9f)));
-  GL_ASSERT
-  glClear(GL_COLOR_BUFFER_BIT);
-  GL_ASSERT
   float time = ms / 1000.f;
   camera_.update();
   batch_->getMaterial()->setUniform("t", time);
