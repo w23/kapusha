@@ -4,6 +4,7 @@
 #include "core.h"
 #include "render/OpenGL.h"
 #include "render/Buffer.h"
+#include "render/Framebuffer.h"
 #include "render/Sampler.h"
 #include "render/Program.h"
 #include "render/Material.h"

@@ -13,3 +13,6 @@ all_samples: $(SAMPLES)
 
 %: %.o $(RUNNER).o $(ROOT)/libkapusha.a
 	$(LD) $< -lkapusha $(LDFLAGS) $(RUNNER).o -L$(ROOT) -o $@
+
+clean:
+	@rm -f $(SAMPLES) *.o

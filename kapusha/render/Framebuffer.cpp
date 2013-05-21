@@ -7,6 +7,8 @@ namespace kapusha {
     KP_ASSERT(index < 4);
     colorAttachments_[index].reset(sampler);
     bind(ctx);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+index, 0, sampler->name(), 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+index, GL_TEXTURE_2D, sampler->name(), 0);
+    GL_ASSERT
+    KP_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
   }
 } // namespace kapusha

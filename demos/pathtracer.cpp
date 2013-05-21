@@ -9,7 +9,8 @@
 // https://www.shadertoy.com/view/MdfGW8
 // all comments are stripped FOR CLARITY lols
 static const char *fragmentShaderPathTracer =
-"#define SAMPLES 8\n"
+"#define KTEMPBLUR .23\n"
+"#define SAMPLES 16\n"
 "#define REFLECTIONS 4\n"
 "#define SCENE_RADIUS 100.\n"
 "#define INFINITY 31337.\n"
@@ -106,7 +107,7 @@ static const char *fragmentShaderPathTracer =
 "      ray.origin = newpos + n * REFLECT_EPSILON;\n"
 "    }\n"
 "  }\n"
-"  gl_FragColor = vec4(pow(max(vec3(0.), sumcolor) / float(SAMPLES), vec3(.7)), .2);\n"
+"  gl_FragColor = vec4(pow(max(vec3(0.), sumcolor) / float(SAMPLES), vec3(.7)), KTEMPBLUR);\n"
 "}\n";
 
 using namespace kapusha;
@@ -114,10 +115,11 @@ class Viewport : public IViewport {
 public:
   Viewport() : camctl_(camera_) {}
   virtual ~Viewport() {}
-  virtual void init(IViewportController* ctrl);
+  virtual void init(IViewportController *ctrl);
   virtual void resize(vec2i);
   virtual void draw(int ms, float dt);
-  void inputPointer(const PointerState& pointers);
+  void inputPointer(const PointerState &pointers);
+  void inputKey(const KeyState &keys);
   virtual void close();
 private:
   Context dummy_;
@@ -125,6 +127,9 @@ private:
   SpectatorCameraController camctl_;
   IViewportController *ctrl_;
   Batch *batch_;
+  Batch *output_;
+  Sampler *sampler_;
+  Framebuffer *fb_;
 };
 void Viewport::init(IViewportController *ctrl) {
   ctrl_ = ctrl;
@@ -159,13 +164,46 @@ void Viewport::init(IViewportController *ctrl) {
   batch_->setGeometry(Batch::GeometryTriangleFan, 0, 4);
   camera_.lookAt(vec3f(.8f), vec3f(0.f));
   camctl_.setSpeed(1.f);
+
+  sampler_ = new Sampler(Sampler::Nearest, Sampler::Nearest);
+  fb_ = new Framebuffer();
+  static const char *osvtx = 
+    "attribute vec4 vtx;\n"
+    "varying vec2 p;\n"
+    "void main() {\n"
+      "p = vtx.xy * .5 + .5;\n"
+      "gl_Position = vtx;\n"
+    "}\n";
+  static const char *osfrg = 
+    "uniform sampler2D frame;\n"
+    "varying vec2 p;\n"
+    "void main() {\n"
+      "gl_FragColor = texture2D(frame, p);\n"
+    "}\n";
+  Program *oprog = new Program(osvtx, osfrg);
+  output_ = new Batch();
+  Material *omat = new Material(oprog);
+  omat->setUniform("frame", sampler_);
+  omat->blend().disable();
+  output_->setMaterial(omat);
+  output_->setAttribSource("vtx", fsrect, 2);
+  output_->setGeometry(Batch::GeometryTriangleFan, 0, 4);
 }
-void Viewport::close() { delete batch_; }
+void Viewport::close() {
+  delete batch_;
+  delete fb_;
+  delete output_;
+}
 void Viewport::resize(vec2i size) {
   glViewport(0, 0, size.x, size.y);
   glClear(GL_COLOR_BUFFER_BIT);
   vec2f aspect((float)size.x / size.y, 1.f);
   batch_->getMaterial()->setUniform("aspect", aspect);
+  sampler_->upload(&dummy_, Sampler::Meta(size), 0);
+  fb_->attachColor(&dummy_, sampler_, 0);
+  fb_->bind(&dummy_);
+  glViewport(0, 0, size.x, size.y);
+  glClear(GL_COLOR_BUFFER_BIT);
 }
 void Viewport::draw(int ms, float dt) {
   camctl_.frame(dt, ctrl_);
@@ -175,7 +213,11 @@ void Viewport::draw(int ms, float dt) {
   batch_->getMaterial()->setUniform("t", time);
   batch_->getMaterial()->setUniform("uv3_pos", camera_.position());
   batch_->getMaterial()->setUniform("uv3_forward", camera_.forward().normalized());
+  fb_->bind(&dummy_);
   batch_->draw(&dummy_);
+  dummy_.bindFramebuffer(0);
+  glClear(GL_COLOR_BUFFER_BIT);
+  output_->draw(&dummy_);
   ctrl_->requestRedraw();
 }
 void Viewport::inputPointer(const PointerState& pointers) {
@@ -190,6 +232,9 @@ void Viewport::inputPointer(const PointerState& pointers) {
     ctrl_->hideCursor(false);
     camctl_.enableOrientation(false);
   }
+}
+void Viewport::inputKey(const KeyState &keys) {
+  if (keys.isKeyPressed(KeyState::KeyEsc)) ctrl_->quit(0);
 }
 IViewport *makeViewport() {
   return new Viewport;

@@ -12,11 +12,11 @@ namespace kapusha {
   Sampler::Sampler(FilterMode magnification, FilterMode minification) {
     glGenTextures(1, &name_);
     setMagFilter(magnification);
-    setMagFilter(minification);
+    setMinFilter(minification);
   }
   Sampler::~Sampler() { glDeleteTextures(1, &name_); }
   void Sampler::setMagFilter(FilterMode filter) {
-    KP_ASSERT(filter != Linear && filter != Nearest);
+    KP_ASSERT(filter == Linear || filter == Nearest);
     magnification_ = filter;
   }
   void Sampler::upload(Context *ctx, const Meta& meta, const void* pixels) {
