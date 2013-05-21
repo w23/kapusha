@@ -9,7 +9,7 @@
 // https://www.shadertoy.com/view/MdfGW8
 // all comments are stripped FOR CLARITY lols
 static const char *fragmentShaderPathTracer =
-"#define KTEMPBLUR .23\n"
+"#define KTEMPBLUR .123\n"
 "#define SAMPLES 16\n"
 "#define REFLECTIONS 4\n"
 "#define SCENE_RADIUS 100.\n"
@@ -107,7 +107,7 @@ static const char *fragmentShaderPathTracer =
 "      ray.origin = newpos + n * REFLECT_EPSILON;\n"
 "    }\n"
 "  }\n"
-"  gl_FragColor = vec4(pow(max(vec3(0.), sumcolor) / float(SAMPLES), vec3(.7)), KTEMPBLUR);\n"
+"  gl_FragColor = vec4(sumcolor / float(SAMPLES), KTEMPBLUR);\n"
 "}\n";
 
 using namespace kapusha;
@@ -178,7 +178,7 @@ void Viewport::init(IViewportController *ctrl) {
     "uniform sampler2D frame;\n"
     "varying vec2 p;\n"
     "void main() {\n"
-      "gl_FragColor = texture2D(frame, p);\n"
+      "gl_FragColor = pow(texture2D(frame, p), vec4(.7));\n"
     "}\n";
   Program *oprog = new Program(osvtx, osfrg);
   output_ = new Batch();
