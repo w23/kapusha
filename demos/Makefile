@@ -12,4 +12,4 @@ RUNNER = main_sdl
 all_samples: $(SAMPLES)
 
 %: %.o $(RUNNER).o $(ROOT)/libkapusha.a
-	$(LD) $(LDFLAGS) $(RUNNER).o $< -L$(ROOT) -lkapusha -o $@
+	$(LD) $< -lkapusha $(LDFLAGS) $(RUNNER).o -L$(ROOT) -o $@

@@ -1,6 +1,6 @@
 #pragma once
 #include "../render/Batch.h"
-#include "../render/Limits.h"
+#include "../render/limits.h"
 #include "Reframe.h"
 
 namespace kapusha {

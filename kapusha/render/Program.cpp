@@ -44,7 +44,7 @@ namespace kapusha {
   }
   
   Program::Program(const char* vertex, const char* fragment)
-    : shader_vertex_(0), shader_fragment_(0), name_(0) {
+    : name_(0), shader_vertex_(0), shader_fragment_(0) {
     shader_vertex_ = compileShader(GL_VERTEX_SHADER, vertex);
     if (!shader_vertex_) return;
     shader_fragment_ = compileShader(GL_FRAGMENT_SHADER, fragment);

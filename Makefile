@@ -17,6 +17,7 @@ SOURCES := \
 	kapusha/render/State.cpp \
 	kapusha/render/Buffer.cpp \
 	kapusha/render/OpenGL.cpp \
+	kapusha/render/Context.cpp \
 	kapusha/ooo/Reframe.cpp \
 	kapusha/ooo/Object.cpp \
 	kapusha/ooo/Camera.cpp \
