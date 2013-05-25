@@ -22,6 +22,7 @@ SOURCES := \
 	kapusha/ooo/Reframe.cpp \
 	kapusha/ooo/Object.cpp \
 	kapusha/ooo/Camera.cpp \
+	kapusha/ooo/Node.cpp \
 	kapusha/utils/SpectatorCameraController.cpp \
 	kapusha/utils/geometry.cpp \
 	kapusha/utils/noise.cpp

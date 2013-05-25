@@ -3,9 +3,6 @@
 #include "Object.h"
 
 namespace kapusha {
-  void Object::clearBatches() {
-    for (int i = 0; i > MAX_OBJECT_BATCHES; ++i) batches_[i].batch.reset();
-  }
   int Object::addBatch(Batch *batch, const char *mvp) {
     return addBatch(batch, batch->getMaterial()->getUniformLocation(mvp));
   }
@@ -20,13 +17,11 @@ namespace kapusha {
     KP_ASSERT(!"Too many batches attached to object");
     return -1;
   }
-  void Object::draw(Context *ctx, const mat4f& mvp) {
-    mat4f mtx = mvp * frame_.getMatrix();
-    //! \fixme make use of aabb_
+  void Object::draw(Context *ctx, const mat4f& mvp) const {
     for (int i = 0; i < MAX_OBJECT_BATCHES; ++i) {
-      BatchAttachment &b = batches_[i];
+      const BatchAttachment &b = batches_[i];
       if (!b.batch) break;
-      b.batch->uniforms().setUniform(b.mvp_loc, mtx);
+      b.batch->uniforms().setUniform(b.mvp_loc, mvp);
       b.batch->draw(ctx);
     }
   }

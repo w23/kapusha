@@ -4,9 +4,10 @@
 #include <kapusha/math.h>
 
 namespace kapusha {
-  struct Reframe {
-    inline Reframe() = default;
-    Reframe(vec3f translation,
+  class Reframe {
+  public:
+    //inline Reframe() = default;
+    Reframe(vec3f translation = vec3f(0.f, 0.f, 0.f),
             vec3f forward = vec3f(0.f, 0.f, -1.f),
             vec3f up      = vec3f(0.f, 1.f, 0.f));
 
