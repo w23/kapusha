@@ -1,12 +1,43 @@
 #include <mach/mach_time.h>
 #include <kapusha/viewport.h>
+#include <kapusha/render/Context.h>
 #import "KPView.h"
 
 
 using namespace kapusha;
-void log::sys_write(const char *message) {
-  NSLog(@"%s", message);
+void log::sys_write(const char *message) { NSLog(@"%s", message); }
+
+////////////////////////////////////////////////////////////////////////////////
+class CocoaGLContext : public Context {
+public:
+  inline CocoaGLContext(NSOpenGLContext *cocoaContext);
+  virtual ~CocoaGLContext();
+  virtual Context *createSharedContext();
+  virtual void makeCurrent();
+private:
+  NSOpenGLContext *cocoaContext_;
+};
+CocoaGLContext::CocoaGLContext(NSOpenGLContext *cocoaContext)
+: cocoaContext_([cocoaContext retain]) {
+  KP_ASSERT(cocoaContext != nil);
 }
+CocoaGLContext::~CocoaGLContext() {
+  [cocoaContext_ release];
+}
+Context *CocoaGLContext::createSharedContext() {
+  CGLContextObj cglctxobj = (CGLContextObj)[cocoaContext_ CGLContextObj];
+  CGLPixelFormatObj cglpixfmt = CGLGetPixelFormat(cglctxobj);
+  NSOpenGLPixelFormat *pixfmt = [[[NSOpenGLPixelFormat alloc]initWithCGLPixelFormatObj:cglpixfmt] autorelease];
+  NSOpenGLContext *newContext = [[[NSOpenGLContext alloc]
+                                  initWithFormat:pixfmt
+                                  shareContext:cocoaContext_] autorelease];
+  return new CocoaGLContext(newContext);
+}
+void CocoaGLContext::makeCurrent() {
+  [cocoaContext_ makeCurrentContext];
+}
+
+////////////////////////////////////////////////////////////////////////////////
 class CocoaViewportController;
 @interface KPView () {
   CocoaViewportController *viewportController_;
@@ -26,6 +57,7 @@ class CocoaViewportController;
 - (void) stopDrawing;
 - (void) mouseAlwaysRelative:(BOOL)always;
 @end
+
 ////////////////////////////////////////////////////////////////////////////////
 class MachTime {
 public:
@@ -243,7 +275,9 @@ class CocoaViewportController : public IViewportController
 {
 public:
   CocoaViewportController(KPView *view, IViewport *viewport)
-    : view_(view), viewport_(viewport) { viewport_->init(this); }
+    : view_(view), viewport_(viewport), glContext_([view openGLContext]) {
+      viewport_->init(this, &glContext_);
+    }
   ~CocoaViewportController() { viewport_->close(); }
 public: // IViewportController
   void quit(int code) {}
@@ -281,9 +315,11 @@ public: // IViewportController
 private:
   KPView *view_;
   IViewport *viewport_;
+  CocoaGLContext glContext_;
   CocoaPointerState pointerState_;
   CocoaKeyState keyState_;
 };
+
 ////////////////////////////////////////////////////////////////////////////////
 @implementation KPView
 - (void) dealloc {
@@ -359,7 +395,7 @@ void KPViewDrawObserverCallback(CFRunLoopObserverRef observer,
   [self draw];
 }
 - (BOOL)acceptsFirstResponder { return YES; }
-- (BOOL)becomeFirstResponder { return  YES; }
+- (BOOL)becomeFirstResponder { return YES; }
 - (BOOL)resignFirstResponder { return YES; }
 - (void) mouseAlwaysRelative:(BOOL)relative {
   KP_ENSURE(kCGErrorSuccess==CGAssociateMouseAndMouseCursorPosition(!relative));
