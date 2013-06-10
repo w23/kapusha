@@ -17,9 +17,11 @@ namespace kapusha {
     void removeFromParent() { removeFromSiblings(); }
     void draw(Context *ctx, const mat4f &mvp) const;
   protected:
+    inline void setParent(Node *parent) { KP_ASSERT(!parent_); parent_ = parent; }
     Reframe frame_;
-    SNode children_;
-    SObject object_;
+    SNode first_child_;
+    Node *parent_ = 0;
     KP_DECLARE_DLINKEDLIST(Node, Sibling);
+    SObject object_;
   }; // class Node
 } // namespace kapusha
