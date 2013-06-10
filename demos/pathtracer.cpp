@@ -3,8 +3,6 @@
 #include <kapusha/ooo.h>
 #include <kapusha/utils/SpectatorCameraController.h>
 
-//! \todo temporal blur
-
 // this source is almost a direct copy from stuff i did at
 // https://www.shadertoy.com/view/MdfGW8
 // all comments are stripped FOR CLARITY lols
