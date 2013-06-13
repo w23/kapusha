@@ -35,6 +35,7 @@ ifeq ($(RPI),1)
   	kapusha/sys/rpi/Evdev.cpp
 else
   SOURCES += kapusha/sys/sdl/KPSDL.cpp
+  #SOURCES += kapusha/sys/x11/x11-glx.cpp
 endif
 
 #MODULES=$(addprefix build/, $(patsubst %.cpp, %.o, $(SOURCES)))
