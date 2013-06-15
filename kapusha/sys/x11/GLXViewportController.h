@@ -24,7 +24,7 @@ private:
   IViewport *viewport_;
   vec2i size_;
   bool fullscreen_;
-  ::Window window_, rootWindow_;
+  ::Window window_;
   X11Pointers pointers_;
   X11Keys keys_;
 };

@@ -59,6 +59,7 @@ int GLXViewportController::run(IViewport *viewport, vec2i size, bool fullscreen)
 
   XDestroyWindow(display_, window_);
   XFree(xvis);
+  return 0;
 }
 
 void GLXViewportController::event_loop() {
@@ -73,8 +74,8 @@ void GLXViewportController::event_loop() {
         case Expose:
           //! \todo draw
         break;
-        case KeyPress:
-          return;
+        //case KeyPress:
+        //  return;
       }
     }
 

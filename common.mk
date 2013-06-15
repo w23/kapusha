@@ -30,7 +30,7 @@ ifeq ($(KP_RASPBERRY),1)
 endif
 
 ifeq ($(KP_X11),1)
-	LDFLAGS += -lGL -lX
+	LDFLAGS += -lGL -lX11
 endif
 
 ifeq ($(KP_SDL),1)

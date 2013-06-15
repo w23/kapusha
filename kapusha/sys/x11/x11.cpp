@@ -1,5 +1,6 @@
 #include "extern.h"
 #include "GLXViewportController.h"
+#include "x11.h"
 
 namespace kapusha {
 void log::sys_write(const char *message) {
