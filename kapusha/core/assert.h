@@ -4,6 +4,9 @@ namespace kapusha {
 }
 
 #if DEBUG
+#ifndef __PRETTY_FUNCTION__
+#define __PRETTY_FUNCTION__ __FUNCTION__
+#endif
 #define KP_ASSERT(expr) if(!(expr)) ::kapusha::assert_perror(#expr, __FILE__, __LINE__, __PRETTY_FUNCTION__)
 #define KP_ENSURE(expr) KP_ASSERT(expr)
 #else

@@ -58,7 +58,7 @@ namespace kapusha {
         SSampler sampler;
         int location;
         inline UniformSampler() {}
-        inline bool empty() const { return !sampler; }
+        inline bool empty() const { return !sampler.valid(); }
       };
       void setUniform(int location, Uniform::Type type, const float* data);
       Uniform uniforms_[MAX_STATE_UNIFORMS];

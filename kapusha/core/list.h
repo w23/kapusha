@@ -11,20 +11,20 @@
     inline type *getPrev##Name() { return prev##Name##_; } \
     void insertAfter##Name(type *member) { \
       KP_ASSERT(member); \
-      KP_ASSERT(!next##Name##_); \
+      KP_ASSERT(!next##Name##_.valid()); \
       KP_ASSERT(!prev##Name##_); \
       next##Name##_ = member->next##Name##_; \
       prev##Name##_ = member; \
-      if (next ##Name##_) next##Name##_->prev##Name##_ = this; \
+      if (next ##Name##_.valid()) next##Name##_->prev##Name##_ = this; \
       member->next##Name##_ = this; \
     } \
     void removeFrom##Name##s() { \
       retain(); \
       if (prev ##Name##_) prev##Name##_->next##Name##_ = next##Name##_; \
-      if (next ##Name##_) next##Name##_->prev##Name##_ = prev##Name##_; \
+      if (next ##Name##_.valid()) next##Name##_->prev##Name##_ = prev##Name##_; \
       next##Name##_.reset(); \
       release(); \
     } \
   private: \
     shared<type> next##Name##_; \
-    type *prev##Name##_ = 0
+    type *prev##Name##_ //! \todo fuck msvc = 0

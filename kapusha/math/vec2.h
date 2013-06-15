@@ -42,7 +42,7 @@ namespace kapusha {
     vec2 operator*(const vec2& v) const { return vec2(x*v.x, y*v.y); }
     vec2 operator/(const vec2& v) const { return *this * v.recip(); }
     vec2 operator*(T r) const { return vec2(x*r, y*r); }
-    vec2 operator/(T r) const { return *this * recip(r); }
+    vec2 operator/(T r) const { return *this * ::kapusha::recip(r); }
     vec2& operator+=(const vec2& v) { return *this = *this + v; }
     vec2& operator-=(const vec2& v) { return *this = *this - v; }
     vec2& operator*=(const vec2& v) { return *this = *this * v; }

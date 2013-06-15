@@ -8,7 +8,7 @@ namespace kapusha {
   }
   int Object::addBatch(Batch *batch, int mvp_loc) {
     for (int i = 0; i < MAX_OBJECT_BATCHES; ++i)
-      if (!batches_[i].batch) {
+      if (!batches_[i].batch.valid()) {
         BatchAttachment &b = batches_[i];
         b.batch = batch;
         b.mvp_loc = mvp_loc;
@@ -20,7 +20,7 @@ namespace kapusha {
   void Object::draw(Context *ctx, const mat4f& mvp) const {
     for (int i = 0; i < MAX_OBJECT_BATCHES; ++i) {
       const BatchAttachment &b = batches_[i];
-      if (!b.batch) break;
+      if (!b.batch.valid()) break;
       b.batch->uniforms().setUniform(b.mvp_loc, mvp);
       b.batch->draw(ctx);
     }

@@ -5,12 +5,12 @@
 namespace kapusha {
 void Node::addChild(Node *node) {
   KP_ASSERT(node);
-  if (first_child_) node->insertAfterSibling(first_child_.get());
+  if (first_child_.valid()) node->insertAfterSibling(first_child_.get());
   else first_child_ = node;
   node->setParent(this);
 }
 void Node::addObject(Object *object) {
-  if (object_) object->insertAfterSibling(object_.get());
+  if (object_.valid()) object->insertAfterSibling(object_.get());
   else object_ = object;
 }
 void Node::draw(Context *ctx, const mat4f &mvp) const {

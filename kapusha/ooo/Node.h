@@ -10,7 +10,7 @@ namespace kapusha {
   typedef shared<Node> SNode;
   class Node : public Shareable {
   public:
-    Node() {}
+    Node() : parent_(nullptr), prevSibling_(nullptr) {}
     ~Node() {}
     void addChild(Node *node);
     void addObject(Object *object);
@@ -20,7 +20,7 @@ namespace kapusha {
     inline void setParent(Node *parent) { KP_ASSERT(!parent_); parent_ = parent; }
     Reframe frame_;
     SNode first_child_;
-    Node *parent_ = 0;
+    Node *parent_;
     KP_DECLARE_DLINKEDLIST(Node, Sibling);
     SObject object_;
   }; // class Node

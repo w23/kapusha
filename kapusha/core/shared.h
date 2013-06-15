@@ -20,15 +20,16 @@ namespace kapusha {
   //! convenience store
   class shared_base {
   public:
-    inline shared_base(Shareable* t = 0) : t_(t) { if (t_) t_->retain(); }
+    inline shared_base(Shareable* t = nullptr) : t_(t) { if (t_) t_->retain(); }
     inline shared_base(const shared_base& other)
       : t_(other.t_) { if (t_) t_->retain(); }
     inline ~shared_base() { if (t_) t_->release(); }
-    void reset(Shareable* r = 0) {
+    void reset(Shareable* r = nullptr) {
       if (r == t_) return;
       if (t_) t_->release();
       if ((t_ = r)) t_->retain();
     }
+    inline bool valid() const { return t_ != nullptr; }
     inline shared_base& operator=(Shareable* t) { reset(t); return *this; }
     inline shared_base& operator=(const shared_base& right) {
       reset(right.t_);
@@ -42,8 +43,9 @@ namespace kapusha {
   //! \warning also thread-unsafe by design!
   template <typename T> class shared : public shared_base {
   public:
-    inline shared(T *t = 0) : shared_base(t) {}
-    inline explicit operator bool() const { return t_; }
+    inline shared(T *t = nullptr) : shared_base(t) {}
+    //! \todo seriously, microsoft, fuck you!
+    // inline explicit operator bool() const { return t_; }
     inline T *get() const { return static_cast<T*>(t_); }
     inline T &operator*() const { return *static_cast<T*>(t_); }
     inline T *operator->() const { return static_cast<T*>(t_); }

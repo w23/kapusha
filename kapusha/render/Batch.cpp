@@ -22,17 +22,17 @@ namespace kapusha {
   void Batch::setAttribSource(const char *attrib_name,
                               Buffer* buffer, unsigned components,
                               unsigned offset, unsigned stride) {
-    KP_ASSERT(material_);
+    KP_ASSERT(material_.valid());
     setAttribSource(material_->getProgram()->getAttributeLocation(attrib_name),
                     buffer, components, offset, stride);
   }
   void Batch::draw(Context *ctx) const {
-    KP_ASSERT(material_);
+    KP_ASSERT(material_.valid());
     material_->use(ctx);
     uniforms_.apply(ctx);
     for (int i = 0; i < MAX_BATCH_ATTRIBS; ++i)
       if (attribs_[i].index != -1) attribs_[i].bind(ctx);
-    if (indices_) {
+    if (indices_.valid()) {
       indices_->bind(ctx, Buffer::BindingIndex);
       glDrawElements(geometryType_, count_, indexType_,
         reinterpret_cast<void*>(first_));

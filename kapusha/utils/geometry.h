@@ -1,6 +1,8 @@
 #pragma once
 #include "../math.h"
 
+#pragma warning(1 : 4519)
+
 namespace kapusha {
   //! function to calculate normals for a mesh with arbitrary vtx fmt in place
   //! \param *_stride is in float units
