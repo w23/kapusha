@@ -18,6 +18,9 @@ namespace kapusha {
     __V_GL_V_PAIR(STACK_UNDERFLOW),
 #endif
     __V_GL_V_PAIR(OUT_OF_MEMORY)
+#if defined GL_INVALID_FRAMEBUFFER_OPERATION
+    , __V_GL_V_PAIR(INVALID_FRAMEBUFFER_OPERATION)
+#endif
   };
 #undef __V_GL_V_PAIR
   const char* glDescribeError(int code) {

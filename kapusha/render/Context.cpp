@@ -14,11 +14,11 @@ namespace kapusha {
     glUseProgram(program->name());
   }
   void Context::bindSampler(const Sampler *sampler, int unit) {
-    if (unit != -1) glActiveTexture(GL_TEXTURE0 + unit);
-    glBindTexture(GL_TEXTURE_2D, sampler->name());
+    if (unit != -1) { glActiveTexture(GL_TEXTURE0 + unit); GL_ASSERT }
+    glBindTexture(GL_TEXTURE_2D, sampler->name()); GL_ASSERT
   }
   void Context::bindFramebuffer(const Framebuffer *framebuffer) {
-    if (framebuffer) glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->name());
-    else glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    if (framebuffer) { glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->name()); GL_ASSERT }
+    else { glBindFramebuffer(GL_FRAMEBUFFER, 0); GL_ASSERT }
   }
 } // namespace kapusha
