@@ -1,11 +1,15 @@
 #include <SDL/SDL.h>
 #include <kapusha/core/log.h>
 #include <kapusha/viewport/IViewport.h>
+#include <kapusha/render/Context.h>
 
 namespace kapusha {
   void log::sys_write(const char *message) {
     fprintf(stderr, "%s\n", message);
   }
+///////////////////////////////////////////////////////////////////////////////
+  class SDLContext : public Context { public: inline SDLContext() {} };
+
 ///////////////////////////////////////////////////////////////////////////////
   class SDLKeyState : public KeyState {
   public:
@@ -132,13 +136,14 @@ namespace kapusha {
     bool should_loop_;
     SDLKeyState key_state_;
     SDLPointerState pointer_state_;
+    SDLContext context_;
   };
 
   SDLViewportController::SDLViewportController(IViewport *viewport, vec2i size)
     : viewport_(viewport)
     , size_(size)
     , should_loop_(true) {
-    viewport_->init(this);
+    viewport_->init(this, &context_);
     viewport_->resize(size);
     pointer_state_.resize(size);
   }

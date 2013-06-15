@@ -46,6 +46,6 @@ namespace kapusha {
     void bindFramebuffer(const Framebuffer *framebuffer);
     
   protected:
-    Context() {}
+    inline Context() {}
   };
 } // namespace kapusha

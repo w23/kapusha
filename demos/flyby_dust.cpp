@@ -8,7 +8,7 @@ class Viewport : public IViewport {
 public:
   Viewport();
   virtual ~Viewport() {}
-  virtual void init(IViewportController* ctrl);
+  virtual void init(IViewportController* ctrl, Context *context);
   virtual void resize(vec2i size);
   virtual void inputPointer(const PointerState& pointers);
   virtual void inputKey(const KeyState& keys);
@@ -17,7 +17,7 @@ public:
   
 private:
   IViewportController *ctrl_;
-  Context dummy_;
+  Context *context_;
   Camera camera_;
   SpectatorCameraController camctl_;
 
@@ -121,13 +121,14 @@ Dust::Dust(Context *ctx, int count, float size, float radius) {
 
 ///////////////////////////////////////////////////////////////////////////////
 Viewport::Viewport() : camctl_(camera_) {}
-void Viewport::init(IViewportController *ctrl) {
+void Viewport::init(IViewportController *ctrl, Context *context) {
   ctrl_ = ctrl;
+  context_ = context;
 
   Node *ndust = new Node();
-  ndust->addObject(new Dust(&dummy_, 8192, .1f, 20.f));
+  ndust->addObject(new Dust(context_, 8192, .1f, 20.f));
   Node *nground = new Node();
-  nground->addObject(new Ground(&dummy_, 20.f));
+  nground->addObject(new Ground(context_, 20.f));
   root_.reset(new Node());
   root_->addChild(ndust);
   root_->addChild(nground);
@@ -155,7 +156,7 @@ void Viewport::draw(int ms, float dt) {
   GL_ASSERT
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   GL_ASSERT
-  root_->draw(&dummy_, camera_.getViewProjection());
+  root_->draw(context_, camera_.getViewProjection());
   ctrl_->requestRedraw();
 }
 

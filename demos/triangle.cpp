@@ -6,16 +6,17 @@
 using namespace kapusha;
 class Viewport : public IViewport {
 public:
-  virtual void init(IViewportController* controller);
+  virtual void init(IViewportController* controller, Context *context);
   virtual void resize(vec2i);
   virtual void draw(int ms, float dt);
   virtual void close();
 private:
   IViewportController *controller_;
+  Context *context_;
   SBatch triangleBatch_;
 }; // class Viewport
 
-void Viewport::init(IViewportController* controller) {
+void Viewport::init(IViewportController* controller, Context *context) {
   static const char *vertex_shader =
     "attribute vec4 vertex;\n"
     "void main() { gl_Position = vertex; }\n";
@@ -26,10 +27,11 @@ void Viewport::init(IViewportController* controller) {
   };
 
   controller_ = controller;
+  context_ = context;
   Program *prog = new Program(vertex_shader, fragment_shader);
   prog->bindAttributeLocation("vertex", 0);
   Buffer *buf = new Buffer(Buffer::BindingArray);
-  buf->load(vertices, sizeof(vertices), Buffer::StaticDraw);
+  buf->load(context_, vertices, sizeof(vertices), Buffer::StaticDraw);
   triangleBatch_.reset(new Batch());
   triangleBatch_->setMaterial(new Material(prog));
   triangleBatch_->setAttribSource(0, buf, 2, 0, sizeof(vec2f));
@@ -42,7 +44,7 @@ void Viewport::resize(vec2i size) {
 
 void Viewport::draw(int ms, float dt) {
   glClear(GL_COLOR_BUFFER_BIT);
-  triangleBatch_->draw();
+  triangleBatch_->draw(context_);
 }
 
 void Viewport::close() {

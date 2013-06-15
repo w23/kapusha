@@ -5,16 +5,18 @@ using namespace kapusha;
 class Viewport : public IViewport {
 public:
   virtual ~Viewport() {}
-  virtual void init(IViewportController* system);
+  virtual void init(IViewportController* system, Context *context);
   virtual void resize(vec2i);
   virtual void draw(int ms, float dt);
   virtual void close();
 private:
   IViewportController *system_;
+  Context *context_;
   Batch *batch_;
 };
-void Viewport::init(IViewportController *system) {
+void Viewport::init(IViewportController *system, Context *context) {
   system_ = system;
+  context_ = context;
   static const char* svtx =
   "uniform vec2 aspect;\n"
   "uniform vec2 ptr;\n"
@@ -47,7 +49,7 @@ void Viewport::init(IViewportController *system) {
     vec2f( 1.f, -1.f)
   };
   Buffer *fsrect = new Buffer();
-  fsrect->load(rect, sizeof rect);
+  fsrect->load(context_, rect, sizeof rect);
   Program *prog = new Program(svtx, sfrg);
   prog->bindAttributeLocation("vtx", 0);
   batch_ = new Batch();
@@ -69,7 +71,7 @@ void Viewport::draw(int ms, float dt) {
 
 //    batch_->getMaterial()->setUniform("time", time);
   batch_->getMaterial()->setUniform("ptr", system_->pointerState().main().getPosition());
-  batch_->draw();
+  batch_->draw(context_);
   system_->requestRedraw();
 }
 IViewport *makeViewport() {

@@ -8,7 +8,7 @@ using namespace kapusha;
 
 class Ground : public Object {
 public:
-  Ground(int detail = 128, float size = 1000.f, float height = 200.f)
+  Ground(Context *context, int detail = 128, float size = 1000.f, float height = 200.f)
   : height_(height) {
     vec2i cells(detail);
     int vertices, indices;
@@ -24,9 +24,9 @@ public:
     }
     calculateNormals(vtx->pos, 6, vtx->nor, 6, idx, indices);
     Buffer *vbuffer = new Buffer(Buffer::BindingArray);
-    vbuffer->load(vtx, sizeof(vertex) * vertices);
+    vbuffer->load(context, vtx, sizeof(vertex) * vertices);
     Buffer *ibuffer = new Buffer(Buffer::BindingIndex);
-    ibuffer->load(idx, sizeof(u16) * indices);
+    ibuffer->load(context, idx, sizeof(u16) * indices);
     
     Program *prog = new Program(g_shaderVertex, g_shaderFragment);
     Material *mat = new Material(prog);
@@ -84,7 +84,7 @@ const char* Ground::g_shaderFragment =
 class Viewport : public IViewport {
 public:
   Viewport() : camctl_(camera_) {}
-  void init(IViewportController* ctrl);
+  void init(IViewportController* ctrl, Context *context);
   void resize(vec2i size);
   void draw(int ms, float dt);
   void inputPointer(const PointerState& pointers);
@@ -93,13 +93,15 @@ private:
   Object* createGround() const;
 private:
   IViewportController *ctrl_;
+  Context *context_;
   Camera camera_;
   SpectatorCameraController camctl_;
   Ground *ground_;
 };
-void Viewport::init(IViewportController *ctrl) {
+void Viewport::init(IViewportController *ctrl, Context *context) {
   ctrl_ = ctrl;
-  ground_ = new Ground();
+  context_ = context;
+  ground_ = new Ground(context);
   glEnable(GL_DEPTH_TEST);
   GL_ASSERT
   glEnable(GL_CULL_FACE);
@@ -125,7 +127,7 @@ void Viewport::draw(int ms, float dt) {
   GL_ASSERT
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   GL_ASSERT
-  ground_->draw(camera_.getViewProjection());
+  ground_->draw(context_, camera_.getViewProjection());
   ctrl_->requestRedraw();
 }
 void Viewport::inputPointer(const PointerState& pointers) {
