@@ -33,8 +33,7 @@ Context *GLXContext::createSharedContext() const {
 
 void GLXContext::makeCurrent() {
   //! \todo glXMakeContextCurrent
-  Bool result = glXMakeCurrent(display_, drawable_, context_);
-  KP_ASSERT(result == True);
+  KP_ENSURE(True == glXMakeCurrent(display_, drawable_, context_));
   //KP_UNUSED(result);
 }
 
