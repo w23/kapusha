@@ -1,4 +1,5 @@
 .SUFFIXES:
+METADEPS=Makefile $(ROOT)/common.mk
 CXXFLAGS += $(CFLAGS) -std=c++11 -Wall -Werror -fno-exceptions -fno-rtti -I$(ROOT)
 LDFLAGS += -lm
 
@@ -38,5 +39,8 @@ ifeq ($(KP_SDL),1)
 	LDFLAGS += `pkg-config --libs sdl` -lGL
 endif
 
-%.o: %.cpp
+%.o: %.cpp $(METADEPS)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+%.d: %.cpp $(METADEPS)
+	$(CXX) $(CXXFLAGS) -MM $< -MT $(patsubst %.cpp,%.o,$<) -MF $@

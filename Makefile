@@ -48,13 +48,17 @@ SOURCES += \
   kapusha/sys/x11/x11.cpp
 endif
 
-#MODULES=$(addprefix build/, $(patsubst %.cpp, %.o, $(SOURCES)))
-MODULES=$(patsubst %.cpp, %.o, $(SOURCES))
+MODULES=$(SOURCES:.cpp=.o)
+DEPENDS=$(SOURCES:.cpp=.d)
 
 .PHONY: all clean
 
 libkapusha.a: $(MODULES)
 	ar rcs libkapusha.a $(MODULES)
 
+depend: $(DEPENDS)
+
+-include $(DEPENDS)
+
 clean:
-	@rm -f $(MODULES) libkapusha.a
+	@rm -f $(MODULES) $(DEPENDS) libkapusha.a
