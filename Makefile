@@ -1,5 +1,5 @@
 ROOT=.
-include common.mk
+include $(ROOT)/common.mk
 
 #! \fixme dependencies
 
@@ -28,14 +28,24 @@ SOURCES := \
 	kapusha/utils/noise.cpp
 	
 
-ifeq ($(RPI),1)
-  SOURCES += kapusha/sys/rpi/VideoCore.cpp \
-  	kapusha/sys/rpi/EGL.cpp \
-  	kapusha/sys/rpi/RPi.cpp \
-  	kapusha/sys/rpi/Evdev.cpp
-else
-  SOURCES += kapusha/sys/sdl/KPSDL.cpp
-  #SOURCES += kapusha/sys/x11/x11-glx.cpp
+ifeq ($(KP_RASPBERRY),1)
+SOURCES += \
+  kapusha/sys/rpi/VideoCore.cpp \
+  kapusha/sys/rpi/EGL.cpp \
+  kapusha/sys/rpi/RPi.cpp \
+  kapusha/sys/rpi/Evdev.cpp
+endif
+
+ifeq ($(KP_SDL),1)
+SOURCES += \
+  kapusha/sys/sdl/KPSDL.cpp
+endif
+
+ifeq ($(KP_X11),1)
+SOURCES += \
+  kapusha/sys/x11/GLXContext.cpp \
+  kapusha/sys/x11/GLXViewportController.cpp \
+  kapusha/sys/x11/x11.cpp
 endif
 
 #MODULES=$(addprefix build/, $(patsubst %.cpp, %.o, $(SOURCES)))
