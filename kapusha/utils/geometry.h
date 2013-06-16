@@ -1,7 +1,9 @@
 #pragma once
 #include "../math.h"
 
+#ifdef _MSC_VER
 #pragma warning(1 : 4519)
+#endif
 
 namespace kapusha {
   //! function to calculate normals for a mesh with arbitrary vtx fmt in place
