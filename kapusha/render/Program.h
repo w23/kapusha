@@ -1,10 +1,11 @@
+// kapusha/render
+// 2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
-#include "../core/Shared.h"
-#include "Limits.h"
-#include "Texture.h"
+#include "limits.h"
+#include "Sampler.h"
+#include "Context.h"
 
 namespace kapusha {
-  class Render;
   //! Simple class for handling shader programs
   class Program : public Shareable {
   public:
@@ -14,22 +15,25 @@ namespace kapusha {
         setUniform(location, Uniform::Float, &value);
       }
       inline void setUniform(int location, const vec2f &value) {
-        setUniform(location, Uniform::Vec2, &value.x);
+        setUniform(location, Uniform::Vec2, value.tptr());
       }
       inline void setUniform(int location, const vec3f &value) {
-        setUniform(location, Uniform::Vec3, &value.x);
+        setUniform(location, Uniform::Vec3, value.tptr());
       }
       inline void setUniform(int location, const vec4f &value) {
-        setUniform(location, Uniform::Vec4, &value.x);
+        setUniform(location, Uniform::Vec4, value.tptr());
       }
       inline void setUniform(int location, const mat2f &value) {
-        setUniform(location, Uniform::Mat2, value.m);
+        mat2f trans(value.transposed());
+        setUniform(location, Uniform::Mat2, trans.tptr());
       }
       inline void setUniform(int location, const mat4f &value) {
-        setUniform(location, Uniform::Mat4, value.m);
+        mat4f trans(value.transposed());
+        setUniform(location, Uniform::Mat4, trans.tptr());
       }
-      void setSampler(int location, Texture *sampler);
-      
+      void setUniform(int location, Sampler *sampler);
+      void apply(Context *ctx) const;
+    private:
       struct Uniform {
         enum Type {
           None = 0,
@@ -50,58 +54,37 @@ namespace kapusha {
         int offset;
         Uniform() : type(None) {}
       };
-      Uniform uniforms_[MAX_STATE_UNIFORMS];
-      float storage_[MAX_STATE_UNIFORM_STORAGE];
       struct UniformSampler {
-        STexture sampler;
+        SSampler sampler;
         int location;
         inline UniformSampler() {}
-        inline bool empty() const { return !sampler; }
+        inline bool empty() const { return !sampler.valid(); }
       };
-      UniformSampler samplers_[MAX_STATE_UNIFORM_SAMPLERS];
-    private:
       void setUniform(int location, Uniform::Type type, const float* data);
+      Uniform uniforms_[MAX_STATE_UNIFORMS];
+      float storage_[MAX_STATE_UNIFORM_STORAGE];
+      UniformSampler samplers_[MAX_STATE_UNIFORM_SAMPLERS];
     };
   public:
     //! Constructor compiles shaders and links program
+    //! \fixme separate shader objects (for sharing and shit)
     Program(const char* vertex, const char* fragment);
     ~Program();
-    inline bool isValid() const { return program_name_ != 0; }
+    void bindAttributeLocation(const char* name, int location);
     int getAttributeLocation(const char* name) const;
     int getUniformLocation(const char* name) const;
-    void use(Render *render, const UniformState *new_state = 0);
-    //Program& operator=(const UniformState& newState);
-    
-    //! set scalar/vector float uniform value
-    //! expects: program already in use
-    //! \param location Uniform location obtained via getUniformLocation
-    //! \param values Pointer to new uniform data
-    //! \param components Vector components (1-4)
-    //! \param count Size of array, if uniform is an array
-    void setUniform(int location, const float* values,
-                    int components = 4, int count = 1) const;
-    void setUniform(int location, int value) const;
-    
-    //! set uniform float matrix value
-    //! expects: program already in use
-    //! \param location Uniform location obtained via getUniformLocation
-    //! \param values Pointer to new uniform data
-    //! \param components Matrix size (4 = 2x2, 9 = 3x3, 16 = 4x4); only square matrices are supported
-    //! \param count Size of array, if uniform is an array
-    void setUniformMatrix(int location, const float* values,
-                          int components = 4, int count = 1) const;
-
-    //! \todo protected:
-    unsigned name() const { return program_name_; }
-    
-  private: // this object is noncopyable
+    inline void use(Context *ctx) const { ctx->useProgram(this); }
+  private: // noncopyable
     Program& operator=(const Program& other) { return *this; }
     Program(const Program& other) {}
     static unsigned compileShader(unsigned name, const char* source);
+    unsigned name_;
     unsigned shader_vertex_;
     unsigned shader_fragment_;
-    unsigned program_name_;
     //! \todo UniformState current_state_;
+  protected:
+    friend class Context;
+    inline unsigned name() const { return name_; }
   }; // class Program
   typedef shared<Program> SProgram;
 } // namespace kapusha

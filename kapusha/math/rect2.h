@@ -58,4 +58,4 @@ namespace kapusha {
     vec2<T> toRelative(const vec2<T>& v) const { return (v - min) / size(); }
     vec2<T> fromRelative(const vec2<T>& v) const { return min + size() * v; }
   };
-} // namespace math
+} // namespace kapusha

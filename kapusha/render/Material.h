@@ -1,19 +1,18 @@
+// kapusha/render
+// 2012 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
-#include "../math/types.h"
 #include "Program.h"
-#include "Limits.h"
+#include "State.h"
 
 namespace kapusha {
-  class Render;
-  class Texture;
-  
+  class Sampler;
   //! Basic material that contains uniform values for specific program
   class Material : public Shareable {
   public:
-    Material(Program *program);
-    virtual ~Material();
-    Program *getProgram() const { return program_.get(); }
-    int getUniformLocation(const char* name) {
+    inline Material(Program *program) : program_(program) {}
+    ~Material() {}
+    inline Program *getProgram() const { return program_.get(); }
+    inline int getUniformLocation(const char* name) const {
       return program_->getUniformLocation(name);
     }
     //! Set persistent uniform values
@@ -23,15 +22,17 @@ namespace kapusha {
     void setUniform(const char *name, const vec4f& value);
     void setUniform(const char *name, const mat2f& value);
     void setUniform(const char *name, const mat4f& value);
-    void setSampler(const char *name, Texture *sampler);
+    void setUniform(const char *name, Sampler *sampler);
     Program::UniformState &getUniforms() { return uniforms_; }
     const Program::UniformState &getUniforms() const { return uniforms_; }
-
+    BlendState &blend() { return blend_; }
     //! Make current material -- sets program and uniforms
-    void use(Render *r) const;
+    void use(Context *ctx) const;
   private:
     SProgram program_;
     Program::UniformState uniforms_;    
+    BlendState blend_;
+    DepthState depth_;
   }; // class Material
   typedef shared<Material> SMaterial;
 }

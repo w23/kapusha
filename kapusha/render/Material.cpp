@@ -1,14 +1,14 @@
-#include <string.h>
-#include "../core/Core.h"
-#include "Texture.h"
+// kapusha/render
+// 2012 (c) Ivan 'w23' Avdeev, me@w23.ru
+#include "Sampler.h"
 #include "Material.h"
-#include "Render.h"
 
 namespace kapusha {
-  Material::Material(Program *program) : program_(program) {}
-  Material::~Material() {}
-  void Material::use(Render *r) const {
-    program_->use(r, &uniforms_);
+  void Material::use(Context *ctx) const {
+    program_->use(ctx);
+    uniforms_.apply(ctx);
+    blend_.apply();
+    depth_.apply();
   }
   void Material::setUniform(const char *name, float value) {
     uniforms_.setUniform(getUniformLocation(name), value);
@@ -28,7 +28,7 @@ namespace kapusha {
   void Material::setUniform(const char *name, const mat4f& value) {
     uniforms_.setUniform(getUniformLocation(name), value);
   }
-  void Material::setSampler(const char *name, Texture *sampler) {
-    uniforms_.setSampler(getUniformLocation(name), sampler);
+  void Material::setUniform(const char *name, Sampler *sampler) {
+    uniforms_.setUniform(getUniformLocation(name), sampler);
   }
 } // namespace kapusha

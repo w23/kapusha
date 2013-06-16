@@ -1,14 +1,27 @@
+// kapusha/ooo
+// 2012-2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
+#include "../core.h"
 #include "Reframe.h"
+#include "Object.h"
 
-//! \todo
 namespace kapusha {
+  class Node;
+  typedef shared<Node> SNode;
   class Node : public Shareable {
   public:
-    Node() {}
-    virtual ~Node() {}
+    Node() : parent_(nullptr), prevSibling_(nullptr) {}
+    ~Node() {}
+    void addChild(Node *node);
+    void addObject(Object *object);
+    void removeFromParent() { removeFromSiblings(); }
+    void draw(Context *ctx, const mat4f &mvp) const;
   protected:
+    inline void setParent(Node *parent) { KP_ASSERT(!parent_); parent_ = parent; }
     Reframe frame_;
-    //rect3f aabb_;
-  };
+    SNode first_child_;
+    Node *parent_;
+    KP_DECLARE_DLINKEDLIST(Node, Sibling);
+    SObject object_;
+  }; // class Node
 } // namespace kapusha

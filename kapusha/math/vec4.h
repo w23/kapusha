@@ -1,111 +1,51 @@
-// Kapusha/math
+// kapusha/math
 // 2012 (c) Ivan 'w23' Avdeev, me@w23.ru
-
 #pragma once
-
-#include <math.h>
-#include "vec2.h"
-#include "vec3.h"
+#include <kapusha/math.h>
 
 namespace kapusha {
-
-  template <typename T>
-  struct vec4
-  {
+  template <typename T> struct vec4 {
     T x, y, z, w;
     
-    // constructors
-    vec4() {}
+    inline vec4() {}
+    inline vec4(T v) : x(v), y(v), z(v), w(v) {}
+    inline vec4(T _x, T _y, T _z = 0, T _w = 0)
+      : x(_x), y(_y), z(_z), w(_w) {}
+    inline explicit vec4(const vec2<T>& v, T _z = 0, T _w = 0)
+      : x(v.x), y(v.y), z(_z), w(_w) {}
+    inline explicit vec4(const vec3<T>& v, T _w = 0)
+      : x(v.x), y(v.y), z(v.z), w(_w) {}
     
-    vec4(T _x, T _y, T _z = 0, T _w = 0)
-    : x(_x), y(_y), z(_z), w(_w) {}
+    vec2<T> xy() const { return vec2<T>(x, y); } 
+    vec2<T> zw() const { return vec2<T>(z, w); }
+    vec3<T> xyz() const { return vec3<T>(x, y, z); }
     
-    vec4(T v) : x(v), y(v), z(v), w(v) {}
-    
-    explicit vec4(const vec2<T>& v, T _z = 0, T _w = 0) : x(v.x), y(v.y), z(_z), w(_w) {}
-    explicit vec4(const vec3<T>& v, T _w = 0) : x(v.x), y(v.y), z(v.z), w(_w) {}
-    
-    // swizzle
-    vec2<T> xy() const
-    {
-      return vec2<T>(x, y);
+    T dot(vec4 r) const { return x*r.x + y*r.y + z*r.z + w*r.w; }
+    T length_sq() const { return dot(*this); }
+    T length() const { return sqrt(length_sq()); }
+    T rlength() const { return rsqrt(length_sq()); }
+    vec4 recip() const { return vec4(recip(x), recip(y), recip(z), recip(w)); }
+    vec4 normalized() const { return *this * rlength(); }
+    vec4 normalize() { return *this = normalized(); }
+    vec4 cross(const vec4<T>& r) const {
+      return vec4(y*r.z - z*r.y, z*r.x - x*r.z, x*r.y - y*r.x, 0);
     }
     
-    vec2<T> zw() const
-    {
-      return vec2<T>(z, w);
+    vec4<T> operator-() const { return vec4<T>(-x, -y, -z, -w); }
+    vec4<T> operator+(const vec4<T>& r) const {
+      return vec4<T>(x+r.x, y+r.y, z+r.z, w+r.w);
     }
+    vec4<T> operator-(const vec4<T>& r) const {
+      return vec4<T>(x-r.x, y-r.y, z-r.z, w-r.w);
+    }
+    vec4<T> operator*(const vec4<T>& r) const {
+      return vec4<T>(x*r.x, y*r.y, z*r.z, w*r.w);
+    }
+    vec4<T> operator*(T r) const { return vec4<T>(x*r, y*r, z*r, w*r); }
+    vec4<T> operator/(const vec4<T>& r) const { return *this * r.recip(); }
+    vec4<T> operator/(T r) const { return *this * recip(r); }
+    vec4<T>& operator+=(const vec4<T>& r) { return *this = *this + r; }
 
-    vec3<T> xyz() const
-    {
-      return vec3<T>(x, y, z);
-    }
-    
-    // math ops
-    T length_sq()
-    {
-      return x*x + y*y + z*z + w*w;
-    }
-    
-    T length()
-    {
-      return sqrt(length_sq());
-    }
-    
-    vec4<T> normalize()
-    {
-      T l = length();
-      x /= l; y /= l; z /= l; w /= l;
-      return *this;
-    }
-    
-    // operators
-    vec4<T> operator-(const vec4<T>& b) const
-    {
-      return vec4<T>(x-b.x, y-b.y, z-b.z, w-b.w);
-    }
-    
-    vec4<T> operator-() const
-    {
-      return vec4<T>(-x, -y, -z, -w);
-    }
-    
-    vec4<T>& operator+=(const vec4<T>& b)
-    {
-      x += b.x;
-      y += b.y;
-      z += b.z;
-      w += b.w;
-      return *this;
-    }
-    
-    vec4<T> operator+(const vec4<T>& b) const
-    {
-      return vec4<T>(x+b.x, y+b.y, z+b.z, w+b.w);
-    }
-    
-    vec4<T> operator*(const vec4<T>& b) const
-    {
-      return vec4<T>(x*b.x, y*b.y, z*b.z, w*b.w);
-    }
-    
-    vec4<T> operator*(T b) const
-    {
-      return vec4<T>(x*b, y*b, z*b, w*b);
-    }
-    
-    // cross product
-    vec4<T> operator^(const vec4<T>& b) const
-    {
-      vec4<T> ret;
-      ret.x = y * b.z - z * b.y;
-      ret.y = z * b.x - x * b.z;
-      ret.z = x * b.y - y * b.x;
-      ret.w = 0;
-      
-      return ret;
-    }
-    
+    const T *tptr() const { return &x; }
   }; // vec4
-    
-} // namespace math
+} // namespace kapusha

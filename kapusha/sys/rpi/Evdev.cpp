@@ -4,19 +4,16 @@
 #include <unistd.h>
 #include <sys/select.h>
 #include <sys/ioctl.h>
-
-#include "../../core/Core.h"
-#include "../../core/IViewport.h"
+#include "../../core/core.h"
+#include "../../viewport/IViewport.h"
 #include "Evdev.h"
 
 namespace kapusha {
-
   EvdevPointerState::EvdevPointerState(vec2i vpsize)
     : state_(EventComplete)
     , kpix_(vec2f(1.f, -1.f) / vec2f(vpsize))
     , relativeOnly_(false)
-  {
-  }
+  {}
 
   EventProcessingState
   EvdevPointerState::process(u32 kptime, const input_event &e)
@@ -241,6 +238,10 @@ namespace kapusha {
     timeval tv;
     gettimeofday(&tv, 0);
     localSecOffset_ = tv.tv_sec;
+
+    unsigned int clk = CLOCK_MONOTONIC;
+    ioctl(fileMouse_, EVIOCSCLOCKID, &clk);
+    ioctl(fileKeyboard_, EVIOCSCLOCKID, &clk);
   }
 
   Evdev::~Evdev()

@@ -18,7 +18,7 @@ public:
 private:
   HANDLE file_;
   HANDLE mapping_;
-  static Error streamFileSeekFunc(StreamSeekable*, int, Reference);
+  static Error streamFileSeekFunc(Stream*, int, Reference);
 };
 
 } // namespace kapusha

@@ -1,20 +1,48 @@
 #include <mach/mach_time.h>
-#include "../../render/Render.h"
+#include <kapusha/viewport.h>
+#include <kapusha/render/Context.h>
 #import "KPView.h"
-#import "../../core/IViewport.h"
+
 
 using namespace kapusha;
+void log::sys_write(const char *message) { NSLog(@"%s", message); }
 
+////////////////////////////////////////////////////////////////////////////////
+class CocoaGLContext : public Context {
+public:
+  inline CocoaGLContext(NSOpenGLContext *cocoaContext);
+  virtual ~CocoaGLContext();
+  virtual Context *createSharedContext();
+  virtual void makeCurrent();
+private:
+  NSOpenGLContext *cocoaContext_;
+};
+CocoaGLContext::CocoaGLContext(NSOpenGLContext *cocoaContext)
+: cocoaContext_([cocoaContext retain]) {
+  KP_ASSERT(cocoaContext != nil);
+}
+CocoaGLContext::~CocoaGLContext() {
+  [cocoaContext_ release];
+}
+Context *CocoaGLContext::createSharedContext() {
+  CGLContextObj cglctxobj = (CGLContextObj)[cocoaContext_ CGLContextObj];
+  CGLPixelFormatObj cglpixfmt = CGLGetPixelFormat(cglctxobj);
+  NSOpenGLPixelFormat *pixfmt = [[[NSOpenGLPixelFormat alloc]initWithCGLPixelFormatObj:cglpixfmt] autorelease];
+  NSOpenGLContext *newContext = [[[NSOpenGLContext alloc]
+                                  initWithFormat:pixfmt
+                                  shareContext:cocoaContext_] autorelease];
+  return new CocoaGLContext(newContext);
+}
+void CocoaGLContext::makeCurrent() {
+  [cocoaContext_ makeCurrentContext];
+}
+
+////////////////////////////////////////////////////////////////////////////////
 class CocoaViewportController;
-
-@interface KPView ()
-{
-  CocoaViewportController *viewport_controller_;
+@interface KPView () {
+  CocoaViewportController *viewportController_;
   IViewport *viewport_;
   u32 prevFrameTime_;
-
-  BOOL relativeOnlyMouse_;
-  
   BOOL needRedraw_;
   BOOL wasDummyRedraw_;
   CFRunLoopRef runloop_;
@@ -24,43 +52,23 @@ class CocoaViewportController;
   // why not now? threading! too lazy to think atm
 }
 - (void) requestRedraw;
-
 - (void) draw;
-
 - (void) startDrawing;
 - (void) stopDrawing;
-
 - (void) mouseAlwaysRelative:(BOOL)always;
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
-
 class MachTime {
 public:
-  MachTime()
-  : start_(mach_absolute_time())
-  {
-    mach_timebase_info(&timebase_);
-  }
-  
-  void reset()
-  {
-    start_ = mach_absolute_time();
-  }
-  
-  u64 now_ns() const
-  {
+  MachTime() : start_(mach_absolute_time()) { mach_timebase_info(&timebase_); }
+  void reset() { start_ = mach_absolute_time(); }
+  u64 now_ns() const {
     uint64_t now = mach_absolute_time() - start_;
     return now * timebase_.numer / timebase_.denom;
   }
-  
-  u32 now_ms() const
-  {
-    return static_cast<u32>(now_ns() / 1000000ULL);
-  }
-  
-  static u32 sys_to_ms(NSTimeInterval nsti)
-  {
+  u32 now_ms() const { return static_cast<u32>(now_ns() / 1000000ULL); }
+  static u32 sys_to_ms(NSTimeInterval nsti) {
     //! \warning this is inconsistent with now_* time
     //! \fixme make it consisntent
     return nsti / 1000.f;
@@ -68,48 +76,39 @@ public:
 private:
   uint64_t start_;
   mach_timebase_info_data_t timebase_;
-};
+}; // class MachTime
 MachTime g_machTime;
-
 ////////////////////////////////////////////////////////////////////////////////
-
-class CocoaKeyState : public KeyState
-{
+class CocoaKeyState : public KeyState {
 public:
-  bool processEvent(NSEvent* event, u32 time)
-  {
+  bool processEvent(NSEvent* event, u32 time) {
     KP_ASSERT([event keyCode] < 128);
     int keyc = s_to_kapusha[[event keyCode]];
-    
     //! \fixme go use IOKit HID isntead of this total ridiculousness
     if (event.type != NSFlagsChanged)
       return key(keyc, event.type == NSKeyDown, time);
-    else
-    {
+    else {
       int kbit;
-      switch (keyc)
-      {
-        case KeyLeftShift:
-          kbit = NSShiftKeyMask;
-          break;
-        case KeyLeftCtrl:
-          kbit = NSControlKeyMask;
-          break;
-        case KeyLeftAlt:
-          kbit = NSAlternateKeyMask;
-          break;
-        default:
-          L("Unknown key %d", keyc);
-          return false;
+      switch (keyc) {
+      case KeyLeftShift:
+        kbit = NSShiftKeyMask;
+        break;
+      case KeyLeftCtrl:
+        kbit = NSControlKeyMask;
+        break;
+      case KeyLeftAlt:
+        kbit = NSAlternateKeyMask;
+        break;
+      default:
+        L("Unknown key %d", keyc);
+        return false;
       }
       return key(keyc, event.modifierFlags & kbit, time);
     }
   }
-  
 private:
   static const int s_to_kapusha[128];
 };
-
 const int CocoaKeyState::s_to_kapusha[128] = {
   KeyA,       //0x00 = kVK_ANSI_A
   KeyS,       //0x01 = kVK_ANSI_S
@@ -239,126 +238,114 @@ const int CocoaKeyState::s_to_kapusha[128] = {
   KeyUp,      //0x7E = kVK_UpArrow
   KeyUnknown  //0x7F
 };
-
+////////////////////////////////////////////////////////////////////////////////
+class CocoaPointerState : public PointerState {
+public:
+  inline CocoaPointerState() : relative_(false) {}
+  inline void setRelative(bool relative) { relative_ = relative; }
+  inline void resize(vec2f size) {
+    resizeViewport(vec2f(0.f), size);
+  }
+  void mouseMoveTo(NSView *view, NSEvent *event) {
+    if (!relative_)
+      PointerState::mouseMoveTo(locationInView(view, event),
+                                MachTime::sys_to_ms(event.timestamp));
+    else
+      PointerState::mouseMoveBy(vec2f(event.deltaX, -event.deltaY),
+                                MachTime::sys_to_ms(event.timestamp));
+  }
+  void mouseDown(NSView *view, NSEvent *event) {
+    PointerState::mouseDown(Pointer::LeftButton,
+                            MachTime::sys_to_ms(event.timestamp));
+  }
+  void mouseUp(NSView *view, NSEvent *event) {
+    PointerState::mouseUp(Pointer::LeftButton,
+                          MachTime::sys_to_ms(event.timestamp));
+  }
+private:
+  static vec2f locationInView(NSView *view, NSEvent *event) {
+    NSPoint pos = [view convertPoint:[event locationInWindow] fromView:nil];
+    return vec2f(pos.x, pos.y);
+  }
+  bool relative_;
+}; // class CocoaPointerState
 ////////////////////////////////////////////////////////////////////////////////
 
 class CocoaViewportController : public IViewportController
 {
 public:
   CocoaViewportController(KPView *view, IViewport *viewport)
-  : view_(view), viewport_(viewport)
-  {
-    viewport_->init(this);
-  }
-  
-  CocoaViewportController()
-  {
-    viewport_->close();
-  }
-  
+    : view_(view), viewport_(viewport), glContext_([view openGLContext]) {
+      viewport_->init(this, &glContext_);
+    }
+  ~CocoaViewportController() { viewport_->close(); }
 public: // IViewportController
-  virtual void quit(int code) {}
-  virtual void requestRedraw()
-  {
-    [view_ requestRedraw];
+  void quit(int code) {}
+  void requestRedraw() { [view_ requestRedraw]; }
+  void setRelativeOnlyPointer(bool relative_only) {
+    [view_ mouseAlwaysRelative:relative_only];
+    pointerState_.setRelative(relative_only);
   }
-  
-  virtual void limitlessPointer(bool limitless)
-  {
-    [view_ mouseAlwaysRelative:limitless];
+  void hideCursor(bool hide) {
+    if (hide) CGDisplayHideCursor(kCGDirectMainDisplay);
+    else CGDisplayShowCursor(kCGDirectMainDisplay);
   }
-  
-  virtual void hideCursor(bool hide)
-  {
-    if (hide)
-      CGDisplayHideCursor(kCGDirectMainDisplay);
-    else
-      CGDisplayShowCursor(kCGDirectMainDisplay);
-  }
-  
-  virtual const PointerState& pointerState() const { return pointerState_; }
-  virtual const KeyState& keyState() const { return keyState_; }
-    
-//
-  inline void mouseMoved(vec2f pos, u32 time)
-  {
-    pointerState_.mouseMove(pos, time);
+  const PointerState& pointerState() const { return pointerState_; }
+  const KeyState& keyState() const { return keyState_; }
+  inline void mouseMoved(NSView *view, NSEvent *event) {
+    pointerState_.mouseMoveTo(view, event);
     viewport_->inputPointer(pointerState_);
   }
-  
-  inline void mouseMoved(vec2f pos, vec2f d, u32 time)
-  {
-    pointerState_.mouseMove(pos, d, time);
+  inline void mouseDown(NSView *view, NSEvent *event) {
+    pointerState_.mouseDown(view, event);
     viewport_->inputPointer(pointerState_);
   }
-  
-  inline void mouseClicked(vec2f pos, int button, u32 time)
-  {
-    pointerState_.mouseClick(pos, button, time);
+  inline void mouseUp(NSView *view, NSEvent *event) {
+    pointerState_.mouseUp(view, event);
     viewport_->inputPointer(pointerState_);
   }
-  
-  inline void mouseUnclicked(vec2f pos, int button, u32 time)
-  {
-    pointerState_.mouseUnclick(pos, button, time);
-    viewport_->inputPointer(pointerState_);
-  }
-  
-  inline void key(NSEvent* event, u32 time)
-  {
+  inline void key(NSEvent* event, u32 time) {
     if (keyState_.processEvent(event, time))
       viewport_->inputKey(keyState_);
   }
-    
+  inline void resize(vec2i size) {
+    viewport_->resize(size);
+    pointerState_.resize(size);
+  }
 private:
   KPView *view_;
   IViewport *viewport_;
-  PointerState pointerState_;
+  CocoaGLContext glContext_;
+  CocoaPointerState pointerState_;
   CocoaKeyState keyState_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-
 @implementation KPView
-
-- (void) dealloc
-{
-  delete viewport_controller_;
+- (void) dealloc {
+  delete viewportController_;
   [super dealloc];
 }
-
-- (void) setViewport:(kapusha::IViewport*)viewport
-{
+- (void) setViewport:(kapusha::IViewport*)viewport {
   viewport_ = viewport;
-  
-  if ([self openGLContext])
-  {
+  if ([self openGLContext]) {
     [self prepareOpenGL];
     [self reshape];
   }
 }
-
-- (void) requestRedraw
-{
+- (void) requestRedraw {
   needRedraw_ = YES;
   CFRunLoopWakeUp(runloop_);
 }
-
 // internals
-
 void KPViewDrawObserverCallback(CFRunLoopObserverRef observer,
-                                CFRunLoopActivity activity, void *info)
-{
+                                CFRunLoopActivity activity, void *info) {
   KPView *view = (KPView*)info;
   [view draw];
 }
-
-- (void) startDrawing
-{
+- (void) startDrawing {
   if (drawObserver_) return;
-  
   runloop_ = CFRunLoopGetCurrent();
-  
   CFRunLoopObserverContext ctx;
   memset(&ctx, 0, sizeof(ctx));
   ctx.info = self;
@@ -366,22 +353,16 @@ void KPViewDrawObserverCallback(CFRunLoopObserverRef observer,
                                           kCFRunLoopBeforeWaiting,
                                           YES, 0, KPViewDrawObserverCallback,
                                           &ctx);
-  
   CFRunLoopAddObserver(runloop_, drawObserver_,
                        kCFRunLoopCommonModes);
 }
-
-- (void) stopDrawing
-{
+- (void) stopDrawing {
   CFRunLoopRemoveObserver(runloop_, drawObserver_,
                           kCFRunLoopCommonModes);
   CFRelease(drawObserver_);
 }
-
-- (void) draw
-{
-  if (viewport_ && needRedraw_)
-  {
+- (void) draw {
+  if (viewport_ && needRedraw_) {
     needRedraw_ = NO;
     u32 time = g_machTime.now_ms();
     float dt = (wasDummyRedraw_) ? 0.f : (time - prevFrameTime_) / 1000.f;
@@ -392,117 +373,54 @@ void KPViewDrawObserverCallback(CFRunLoopObserverRef observer,
   } else
     wasDummyRedraw_ = YES;
 }
-
- 
 #pragma mark - delegate methods
-
-- (void) prepareOpenGL
-{
+- (void) prepareOpenGL {
   g_machTime.reset();
   prevFrameTime_ = g_machTime.now_ms();
-  
-  delete viewport_controller_;
-  viewport_controller_ = 0;
-
+  delete viewportController_;
+  viewportController_ = 0;
   if (viewport_)
-    viewport_controller_ = new CocoaViewportController(self, viewport_);
-  
+    viewportController_ = new CocoaViewportController(self, viewport_);
   needRedraw_ = YES;
   wasDummyRedraw_ = YES;
   [self startDrawing];
 }
-
-- (void) reshape
-{
+- (void) reshape {
   if (viewport_)
-    viewport_->resize(kapusha::vec2i(self.bounds.size.width,
-                                     self.bounds.size.height));
+    viewportController_->resize(vec2i(self.bounds.size.width,
+                                      self.bounds.size.height));
 }
-
-- (void)drawRect:(NSRect)dirtyRect
-{
+- (void)drawRect:(NSRect)dirtyRect {
   needRedraw_ = YES;
   [self draw];
 }
-
-- (BOOL)acceptsFirstResponder {
-  return YES;
-}
-- (BOOL)becomeFirstResponder {
-  return  YES;
-}
-- (BOOL)resignFirstResponder {
-  return YES;
-}
-
-- (vec2f) viewportMouseLocation:(NSEvent *)event
-{
-  NSPoint pos = [self convertPoint:[event locationInWindow] fromView:nil];
-  vec2f ret(pos.x, pos.y);
-  vec2f size(self.bounds.size.width, self.bounds.size.height);
-  return (ret / size) * 2.f - 1.f;
-}
-
-- (void) mouseAlwaysRelative:(BOOL)relative
-{
+- (BOOL)acceptsFirstResponder { return YES; }
+- (BOOL)becomeFirstResponder { return YES; }
+- (BOOL)resignFirstResponder { return YES; }
+- (void) mouseAlwaysRelative:(BOOL)relative {
   KP_ENSURE(kCGErrorSuccess==CGAssociateMouseAndMouseCursorPosition(!relative));
-  relativeOnlyMouse_ = relative;
 }
-
 #pragma mark Mouse events
-
-- (void) mouseMoved:(NSEvent *)theEvent
-{
-  if (relativeOnlyMouse_)
-  {
-    vec2f d = vec2f(theEvent.deltaX, -theEvent.deltaY)
-      / vec2f(self.bounds.size.width, self.bounds.size.height);
-    viewport_controller_->mouseMoved([self viewportMouseLocation:theEvent],
-                                     d,
-                                     MachTime::sys_to_ms([theEvent timestamp]));
-  } else
-    viewport_controller_->mouseMoved([self viewportMouseLocation:theEvent],
-                                     MachTime::sys_to_ms([theEvent timestamp]));
+//! \todo right, middle buttons, wheel, maybe less functions
+- (void) mouseDragged:(NSEvent *)theEvent { [self mouseMoved:theEvent]; }
+- (void) mouseMoved:(NSEvent *)theEvent {
+  viewportController_->mouseMoved(self, theEvent);
 }
-
-- (void) mouseDragged:(NSEvent *)theEvent
-{
-  [self mouseMoved:theEvent];
+- (void) mouseDown:(NSEvent *)theEvent {
+  viewportController_->mouseDown(self, theEvent);
 }
-
-- (void) mouseDown:(NSEvent *)theEvent
-{
-  viewport_controller_->mouseClicked([self viewportMouseLocation:theEvent],
-                                     PointerState::Pointer::LeftButton,
-                                     MachTime::sys_to_ms([theEvent timestamp]));
+- (void) mouseUp:(NSEvent *)theEvent {
+  viewportController_->mouseUp(self, theEvent);
 }
-
-- (void) mouseUp:(NSEvent *)theEvent
-{
-  viewport_controller_->mouseUnclicked([self viewportMouseLocation:theEvent],
-                                       PointerState::Pointer::LeftButton,
-                                       MachTime::sys_to_ms([theEvent timestamp]));
-}
-
-//! \todo right, middle buttons, wheel
-
 #pragma mark Key events
-
-- (void) keyDown:(NSEvent *)theEvent
-{
+- (void) keyDown:(NSEvent *)theEvent {
   if (!theEvent.isARepeat)
-    viewport_controller_->key(theEvent, MachTime::sys_to_ms([theEvent timestamp]));
+    viewportController_->key(theEvent, MachTime::sys_to_ms([theEvent timestamp]));
 }
-
-- (void) flagsChanged:(NSEvent *)theEvent
-{
-  viewport_controller_->key(theEvent, MachTime::sys_to_ms([theEvent timestamp]));
+- (void) flagsChanged:(NSEvent *)theEvent {
+  viewportController_->key(theEvent, MachTime::sys_to_ms([theEvent timestamp]));
 }
-
-- (void) keyUp:(NSEvent *)theEvent
-{
-  viewport_controller_->key(theEvent, MachTime::sys_to_ms([theEvent timestamp]));
+- (void) keyUp:(NSEvent *)theEvent {
+  viewportController_->key(theEvent, MachTime::sys_to_ms([theEvent timestamp]));
 }
-
-
 @end

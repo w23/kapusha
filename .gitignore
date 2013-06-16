@@ -8,3 +8,7 @@ project.xcworkspace
 *.o
 *.a
 *.log
+*.d
+*.sdf
+/ipch
+*.user

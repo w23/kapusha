@@ -1,10 +1,15 @@
 #include <windows.h>
 #include <windowsx.h>
+#undef min
+#undef max
 #include <kapusha/core/Log.h>
-#include <kapusha/core/IViewport.h>
-#include <kapusha/render/OpenGL.h>
+#include <kapusha/viewport/IViewport.h>
+#include <kapusha/render/Context.h>
 
 namespace kapusha {
+
+///////////////////////////////////////////////////////////////////////////////
+  class WGLContext : public Context { public: inline WGLContext() {} };
 
 ///////////////////////////////////////////////////////////////////////////////
   class WindowsKeyState : public KeyState
@@ -311,11 +316,11 @@ namespace kapusha {
     switch(msg)
     {
     case WM_LBUTTONDOWN:
-      mouseClick(pos(lParam), Pointer::LeftButton, now);
+      mouseDown(Pointer::LeftButton, now);
       break;
 
     case WM_LBUTTONUP:
-      mouseUnclick(pos(lParam), Pointer::LeftButton, now);
+      mouseUp(Pointer::LeftButton, now);
       break;
 
     case WM_MOUSEMOVE:
@@ -323,10 +328,10 @@ namespace kapusha {
 
       if (grabbed_)
       {
-        mouseMove(pos(lParam), delta(lParam), now);
+        mouseMoveBy(delta(lParam), now);
         grab();
       } else
-        mouseMove(pos(lParam), now);
+        mouseMoveTo(pos(lParam), now);
       break;
 
     default:
@@ -344,7 +349,7 @@ namespace kapusha {
 
     virtual void quit(int code);
     virtual void requestRedraw();
-    virtual void limitlessPointer(bool limitless);
+    virtual void setRelativeOnlyPointer(bool relative_only);
     virtual void hideCursor(bool hide);
     virtual const PointerState& pointerState() const { return pointers_; }
     virtual const KeyState& keyState() const { return keys_; }
@@ -363,6 +368,7 @@ namespace kapusha {
     bool need_redraw_;
     WindowsPointerState pointers_;
     WindowsKeyState keys_;
+    WGLContext context_;
   };
 
   void WindowController::quit(int code)
@@ -375,9 +381,9 @@ namespace kapusha {
     need_redraw_ = true;
   }
 
-  void WindowController::limitlessPointer(bool limitless)
+  void WindowController::setRelativeOnlyPointer(bool relative_only)
   {
-    pointers_.setGrab(limitless, window_);
+    pointers_.setGrab(relative_only, window_);
   }
 
   void WindowController::hideCursor(bool hide)
@@ -475,7 +481,8 @@ namespace kapusha {
 
     glewInit();
 
-    viewport->init(this);
+    viewport->init(this, &context_);
+    viewport->resize(vec2i(width, height));
   }
 
   int WindowController::run()
