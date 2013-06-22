@@ -32,12 +32,19 @@ ifeq ($(KP_RASPBERRY),1)
 endif
 
 ifeq ($(KP_X11),1)
+	KP_FREETYPE = 1
 	LDFLAGS += -lGL -lX11
 endif
 
 ifeq ($(KP_SDL),1)
+	KP_FREETYPE = 1
 	CXXFLAGS += `pkg-config --cflags sdl`
 	LDFLAGS += `pkg-config --libs sdl` -lGL
+endif
+
+ifeq ($(KP_FREETYPE),1)
+	CXXFLAGS += `pkg-config --cflags freetype2 harfbuzz`
+	LDFLAGS += `pkg-config --libs freetype2 harfbuzz`
 endif
 
 %.o: %.cpp $(METADEPS)

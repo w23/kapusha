@@ -30,22 +30,29 @@ SOURCES := \
 
 ifeq ($(KP_RASPBERRY),1)
 SOURCES += \
-  kapusha/sys/rpi/VideoCore.cpp \
-  kapusha/sys/rpi/EGL.cpp \
-  kapusha/sys/rpi/RPi.cpp \
-  kapusha/sys/rpi/Evdev.cpp
+	kapusha/sys/rpi/VideoCore.cpp \
+	kapusha/sys/rpi/EGL.cpp \
+	kapusha/sys/rpi/RPi.cpp \
+	kapusha/sys/rpi/Evdev.cpp
 endif
 
 ifeq ($(KP_SDL),1)
 SOURCES += \
-  kapusha/sys/sdl/KPSDL.cpp
+	kapusha/sys/sdl/KPSDL.cpp
 endif
 
 ifeq ($(KP_X11),1)
 SOURCES += \
-  kapusha/sys/x11/GLXContext.cpp \
-  kapusha/sys/x11/GLXViewportController.cpp \
-  kapusha/sys/x11/x11.cpp
+	kapusha/sys/x11/GLXContext.cpp \
+	kapusha/sys/x11/GLXViewportController.cpp \
+	kapusha/sys/x11/x11.cpp
+endif
+
+ifeq ($(KP_FREETYPE),1)
+SOURCES += \
+	kapusha/fontain/harftype/Freetype.cpp \
+	kapusha/fontain/harftype/Face.cpp \
+	kapusha/fontain/harftype/String.cpp
 endif
 
 MODULES=$(SOURCES:.cpp=.o)
