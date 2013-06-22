@@ -42,7 +42,7 @@ namespace kapusha {
       return (p.x >= min.x) && (p.y >= min.y)
         && (p.x <= max.x) && (p.y <= max.y);
     }
-    bool doesContain(const rect2<T>& r) const {
+    bool doesContain(const rect2<T> &r) const {
       return doesContain(r.min) && doesContain(r.max);
     }
     void extendToContain(const vec2<T> p) {
@@ -50,6 +50,9 @@ namespace kapusha {
       if (p.y < min.y) min.y = p.y;
       if (p.x > max.x) max.x = p.x;
       if (p.y > max.y) max.y = p.y;
+    }
+    void extendToContain(const rect2<T> &r) {
+      extendToContain(r.min); extendToContain(r.max);
     }
     bool doesIntersect(const rect2<T>& other_rect) const {
       return (min.x < other_rect.max.x) && (min.y < other_rect.max.y)
