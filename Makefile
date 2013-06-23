@@ -6,6 +6,7 @@ include $(ROOT)/common.mk
 SOURCES := \
 	kapusha/core/assert.cpp \
 	kapusha/core/log.cpp \
+	kapusha/core/Surface.cpp \
 	kapusha/math/math.cpp \
 	kapusha/io/StreamFile_posix.cpp \
 	kapusha/io/Stream.cpp \
