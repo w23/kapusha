@@ -14,7 +14,7 @@ public:
   unsigned push_back(const void *items, unsigned count = 1);
   void erase(unsigned index, unsigned count = 1);
 
-  //! \todo void insert(unsigned index, const void *items, unsigned count = 1);
+  void insert(unsigned index, const void *items, unsigned count = 1);
 
   template <typename T>
   inline T *get(unsigned index) {
@@ -29,6 +29,7 @@ public:
   }
 
 private:
+  void checkOverflow(unsigned new_size);
   size_t itemSize_;
   unsigned allocated_;
   unsigned size_;
@@ -47,6 +48,9 @@ public:
   }
   inline unsigned push_back(const T& item) {
     return Array::push_back(&item, 1);
+  }
+  inline void insert(unsigned index, const T& item) {
+    Array::insert(index, &item, 1);
   }
 }; // class ArrayOf
 } // namespace kapusha
