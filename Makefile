@@ -27,6 +27,7 @@ SOURCES := \
 	kapusha/ooo/Node.cpp \
 	kapusha/utils/SpectatorCameraController.cpp \
 	kapusha/utils/geometry.cpp \
+	kapusha/utils/Atlas.cpp \
 	kapusha/utils/noise.cpp
 	
 
@@ -63,6 +64,7 @@ DEPENDS=$(SOURCES:.cpp=.d)
 .PHONY: all clean
 
 libkapusha.a: $(MODULES)
+	@rm -f libkapusha.a
 	ar rcs libkapusha.a $(MODULES)
 
 depend: $(DEPENDS)
