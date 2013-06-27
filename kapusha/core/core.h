@@ -6,3 +6,5 @@
 #include "log.h"
 #include "shared.h"
 #include "list.h"
+#include "Surface.h"
+#include "array.h"
