@@ -1,27 +1,47 @@
+#include <cstring>
 #include "assert.h"
 #include "Surface.h"
 
 namespace kapusha {
 
-Surface::Surface(vec2i size, int bytesPerPixel) : owner_(true) {
-  meta_.size = size;
-  meta_.bytesPerPixel = bytesPerPixel;
+void Surface::Meta::init() {
+  switch(format) {
+    case R8: bytesPerPixel = 1; break;
+    case RGB565:
+    case RG88: bytesPerPixel = 2; break;
+    case RGB888: bytesPerPixel = 3; break;
+    case BGRA8888:
+    case RGBA8888: bytesPerPixel = 4; break;
+    case Unknown: {}
+  }
   // enforce 4-bytes alignment
-  meta_.bytesPerRow = size.x * bytesPerPixel;
-  meta_.bytesPerRow += 4 - (meta_.bytesPerRow & 3);
-  pixels_ = new u32[meta_.bytesPerRow * size.y];
+  bytesPerRow = size.x * bytesPerPixel;
+  bytesPerRow += 4 - (bytesPerRow & 3);
 }
 
-Surface::Surface(Surface *parent, rect2i rect) : owner_(false) {
-  KP_ASSERT(rect2i(vec2i(0), parent->meta_.size).doesContain(rect));
-  meta_.size = rect.size();
-  meta_.bytesPerPixel = parent->meta_.bytesPerPixel;
-  u8 *u8p = reinterpret_cast<u8*>(parent->pixels_) + rect.min.y * parent->meta_.bytesPerRow;
-  pixels_ = reinterpret_cast<u32*>(u8p + rect.min.x * meta_.bytesPerPixel);
-  meta_.bytesPerRow = parent->meta_.bytesPerRow - meta_.bytesPerPixel
-    * (parent->meta_.size.x - meta_.size.x);
+Surface::Surface(const Meta& meta) : meta_(meta), owner_(true) {
+  pixels_ = new u32[meta_.bytes() / 4];
 }
+Surface::Surface(const Meta &meta, void *pixels)
+  : meta_(meta), pixels_(reinterpret_cast<u32*>(pixels)), owner_(false) {}
 
 Surface::~Surface() { if (owner_) delete[] pixels_; }
+
+void Surface::blit(vec2i pos, const Surface *source) {
+  KP_ASSERT(meta_.format != source->meta().format);
+  KP_ASSERT(meta_.bytesPerPixel != source->meta().bytesPerPixel);
+  KP_ASSERT(rect2i(meta_.size).doesContain(rect2i(source->meta().size)+pos));
+
+  const u8 *psrc = reinterpret_cast<const u8*>(source->pixels_);
+  u8 *pdst = reinterpret_cast<u8*>(pixels_)
+    + pos.y * meta_.bytesPerRow
+    + pos.x * meta_.bytesPerPixel;
+
+  const vec2i size = source->meta().size;
+  for (unsigned y = 0; y < size.y; ++y, psrc += source->meta().bytesPerRow,
+    pdst += meta_.bytesPerRow) {
+    memcpy(pdst, psrc, size.x * meta_.bytesPerPixel);
+  }
+}
 
 } // namespace kapusha
