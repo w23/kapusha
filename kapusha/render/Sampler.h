@@ -10,24 +10,6 @@ namespace kapusha {
   class Framebuffer;
   class Sampler : public Shareable {
   public:
-    struct Meta {
-      vec2i size;
-      enum SampleFormat {
-        None = 0,
-        RGBA8888,
-        BGRA8888,
-        RGB565,
-        R8
-      } format;
-      Meta() : size(0), format(None) {}
-      Meta(vec2i sz, SampleFormat fmt = RGBA8888)
-        : size(sz), format(fmt) {}
-      bool operator==(const Meta& other) const {
-        return size == other.size && format == other.format;
-      }
-      bool operator!=(const Meta& other) const { return !(*this == other); }
-    };
-  public:
     enum FilterMode {
       Linear = GL_LINEAR,
       Nearest = GL_NEAREST,
@@ -38,17 +20,27 @@ namespace kapusha {
     };
     Sampler(FilterMode magnification = Linear,
             FilterMode minification = LinearMipmapLinear);
+    Sampler(Context *context, const Surface* source,
+            FilterMode magnification = Linear,
+            FilterMode minification = LinearMipmapLinear);
     ~Sampler();
     void setMagFilter(FilterMode filter);
     inline void setMinFilter(FilterMode filter) { minification_ = filter; }
-    void upload(Context *ctx, const Meta& meta, const void* pixels);
-    const Meta& getMeta() const { return meta_; }
+    inline void allocate(Context *ctx, const Surface::Meta &meta) {
+      upload(ctx, meta, nullptr);
+    }
+    inline void upload(Context *ctx, const Surface *source) {
+      upload(ctx, source->meta(), source->pixels());
+    }
+    const Surface::Meta& meta() const { return meta_; }
     inline void bind(Context *ctx, int unit = -1) const {
       ctx->bindSampler(this, unit);
     }
   private:
+    void init(FilterMode magnification, FilterMode minification);
+    void upload(Context *ctx, const Surface::Meta &meta, const void *data);
     unsigned name_;
-    Meta meta_;
+    Surface::Meta meta_;
     FilterMode magnification_, minification_;
   protected:
     friend class Context;

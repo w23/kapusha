@@ -9,42 +9,55 @@
 #endif
 
 namespace kapusha {
-  Sampler::Sampler(FilterMode magnification, FilterMode minification) {
+  void Sampler::init(FilterMode magnification, FilterMode minification) {
     glGenTextures(1, &name_);
     setMagFilter(magnification);
     setMinFilter(minification);
   }
+
+  Sampler::Sampler(FilterMode magnification, FilterMode minification) {
+    init(magnification, minification);
+  }
+
+  Sampler::Sampler(Context *context, const Surface* source,
+                   FilterMode magnification, FilterMode minification) {
+    init(magnification, minification);
+    upload(context, source);
+  }
+
   Sampler::~Sampler() { glDeleteTextures(1, &name_); }
+
   void Sampler::setMagFilter(FilterMode filter) {
     KP_ASSERT(filter == Linear || filter == Nearest);
     magnification_ = filter;
   }
-  void Sampler::upload(Context *ctx, const Meta& meta, const void* pixels) {
+
+  void Sampler::upload(Context *ctx, const Surface::Meta &meta, const void *data) {
     meta_ = meta;
     L("Loading texture: %dx%d format = %d",
-      meta.size.x, meta.size.y, meta.format);
+      meta_.size.x, meta_.size.y, meta_.format);
     //! \todo table, not switch?
     unsigned internal, format, type;
-    switch (meta.format) {
-      case Meta::RGBA8888:
+    switch (meta_.format) {
+      case Surface::Meta::RGBA8888:
         internal = GL_RGBA, format = GL_RGBA, type = GL_UNSIGNED_BYTE;
         break;
-      case Meta::BGRA8888:
+      case Surface::Meta::BGRA8888:
         internal = GL_RGBA, format = GL_BGRA, type = GL_UNSIGNED_BYTE;
         break;
-      case Meta::RGB565:
+      case Surface::Meta::RGB565:
         internal = GL_RGB, format = GL_RGB, type = GL_UNSIGNED_SHORT_5_6_5;
         break;
-      case Meta::R8:
+      case Surface::Meta::R8:
         internal = GL_LUMINANCE, format = GL_LUMINANCE, type = GL_UNSIGNED_BYTE;
         break;
       default: KP_ASSERT(!"Unsupported texture format"); return;
     }
     bind(ctx);
     glTexImage2D(GL_TEXTURE_2D, 0, internal,
-                 meta.size.x, meta.size.y, 0,
+                 meta_.size.x, meta_.size.y, 0,
                  format, type,
-                 pixels); GL_ASSERT
+                 data); GL_ASSERT
     //! \todo move this to some other place?
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magnification_); GL_ASSERT
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minification_); GL_ASSERT
