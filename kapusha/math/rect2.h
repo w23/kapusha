@@ -7,17 +7,19 @@
 namespace kapusha {
   template <typename T> struct rect2 {
     vec2<T> min, max;
-    rect2() {}
+    rect2() = default;
     rect2(T v) : min(v,v), max(v,v) {}
     rect2(T left, T bottom, T right, T top)
       : min(left, bottom), max(right, top) {}
     rect2(vec2<T> min_, vec2<T> max_) : min(min_), max(max_) {}
     rect2(vec2<T> sz_) : min(0), max(sz_) {}
-    void clear() {
+    rect2 &clear() {
       min.x = min.y = std::numeric_limits<T>::max();
       max.x = max.y = std::numeric_limits<T>::min();
+      return *this;
     }
-    bool isEmpty() const { return min.x > max.x || min.y > max.y; }
+    bool isValid() const { return min.x > max.x || min.y > max.y; }
+    bool isEmpty() const { return min.x >= max.x || min.y >= max.y; }
     T left() const { return min.x; }
     T bottom() const { return min.y; }
     T right() const { return max.x; }
@@ -45,14 +47,15 @@ namespace kapusha {
     bool doesContain(const rect2<T> &r) const {
       return doesContain(r.min) && doesContain(r.max);
     }
-    void extendToContain(const vec2<T> p) {
+    rect2 &extendToContain(const vec2<T> p) {
       if (p.x < min.x) min.x = p.x;
       if (p.y < min.y) min.y = p.y;
       if (p.x > max.x) max.x = p.x;
       if (p.y > max.y) max.y = p.y;
+      return *this;
     }
-    void extendToContain(const rect2<T> &r) {
-      extendToContain(r.min); extendToContain(r.max);
+    rect2 &extendToContain(const rect2<T> &r) {
+      extendToContain(r.min); return extendToContain(r.max);
     }
     bool doesIntersect(const rect2<T>& other_rect) const {
       return (min.x < other_rect.max.x) && (min.y < other_rect.max.y)
