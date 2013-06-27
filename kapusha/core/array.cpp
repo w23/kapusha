@@ -4,7 +4,7 @@
 #define INITIAL_SIZE 4
 
 namespace kapusha {
-Array::Array(size_t item_size, unsigned reserve)
+Array::Array(std::size_t item_size, unsigned reserve)
   : itemSize_(item_size), allocated_(reserve)
   , size_(0), items_(nullptr) {
   if (allocated_ != 0)

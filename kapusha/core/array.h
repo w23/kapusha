@@ -5,10 +5,10 @@ namespace kapusha {
 //! \brief Basic array for mostly POD types
 class Array {
 public:
-  Array(size_t item_size, unsigned reserve = 0);
+  Array(std::size_t item_size, unsigned reserve = 0);
   ~Array();
 
-  size_t itemSize() const { return itemSize_; }
+  std::size_t itemSize() const { return itemSize_; }
   unsigned size() const { return size_; }
 
   unsigned push_back(const void *items, unsigned count = 1);
@@ -19,18 +19,20 @@ public:
   template <typename T>
   inline T *get(unsigned index) {
     KP_ASSERT(sizeof(T) == itemSize_);
+    KP_ASSERT(index < size_);
     return reinterpret_cast<T*>(items_) + index;
   }
 
   template <typename T>
   inline const T *get(unsigned index) const {
     KP_ASSERT(sizeof(T) == itemSize_);
+    KP_ASSERT(index < size_);
     return reinterpret_cast<const T*>(items_) + index;
   }
 
 private:
   void checkOverflow(unsigned new_size);
-  size_t itemSize_;
+  std::size_t itemSize_;
   unsigned allocated_;
   unsigned size_;
   char *items_;
@@ -52,5 +54,7 @@ public:
   inline void insert(unsigned index, const T& item) {
     Array::insert(index, &item, 1);
   }
+  const T& operator[](unsigned index) const { return *get<T>(index); }
+  T& operator[](unsigned index) { return *get<T>(index); }
 }; // class ArrayOf
 } // namespace kapusha
