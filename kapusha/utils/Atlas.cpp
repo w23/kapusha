@@ -6,8 +6,9 @@
 namespace kapusha {
 
 Atlas::Atlas(const Surface::Meta& smeta) : surface_(new Surface(smeta)),
-  freeRects_(PREALLOCATED_RECTS) {
+  freeRects_(PREALLOCATED_RECTS), dirty_(true) {
   freeRects_.push_back(rect2i(smeta.size));
+  surface_->clear();
 }
 
 rect2i Atlas::insert(const Surface *surface) {
@@ -58,16 +59,19 @@ rect2i Atlas::insert(const Surface *surface) {
   }
 
   // 0 should be the biggest one, try it first
-  if (!newrects[0].isEmpty()) {
+  if (newrects[0].area() != 0) {
     freeRects_[best] = newrects[0];
-    if (!newrects[1].isEmpty()) freeRects_.push_back(newrects[1]);
+    if (newrects[1].area() != 0) freeRects_.push_back(newrects[1]);
   } else freeRects_.erase(best);
 
-  return ret;
+  dirty_ = true;
+  return rect2i(ret.min, ret.min + size);
 }
 
 void Atlas::commit(Context *context) {
+  if (!dirty_) return;
   if (!sampler_.get()) sampler_.reset(new Sampler(context, surface_.get()));
   else sampler_->upload(context, surface_.get());
+  dirty_ = false;
 }
 } // namespace kapusha

@@ -18,5 +18,6 @@ private:
   SSurface surface_;
   SSampler sampler_;
   ArrayOf<rect2i> freeRects_;
+  bool dirty_;
 }; // class Atlas
 } // namespace kapusha

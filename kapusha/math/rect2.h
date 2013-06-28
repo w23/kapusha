@@ -18,8 +18,8 @@ namespace kapusha {
       max.x = max.y = std::numeric_limits<T>::min();
       return *this;
     }
-    bool isValid() const { return min.x > max.x || min.y > max.y; }
-    bool isEmpty() const { return min.x >= max.x || min.y >= max.y; }
+    bool isValid() const { return min.x <= max.x && min.y <= max.y; }
+    //bool isEmpty() const { return min.x > max.x || min.y > max.y; }
     T left() const { return min.x; }
     T bottom() const { return min.y; }
     T right() const { return max.x; }
