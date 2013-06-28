@@ -33,12 +33,11 @@ namespace kapusha {
   }
 
   void Sampler::upload(Context *ctx, const Surface::Meta &meta, const void *data) {
-    meta_ = meta;
     L("Loading texture: %dx%d format = %d",
-      meta_.size.x, meta_.size.y, meta_.format);
+      meta.size.x, meta.size.y, meta.format);
     //! \todo table, not switch?
     unsigned internal, format, type;
-    switch (meta_.format) {
+    switch (meta.format) {
       case Surface::Meta::RGBA8888:
         internal = GL_RGBA, format = GL_RGBA, type = GL_UNSIGNED_BYTE;
         break;
@@ -49,19 +48,27 @@ namespace kapusha {
         internal = GL_RGB, format = GL_RGB, type = GL_UNSIGNED_SHORT_5_6_5;
         break;
       case Surface::Meta::R8:
-        internal = GL_LUMINANCE, format = GL_LUMINANCE, type = GL_UNSIGNED_BYTE;
+        //internal = GL_LUMINANCE, format = GL_LUMINANCE, type = GL_UNSIGNED_BYTE;
+        internal = GL_ALPHA, format = GL_ALPHA, type = GL_UNSIGNED_BYTE;
         break;
       default: KP_ASSERT(!"Unsupported texture format"); return;
     }
     bind(ctx);
-    glTexImage2D(GL_TEXTURE_2D, 0, internal,
-                 meta_.size.x, meta_.size.y, 0,
-                 format, type,
-                 data); GL_ASSERT
+    if (meta == meta_) {
+      if (data) {
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, meta.size.x, meta.size.y,
+          format, type, data); GL_ASSERT }
+    } else {
+      glTexImage2D(GL_TEXTURE_2D, 0, internal,
+                   meta.size.x, meta.size.y, 0,
+                   format, type,
+                   data); GL_ASSERT
+    }
     //! \todo move this to some other place?
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magnification_); GL_ASSERT
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minification_); GL_ASSERT
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); GL_ASSERT
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); GL_ASSERT
+    meta_ = meta;
   }
 } // namespace kapusha

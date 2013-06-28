@@ -19,10 +19,10 @@ namespace kapusha {
       LinearMipmapLinear = GL_LINEAR_MIPMAP_LINEAR
     };
     Sampler(FilterMode magnification = Linear,
-            FilterMode minification = LinearMipmapLinear);
+            FilterMode minification = Nearest);//LinearMipmapLinear);
     Sampler(Context *context, const Surface* source,
             FilterMode magnification = Linear,
-            FilterMode minification = LinearMipmapLinear);
+            FilterMode minification = Nearest);//LinearMipmapLinear);
     ~Sampler();
     void setMagFilter(FilterMode filter);
     inline void setMinFilter(FilterMode filter) { minification_ = filter; }
