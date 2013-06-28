@@ -15,8 +15,7 @@ void Surface::Meta::init() {
     case Unknown: {}
   }
   // enforce 4-bytes alignment
-  bytesPerRow = size.x * bytesPerPixel;
-  bytesPerRow += 4 - (bytesPerRow & 3);
+  bytesPerRow = 4 * ((size.x * bytesPerPixel + 3) / 4);
 }
 
 Surface::Surface(const Meta& meta) : meta_(meta), owner_(true) {
@@ -27,9 +26,13 @@ Surface::Surface(const Meta &meta, void *pixels)
 
 Surface::~Surface() { if (owner_) delete[] pixels_; }
 
+void Surface::clear() {
+  memset(pixels_, 0, meta_.bytes());
+}
+
 void Surface::blit(vec2i pos, const Surface *source) {
-  KP_ASSERT(meta_.format != source->meta().format);
-  KP_ASSERT(meta_.bytesPerPixel != source->meta().bytesPerPixel);
+  KP_ASSERT(meta_.format == source->meta().format);
+  KP_ASSERT(meta_.bytesPerPixel == source->meta().bytesPerPixel);
   KP_ASSERT(rect2i(meta_.size).doesContain(rect2i(source->meta().size)+pos));
 
   const u8 *psrc = reinterpret_cast<const u8*>(source->pixels_);

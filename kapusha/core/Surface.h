@@ -41,6 +41,7 @@ public:
   template <typename T>
   inline const T *pixels() const { return reinterpret_cast<const T>(pixels_); }
 
+  void clear();
   void blit(vec2i pos, const Surface *source);
 
   //! \todo void extend(vec2i by);
