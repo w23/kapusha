@@ -25,6 +25,7 @@ SOURCES := \
 	kapusha/ooo/Object.cpp \
 	kapusha/ooo/Camera.cpp \
 	kapusha/ooo/Node.cpp \
+	kapusha/fontain/String.cpp \
 	kapusha/utils/SpectatorCameraController.cpp \
 	kapusha/utils/geometry.cpp \
 	kapusha/utils/Atlas.cpp \
@@ -51,11 +52,10 @@ SOURCES += \
 	kapusha/sys/x11/x11.cpp
 endif
 
-ifeq ($(KP_FREETYPE),1)
+ifeq ($(KP_HARFTYPE),1)
 SOURCES += \
 	kapusha/fontain/harftype/Freetype.cpp \
-	kapusha/fontain/harftype/Face.cpp \
-	kapusha/fontain/harftype/String.cpp
+	kapusha/fontain/harftype/Face.cpp
 endif
 
 MODULES=$(SOURCES:.cpp=.o)
