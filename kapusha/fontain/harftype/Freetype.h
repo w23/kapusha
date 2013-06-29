@@ -10,7 +10,7 @@ class Freetype : public IFontain {
 public:
   Freetype();
   ~Freetype();
-  virtual SFace getFace(const char *name, vec2i size);
+  virtual IFace *getFace(const char *name, vec2i size);
 private:
   FT_Library library_;
 }; // class Freetype

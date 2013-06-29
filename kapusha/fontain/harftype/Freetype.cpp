@@ -12,7 +12,7 @@ Freetype::~Freetype() {
   FT_Done_FreeType(library_);
 }
 
-SFace Freetype::getFace(const char *name, vec2i size) {
+IFace *Freetype::getFace(const char *name, vec2i size) {
   return Face::create(library_, name, size);
 }
 

@@ -1,14 +1,13 @@
 #pragma once
-#include <kapusha/core.h>
-#include <kapusha/math.h>
 
 namespace kapusha {
+  class Context;
 namespace fontain {
-  class IString;
-  class IFace : public Shareable {
+  class String;
+  class IFace {
   public:
-    virtual IString *createEmptyString() const = 0;
-  };
-  typedef shared<IFace> SFace;
+    virtual ~IFace() {}
+    virtual String *createString(Context *ctx,const char *string, int length = -1) const = 0;
+  }; // class IFace
 } // namespace fontain
 } // namespace kapusha
