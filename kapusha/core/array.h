@@ -1,20 +1,39 @@
 #pragma once
+#include <cstring>
+#include "types.h"
 #include "assert.h"
 
 namespace kapusha {
 //! \brief Basic array for mostly POD types
 class Array {
 public:
+  inline Array() = default;
   Array(std::size_t item_size, unsigned reserve = 0);
   ~Array();
+
+  void init(std::size_t item_size, unsigned reserve = 0);
 
   std::size_t itemSize() const { return itemSize_; }
   unsigned size() const { return size_; }
 
+  inline void *alloc_back(unsigned count = 1) {
+    return alloc(size_, count);
+  }
   unsigned push_back(const void *items, unsigned count = 1);
   void erase(unsigned index, unsigned count = 1);
 
+  void *alloc(unsigned index, unsigned count = 1);
   void insert(unsigned index, const void *items, unsigned count = 1);
+
+  inline const void *get(unsigned index) const {
+    KP_ASSERT(index < size_);
+    return reinterpret_cast<u8*>(items_) + itemSize_ * index;
+  }
+
+  inline void *get(unsigned index) {
+    KP_ASSERT(index < size_);
+    return reinterpret_cast<u8*>(items_) + itemSize_ * index;
+  }
 
   template <typename T>
   inline T *get(unsigned index) {

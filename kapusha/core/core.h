@@ -8,3 +8,4 @@
 #include "list.h"
 #include "Surface.h"
 #include "array.h"
+#include "map.h"

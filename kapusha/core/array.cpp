@@ -4,11 +4,17 @@
 #define INITIAL_SIZE 4
 
 namespace kapusha {
-Array::Array(std::size_t item_size, unsigned reserve)
-  : itemSize_(item_size), allocated_(reserve)
-  , size_(0), items_(nullptr) {
+Array::Array(std::size_t item_size, unsigned reserve) {
+  init(item_size, reserve);
+}
+void Array::init(std::size_t item_size, unsigned reserve) {
+  itemSize_ = item_size;
+  allocated_ = reserve;
+  size_ = 0;
   if (allocated_ != 0)
     items_ = new char[itemSize_ * allocated_];
+  else
+    items_ = nullptr;
 }
 
 Array::~Array() {
@@ -34,14 +40,17 @@ void Array::checkOverflow(unsigned new_size) {
   items_ = new_items;
 }
 
-void Array::insert(unsigned index, const void *items, unsigned count) {
+void *Array::alloc(unsigned index, unsigned count) {
   KP_ASSERT(index <= size_);
   unsigned new_size = size_ + count;
   checkOverflow(new_size);
-  memmove(items_ + itemSize_ * (index + count),
-    items_ + itemSize_ * index, itemSize_ * (size_ - index));
-  memcpy(items_ + itemSize_ * index, items, itemSize_ * count);
+  void *slot = items_ + itemSize_ * index;
+  memmove(items_ + itemSize_ * (index + count), slot, itemSize_ * (size_ - index));
   size_ = new_size;
+  return slot;
+}
+void Array::insert(unsigned index, const void *items, unsigned count) {
+   memcpy(alloc(index, count), items, itemSize_ * count);
 }
 
 void Array::erase(unsigned index, unsigned count) {
