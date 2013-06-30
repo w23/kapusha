@@ -91,9 +91,8 @@ Face::Glyph Face::getGlyphForCodepoint(u32 codepoint) const {
   Glyph ret;
   FT_GlyphSlotRec *slot = face_->glyph;
   const FT_Bitmap &b = slot->bitmap;
-  ret.origin = vec2i(slot->bitmap_left, slot->bitmap_top);
-  //L("G O:(%d, %d), S(%d, %d) P%d", origin.x, origin.y, size.x, size.y,
-  //  slot->bitmap.pitch);
+  ret.origin = vec2i(slot->bitmap_left, slot->bitmap_top - b.rows);
+  //L("G O:(%d, %d), S(%d, %d) P%d", ret.origin.x, ret.origin.y, b.width, b.rows, b.pitch);
 
   KP_ASSERT(b.pixel_mode == FT_PIXEL_MODE_GRAY);
 
