@@ -106,7 +106,7 @@ Face::Glyph Face::getGlyphForCodepoint(u32 codepoint) const {
   else pixels = b.buffer;
   Surface bitmap(smeta, pixels);
 
-  ret.atlas = const_cast<Atlas*>(&atlas_)->insert(&bitmap);
+  ret.atlas = const_cast<Atlas*>(&atlas_)->insert(&bitmap, vec2i(1));
   const_cast<MapOf<Glyph>*>(&grapheMap_)->set(codepoint, &ret);
   return ret;
 }

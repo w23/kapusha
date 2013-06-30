@@ -11,8 +11,8 @@ Atlas::Atlas(const Surface::Meta& smeta) : surface_(new Surface(smeta)),
   surface_->clear();
 }
 
-rect2i Atlas::insert(const Surface *surface) {
-  const vec2i size = surface->meta().size;
+rect2i Atlas::insert(const Surface *surface, vec2i guard) {
+  const vec2i size = surface->meta().size + guard * 2;
   unsigned best = freeRects_.size();
   int best_delta = std::numeric_limits<int>::max();
   for (unsigned i = 0; i < freeRects_.size(); ++i) {
@@ -41,7 +41,7 @@ rect2i Atlas::insert(const Surface *surface) {
 
   // blit
   rect2i ret = freeRects_[best];
-  surface_->blit(ret.min, surface);
+  surface_->blit(ret.min + guard, surface);
 
   // and split
   rect2i newrects[2];
@@ -65,7 +65,7 @@ rect2i Atlas::insert(const Surface *surface) {
   } else freeRects_.erase(best);
 
   dirty_ = true;
-  return rect2i(ret.min, ret.min + size);
+  return rect2i(ret.min + guard, ret.min + guard + surface->meta().size);
 }
 
 void Atlas::commit(Context *context) {

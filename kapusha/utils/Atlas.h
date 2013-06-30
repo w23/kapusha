@@ -7,7 +7,7 @@ class Atlas {
 public:
   Atlas(const Surface::Meta &meta);
 
-  rect2i insert(const Surface *surface);
+  rect2i insert(const Surface *surface, vec2i guard = vec2i(0));
   void commit(Context *context);
 
   //! \todo dropSampler();
