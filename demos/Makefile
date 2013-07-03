@@ -6,6 +6,7 @@ SAMPLES = \
 	fullscreen_shader \
 	flyby_dust \
 	terrain \
+	textosterone \
 	pathtracer
 
 ifeq ($(KP_SDL),1)
