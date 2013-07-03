@@ -32,13 +32,13 @@ namespace kapusha {
     inline void upload(Context *ctx, const Surface *source) {
       upload(ctx, source->meta(), source->pixels());
     }
+    void upload(Context *ctx, const Surface::Meta &meta, const void *data);
     const Surface::Meta& meta() const { return meta_; }
     inline void bind(Context *ctx, int unit = -1) const {
       ctx->bindSampler(this, unit);
     }
   private:
     void init(FilterMode magnification, FilterMode minification);
-    void upload(Context *ctx, const Surface::Meta &meta, const void *data);
     unsigned name_;
     Surface::Meta meta_;
     FilterMode magnification_, minification_;

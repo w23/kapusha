@@ -199,7 +199,7 @@ void Viewport::resize(vec2i size) {
   glClear(GL_COLOR_BUFFER_BIT);
   vec2f aspect((float)size.x / size.y, 1.f);
   batch_->getMaterial()->setUniform("aspect", aspect);
-  sampler_->upload(context_, Sampler::Meta(size), 0);
+  sampler_->upload(context_, Surface::Meta(size), 0);
   fb_->attachColor(context_, sampler_, 0);
   fb_->bind(context_);
   glViewport(0, 0, size.x, size.y);
