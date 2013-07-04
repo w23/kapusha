@@ -13,11 +13,17 @@ Atlas::Atlas(const Surface::Meta& smeta) : surface_(new Surface(smeta)),
 
 rect2i Atlas::insert(const Surface *surface, vec2i guard) {
   const vec2i size = surface->meta().size + guard * 2;
+  rect2i rect = allocate(size, guard);
+  if (rect.isValid()) surface_->blit(rect.min, surface);
+  return rect;
+}
+rect2i Atlas::allocate(vec2i size, vec2i guard) {
+  const vec2i gsize(size + guard * 2);
   unsigned best = freeRects_.size();
   int best_delta = std::numeric_limits<int>::max();
   for (unsigned i = 0; i < freeRects_.size(); ++i) {
     rect2i &r = freeRects_[i];
-    vec2i delta = r.size() - size;
+    vec2i delta = r.size() - gsize;
 
     // does not fit at all
     if (delta.x < 0 || delta.y < 0) continue;
@@ -39,23 +45,20 @@ rect2i Atlas::insert(const Surface *surface, vec2i guard) {
   // empty rect on fail
   if (best == freeRects_.size()) return rect2i().clear();
 
-  // blit
+  // split
   rect2i ret = freeRects_[best];
-  surface_->blit(ret.min + guard, surface);
-
-  // and split
   rect2i newrects[2];
-  const vec2i delta = ret.size() - size;
+  const vec2i delta = ret.size() - gsize;
   if (delta.x > delta.y) {
-    newrects[0] = rect2i(ret.min.x + size.x, ret.min.y,
-                         ret.max.x,          ret.max.y);
-    newrects[1] = rect2i(ret.min.x,          ret.min.y + size.y,
-                         ret.min.x + size.x, ret.max.y);
+    newrects[0] = rect2i(ret.min.x + gsize.x, ret.min.y,
+                         ret.max.x,           ret.max.y);
+    newrects[1] = rect2i(ret.min.x,           ret.min.y + gsize.y,
+                         ret.min.x + gsize.x, ret.max.y);
   } else {
-    newrects[0] = rect2i(ret.min.x,          ret.min.y + size.y,
-                         ret.max.x,          ret.max.y);
-    newrects[1] = rect2i(ret.min.x + size.x, ret.min.y,
-                         ret.max.x,          ret.min.y + size.y);
+    newrects[0] = rect2i(ret.min.x,           ret.min.y + gsize.y,
+                         ret.max.x,           ret.max.y);
+    newrects[1] = rect2i(ret.min.x + gsize.x, ret.min.y,
+                         ret.max.x,           ret.min.y + gsize.y);
   }
 
   // 0 should be the biggest one, try it first
@@ -65,7 +68,7 @@ rect2i Atlas::insert(const Surface *surface, vec2i guard) {
   } else freeRects_.erase(best);
 
   dirty_ = true;
-  return rect2i(ret.min + guard, ret.min + guard + surface->meta().size);
+  return rect2i(ret.min + guard, ret.min + guard + size);
 }
 
 void Atlas::commit(Context *context) {

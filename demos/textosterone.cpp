@@ -2,13 +2,15 @@
 #include <kapusha/render.h>
 #include <kapusha/fontain.h>
 
-#include <kapusha/fontain/harftype/Freetype.h>
+//#include <kapusha/fontain/harftype/Freetype.h>
+#include <kapusha/fontain/coretext/Face.h>
 
 using namespace kapusha;
 
 class Viewport : public IViewport {
 public:
-  Viewport() : face_(fontain.getFace("/usr/share/fonts/liberation-fonts/LiberationMono-Regular.ttf", vec2i(23))) {}
+  //Viewport() : face_(fontain.getFace("/usr/share/fonts/liberation-fonts/LiberationMono-Regular.ttf", vec2i(23))) {}
+  Viewport() : face_(new fontain::coretext::Face("Courier New", vec2i(72))) {}
   //Viewport() : face_(fontain.getFace("/usr/share/fonts/liberation-fonts/LiberationSerif-Italic.ttf", vec2i(32))) {}
   ~Viewport() { delete face_; }
   void init(IViewportController* ctrl, Context *context);
@@ -16,7 +18,7 @@ public:
   void draw(int ms, float dt);
   void close();
 private:
-  fontain::harftype::Freetype fontain;
+  //fontain::harftype::Freetype fontain;
   IViewportController *ctrl_;
   Context *context_;
   SBatch textAtlas_;

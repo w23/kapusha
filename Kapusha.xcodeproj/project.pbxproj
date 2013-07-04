@@ -36,6 +36,18 @@
 		E184ECE817847224007CDEF3 /* Surface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECE417847224007CDEF3 /* Surface.cpp */; };
 		E184ECE917847224007CDEF3 /* Surface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECE417847224007CDEF3 /* Surface.cpp */; };
 		E184ECEA17847224007CDEF3 /* Surface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECE417847224007CDEF3 /* Surface.cpp */; };
+		E184ECEE17848039007CDEF3 /* Face.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECEC17848039007CDEF3 /* Face.cpp */; };
+		E184ECEF17848039007CDEF3 /* Face.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECEC17848039007CDEF3 /* Face.cpp */; };
+		E184ECF017848039007CDEF3 /* Face.h in Headers */ = {isa = PBXBuildFile; fileRef = E184ECED17848039007CDEF3 /* Face.h */; };
+		E184ECF217848671007CDEF3 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E184ECF117848671007CDEF3 /* CoreText.framework */; };
+		E184ECF417848678007CDEF3 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E184ECF317848678007CDEF3 /* CoreText.framework */; };
+		E184ECF717849961007CDEF3 /* Atlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECF517849961007CDEF3 /* Atlas.cpp */; };
+		E184ECF817849961007CDEF3 /* Atlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECF517849961007CDEF3 /* Atlas.cpp */; };
+		E184ECFD1784A054007CDEF3 /* textosterone.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECFA1784A04C007CDEF3 /* textosterone.cpp */; };
+		E184ECFF1785E9E4007CDEF3 /* array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECFE1785E9E4007CDEF3 /* array.cpp */; };
+		E184ED001785E9E4007CDEF3 /* array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECFE1785E9E4007CDEF3 /* array.cpp */; };
+		E184ED011785E9E4007CDEF3 /* array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECFE1785E9E4007CDEF3 /* array.cpp */; };
+		E184ED021785E9E4007CDEF3 /* array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECFE1785E9E4007CDEF3 /* array.cpp */; };
 		E189E879169AB3F300541FE1 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFED163D8EED00869CF5 /* log.cpp */; };
 		E189E87B169AB3F300541FE1 /* Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDF163D8EED00869CF5 /* Stream.cpp */; };
 		E189E87C169AB3F300541FE1 /* StreamFile_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */; };
@@ -100,21 +112,13 @@
 		E1BE3871173395610029FD4A /* SpectatorCameraController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE386F173395610029FD4A /* SpectatorCameraController.cpp */; };
 		E1BE3872173395610029FD4A /* SpectatorCameraController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE386F173395610029FD4A /* SpectatorCameraController.cpp */; };
 		E1BE3873173395610029FD4A /* SpectatorCameraController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE386F173395610029FD4A /* SpectatorCameraController.cpp */; };
-		E1BE3874173395610029FD4A /* SpectatorCameraController.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE3870173395610029FD4A /* SpectatorCameraController.h */; };
-		E1BE3875173395610029FD4A /* SpectatorCameraController.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE3870173395610029FD4A /* SpectatorCameraController.h */; };
 		E1BE387D17362A4F0029FD4A /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE387B17362A4F0029FD4A /* geometry.cpp */; };
 		E1BE387E17362A4F0029FD4A /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE387B17362A4F0029FD4A /* geometry.cpp */; };
 		E1BE387F17362A4F0029FD4A /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE387B17362A4F0029FD4A /* geometry.cpp */; };
-		E1BE388017362A4F0029FD4A /* geometry.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE387C17362A4F0029FD4A /* geometry.h */; };
-		E1BE388117362A4F0029FD4A /* geometry.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE387C17362A4F0029FD4A /* geometry.h */; };
 		E1BE3885173F7AAA0029FD4A /* noise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE3883173F7AAA0029FD4A /* noise.cpp */; };
 		E1BE3886173F7AAA0029FD4A /* noise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE3883173F7AAA0029FD4A /* noise.cpp */; };
 		E1BE3887173F7AAA0029FD4A /* noise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE3883173F7AAA0029FD4A /* noise.cpp */; };
 		E1BE3888173F7AAA0029FD4A /* noise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE3883173F7AAA0029FD4A /* noise.cpp */; };
-		E1BE3889173F7AAA0029FD4A /* noise.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE3884173F7AAA0029FD4A /* noise.h */; };
-		E1BE388A173F7AAA0029FD4A /* noise.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE3884173F7AAA0029FD4A /* noise.h */; };
-		E1BE388B173F7AAA0029FD4A /* noise.h in Headers */ = {isa = PBXBuildFile; fileRef = E1BE3884173F7AAA0029FD4A /* noise.h */; };
-		E1BE388F17415A680029FD4A /* pathtracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE388D17415A680029FD4A /* pathtracer.cpp */; };
 		E1BE389017415E220029FD4A /* terrain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE3877173438B80029FD4A /* terrain.cpp */; };
 		E1BE38931743F1E70029FD4A /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE38911743F1E60029FD4A /* Context.cpp */; };
 		E1BE38941743F1E70029FD4A /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE38911743F1E60029FD4A /* Context.cpp */; };
@@ -168,6 +172,14 @@
 		E184ECDA178471FA007CDEF3 /* Surface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Surface.h; sourceTree = "<group>"; };
 		E184ECE317847224007CDEF3 /* map.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = map.cpp; sourceTree = "<group>"; };
 		E184ECE417847224007CDEF3 /* Surface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Surface.cpp; sourceTree = "<group>"; };
+		E184ECEC17848039007CDEF3 /* Face.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Face.cpp; sourceTree = "<group>"; };
+		E184ECED17848039007CDEF3 /* Face.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Face.h; sourceTree = "<group>"; };
+		E184ECF117848671007CDEF3 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreText.framework; sourceTree = DEVELOPER_DIR; };
+		E184ECF317848678007CDEF3 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/CoreText.framework; sourceTree = DEVELOPER_DIR; };
+		E184ECF517849961007CDEF3 /* Atlas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Atlas.cpp; sourceTree = "<group>"; };
+		E184ECF617849961007CDEF3 /* Atlas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Atlas.h; sourceTree = "<group>"; };
+		E184ECFA1784A04C007CDEF3 /* textosterone.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = textosterone.cpp; sourceTree = "<group>"; };
+		E184ECFE1785E9E4007CDEF3 /* array.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = array.cpp; sourceTree = "<group>"; };
 		E189E890169AB3F300541FE1 /* libkapushacore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libkapushacore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E18DDFD4163D8EED00869CF5 /* Buffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Buffer.cpp; sourceTree = "<group>"; };
 		E18DDFD5163D8EED00869CF5 /* Buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
@@ -283,6 +295,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E184ECF217848671007CDEF3 /* CoreText.framework in Frameworks */,
 				E131D5051662034600B0320A /* OpenGL.framework in Frameworks */,
 				E131D5041662033F00B0320A /* Cocoa.framework in Frameworks */,
 			);
@@ -321,6 +334,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E184ECF417848678007CDEF3 /* CoreText.framework in Frameworks */,
 				E19931C9164E4F5800E8D9CB /* OpenGLES.framework in Frameworks */,
 				E19931A8164E144F00E8D9CB /* Foundation.framework in Frameworks */,
 			);
@@ -353,6 +367,7 @@
 		E184ECC817847141007CDEF3 /* fontain */ = {
 			isa = PBXGroup;
 			children = (
+				E184ECEB178472B9007CDEF3 /* coretext */,
 				E184ECCA17847197007CDEF3 /* IFace.h */,
 				E184ECCB17847197007CDEF3 /* IFontain.h */,
 				E184ECCC17847197007CDEF3 /* String.cpp */,
@@ -360,6 +375,15 @@
 			);
 			name = fontain;
 			path = kapusha/fontain;
+			sourceTree = "<group>";
+		};
+		E184ECEB178472B9007CDEF3 /* coretext */ = {
+			isa = PBXGroup;
+			children = (
+				E184ECEC17848039007CDEF3 /* Face.cpp */,
+				E184ECED17848039007CDEF3 /* Face.h */,
+			);
+			path = coretext;
 			sourceTree = "<group>";
 		};
 		E18DDFC7163D8ED100869CF5 = {
@@ -452,6 +476,7 @@
 		E18DDFEB163D8EED00869CF5 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				E184ECFE1785E9E4007CDEF3 /* array.cpp */,
 				E184ECE317847224007CDEF3 /* map.cpp */,
 				E184ECE417847224007CDEF3 /* Surface.cpp */,
 				E184ECD7178471FA007CDEF3 /* array.h */,
@@ -487,6 +512,8 @@
 		E18DDFF7163D8F3A00869CF5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E184ECF317848678007CDEF3 /* CoreText.framework */,
+				E184ECF117848671007CDEF3 /* CoreText.framework */,
 				E131D5031662033F00B0320A /* Cocoa.framework */,
 				E19931C8164E4F5800E8D9CB /* OpenGLES.framework */,
 				E18DE042163D925600869CF5 /* GLUT.framework */,
@@ -515,6 +542,7 @@
 		E18DE038163D923000869CF5 /* demos */ = {
 			isa = PBXGroup;
 			children = (
+				E184ECFA1784A04C007CDEF3 /* textosterone.cpp */,
 				E19DA35217322D3D005B1F74 /* flyby_dust.cpp */,
 				E19DA35317322D3D005B1F74 /* fullscreen_shader.cpp */,
 				E19DA35417322D3D005B1F74 /* triangle.cpp */,
@@ -611,6 +639,8 @@
 		E1BE386E173394690029FD4A /* utils */ = {
 			isa = PBXGroup;
 			children = (
+				E184ECF517849961007CDEF3 /* Atlas.cpp */,
+				E184ECF617849961007CDEF3 /* Atlas.h */,
 				E1BE386F173395610029FD4A /* SpectatorCameraController.cpp */,
 				E1BE3870173395610029FD4A /* SpectatorCameraController.h */,
 				E1BE387B17362A4F0029FD4A /* geometry.cpp */,
@@ -645,11 +675,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1BE3874173395610029FD4A /* SpectatorCameraController.h in Headers */,
-				E1BE388017362A4F0029FD4A /* geometry.h in Headers */,
-				E1BE3889173F7AAA0029FD4A /* noise.h in Headers */,
 				E1BE38961743F1E70029FD4A /* Context.h in Headers */,
 				E1BE389D174400860029FD4A /* Framebuffer.h in Headers */,
+				E184ECF017848039007CDEF3 /* Face.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -657,7 +685,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1BE388A173F7AAA0029FD4A /* noise.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -666,9 +693,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E197CBF716B3AED8003FDEF6 /* Glut.h in Headers */,
-				E1BE3875173395610029FD4A /* SpectatorCameraController.h in Headers */,
-				E1BE388117362A4F0029FD4A /* geometry.h in Headers */,
-				E1BE388B173F7AAA0029FD4A /* noise.h in Headers */,
 				E1BE38971743F1E70029FD4A /* Context.h in Headers */,
 				E1BE389E174400860029FD4A /* Framebuffer.h in Headers */,
 			);
@@ -864,6 +888,9 @@
 				E184ECD317847197007CDEF3 /* String.cpp in Sources */,
 				E184ECE617847224007CDEF3 /* map.cpp in Sources */,
 				E184ECE917847224007CDEF3 /* Surface.cpp in Sources */,
+				E184ECEF17848039007CDEF3 /* Face.cpp in Sources */,
+				E184ECF817849961007CDEF3 /* Atlas.cpp in Sources */,
+				E184ED001785E9E4007CDEF3 /* array.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -877,6 +904,7 @@
 				E189E87D169AB3F300541FE1 /* math.cpp in Sources */,
 				E172B428171604FD00475227 /* assert.cpp in Sources */,
 				E1BE3887173F7AAA0029FD4A /* noise.cpp in Sources */,
+				E184ED011785E9E4007CDEF3 /* array.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -909,6 +937,7 @@
 				E184ECD417847197007CDEF3 /* String.cpp in Sources */,
 				E184ECE717847224007CDEF3 /* map.cpp in Sources */,
 				E184ECEA17847224007CDEF3 /* Surface.cpp in Sources */,
+				E184ED021785E9E4007CDEF3 /* array.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -952,6 +981,9 @@
 				E184ECD217847197007CDEF3 /* String.cpp in Sources */,
 				E184ECE517847224007CDEF3 /* map.cpp in Sources */,
 				E184ECE817847224007CDEF3 /* Surface.cpp in Sources */,
+				E184ECEE17848039007CDEF3 /* Face.cpp in Sources */,
+				E184ECF717849961007CDEF3 /* Atlas.cpp in Sources */,
+				E184ECFF1785E9E4007CDEF3 /* array.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -961,7 +993,7 @@
 			files = (
 				E1A77CAB165D39F9009FF8F3 /* main.m in Sources */,
 				E1A77CB2165D39F9009FF8F3 /* AppDelegate.mm in Sources */,
-				E1BE388F17415A680029FD4A /* pathtracer.cpp in Sources */,
+				E184ECFD1784A054007CDEF3 /* textosterone.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
