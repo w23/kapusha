@@ -27,7 +27,7 @@ unsigned Array::push_back(const void *items, unsigned count) {
   return old_size;
 }
 
-void Array::checkOverflow(unsigned new_size) {
+void Array::reserve(unsigned new_size) {
   if (new_size <= allocated_) return;
   //! \todo refine this whole mess
   unsigned new_allocated = (allocated_ == 0) ? INITIAL_SIZE: allocated_;
@@ -43,7 +43,7 @@ void Array::checkOverflow(unsigned new_size) {
 void *Array::alloc(unsigned index, unsigned count) {
   KP_ASSERT(index <= size_);
   unsigned new_size = size_ + count;
-  checkOverflow(new_size);
+  reserve(new_size);
   void *slot = items_ + itemSize_ * index;
   memmove(items_ + itemSize_ * (index + count), slot, itemSize_ * (size_ - index));
   size_ = new_size;

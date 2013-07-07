@@ -10,11 +10,20 @@ public:
   inline Array() = default;
   Array(std::size_t item_size, unsigned reserve = 0);
   ~Array();
-
+  
   void init(std::size_t item_size, unsigned reserve = 0);
 
   std::size_t itemSize() const { return itemSize_; }
   unsigned size() const { return size_; }
+  std::size_t totalSizeInBytes() const { return size() * itemSize(); }
+  inline void clear() { size_ = 0; }
+  /// \todo void distClear() { delete[] items_ ... }
+  
+  void reserve(unsigned new_size);
+  inline void resize(u32 size) {
+    reserve(size);
+    size_ = size;
+  }
 
   inline void *alloc_back(unsigned count = 1) {
     return alloc(size_, count);
@@ -50,7 +59,6 @@ public:
   }
 
 private:
-  void checkOverflow(unsigned new_size);
   std::size_t itemSize_;
   unsigned allocated_;
   unsigned size_;
