@@ -24,6 +24,15 @@
 		E131D5131662036F00B0320A /* KPView.mm in Sources */ = {isa = PBXBuildFile; fileRef = E14B5357165D59F300B55FEC /* KPView.mm */; };
 		E131D514166204C500B0320A /* libkapusha.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E131D4FF166201F400B0320A /* libkapusha.a */; };
 		E15E63FB165E84150032BBC2 /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E15E63F9165E84150032BBC2 /* input.cpp */; };
+		E167AACB1789E1890047DF38 /* CocoaGLContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = E167AAC91789E1890047DF38 /* CocoaGLContext.mm */; };
+		E167AACC1789E1890047DF38 /* CocoaGLContext.h in Headers */ = {isa = PBXBuildFile; fileRef = E167AACA1789E1890047DF38 /* CocoaGLContext.h */; };
+		E167AACF1789E22C0047DF38 /* CocoaKeyState.mm in Sources */ = {isa = PBXBuildFile; fileRef = E167AACD1789E22C0047DF38 /* CocoaKeyState.mm */; };
+		E167AAD01789E22C0047DF38 /* CocoaKeyState.h in Headers */ = {isa = PBXBuildFile; fileRef = E167AACE1789E22C0047DF38 /* CocoaKeyState.h */; };
+		E167AAD41789E3BF0047DF38 /* CocoaPointerState.h in Headers */ = {isa = PBXBuildFile; fileRef = E167AAD21789E3BF0047DF38 /* CocoaPointerState.h */; };
+		E167AAD71789E6920047DF38 /* MachTime.mm in Sources */ = {isa = PBXBuildFile; fileRef = E167AAD51789E6920047DF38 /* MachTime.mm */; };
+		E167AAD81789E6920047DF38 /* MachTime.mm in Sources */ = {isa = PBXBuildFile; fileRef = E167AAD51789E6920047DF38 /* MachTime.mm */; };
+		E167AAD91789E6920047DF38 /* MachTime.h in Headers */ = {isa = PBXBuildFile; fileRef = E167AAD61789E6920047DF38 /* MachTime.h */; };
+		E167AADA1789E6920047DF38 /* MachTime.h in Headers */ = {isa = PBXBuildFile; fileRef = E167AAD61789E6920047DF38 /* MachTime.h */; };
 		E172B426171604FD00475227 /* assert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E172B423171604FD00475227 /* assert.cpp */; };
 		E172B427171604FD00475227 /* assert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E172B423171604FD00475227 /* assert.cpp */; };
 		E172B428171604FD00475227 /* assert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E172B423171604FD00475227 /* assert.cpp */; };
@@ -156,6 +165,13 @@
 		E14B5357165D59F300B55FEC /* KPView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KPView.mm; sourceTree = "<group>"; };
 		E15E63F9165E84150032BBC2 /* input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = input.cpp; sourceTree = "<group>"; };
 		E15E63FA165E84150032BBC2 /* input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = input.h; sourceTree = "<group>"; };
+		E167AAC91789E1890047DF38 /* CocoaGLContext.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CocoaGLContext.mm; sourceTree = "<group>"; };
+		E167AACA1789E1890047DF38 /* CocoaGLContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaGLContext.h; sourceTree = "<group>"; };
+		E167AACD1789E22C0047DF38 /* CocoaKeyState.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CocoaKeyState.mm; sourceTree = "<group>"; };
+		E167AACE1789E22C0047DF38 /* CocoaKeyState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaKeyState.h; sourceTree = "<group>"; };
+		E167AAD21789E3BF0047DF38 /* CocoaPointerState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaPointerState.h; sourceTree = "<group>"; };
+		E167AAD51789E6920047DF38 /* MachTime.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MachTime.mm; sourceTree = "<group>"; };
+		E167AAD61789E6920047DF38 /* MachTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MachTime.h; sourceTree = "<group>"; };
 		E168ED901697E6250020F03F /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		E172B423171604FD00475227 /* assert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = assert.cpp; sourceTree = "<group>"; };
 		E172B424171604FD00475227 /* assert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assert.h; sourceTree = "<group>"; };
@@ -256,9 +272,6 @@
 		E1A77CB0165D39F9009FF8F3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E1A77CB1165D39F9009FF8F3 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		E1A77CB4165D39F9009FF8F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		E1A77CCD165D528A009FF8F3 /* kapusha-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "kapusha-Info.plist"; sourceTree = "<group>"; };
-		E1A77CCF165D528A009FF8F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		E1A77CD1165D528A009FF8F3 /* kapusha-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "kapusha-Prefix.pch"; sourceTree = "<group>"; };
 		E1A8E7DF16915BD10084718E /* Render.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Render.cpp; sourceTree = "<group>"; };
 		E1BD0C1D164F72A900A3454C /* Render.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Render.h; sourceTree = "<group>"; };
 		E1BD8D6716BECE1500FBE9DC /* rect4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rect4.h; sourceTree = "<group>"; };
@@ -389,7 +402,6 @@
 		E18DDFC7163D8ED100869CF5 = {
 			isa = PBXGroup;
 			children = (
-				E18DDFF6163D8F3A00869CF5 /* Products */,
 				E184ECC91784717F007CDEF3 /* fontain.h */,
 				E19DA3691732D277005B1F74 /* core.h */,
 				E19DA36A1732D277005B1F74 /* math.h */,
@@ -400,7 +412,6 @@
 				E172B422171602D200475227 /* viewport */,
 				E18DDFEB163D8EED00869CF5 /* core */,
 				E184ECC817847141007CDEF3 /* fontain */,
-				E18DDFF7163D8F3A00869CF5 /* Frameworks */,
 				E18DDFDE163D8EED00869CF5 /* io */,
 				E18DDFE3163D8EED00869CF5 /* math */,
 				E1D556DE167B988800A360F6 /* ooo */,
@@ -408,6 +419,8 @@
 				E1BE386E173394690029FD4A /* utils */,
 				E18DE038163D923000869CF5 /* demos */,
 				E1A77CFD165D5531009FF8F3 /* sys */,
+				E18DDFF7163D8F3A00869CF5 /* Frameworks */,
+				E18DDFF6163D8F3A00869CF5 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -477,19 +490,19 @@
 			isa = PBXGroup;
 			children = (
 				E184ECFE1785E9E4007CDEF3 /* array.cpp */,
-				E184ECE317847224007CDEF3 /* map.cpp */,
-				E184ECE417847224007CDEF3 /* Surface.cpp */,
 				E184ECD7178471FA007CDEF3 /* array.h */,
-				E184ECD8178471FA007CDEF3 /* list.h */,
-				E184ECD9178471FA007CDEF3 /* map.h */,
-				E184ECDA178471FA007CDEF3 /* Surface.h */,
 				E172B423171604FD00475227 /* assert.cpp */,
 				E172B424171604FD00475227 /* assert.h */,
+				E18DDFEF163D8EED00869CF5 /* core.h */,
 				E172B425171604FD00475227 /* limits.h */,
-				E1E74B6E1644551C0038E873 /* shared.h */,
+				E184ECD8178471FA007CDEF3 /* list.h */,
 				E18DDFED163D8EED00869CF5 /* log.cpp */,
 				E18DDFEE163D8EED00869CF5 /* log.h */,
-				E18DDFEF163D8EED00869CF5 /* core.h */,
+				E184ECE317847224007CDEF3 /* map.cpp */,
+				E184ECD9178471FA007CDEF3 /* map.h */,
+				E1E74B6E1644551C0038E873 /* shared.h */,
+				E184ECE417847224007CDEF3 /* Surface.cpp */,
+				E184ECDA178471FA007CDEF3 /* Surface.h */,
 				E168ED901697E6250020F03F /* types.h */,
 			);
 			name = core;
@@ -617,11 +630,15 @@
 		E1A77CCB165D528A009FF8F3 /* osx */ = {
 			isa = PBXGroup;
 			children = (
-				E1A77CCD165D528A009FF8F3 /* kapusha-Info.plist */,
-				E1A77CCE165D528A009FF8F3 /* InfoPlist.strings */,
-				E1A77CD1165D528A009FF8F3 /* kapusha-Prefix.pch */,
 				E14B5356165D59F300B55FEC /* KPView.h */,
 				E14B5357165D59F300B55FEC /* KPView.mm */,
+				E167AAC91789E1890047DF38 /* CocoaGLContext.mm */,
+				E167AACA1789E1890047DF38 /* CocoaGLContext.h */,
+				E167AACD1789E22C0047DF38 /* CocoaKeyState.mm */,
+				E167AACE1789E22C0047DF38 /* CocoaKeyState.h */,
+				E167AAD21789E3BF0047DF38 /* CocoaPointerState.h */,
+				E167AAD51789E6920047DF38 /* MachTime.mm */,
+				E167AAD61789E6920047DF38 /* MachTime.h */,
 			);
 			path = osx;
 			sourceTree = "<group>";
@@ -678,6 +695,10 @@
 				E1BE38961743F1E70029FD4A /* Context.h in Headers */,
 				E1BE389D174400860029FD4A /* Framebuffer.h in Headers */,
 				E184ECF017848039007CDEF3 /* Face.h in Headers */,
+				E167AACC1789E1890047DF38 /* CocoaGLContext.h in Headers */,
+				E167AAD01789E22C0047DF38 /* CocoaKeyState.h in Headers */,
+				E167AAD41789E3BF0047DF38 /* CocoaPointerState.h in Headers */,
+				E167AAD91789E6920047DF38 /* MachTime.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -685,6 +706,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E167AADA1789E6920047DF38 /* MachTime.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -891,6 +913,9 @@
 				E184ECEF17848039007CDEF3 /* Face.cpp in Sources */,
 				E184ECF817849961007CDEF3 /* Atlas.cpp in Sources */,
 				E184ED001785E9E4007CDEF3 /* array.cpp in Sources */,
+				E167AACB1789E1890047DF38 /* CocoaGLContext.mm in Sources */,
+				E167AACF1789E22C0047DF38 /* CocoaKeyState.mm in Sources */,
+				E167AAD71789E6920047DF38 /* MachTime.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -905,6 +930,7 @@
 				E172B428171604FD00475227 /* assert.cpp in Sources */,
 				E1BE3887173F7AAA0029FD4A /* noise.cpp in Sources */,
 				E184ED011785E9E4007CDEF3 /* array.cpp in Sources */,
+				E167AAD81789E6920047DF38 /* MachTime.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1030,14 +1056,6 @@
 				E1A77CB4165D39F9009FF8F3 /* en */,
 			);
 			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-		E1A77CCE165D528A009FF8F3 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E1A77CCF165D528A009FF8F3 /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
