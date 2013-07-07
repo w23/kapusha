@@ -7,8 +7,13 @@
 
 namespace kapusha {
   void Context::bindBuffer(const Buffer *buffer, int binding) {
-    if (binding == Buffer::BindingNative) binding = buffer->bindingHint();
-    glBindBuffer(binding, buffer->name()); GL_ASSERT
+    if (buffer) {
+      if (binding == Buffer::BindingNative) binding = buffer->bindingHint();
+      glBindBuffer(binding, buffer->name()); GL_ASSERT
+    } else {
+      KP_ASSERT(binding != Buffer::BindingNative);
+      glBindBuffer(binding, 0);
+    }
   }
   void Context::useProgram(const Program *program) {
     glUseProgram(program->name());

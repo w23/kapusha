@@ -35,11 +35,15 @@ namespace kapusha {
       indexType_ = itype;
     }
     void setAttribSource(int attrib_location,
-                         Buffer* buffer, unsigned components = 3,
-                         unsigned offset = 0, unsigned stride = 0);
-    void setAttribSource(const char *attrib_name,
-                         Buffer* buffer, unsigned components = 3,
-                         unsigned offset = 0, unsigned stride = 0);
+                         Buffer* buffer, u32 components = 3,
+                         u32 offset = 0, u32 stride = 0);
+    inline void setAttribSource(const char *attrib_name,
+                         Buffer* buffer, u32 components = 3,
+                         u32 offset = 0, u32 stride = 0) {
+      KP_ASSERT(material_.valid());
+      setAttribSource(material_->getProgram()->getAttributeLocation(attrib_name),
+                      buffer, components, offset, stride);
+    }
     Material* getMaterial() const { return material_.get(); }
     Program::UniformState& uniforms() { return uniforms_; }
     void draw(Context *ctx) const;
@@ -48,7 +52,7 @@ namespace kapusha {
       int index;
       SBuffer buffer;
       int components;
-      int offset;
+      void *offset;
       int stride;
       Attrib() : index(-1) {}
       inline void bind(Context *ctx) const;

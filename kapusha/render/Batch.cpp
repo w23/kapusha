@@ -8,23 +8,18 @@
 
 namespace kapusha {
   void Batch::setAttribSource(int attrib_location,
-                              Buffer* buffer, unsigned components,
-                              unsigned offset, unsigned stride) {
-    int i = 0;
-    for (; i < MAX_BATCH_ATTRIBS; ++i) if (attribs_[i].index == -1) break;
-    KP_ASSERT(i < MAX_BATCH_ATTRIBS);
-    attribs_[i].index = attrib_location;
-    attribs_[i].buffer = buffer;
-    attribs_[i].components = components;
-    attribs_[i].offset = offset;
-    attribs_[i].stride = stride;
-  }
-  void Batch::setAttribSource(const char *attrib_name,
-                              Buffer* buffer, unsigned components,
-                              unsigned offset, unsigned stride) {
-    KP_ASSERT(material_.valid());
-    setAttribSource(material_->getProgram()->getAttributeLocation(attrib_name),
-                    buffer, components, offset, stride);
+                              Buffer* buffer, u32 components,
+                              u32 offset, u32 stride) {
+    for (int i = 0; i < MAX_BATCH_ATTRIBS; ++i)
+      if (attribs_[i].index == -1) {
+        attribs_[i].index = attrib_location;
+        attribs_[i].buffer = buffer;
+        attribs_[i].components = components;
+        attribs_[i].offset = reinterpret_cast<void*>(offset);
+        attribs_[i].stride = stride;
+        return;
+      }
+    KP_ASSERT(!"Too many attributes");
   }
   void Batch::draw(Context *ctx) const {
     KP_ASSERT(material_.valid());
@@ -46,9 +41,9 @@ namespace kapusha {
   }
 
   void Batch::Attrib::bind(Context *ctx) const {
-    buffer->bind(ctx, Buffer::BindingArray);
-    glVertexAttribPointer(index, components, GL_FLOAT, GL_FALSE,
-      stride, reinterpret_cast<void*>(offset));
+    if (buffer.get()) buffer->bind(ctx, Buffer::BindingArray);
+    else ctx->bindBuffer(nullptr, Buffer::BindingArray);
+    glVertexAttribPointer(index, components, GL_FLOAT, GL_FALSE, stride, offset);
     GL_ASSERT
     glEnableVertexAttribArray(index);
     GL_ASSERT

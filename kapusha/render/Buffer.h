@@ -1,7 +1,7 @@
 // kapusha/render
 // 2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
-#include "../core/shared.h"
+#include "../core.h"
 #include "OpenGL.h"
 #include "Context.h"
 
@@ -32,8 +32,8 @@ namespace kapusha {
   public:
     Buffer(Binding binding_hint = BindingArray);
     ~Buffer();
-    void load(Context *ctx, void* data, unsigned size, Usage usage = StaticDraw);
-    inline void alloc(Context *ctx, unsigned size, Usage usage = StaticDraw) {
+    void load(Context *ctx, void* data, std::size_t size, Usage usage = StaticDraw);
+    inline void alloc(Context *ctx, std::size_t size, Usage usage = StaticDraw) {
       load(ctx, static_cast<void*>(0), size, usage);
     }
     inline void bind(Context *ctx, Binding binding = BindingNative) const {
@@ -41,7 +41,8 @@ namespace kapusha {
     }
   private:
     Binding bindingHint_;
-    unsigned name_;
+    u32 name_;
+    std::size_t size_;
   private: // noncopyable
     Buffer& operator=(const Buffer& right) { return *this; }
     Buffer(const Buffer& right) {}
