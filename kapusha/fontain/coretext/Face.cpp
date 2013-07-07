@@ -15,7 +15,11 @@ namespace coretext {
     font_ = CTFontCreateWithName(fname, fsize, NULL);
     CFRelease(fname);
     
-    atlas_.reset(new Atlas(Surface::Meta(vec2i(256), Surface::Meta::R8)));
+    vec2i atlas_est = size * 10;
+    vec2i asize(1);
+    while (asize.x < atlas_est.x) asize.x *= 2;
+    while (asize.y < atlas_est.y) asize.y *= 2;
+    atlas_.reset(new Atlas(Surface::Meta(asize, Surface::Meta::R8)));
     
     atlasContext_ =
     CGBitmapContextCreate(const_cast<void*>(atlas_->getSurface()->pixels()),
