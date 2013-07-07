@@ -1,6 +1,8 @@
 #pragma once
+#include <kapusha/core.h>
 #include <kapusha/math.h>
 #include <kapusha/render.h>
+#include <kapusha/utils/Atlas.h>
 
 namespace kapusha {
 namespace fontain {
@@ -11,25 +13,25 @@ public:
     rect2i rectInAtlas;
     u32 clusterBegin, clusterEnd;
   };
+  typedef ArrayOf<Glyph> Glyphs;
 
-  String(Sampler *atlas, u32 nglyphs);
+  String(Atlas *atlas, u32 nglyphs);
   ~String();
 
-  inline Sampler* atlas() const { return atlas_.get(); }
-  inline u32 length() const { return nglyphs_; }
-  inline const Glyph &operator[](u32 index) const {
-    KP_ASSERT(index < nglyphs_);
-    return glyphs_[index];
+  inline const Atlas &atlas() const { return *atlas_.get(); }
+  inline const Sampler* getAtlasSampler(Context *ctx) const {
+    return atlas_->getSampler(ctx);
   }
-  inline Glyph &operator[](u32 index) {
-    KP_ASSERT(index < nglyphs_);
-    return glyphs_[index];
-  }
+  inline const Glyphs &glyphs() const { return glyphs_; }
+  inline Glyphs &glyphs() { return glyphs_; }
+  inline u32 length() const { return glyphs_.size(); }
+  inline const rect2i &box() const { return box_; }
+  inline rect2i &box() { return box_; }
 
 private:
-  SSampler atlas_;
-  u32 nglyphs_;
-  Glyph *glyphs_;
+  SAtlas atlas_;
+  rect2i box_;
+  Glyphs glyphs_;
 }; // class String
 } // namespace fontain
 } // namespace kapusha

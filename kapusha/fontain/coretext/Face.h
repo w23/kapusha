@@ -11,8 +11,7 @@ namespace coretext {
   class Face : public IFace {
   public:
     virtual ~Face();
-    virtual String *createString(Context *ctx,
-                                 const char *string, int length = -1) const;
+    virtual String *createString(const char *string, int length = -1) const;
   //protected:
     Face(const char *font_name, vec2i size);
   private:
@@ -27,7 +26,7 @@ namespace coretext {
     CTFontRef font_;
     CGFontRef cgFont_;
     CGContextRef atlasContext_;
-    Atlas *atlas_;
+    SAtlas atlas_;
     MapOf<Glyph> grapheMap_;
   };
 } // namespace coretext

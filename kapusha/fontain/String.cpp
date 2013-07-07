@@ -3,14 +3,13 @@
 namespace kapusha {
 namespace fontain {
 
-  String::String(Sampler *atlas, u32 nglyphs) : atlas_(atlas)
-    , nglyphs_(nglyphs) {
-    KP_ASSERT(atlas);
-    glyphs_ = new Glyph[nglyphs_];
+  String::String(Atlas *atlas, u32 nglyphs)
+  : atlas_(atlas), glyphs_(nglyphs) {
+    KP_ASSERT(atlas_.get());
+    box_.clear();
   }
 
   String::~String() {
-    delete[] glyphs_;
   }
 } // namespace fontain
 } // namespace kapusha

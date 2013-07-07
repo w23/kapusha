@@ -15,7 +15,7 @@ namespace coretext {
     font_ = CTFontCreateWithName(fname, fsize, NULL);
     CFRelease(fname);
     
-    atlas_ = new Atlas(Surface::Meta(vec2i(256), Surface::Meta::R8));
+    atlas_.reset(new Atlas(Surface::Meta(vec2i(256), Surface::Meta::R8)));
     
     atlasContext_ =
     CGBitmapContextCreate(const_cast<void*>(atlas_->getSurface()->pixels()),
@@ -31,12 +31,15 @@ namespace coretext {
     CGContextSetRGBFillColor(atlasContext_, 1.f, 1.f, 1.f, 1.f);
     CGContextTranslateCTM(atlasContext_, 0, atlas_->meta().size.y);
     CGContextScaleCTM(atlasContext_, 1., -1.);
+    
+    metrics_.ascent = CTFontGetAscent(font_);
+    metrics_.descent = CTFontGetDescent(font_);
+    metrics_.leading = CTFontGetLeading(font_);
   }
   
   Face::~Face() {
     CFRelease(cgFont_);
     CGContextRelease(atlasContext_);
-    delete atlas_;
     CFRelease(font_);
   }
   
@@ -63,8 +66,7 @@ namespace coretext {
 	return atstring;
   }
 
-  String *Face::createString(kapusha::Context *ctx,
-                             const char *string, int length) const {
+  String *Face::createString(const char *string, int length) const {
     CFAttributedStringRef atstring = makeAttributedString(string, length);
     CTLineRef line = CTLineCreateWithAttributedString(atstring);
     CFRelease(atstring);
@@ -82,9 +84,8 @@ namespace coretext {
       if (CFEqual(font_, font)) total_glyphs += CTRunGetGlyphCount(run);
     }
 
-    if (!atlas_->getSampler()) atlas_->commit(ctx);
-    String *ret = new String(const_cast<Sampler*>(atlas_->getSampler()),
-                             total_glyphs);
+    String *ret = new String(atlas_.get(), total_glyphs);
+    ret->glyphs().resize(total_glyphs);
     u32 glyph_index = 0;
     for (CFIndex i = 0; i < nruns; ++i) {
       CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex(runs, i);
@@ -94,7 +95,7 @@ namespace coretext {
       
       CFIndex nglyphs = CTRunGetGlyphCount(run);
       for (CFIndex j = 0; j < nglyphs; ++j, ++glyph_index) {
-        String::Glyph &g = (*ret)[glyph_index];
+        String::Glyph &g = ret->glyphs()[glyph_index];
         CFRange grange = CFRangeMake(j, 1);
         CGGlyph glyph;
         CGPoint pos;
@@ -107,15 +108,15 @@ namespace coretext {
         g.offset = gg.origin + vec2i(pos.x, pos.y);
         g.clusterBegin = static_cast<u32>(cluster_index);
         if (glyph_index > 0)
-          (*ret)[glyph_index-1].clusterEnd = static_cast<u32>(cluster_index);
+          ret->glyphs()[glyph_index-1].clusterEnd = static_cast<u32>(cluster_index);
         g.rectInAtlas = gg.atlas;
+        ret->box().extendToContain(rect2i(g.offset, g.rectInAtlas.size()+g.offset));
       }
       CFRange rrange = CTRunGetStringRange(run);
-      (*ret)[glyph_index-1].clusterEnd =
+      ret->glyphs()[glyph_index-1].clusterEnd =
         static_cast<u32>(rrange.location + rrange.length);
     }
     CFRelease(line);
-    atlas_->commit(ctx);
     return ret;
   }
   
@@ -128,7 +129,7 @@ namespace coretext {
                                                   &glyph, NULL, 1);
     vec2i size(floor(rect.size.width)+1, floor(rect.size.height)+1);
     Glyph ret;
-    ret.atlas = const_cast<Atlas*>(atlas_)->allocate(size, vec2i(1));
+    ret.atlas = atlas_->allocate(size, vec2i(1));
     ret.origin = vec2i(rect.origin.x, rect.origin.y);
     CGPoint pos =
       CGPointMake(ret.atlas.min.x - rect.origin.x,

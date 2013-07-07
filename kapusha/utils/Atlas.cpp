@@ -71,7 +71,12 @@ rect2i Atlas::allocate(vec2i size, vec2i guard) {
   return rect2i(ret.min + guard, ret.min + guard + size);
 }
 
-void Atlas::commit(Context *context) {
+  Sampler *Atlas::getSampler(Context *ctx) const {
+    commit(ctx);
+    return sampler_.get();
+  }
+
+void Atlas::commit(Context *context) const {
   if (!dirty_) return;
   if (!sampler_.get()) sampler_.reset(new Sampler(context, surface_.get()));
   else sampler_->upload(context, surface_.get());

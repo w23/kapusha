@@ -59,7 +59,7 @@ void Viewport::init(IViewportController *ctrl, Context *context) {
     "/usr/share/fonts/liberation-fonts/LiberationMono-Regular.ttf"
   ;
 
-  fontain::String *string = face_->createString(context_, test_string);
+  fontain::String *string = face_->createString(test_string);
 
   const u32 nvertices = string->length() * 4 + 4;
   struct vertex_t {
@@ -70,11 +70,11 @@ void Viewport::init(IViewportController *ctrl, Context *context) {
   u16 *indices = new u16[nindices];
 
   vec2f offset(-1.f, 0.f);
-  vec2f scale = vec2f(string->atlas()->meta().size).recip();
+  vec2f scale = vec2f(string->atlas().meta().size).recip();
   vec2f pscale(.002f);
   vertex_t *v = vertices;
   for (u32 i = 0; i < string->length(); ++i, v += 4) {
-    const fontain::String::Glyph &g = (*string)[i];
+    const fontain::String::Glyph &g = string->glyphs()[i];
     const rect2i &r = g.rectInAtlas;
     v[0].pos = offset + vec2f(g.offset + vec2i(0, r.height())) * pscale;
     v[1].pos = offset + vec2f(g.offset) * pscale;
@@ -117,7 +117,7 @@ void Viewport::init(IViewportController *ctrl, Context *context) {
     
   Program *program = new Program(shader_vertex, shader_fragment);
   Material *material = new Material(program);
-  material->setUniform("us2_atlas", string->atlas());
+  material->setUniform("us2_atlas", string->atlas().getSampler(context_));
   material->blend().enable();
   material->blend().setFunction(BlendState::ConstOne, BlendState::OneMinusSourceAlpha);
   Batch* batch = new Batch();
