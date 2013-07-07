@@ -13,6 +13,8 @@ namespace kapusha {
       : min(left, bottom), max(right, top) {}
     rect2(vec2<T> min_, vec2<T> max_) : min(min_), max(max_) {}
     rect2(vec2<T> sz_) : min(0), max(sz_) {}
+    template <typename Q>
+    rect2(const rect2<Q> &other) : min(other.min), max(other.max) {}
     rect2 &clear() {
       min.x = min.y = std::numeric_limits<T>::max();
       max.x = max.y = std::numeric_limits<T>::min();
@@ -63,5 +65,6 @@ namespace kapusha {
     }
     vec2<T> toRelative(const vec2<T>& v) const { return (v - min) / size(); }
     vec2<T> fromRelative(const vec2<T>& v) const { return min + size() * v; }
+    rect2 operator*(vec2<T> v) { min *= v; max *= v; return *this; }
   };
 } // namespace kapusha
