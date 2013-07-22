@@ -41,7 +41,7 @@ void Surface::blit(vec2i pos, const Surface *source) {
     + pos.x * meta_.bytesPerPixel;
 
   const vec2i size = source->meta().size;
-  for (unsigned y = 0; y < size.y; ++y, psrc += source->meta().bytesPerRow,
+  for (int y = 0; y < size.y; ++y, psrc += source->meta().bytesPerRow,
     pdst += meta_.bytesPerRow) {
     memcpy(pdst, psrc, size.x * meta_.bytesPerPixel);
   }

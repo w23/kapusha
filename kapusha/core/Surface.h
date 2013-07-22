@@ -13,7 +13,7 @@ public:
       //! \todo RF16, RF32, ..., RGBAF32
       Unknown
     } format;
-    int bytesPerPixel, bytesPerRow;
+    u32 bytesPerPixel, bytesPerRow;
 
     Meta() = default;
     inline Meta(vec2i _size, int _bytesPerPixel)
