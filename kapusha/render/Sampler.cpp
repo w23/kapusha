@@ -33,8 +33,8 @@ namespace kapusha {
   }
 
   void Sampler::upload(Context *ctx, const Surface::Meta &meta, const void *data) {
-    L("Loading texture: %dx%d format = %d",
-      meta.size.x, meta.size.y, meta.format);
+    //L("Loading texture: %dx%d format = %d",
+    //  meta.size.x, meta.size.y, meta.format);
     //! \todo table, not switch?
     unsigned internal, format, type;
     switch (meta.format) {
