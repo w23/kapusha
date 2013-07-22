@@ -1,5 +1,6 @@
 ROOT=.
-include $(ROOT)/common.mk
+KAPUSHA_ROOT=$(ROOT)
+include $(KAPUSHA_ROOT)/common.mk
 
 #! \fixme dependencies
 

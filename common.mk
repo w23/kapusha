@@ -1,6 +1,6 @@
 .SUFFIXES:
-METADEPS=Makefile $(ROOT)/common.mk
-CXXFLAGS += $(CFLAGS) -std=c++11 -Wall -Werror -fno-exceptions -fno-rtti -I$(ROOT)
+METADEPS=Makefile $(KAPUSHA_ROOT)/common.mk
+CXXFLAGS += $(CFLAGS) -std=c++11 -Wall -Werror -fno-exceptions -fno-rtti -I$(KAPUSHA_ROOT)
 LDFLAGS += -lm
 
 ifneq ($(RELEASE),1)
