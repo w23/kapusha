@@ -42,6 +42,8 @@ ifeq ($(KP_SDL),1)
 	LDFLAGS += `pkg-config --libs sdl` -lGL
 endif
 
+KP_HARFTYPE=0
+
 ifeq ($(KP_HARFTYPE),1)
 	CXXFLAGS += `pkg-config --cflags freetype2 harfbuzz`
 	LDFLAGS += `pkg-config --libs freetype2 harfbuzz`
