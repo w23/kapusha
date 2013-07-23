@@ -5,6 +5,15 @@
 namespace kapusha {
 namespace sys {
 
+class ClockMonotonic {
+public:
+  static u64 now() {
+    timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return ts.tv_sec * 1000ULL + ts.tv_nsec / 1000000ULL;
+  }
+};
+
 GLXViewportController::~GLXViewportController() {
   if (display_) XCloseDisplay(display_);
 }
@@ -63,6 +72,7 @@ int GLXViewportController::run(IViewport *viewport, vec2i size, bool fullscreen)
 }
 
 void GLXViewportController::event_loop() {
+  u64 start = ClockMonotonic::now(), prev = 0;
   for(;;) {
     while (XPending(display_)) {
       XEvent event;
@@ -79,8 +89,10 @@ void GLXViewportController::event_loop() {
       }
     }
 
-    viewport_->draw(0, 0);
+    u64 now = ClockMonotonic::now() - start;
+    viewport_->draw(now, (now-prev) / 1000.f);
     glXSwapBuffers(display_, window_);
+    prev = now;
   }
 }
 

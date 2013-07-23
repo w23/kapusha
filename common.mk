@@ -33,7 +33,7 @@ endif
 
 ifeq ($(KP_X11),1)
 	KP_HARFTYPE = 1
-	LDFLAGS += -lGL -lX11
+	LDFLAGS += -lGL -lX11 -lrt
 endif
 
 ifeq ($(KP_SDL),1)
