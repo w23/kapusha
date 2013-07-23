@@ -8,7 +8,7 @@ namespace kapusha {
     typedef T type;
     T x, y;
 
-    inline vec2() {}
+    inline vec2() = default;
     inline explicit vec2(T v) : x(v), y(v) {}
     inline vec2(T _x, T _y) : x(_x), y(_y) {}
     template <typename R> inline vec2(const vec2<R>& v)
