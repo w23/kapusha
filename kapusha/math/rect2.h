@@ -66,5 +66,12 @@ namespace kapusha {
     vec2<T> toRelative(const vec2<T>& v) const { return (v - min) / size(); }
     vec2<T> fromRelative(const vec2<T>& v) const { return min + size() * v; }
     rect2 operator*(vec2<T> v) { min *= v; max *= v; return *this; }
+    rect2<T> clip(const rect2<T>& r) {
+      min.x = ::kapusha::max(min.x, r.min.x);
+      min.y = ::kapusha::max(min.y, r.min.y);
+      max.x = ::kapusha::min(max.x, r.max.x);
+      max.y = ::kapusha::min(max.y, r.max.y);
+      return *this;
+    }
   };
 } // namespace kapusha
