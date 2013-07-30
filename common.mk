@@ -7,16 +7,19 @@ ifneq ($(RELEASE),1)
 	DEBUG = 1
 endif
 
-ifneq ($(KP_SDL),1)
+ifeq ($(OS),Windows_NT)
+	KAPUSHA_WINDOWS = 1
+else
+ifneq ($(KAPUSHA_SDL),1)
 	KP_X11 = 1
 	KP_EGL = 0
 endif
 
-ifeq ($(RPI),1)
-	KP_RASPBERRY = 1
+ifeq ($(KAPUSHA_RASPBERRY),1)
 	KP_SDL = 0
 	KP_X11 = 0
 	KP_EGL = 1
+endif # RP
 endif
 
 ifeq ($(DEBUG),1)
@@ -25,7 +28,7 @@ else
 	CXXFLAGS += -Os -fomit-frame-pointer
 endif
 
-ifeq ($(KP_RASPBERRY),1)
+ifeq ($(KAPUSHA_RASPBERRY),1)
 	CXXFLAGS += -DKP_RASPBERRY=1 -I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads
 	CXXFLAGS += -I/opt/vc/include/interface/vmcs_host/linux
 	LDFLAGS += -lGLESv2 -lEGL -lbcm_host -L/opt/vc/lib
@@ -42,7 +45,14 @@ ifeq ($(KP_SDL),1)
 	LDFLAGS += `pkg-config --libs sdl` -lGL
 endif
 
-KP_HARFTYPE=0
+ifeq ($(KAPUSHA_WINDOWS),1)
+# TODO get rid of glew
+	CFLAGS += -I$(KAPUSHA_ROOT)/3p/glew -DUNICODE -D_UNICODE -DGLEW_STATIC
+	LDFLAGS += -luser32 -lopengl32 -lgdi32
+endif
+
+# temp hack
+KP_HARFTYPE = 0
 
 ifeq ($(KP_HARFTYPE),1)
 	CXXFLAGS += `pkg-config --cflags freetype2 harfbuzz`

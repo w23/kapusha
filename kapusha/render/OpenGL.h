@@ -2,7 +2,7 @@
 // 2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <GL/glew.h>
 #include <GL/gl.h>
 #elif defined(__APPLE__)

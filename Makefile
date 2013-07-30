@@ -11,7 +11,6 @@ SOURCES := \
 	kapusha/core/map.cpp \
 	kapusha/core/Surface.cpp \
 	kapusha/math/math.cpp \
-	kapusha/io/StreamFile_posix.cpp \
 	kapusha/io/Stream.cpp \
 	kapusha/viewport/input.cpp \
 	kapusha/render/Program.cpp \
@@ -32,7 +31,6 @@ SOURCES := \
 	kapusha/utils/geometry.cpp \
 	kapusha/utils/Atlas.cpp \
 	kapusha/utils/noise.cpp
-	
 
 ifeq ($(KP_RASPBERRY),1)
 SOURCES += \
@@ -52,6 +50,15 @@ SOURCES += \
 	kapusha/sys/x11/GLXContext.cpp \
 	kapusha/sys/x11/GLXViewportController.cpp \
 	kapusha/sys/x11/x11.cpp
+endif
+
+ifeq ($(KAPUSHA_WINDOWS), 1)
+SOURCES += \
+	3p/glew/GL/glew.cpp \
+	kapusha/sys/win/Window.cpp
+else
+SOURCES += \
+	kapusha/io/StreamFile_posix.cpp
 endif
 
 ifeq ($(KP_HARFTYPE),1)

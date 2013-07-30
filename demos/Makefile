@@ -1,4 +1,5 @@
 ROOT=..
+KAPUSHA_ROOT=$(ROOT)
 include $(ROOT)/common.mk
 
 SAMPLES = \
@@ -17,11 +18,15 @@ ifeq ($(KP_X11),1)
 	RUNNER = main_x11
 endif
 
+ifeq ($(KAPUSHA_WINDOWS),1)
+	RUNNER = main_win32
+endif
+
 all_samples: $(SAMPLES)
 
 %: %.o $(RUNNER).o $(ROOT)/libkapusha.a
 	make -C $(ROOT)
-	$(LD) $< -lkapusha $(LDFLAGS) $(RUNNER).o -L$(ROOT) -o $@
+	$(LD) $< $(RUNNER).o -lkapusha $(LDFLAGS) -L$(ROOT) -o $@
 
 clean:
 	@rm -f $(SAMPLES) *.o

@@ -1,4 +1,6 @@
 #include <windows.h>
+#undef min
+#undef max
 #include <kapusha/core.h>
 #include <kapusha/sys/win/Window.h>
 

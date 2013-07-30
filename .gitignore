@@ -12,3 +12,4 @@ project.xcworkspace
 *.sdf
 /ipch
 *.user
+*.exe
