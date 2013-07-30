@@ -2,8 +2,6 @@ ROOT=.
 KAPUSHA_ROOT=$(ROOT)
 include $(KAPUSHA_ROOT)/common.mk
 
-#! \fixme dependencies
-
 SOURCES := \
 	kapusha/core/assert.cpp \
 	kapusha/core/log.cpp \
