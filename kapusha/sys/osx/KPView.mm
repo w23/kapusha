@@ -1,173 +1,71 @@
 #include <mach/mach_time.h>
 #import "KPView.h"
-#include "CocoaGLContext.h"
-#include "CocoaKeyState.h"
-#include "CocoaPointerState.h"
+#import "KPView_private.h"
+#include "CocoaViewportController.h"
 
 using namespace kapusha;
 void log::sys_write(const char *message) { NSLog(@"%s", message); }
 
 ////////////////////////////////////////////////////////////////////////////////
-class CocoaViewportController;
 @interface KPView () {
+  vec2i size_;
   CocoaViewportController *viewportController_;
-  IViewport *viewport_;
-  u32 prevFrameTime_;
-  BOOL needRedraw_;
-  BOOL wasDummyRedraw_;
-  CFRunLoopRef runloop_;
-  CFRunLoopObserverRef drawObserver_;
-  //! \todo CVDisplayLinkRef displayLink_;
-  // http://developer.apple.com/library/mac/#qa/qa1385/_index.html
-  // why not now? threading! too lazy to think atm
+  /// \todo THREADING and CVDisplayLinkRef displayLink_;
+  NSTimer *timer_;
 }
-- (void) requestRedraw;
-- (void) draw;
-- (void) startDrawing;
-- (void) stopDrawing;
 - (void) mouseAlwaysRelative:(BOOL)always;
+- (void) timerDraw;
 @end
-
-////////////////////////////////////////////////////////////////////////////////
-
-class CocoaViewportController : public IViewportController
-{
-public:
-  CocoaViewportController(KPView *view, IViewport *viewport)
-    : view_(view), viewport_(viewport), glContext_([view openGLContext]) {
-      viewport_->init(this, &glContext_);
-    }
-  ~CocoaViewportController() { viewport_->close(); }
-public: // IViewportController
-  void quit(int code) {}
-  void requestRedraw() { [view_ requestRedraw]; }
-  void setRelativeOnlyPointer(bool relative_only) {
-    [view_ mouseAlwaysRelative:relative_only];
-    pointerState_.setRelative(relative_only);
-  }
-  void hideCursor(bool hide) {
-    if (hide) CGDisplayHideCursor(kCGDirectMainDisplay);
-    else CGDisplayShowCursor(kCGDirectMainDisplay);
-  }
-  const PointerState& pointerState() const { return pointerState_; }
-  const KeyState& keyState() const { return keyState_; }
-  inline void mouseMoved(NSView *view, NSEvent *event) {
-    pointerState_.mouseMoveTo(view, event);
-    viewport_->inputPointer(pointerState_);
-  }
-  inline void mouseDown(NSView *view, NSEvent *event) {
-    pointerState_.mouseDown(view, event);
-    viewport_->inputPointer(pointerState_);
-  }
-  inline void mouseUp(NSView *view, NSEvent *event) {
-    pointerState_.mouseUp(view, event);
-    viewport_->inputPointer(pointerState_);
-  }
-  inline void key(NSEvent* event, u32 time) {
-    if (keyState_.processEvent(event, time))
-      viewport_->inputKey(keyState_);
-  }
-  inline void resize(vec2i size) {
-    viewport_->resize(size);
-    pointerState_.resize(size);
-  }
-private:
-  KPView *view_;
-  IViewport *viewport_;
-  CocoaGLContext glContext_;
-  CocoaPointerState pointerState_;
-  CocoaKeyState keyState_;
-};
 
 ////////////////////////////////////////////////////////////////////////////////
 @implementation KPView
 - (id) initWithFrame:(NSRect)frame WithViewport:(kapusha::IViewport*)viewport {
   static const NSOpenGLPixelFormatAttribute attribs[] = {
-    NSOpenGLPFADoubleBuffer, 1,
-    NSOpenGLPFADepthSize, 24,
-    NSOpenGLPFAAccelerated, 1
+    NSOpenGLPFADoubleBuffer,
+    NSOpenGLPFADepthSize, 32,
+    NSOpenGLPFAAccelerated,
+    //NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core
+    0
   };
   NSOpenGLPixelFormat *pixfmt = [[[NSOpenGLPixelFormat alloc]
                                   initWithAttributes:attribs] autorelease];
+  KP_ASSERT(pixfmt);
   if (self = [super initWithFrame:frame pixelFormat:pixfmt]) {
-    [self setViewport:viewport];
+    viewportController_ = new CocoaViewportController(self, viewport);
   }
   return self;
 }
+
 - (void) dealloc {
   delete viewportController_;
   [super dealloc];
 }
-- (void) setViewport:(kapusha::IViewport*)viewport {
-  viewport_ = viewport;
-  if ([self openGLContext]) {
-    [self prepareOpenGL];
-    [self reshape];
-  }
-}
-- (void) requestRedraw {
-  needRedraw_ = YES;
-  CFRunLoopWakeUp(runloop_);
-}
-// internals
-void KPViewDrawObserverCallback(CFRunLoopObserverRef observer,
-                                CFRunLoopActivity activity, void *info) {
-  KPView *view = (KPView*)info;
-  [view draw];
-}
-- (void) startDrawing {
-  if (drawObserver_) return;
-  runloop_ = CFRunLoopGetCurrent();
-  CFRunLoopObserverContext ctx;
-  memset(&ctx, 0, sizeof(ctx));
-  ctx.info = self;
-  drawObserver_ = CFRunLoopObserverCreate(kCFAllocatorDefault,
-                                          kCFRunLoopBeforeWaiting,
-                                          YES, 0, KPViewDrawObserverCallback,
-                                          &ctx);
-  CFRunLoopAddObserver(runloop_, drawObserver_,
-                       kCFRunLoopCommonModes);
-}
-- (void) stopDrawing {
-  CFRunLoopRemoveObserver(runloop_, drawObserver_,
-                          kCFRunLoopCommonModes);
-  CFRelease(drawObserver_);
-}
-- (void) draw {
-  if (viewport_ && needRedraw_) {
-    needRedraw_ = NO;
-    u32 time = MachTime::now_ms();
-    float dt = (wasDummyRedraw_) ? 0.f : (time - prevFrameTime_) / 1000.f;
-    viewport_->draw(time, dt);
-    [[self openGLContext] flushBuffer];
-    prevFrameTime_ = time;
-    wasDummyRedraw_ = NO;
-  } else
-    wasDummyRedraw_ = YES;
-}
 
-#pragma mark - delegate methods
 - (void) prepareOpenGL {
-  MachTime::reset();
-  prevFrameTime_ = MachTime::now_ms();
-  delete viewportController_;
-  viewportController_ = 0;
-  if (viewport_)
-    viewportController_ = new CocoaViewportController(self, viewport_);
-  needRedraw_ = YES;
-  wasDummyRedraw_ = YES;
-  [self startDrawing];
+  GLint swapInt = 1;
+  [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
+  viewportController_->init();
+  
+  timer_ = [NSTimer timerWithTimeInterval:0.001
+                                   target:self
+                                 selector:@selector(timerDraw)
+                                 userInfo:nil
+                                  repeats:YES];
+  [[NSRunLoop currentRunLoop] addTimer:timer_
+                               forMode:NSDefaultRunLoopMode];
+  [[NSRunLoop currentRunLoop] addTimer:timer_
+                               forMode:NSEventTrackingRunLoopMode];
+  [[self window] setAcceptsMouseMovedEvents:YES];
 }
 
 - (void) reshape {
-  if (viewport_)
-    viewportController_->resize(vec2i(self.bounds.size.width,
-                                      self.bounds.size.height));
+  vec2i size = vec2i(self.bounds.size.width, self.bounds.size.height);
+  viewportController_->resize(size);
 }
 
-- (void)drawRect:(NSRect)dirtyRect {
-  needRedraw_ = YES;
-  [self draw];
+- (void) drawRect:(NSRect)dirtyRect {
+  viewportController_->draw();
+  [[self openGLContext] flushBuffer];
 }
 
 - (BOOL)acceptsFirstResponder { return YES; }
@@ -182,21 +80,34 @@ void KPViewDrawObserverCallback(CFRunLoopObserverRef observer,
 - (void) mouseMoved:(NSEvent *)theEvent {
   viewportController_->mouseMoved(self, theEvent);
 }
+
 - (void) mouseDown:(NSEvent *)theEvent {
   viewportController_->mouseDown(self, theEvent);
 }
+
 - (void) mouseUp:(NSEvent *)theEvent {
   viewportController_->mouseUp(self, theEvent);
 }
+
 #pragma mark Key events
 - (void) keyDown:(NSEvent *)theEvent {
   if (!theEvent.isARepeat)
     viewportController_->key(theEvent, MachTime::sys_to_ms([theEvent timestamp]));
 }
+
 - (void) flagsChanged:(NSEvent *)theEvent {
   viewportController_->key(theEvent, MachTime::sys_to_ms([theEvent timestamp]));
 }
+
 - (void) keyUp:(NSEvent *)theEvent {
   viewportController_->key(theEvent, MachTime::sys_to_ms([theEvent timestamp]));
+}
+
+- (void) timerDraw {
+  [self setNeedsDisplay:YES];
+}
+
+- (void) requestRedraw {
+  [self setNeedsDisplay:YES];
 }
 @end

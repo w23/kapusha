@@ -6,5 +6,4 @@ namespace kapusha {
 
 @interface KPView : NSOpenGLView
 - (id) initWithFrame:(NSRect)frame WithViewport:(kapusha::IViewport*)viewport;
-- (void) setViewport:(kapusha::IViewport*)viewport;
 @end

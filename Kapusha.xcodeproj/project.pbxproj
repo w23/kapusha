@@ -29,8 +29,6 @@
 		E167AACF1789E22C0047DF38 /* CocoaKeyState.mm in Sources */ = {isa = PBXBuildFile; fileRef = E167AACD1789E22C0047DF38 /* CocoaKeyState.mm */; };
 		E167AAD01789E22C0047DF38 /* CocoaKeyState.h in Headers */ = {isa = PBXBuildFile; fileRef = E167AACE1789E22C0047DF38 /* CocoaKeyState.h */; };
 		E167AAD41789E3BF0047DF38 /* CocoaPointerState.h in Headers */ = {isa = PBXBuildFile; fileRef = E167AAD21789E3BF0047DF38 /* CocoaPointerState.h */; };
-		E167AAD71789E6920047DF38 /* MachTime.mm in Sources */ = {isa = PBXBuildFile; fileRef = E167AAD51789E6920047DF38 /* MachTime.mm */; };
-		E167AAD81789E6920047DF38 /* MachTime.mm in Sources */ = {isa = PBXBuildFile; fileRef = E167AAD51789E6920047DF38 /* MachTime.mm */; };
 		E167AAD91789E6920047DF38 /* MachTime.h in Headers */ = {isa = PBXBuildFile; fileRef = E167AAD61789E6920047DF38 /* MachTime.h */; };
 		E167AADA1789E6920047DF38 /* MachTime.h in Headers */ = {isa = PBXBuildFile; fileRef = E167AAD61789E6920047DF38 /* MachTime.h */; };
 		E172B426171604FD00475227 /* assert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E172B423171604FD00475227 /* assert.cpp */; };
@@ -143,6 +141,8 @@
 		E1D556E4167C6A8900A360F6 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E2167C6A8900A360F6 /* Node.cpp */; };
 		E1D556E6167C996600A360F6 /* Reframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E5167C996600A360F6 /* Reframe.cpp */; };
 		E1D556E7167C996600A360F6 /* Reframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E5167C996600A360F6 /* Reframe.cpp */; };
+		E1EB518B17A9608700A76D62 /* CocoaViewportController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1EB518917A9608700A76D62 /* CocoaViewportController.mm */; };
+		E1EB518C17A9608700A76D62 /* CocoaViewportController.h in Headers */ = {isa = PBXBuildFile; fileRef = E1EB518A17A9608700A76D62 /* CocoaViewportController.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -170,7 +170,6 @@
 		E167AACD1789E22C0047DF38 /* CocoaKeyState.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CocoaKeyState.mm; sourceTree = "<group>"; };
 		E167AACE1789E22C0047DF38 /* CocoaKeyState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaKeyState.h; sourceTree = "<group>"; };
 		E167AAD21789E3BF0047DF38 /* CocoaPointerState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaPointerState.h; sourceTree = "<group>"; };
-		E167AAD51789E6920047DF38 /* MachTime.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MachTime.mm; sourceTree = "<group>"; };
 		E167AAD61789E6920047DF38 /* MachTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MachTime.h; sourceTree = "<group>"; };
 		E168ED901697E6250020F03F /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		E172B423171604FD00475227 /* assert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = assert.cpp; sourceTree = "<group>"; };
@@ -301,6 +300,10 @@
 		E1E74B6E1644551C0038E873 /* shared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shared.h; sourceTree = "<group>"; };
 		E1E74B6F164462670038E873 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Object.cpp; path = kapusha/ooo/Object.cpp; sourceTree = "<group>"; };
 		E1E74B70164462670038E873 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Object.h; path = kapusha/ooo/Object.h; sourceTree = "<group>"; };
+		E1EB518917A9608700A76D62 /* CocoaViewportController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CocoaViewportController.mm; sourceTree = "<group>"; };
+		E1EB518A17A9608700A76D62 /* CocoaViewportController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaViewportController.h; sourceTree = "<group>"; };
+		E1EB518D17A9638C00A76D62 /* IViewportController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IViewportController.h; sourceTree = "<group>"; };
+		E1EB518E17A98CF000A76D62 /* KPView_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KPView_private.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -372,6 +375,7 @@
 				E15E63F9165E84150032BBC2 /* input.cpp */,
 				E15E63FA165E84150032BBC2 /* input.h */,
 				E18DDFEC163D8EED00869CF5 /* IViewport.h */,
+				E1EB518D17A9638C00A76D62 /* IViewportController.h */,
 			);
 			name = viewport;
 			path = kapusha/viewport;
@@ -630,14 +634,16 @@
 		E1A77CCB165D528A009FF8F3 /* osx */ = {
 			isa = PBXGroup;
 			children = (
+				E167AACA1789E1890047DF38 /* CocoaGLContext.h */,
+				E167AAC91789E1890047DF38 /* CocoaGLContext.mm */,
+				E167AACE1789E22C0047DF38 /* CocoaKeyState.h */,
+				E167AACD1789E22C0047DF38 /* CocoaKeyState.mm */,
+				E167AAD21789E3BF0047DF38 /* CocoaPointerState.h */,
+				E1EB518A17A9608700A76D62 /* CocoaViewportController.h */,
+				E1EB518917A9608700A76D62 /* CocoaViewportController.mm */,
 				E14B5356165D59F300B55FEC /* KPView.h */,
 				E14B5357165D59F300B55FEC /* KPView.mm */,
-				E167AAC91789E1890047DF38 /* CocoaGLContext.mm */,
-				E167AACA1789E1890047DF38 /* CocoaGLContext.h */,
-				E167AACD1789E22C0047DF38 /* CocoaKeyState.mm */,
-				E167AACE1789E22C0047DF38 /* CocoaKeyState.h */,
-				E167AAD21789E3BF0047DF38 /* CocoaPointerState.h */,
-				E167AAD51789E6920047DF38 /* MachTime.mm */,
+				E1EB518E17A98CF000A76D62 /* KPView_private.h */,
 				E167AAD61789E6920047DF38 /* MachTime.h */,
 			);
 			path = osx;
@@ -699,6 +705,7 @@
 				E167AAD01789E22C0047DF38 /* CocoaKeyState.h in Headers */,
 				E167AAD41789E3BF0047DF38 /* CocoaPointerState.h in Headers */,
 				E167AAD91789E6920047DF38 /* MachTime.h in Headers */,
+				E1EB518C17A9608700A76D62 /* CocoaViewportController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -915,7 +922,7 @@
 				E184ED001785E9E4007CDEF3 /* array.cpp in Sources */,
 				E167AACB1789E1890047DF38 /* CocoaGLContext.mm in Sources */,
 				E167AACF1789E22C0047DF38 /* CocoaKeyState.mm in Sources */,
-				E167AAD71789E6920047DF38 /* MachTime.mm in Sources */,
+				E1EB518B17A9608700A76D62 /* CocoaViewportController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -930,7 +937,6 @@
 				E172B428171604FD00475227 /* assert.cpp in Sources */,
 				E1BE3887173F7AAA0029FD4A /* noise.cpp in Sources */,
 				E184ED011785E9E4007CDEF3 /* array.cpp in Sources */,
-				E167AAD81789E6920047DF38 /* MachTime.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
