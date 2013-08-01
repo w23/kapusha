@@ -10,7 +10,7 @@ endif
 ifeq ($(OS),Windows_NT)
 	KAPUSHA_WINDOWS = 1
 else
-ifneq ($(KAPUSHA_SDL),1)
+ifneq ($(KP_SDL),1)
 	KP_X11 = 1
 	KP_EGL = 0
 endif
