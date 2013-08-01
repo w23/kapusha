@@ -24,7 +24,6 @@
 		E131D5131662036F00B0320A /* KPView.mm in Sources */ = {isa = PBXBuildFile; fileRef = E14B5357165D59F300B55FEC /* KPView.mm */; };
 		E131D514166204C500B0320A /* libkapusha.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E131D4FF166201F400B0320A /* libkapusha.a */; };
 		E15E63FB165E84150032BBC2 /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E15E63F9165E84150032BBC2 /* input.cpp */; };
-		E167AACB1789E1890047DF38 /* CocoaGLContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = E167AAC91789E1890047DF38 /* CocoaGLContext.mm */; };
 		E167AACC1789E1890047DF38 /* CocoaGLContext.h in Headers */ = {isa = PBXBuildFile; fileRef = E167AACA1789E1890047DF38 /* CocoaGLContext.h */; };
 		E167AACF1789E22C0047DF38 /* CocoaKeyState.mm in Sources */ = {isa = PBXBuildFile; fileRef = E167AACD1789E22C0047DF38 /* CocoaKeyState.mm */; };
 		E167AAD01789E22C0047DF38 /* CocoaKeyState.h in Headers */ = {isa = PBXBuildFile; fileRef = E167AACE1789E22C0047DF38 /* CocoaKeyState.h */; };
@@ -143,6 +142,7 @@
 		E1D556E7167C996600A360F6 /* Reframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E5167C996600A360F6 /* Reframe.cpp */; };
 		E1EB518B17A9608700A76D62 /* CocoaViewportController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1EB518917A9608700A76D62 /* CocoaViewportController.mm */; };
 		E1EB518C17A9608700A76D62 /* CocoaViewportController.h in Headers */ = {isa = PBXBuildFile; fileRef = E1EB518A17A9608700A76D62 /* CocoaViewportController.h */; };
+		E1EB518F17A9947000A76D62 /* CocoaGLContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = E167AAC91789E1890047DF38 /* CocoaGLContext.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -920,9 +920,9 @@
 				E184ECEF17848039007CDEF3 /* Face.cpp in Sources */,
 				E184ECF817849961007CDEF3 /* Atlas.cpp in Sources */,
 				E184ED001785E9E4007CDEF3 /* array.cpp in Sources */,
-				E167AACB1789E1890047DF38 /* CocoaGLContext.mm in Sources */,
 				E167AACF1789E22C0047DF38 /* CocoaKeyState.mm in Sources */,
 				E1EB518B17A9608700A76D62 /* CocoaViewportController.mm in Sources */,
+				E1EB518F17A9947000A76D62 /* CocoaGLContext.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

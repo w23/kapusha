@@ -29,7 +29,7 @@ namespace coretext {
                           NULL,
                           kCGImageAlphaOnly);
     
-    CGFontRef cgFont_ = CTFontCopyGraphicsFont(font_, NULL);
+    cgFont_ = CTFontCopyGraphicsFont(font_, NULL);
     CGContextSetFont(atlasContext_, cgFont_);
     CGContextSetFontSize(atlasContext_, CTFontGetSize(font_));
     CGContextSetRGBFillColor(atlasContext_, 1.f, 1.f, 1.f, 1.f);

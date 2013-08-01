@@ -26,7 +26,7 @@ namespace kapusha {
     
     struct ::stat st;
     ::fstat(file_, &st);
-    void *ptr = ::mmap(0, st.st_size, PROT_READ, MAP_PRIVATE, file_, 0);
+    void *ptr = ::mmap(0, static_cast<size_t>(st.st_size), PROT_READ, MAP_PRIVATE, file_, 0);
 
 #if !SIZE_OPTIMIZE
     if (ptr == MAP_FAILED)
@@ -38,7 +38,7 @@ namespace kapusha {
     }
 #endif
     
-    useMemory(ptr, st.st_size);
+    useMemory(ptr, static_cast<size_t>(st.st_size));
 
 	  L("Opened file \"%s\" stream @%p size %ld", filename, ptr, st.st_size);
     
