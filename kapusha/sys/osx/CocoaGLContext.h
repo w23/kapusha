@@ -5,7 +5,7 @@
 namespace kapusha {
   class CocoaGLContext : public Context {
   public:
-    inline CocoaGLContext(NSOpenGLContext *cocoaContext);
+    CocoaGLContext(NSOpenGLContext *cocoaContext);
     virtual ~CocoaGLContext();
     virtual Context *createSharedContext();
     virtual void makeCurrent();
