@@ -2,7 +2,7 @@
 #include <windowsx.h>
 #undef min
 #undef max
-#include <kapusha/core/Log.h>
+#include <kapusha/core.h>
 #include <kapusha/viewport/IViewport.h>
 #include <kapusha/render/Context.h>
 
@@ -349,6 +349,7 @@ namespace kapusha {
 
     virtual void quit(int code);
     virtual void requestRedraw();
+    virtual void setTargetFramerate(int) {}
     virtual void setRelativeOnlyPointer(bool relative_only);
     virtual void hideCursor(bool hide);
     virtual const PointerState& pointerState() const { return pointers_; }

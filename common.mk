@@ -9,7 +9,9 @@ endif
 
 ifeq ($(OS),Windows_NT)
 	KAPUSHA_WINDOWS = 1
-else
+endif
+
+ifneq ($(KAPUSHA_WINDOWS), 1)
 ifneq ($(KP_SDL),1)
 	KP_X11 = 1
 	KP_EGL = 0
@@ -48,7 +50,11 @@ endif
 ifeq ($(KAPUSHA_WINDOWS),1)
 # TODO get rid of glew
 	CFLAGS += -I$(KAPUSHA_ROOT)/3p/glew -DUNICODE -D_UNICODE -DGLEW_STATIC
-	LDFLAGS += -luser32 -lopengl32 -lgdi32
+	LDFLAGS += -luser32 -lopengl32 -lgdi32 -static-libgcc -static-libstdc++
+endif
+
+ifeq ($(KP_STRIP), 1)
+	LDFLAGS += -s
 endif
 
 # temp hack

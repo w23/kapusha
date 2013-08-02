@@ -72,7 +72,7 @@ DEPENDS=$(SOURCES:.cpp=.d)
 
 libkapusha.a: $(MODULES)
 	@rm -f libkapusha.a
-	ar rcs libkapusha.a $(MODULES)
+	$(AR) rcs libkapusha.a $(MODULES)
 
 depend: $(DEPENDS)
 
