@@ -116,6 +116,7 @@ namespace kapusha {
     virtual void requestRedraw() {
       //! \fixme
     }
+    virtual void setTargetFramerate(int) {}
     virtual void setRelativeOnlyPointer(bool limitless) {
       SDL_WM_GrabInput(limitless ? SDL_GRAB_ON : SDL_GRAB_OFF);
       pointer_state_.setDeltaOnly(limitless);
