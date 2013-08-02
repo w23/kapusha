@@ -37,9 +37,9 @@ public:
   inline const void *pixels() const { return pixels_; }
   inline void *pixels() { return pixels_; }
   template <typename T>
-  inline T *pixels() { return reinterpret_cast<T>(pixels_); }
+  inline T *pixels() { return reinterpret_cast<T*>(pixels_); }
   template <typename T>
-  inline const T *pixels() const { return reinterpret_cast<const T>(pixels_); }
+  inline const T *pixels() const { return reinterpret_cast<const T*>(pixels_); }
 
   void clear();
   void blit(vec2i pos, const Surface *source);

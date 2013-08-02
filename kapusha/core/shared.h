@@ -44,8 +44,7 @@ namespace kapusha {
   template <typename T> class shared : public shared_base {
   public:
     inline shared(T *t = nullptr) : shared_base(t) {}
-    //! \todo seriously, microsoft, fuck you!
-    // inline explicit operator bool() const { return t_; }
+    inline explicit operator bool() const { return t_; }
     inline T *get() const { return static_cast<T*>(t_); }
     inline T &operator*() const { return *static_cast<T*>(t_); }
     inline T *operator->() const { return static_cast<T*>(t_); }
