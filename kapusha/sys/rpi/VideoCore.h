@@ -2,8 +2,8 @@
 
 #include <bcm_host.h>
 #include "EGL.h"
-#include "../../core/Core.h"
-#include "../../math/types.h"
+#include <kapusha/core.h>
+#include <kapusha/math.h>
 
 namespace kapusha {
 

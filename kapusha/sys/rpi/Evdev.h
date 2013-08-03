@@ -1,6 +1,6 @@
 #pragma once
 #include <linux/input.h>
-#include "../../core/Input.h"
+#include <kapusha/viewport/input.h>
 
 namespace kapusha {
 
@@ -25,7 +25,6 @@ namespace kapusha {
 
   private:
     EventProcessingState state_;
-    vec2f kpix_;
     bool relativeOnly_;
   }; // class EvdevPointerState
 

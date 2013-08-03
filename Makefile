@@ -30,7 +30,7 @@ SOURCES := \
 	kapusha/utils/Atlas.cpp \
 	kapusha/utils/noise.cpp
 
-ifeq ($(KP_RASPBERRY),1)
+ifeq ($(KAPUSHA_RASPBERRY),1)
 SOURCES += \
 	kapusha/sys/rpi/VideoCore.cpp \
 	kapusha/sys/rpi/EGL.cpp \

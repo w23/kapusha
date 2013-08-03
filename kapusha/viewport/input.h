@@ -47,8 +47,8 @@ namespace kapusha {
       inline bool wasCancelled() const { return (flags_ & Cancelled) != 0; }
       inline vec2f getPosition() const { return point_; }
       inline vec2f getDelta() const { return pointDelta_; }
-    protected:
-      friend class PointerState;
+
+    //protected: friend class PointerState;
       int flags_, flagsChanged_;
       vec2f point_, pointDelta_; //! in normalized viewport coordinates
       Pointer() : flags_(0), flagsChanged_(0), point_(0), pointDelta_(0) {}

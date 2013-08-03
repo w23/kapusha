@@ -1,11 +1,16 @@
+#include <cstdio>
 #include <time.h>
-#include "../../core/IViewport.h"
+#include <kapusha/viewport.h>
+#include <kapusha/render/Context.h>
 #include "VideoCore.h"
 #include "EGL.h"
 #include "Evdev.h"
 #include "RPi.h"
 
 namespace kapusha {
+  void log::sys_write(const char *message) {
+    fprintf(stderr, "%s\n", message);
+  }
 
   class RaspberryController : public IViewportController
   {
@@ -15,7 +20,8 @@ namespace kapusha {
   public: // IViewportController
     virtual void quit(int code);
     virtual void requestRedraw() { /*! \todo */ }
-    virtual void limitlessPointer(bool rel) { evdev_.setRelativeOnly(rel); }
+    virtual void setTargetFramerate(int) {}
+    virtual void setRelativeOnlyPointer(bool rel) { evdev_.setRelativeOnly(rel); }
     virtual void hideCursor(bool) { /*! \todo sw-cursor? */ }
     virtual const PointerState& pointerState() const { return evdev_.pointerState(); }
     virtual const KeyState& keyState() const { return evdev_.keyState(); }
@@ -32,6 +38,12 @@ namespace kapusha {
     bool continue_;
     int returnCode_;
 
+  };
+
+  /// \todo fix dummy
+  class RaspberryContext : public Context {
+  public:
+    RaspberryContext() {}
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -57,20 +69,23 @@ namespace kapusha {
 
     KP_ENSURE(egl_.init(EGL_DEFAULT_DISPLAY, win));
 
-    viewport_->init(this);
-    viewport_->resize(videoCore_.displaySize());
-
-    int tprev = now();
-    while(continue_)
     {
-      evdev_.run(false);
-      int tnow = now();
-      viewport_->draw(tnow, (tnow - tprev) / 1000.f);
-      KP_ENSURE(egl_.swap());
-      tprev = tnow;
-    }
+      RaspberryContext context;
+      viewport_->init(this, &context);
+      viewport_->resize(videoCore_.displaySize());
 
-    viewport_->close();
+      int tprev = now();
+      while(continue_)
+      {
+        evdev_.run(false);
+        int tnow = now();
+        viewport_->draw(tnow, (tnow - tprev) / 1000.f);
+        KP_ENSURE(egl_.swap());
+        tprev = tnow;
+      }
+
+      viewport_->close();
+    }
     return returnCode_;
   }
 

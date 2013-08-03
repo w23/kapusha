@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/select.h>
 #include <sys/ioctl.h>
+#include <time.h>
 #include "../../core/core.h"
 #include "../../viewport/IViewport.h"
 #include "Evdev.h"
@@ -11,29 +12,26 @@
 namespace kapusha {
   EvdevPointerState::EvdevPointerState(vec2i vpsize)
     : state_(EventComplete)
-    , kpix_(vec2f(1.f, -1.f) / vec2f(vpsize))
     , relativeOnly_(false)
-  {}
+  {
+    resizeViewport(vec2f(0.f, vpsize.y), vec2f(vpsize.x, 0.f));
+  }
 
   EventProcessingState
-  EvdevPointerState::process(u32 kptime, const input_event &e)
-  {
+  EvdevPointerState::process(u32 kptime, const input_event &e) {
     //L("\tmouse state == %d", state_);
     if (state_ == EventComplete) beginUpdate();
 
-    switch (e.type)
-    {
+    switch (e.type) {
       case EV_SYN:
         if (e.code != SYN_REPORT || state_ != EventProcessing)
           return EventIgnored;
-        accumulate(kptime);
-        endUpdate();
+        endUpdate(kptime);
         return state_ = EventComplete;
 
-      case EV_KEY:
-        {
+      case EV_KEY: {
           int btn = 0;
-          switch (e.code){
+          switch (e.code) {
             case BTN_LEFT:
               btn = Pointer::LeftButton;
               break;
@@ -46,10 +44,10 @@ namespace kapusha {
             default: return EventIgnored;
           }
           if (e.value == 0)
-            pointers_[0].flags &= ~btn;
+            pointers_[0].flags_ &= ~btn;
           else
-            pointers_[0].flags |= btn;
-          pointers_[0].change |= btn;
+            pointers_[0].flags_ |= btn;
+          pointers_[0].flagsChanged_ |= btn;
         }
         return state_ = EventProcessing;
 
@@ -57,22 +55,22 @@ namespace kapusha {
         {
           vec2f d(0);
           if (e.code == REL_X)
-            d.x = kpix_.x * e.value;
+            d.x = scale_.x * e.value;
           else if (e.code == REL_Y)
-            d.y = kpix_.y * e.value;
+            d.y = scale_.y * e.value;
           else return EventIgnored;
           
-          pointers_[0].flags |= Pointer::Move;
-          pointers_[0].change |= Pointer::Move;
+          pointers_[0].flags_ |= Pointer::Moved;
+          pointers_[0].flagsChanged_ |= Pointer::Moved;
 
           if (relativeOnly_)
           {
-            pointers_[0].movement += d;
-            pointers_[0].point = vec2f(0);
+            pointers_[0].pointDelta_ += d;
+            pointers_[0].point_ = vec2f(.5f);
           } else {
-            vec2f newpos = (pointers_[0].point + d).clamp(-1.f, 1.f);
-            pointers_[0].movement += newpos - pointers_[0].point;
-            pointers_[0].point = newpos;
+            vec2f newpos = (pointers_[0].point_ + d).clamped(-1.f, 1.f);
+            pointers_[0].pointDelta_ += newpos - pointers_[0].point_;
+            pointers_[0].point_ = newpos;
           }
         }
         return state_ = EventProcessing;
@@ -239,9 +237,12 @@ namespace kapusha {
     gettimeofday(&tv, 0);
     localSecOffset_ = tv.tv_sec;
 
+#ifndef EVIOCSCLOCKID
+#define EVIOCSCLOCKID _IOW('E', 0xa0, int)
+#endif
     unsigned int clk = CLOCK_MONOTONIC;
-    ioctl(fileMouse_, EVIOCSCLOCKID, &clk);
-    ioctl(fileKeyboard_, EVIOCSCLOCKID, &clk);
+    KP_ENSURE(-1 != ioctl(fileMouse_, EVIOCSCLOCKID, &clk));
+    KP_ENSURE(-1 != ioctl(fileKeyboard_, EVIOCSCLOCKID, &clk));
   }
 
   Evdev::~Evdev()

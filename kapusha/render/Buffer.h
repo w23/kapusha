@@ -14,20 +14,17 @@ namespace kapusha {
       BindingIndex = GL_ELEMENT_ARRAY_BUFFER
     };
     enum Usage {
-      StreamDraw = GL_STREAM_DRAW,
+#if !KAPUSHA_GLES
       StreamRead = GL_STREAM_READ,
       StreamCopy = GL_STREAM_COPY,
-      StaticDraw = GL_STATIC_DRAW,
       StaticRead = GL_STATIC_READ,
       StaticCopy = GL_STATIC_COPY,
-      DynamicDraw = GL_DYNAMIC_DRAW,
       DynamicRead = GL_DYNAMIC_READ,
-      DynamicCopy = GL_DYNAMIC_COPY
-    };
-    enum Access {
-      ReadOnly = GL_READ_ONLY,
-      WriteOnly = GL_WRITE_ONLY,
-      ReadWrite = GL_READ_WRITE
+      DynamicCopy = GL_DYNAMIC_COPY,
+#endif
+      StreamDraw = GL_STREAM_DRAW,
+      StaticDraw = GL_STATIC_DRAW,
+      DynamicDraw = GL_DYNAMIC_DRAW
     };
   public:
     Buffer(Binding binding_hint = BindingArray);

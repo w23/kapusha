@@ -1,4 +1,4 @@
-#include "../../core/Core.h"
+#include <kapusha/core.h>
 #include "EGL.h"
 
 namespace kapusha {
