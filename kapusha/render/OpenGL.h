@@ -4,6 +4,9 @@
 
 #ifdef _WIN32
 #include <GL/glew.h>
+#include <GL/wglew.h>
+#undef min
+#undef max
 #include <GL/gl.h>
 #elif defined(__APPLE__)
 #include "TargetConditionals.h"

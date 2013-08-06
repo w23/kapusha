@@ -48,10 +48,10 @@ namespace kapusha {
         internal = GL_RGB, format = GL_RGB, type = GL_UNSIGNED_SHORT_5_6_5;
         break;
       case Surface::Meta::RG88:
-#if !KAPUSHA_GLES
-        internal = GL_RG, format = GL_RG, type = GL_UNSIGNED_BYTE;
-#else
+#if KAPUSHA_GLES
         internal = GL_LUMINANCE_ALPHA, format = GL_LUMINANCE_ALPHA, type = GL_UNSIGNED_BYTE;
+#else
+        internal = GL_RG, format = GL_RG, type = GL_UNSIGNED_BYTE;
 #endif
         break;
       case Surface::Meta::R8:
