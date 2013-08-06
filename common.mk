@@ -50,7 +50,8 @@ endif
 ifeq ($(KAPUSHA_WINDOWS),1)
 # TODO get rid of glew
 	CFLAGS += -I$(KAPUSHA_ROOT)/3p/glew -DUNICODE -D_UNICODE -DGLEW_STATIC
-	LDFLAGS += -luser32 -lopengl32 -lgdi32 -static-libgcc -static-libstdc++
+	LDFLAGS += -luser32 -lopengl32 -lgdi32 -lwinmm
+	LDFLAGS += -static-libgcc -static-libstdc++
 endif
 
 ifeq ($(KP_STRIP), 1)

@@ -5,6 +5,7 @@
 #include <kapusha/core.h>
 #include <kapusha/viewport/IViewport.h>
 #include <kapusha/render/Context.h>
+#include "Timer.h"
 
 namespace kapusha {
 
@@ -257,7 +258,7 @@ namespace kapusha {
       down = true;
     case WM_KEYUP:
         if (wParam < 256)
-          return key(winkey_to_kapusha_[wParam], down, GetTickCount());
+          return key(winkey_to_kapusha_[wParam], down, timeGetTime());
     }
     return false;
   }
@@ -272,8 +273,8 @@ namespace kapusha {
     bool processEvent(UINT msg, WPARAM wParam, LPARAM lParam);
     
     void resize(vec2i size) {
-      size2_ = size / 2;
-      scale_ = vec2f(1.f, -1.f) / vec2f(size);
+      size_ = size;
+      resizeViewport(vec2f(0.f, size.y), vec2f(size.x, 0.f));
     }
 
     void setGrab(bool _grab, HWND window)
@@ -287,32 +288,25 @@ namespace kapusha {
     void grab()
     {
       POINT pt;
-      pt.x = size2_.x;
-      pt.y = size2_.y;
+      pt.x = size_.x / 2;
+      pt.y = size_.y / 2;
       ClientToScreen(window_, &pt);
       SetCursorPos(pt.x, pt.y);
       ignore_ = true;
     }
-    vec2f pos(LPARAM lParam) {
+    inline vec2f lparam_to_vec2f(LPARAM lParam) {
       return vec2f(static_cast<float>(GET_X_LPARAM(lParam)),
-                   static_cast<float>(GET_Y_LPARAM(lParam))) * scale_ * 2.f
-             + vec2f(-1.f, 1.f);
-    }
-
-    vec2f delta(LPARAM lParam) {
-      return vec2f(static_cast<float>(GET_X_LPARAM(lParam) - size2_.x),
-                   static_cast<float>(GET_Y_LPARAM(lParam) - size2_.y)) * scale_;
+                   static_cast<float>(GET_Y_LPARAM(lParam)));
     }
 
     HWND window_;
-    vec2i size2_;
-    vec2f scale_;
+    vec2i size_;
     bool grabbed_, ignore_;
   };
 
   bool WindowsPointerState::processEvent(UINT msg, WPARAM wParam, LPARAM lParam)
   {
-    int now = GetTickCount();
+    unsigned now = timeGetTime();
     switch(msg)
     {
     case WM_LBUTTONDOWN:
@@ -328,10 +322,10 @@ namespace kapusha {
 
       if (grabbed_)
       {
-        mouseMoveBy(delta(lParam), now);
+        mouseMoveBy(lparam_to_vec2f(lParam), now);
         grab();
       } else
-        mouseMoveTo(pos(lParam), now);
+        mouseMoveTo(lparam_to_vec2f(lParam), now);
       break;
 
     default:
@@ -398,9 +392,13 @@ namespace kapusha {
   {
     switch (msg)
     {
+    //case WM_SIZING:
     case WM_SIZE:
       {
-        vec2i size(lParam & 0xffff, lParam >> 16);
+        //vec2i size(lParam & 0xffff, lParam >> 16);
+        RECT rect;
+        GetClientRect(window_, &rect);
+        vec2i size(rect.right, rect.bottom);
         pointers_.resize(size);
         scale_ = vec2f(1.f) / vec2f(size);
         viewport_->resize(size);
@@ -424,21 +422,16 @@ namespace kapusha {
 
     default:
       if (pointers_.processEvent(msg, wParam, lParam))
-      {
         viewport_->inputPointer(pointers_);
-        break;
-      } else
-        return DefWindowProc(window_, msg, wParam, lParam);
 	  }
-    return 0;
+    return DefWindowProc(window_, msg, wParam, lParam);
   }
 
   LRESULT CALLBACK windowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
   {
     WindowController *winctl = reinterpret_cast<WindowController*>(
       GetWindowLongPtr(hWnd, GWLP_USERDATA));
-    if (winctl)
-      return winctl->processEvent(msg, wParam, lParam);
+    if (winctl) return winctl->processEvent(msg, wParam, lParam);
 
     if (msg == WM_NCCREATE)
     {
@@ -457,19 +450,25 @@ namespace kapusha {
     : viewport_(viewport)
     , need_redraw_(true)
   {
-    WNDCLASSEX wndclass;
-    ZeroMemory(&wndclass, sizeof wndclass);
+    WNDCLASSEX wndclass = { 0 };
     wndclass.cbSize = sizeof wndclass;
-    wndclass.style = CS_OWNDC;
+    wndclass.style = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
     wndclass.lpfnWndProc = windowProc;
     wndclass.hInstance = hInst;
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
     wndclass.lpszClassName = L"KapushaWindowClass";
     RegisterClassEx(&wndclass);
 
-    window_ = CreateWindow(wndclass.lpszClassName, 0,
-                           WS_POPUP | WS_VISIBLE | WS_OVERLAPPEDWINDOW,
-                           0, 0, width, height,
-                           0, 0, hInst, this);
+    RECT wr = {0, 0, width, height};
+    AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
+
+    window_ = CreateWindowEx(WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,
+                             wndclass.lpszClassName, NULL,
+                             WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_OVERLAPPEDWINDOW,
+                             // | WS_VISIBLE, -- makes aero go awaY (?!?!)
+                             CW_USEDEFAULT, CW_USEDEFAULT,
+                             1, 1, // why not wr stuff? see MoveWindow below!11
+                             NULL, NULL, hInst, this);
 
     dc_ = GetDC(window_);
     static const PIXELFORMATDESCRIPTOR pfd = {
@@ -482,6 +481,19 @@ namespace kapusha {
 
     glewInit();
 
+    ShowWindow(window_, SW_SHOW);
+    SetForegroundWindow(window_);
+    SetFocus(window_);
+
+    // WTF WINDOWS !!!!11
+    // OTHERWISE THERE'S NO BORDER OR CAPTION ON FIRST APPEAR
+    // AND CLIENT RECT IS BORKEN SO MOUSE POS IS ALSO INCORRECT
+    // LE FOUCQUE
+    MoveWindow(window_, 0, 0, wr.right-wr.left, wr.bottom-wr.top, TRUE);
+
+    wglSwapIntervalEXT(1);
+
+    pointers_.resize(vec2i(width, height));
     viewport->init(this, &context_);
     viewport->resize(vec2i(width, height));
   }
@@ -489,7 +501,8 @@ namespace kapusha {
   int WindowController::run()
   {
     MSG message;
-    int prev = GetTickCount(), now;
+    Timer timer;
+    u32 prev = timer.now();
     while (true)
     {
       if (need_redraw_)
@@ -508,7 +521,7 @@ namespace kapusha {
       //if (need_redraw_)
       {
         //need_redraw_ = false;
-        now = GetTickCount();
+        u32 now = timer.now();
         viewport_->draw(now, (now - prev) / 1000.f);
         SwapBuffers(dc_);
         prev = now;
