@@ -7,8 +7,12 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "AppDelegate.h"
 
 int main(int argc, char *argv[])
 {
-  return NSApplicationMain(argc, (const char **)argv);
+  NSApplication *app = [NSApplication sharedApplication];
+  app.delegate = [[KapushaAppDelegate alloc] init];
+  [app run];
+  return 0;
 }

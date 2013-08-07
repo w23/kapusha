@@ -4,19 +4,30 @@
 
 extern kapusha::IViewport *makeViewport();
 
-@interface AppDelegate ()
-@property (assign) IBOutlet KPView *viewport;
+@interface KapushaAppDelegate ()
+{
+  NSWindow *window_;
+}
 @end
 
-@implementation AppDelegate
+@implementation KapushaAppDelegate
 - (void)dealloc { [super dealloc]; }
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-  // \hack force likning KPView class from libkapusha
-  [KPView class];
-  
   KP_LOG_OPEN("/tmp/Kapusha.log");
-  [self.window setAcceptsMouseMovedEvents:YES];
-  [self.viewport setViewport:makeViewport()];
+  
+  window_ = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 800, 600)
+                                        styleMask:15
+                                          backing:NSBackingStoreBuffered
+                                            defer:YES];
+  window_.delegate = self;
+  
+  NSRect bounds = NSMakeRect(0, 0, window_.frame.size.width, window_.frame.size.height);
+  window_.contentView = [[KPView alloc] initWithFrame:bounds
+                                         withViewport:makeViewport()];
+  
+  [window_ makeKeyAndOrderFront:self];
+  window_.acceptsMouseMovedEvents = YES;
 }
 
 - (BOOL)windowShouldClose:(id)sender {

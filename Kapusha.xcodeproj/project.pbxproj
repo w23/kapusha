@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E10A639A17B2C7EB004B68C4 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1A77CB1165D39F9009FF8F3 /* AppDelegate.mm */; };
+		E10A639B17B2D466004B68C4 /* flyby_dust.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E19DA35217322D3D005B1F74 /* flyby_dust.cpp */; };
 		E131D5041662033F00B0320A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E131D5031662033F00B0320A /* Cocoa.framework */; };
 		E131D5051662034600B0320A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
 		E131D5061662036500B0320A /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFED163D8EED00869CF5 /* log.cpp */; };
@@ -49,7 +51,6 @@
 		E184ECF417848678007CDEF3 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E184ECF317848678007CDEF3 /* CoreText.framework */; };
 		E184ECF717849961007CDEF3 /* Atlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECF517849961007CDEF3 /* Atlas.cpp */; };
 		E184ECF817849961007CDEF3 /* Atlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECF517849961007CDEF3 /* Atlas.cpp */; };
-		E184ECFD1784A054007CDEF3 /* textosterone.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECFA1784A04C007CDEF3 /* textosterone.cpp */; };
 		E184ECFF1785E9E4007CDEF3 /* array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECFE1785E9E4007CDEF3 /* array.cpp */; };
 		E184ED001785E9E4007CDEF3 /* array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECFE1785E9E4007CDEF3 /* array.cpp */; };
 		E184ED011785E9E4007CDEF3 /* array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECFE1785E9E4007CDEF3 /* array.cpp */; };
@@ -111,9 +112,6 @@
 		E1A77CA3165D39F9009FF8F3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DDFF8163D8F3A00869CF5 /* Cocoa.framework */; };
 		E1A77CA9165D39F9009FF8F3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1A77CA7165D39F9009FF8F3 /* InfoPlist.strings */; };
 		E1A77CAB165D39F9009FF8F3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E1A77CAA165D39F9009FF8F3 /* main.m */; };
-		E1A77CAF165D39F9009FF8F3 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = E1A77CAD165D39F9009FF8F3 /* Credits.rtf */; };
-		E1A77CB2165D39F9009FF8F3 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1A77CB1165D39F9009FF8F3 /* AppDelegate.mm */; };
-		E1A77CB5165D39F9009FF8F3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1A77CB3165D39F9009FF8F3 /* MainMenu.xib */; };
 		E1A77CBB165D3ADA009FF8F3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
 		E1BE3871173395610029FD4A /* SpectatorCameraController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE386F173395610029FD4A /* SpectatorCameraController.cpp */; };
 		E1BE3872173395610029FD4A /* SpectatorCameraController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE386F173395610029FD4A /* SpectatorCameraController.cpp */; };
@@ -267,10 +265,8 @@
 		E1A77CA8165D39F9009FF8F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E1A77CAA165D39F9009FF8F3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E1A77CAC165D39F9009FF8F3 /* kapusha-samples-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "kapusha-samples-Prefix.pch"; sourceTree = "<group>"; };
-		E1A77CAE165D39F9009FF8F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		E1A77CB0165D39F9009FF8F3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E1A77CB1165D39F9009FF8F3 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
-		E1A77CB4165D39F9009FF8F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		E1A8E7DF16915BD10084718E /* Render.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Render.cpp; sourceTree = "<group>"; };
 		E1BD0C1D164F72A900A3454C /* Render.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Render.h; sourceTree = "<group>"; };
 		E1BD8D6716BECE1500FBE9DC /* rect4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rect4.h; sourceTree = "<group>"; };
@@ -610,9 +606,9 @@
 		E1A77CA4165D39F9009FF8F3 /* osx */ = {
 			isa = PBXGroup;
 			children = (
+				E1A77CAA165D39F9009FF8F3 /* main.m */,
 				E1A77CB0165D39F9009FF8F3 /* AppDelegate.h */,
 				E1A77CB1165D39F9009FF8F3 /* AppDelegate.mm */,
-				E1A77CB3165D39F9009FF8F3 /* MainMenu.xib */,
 				E1A77CA5165D39F9009FF8F3 /* Supporting Files */,
 			);
 			name = osx;
@@ -624,9 +620,7 @@
 			children = (
 				E1A77CA6165D39F9009FF8F3 /* kapusha-samples-Info.plist */,
 				E1A77CA7165D39F9009FF8F3 /* InfoPlist.strings */,
-				E1A77CAA165D39F9009FF8F3 /* main.m */,
 				E1A77CAC165D39F9009FF8F3 /* kapusha-samples-Prefix.pch */,
-				E1A77CAD165D39F9009FF8F3 /* Credits.rtf */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -879,8 +873,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1A77CA9165D39F9009FF8F3 /* InfoPlist.strings in Resources */,
-				E1A77CAF165D39F9009FF8F3 /* Credits.rtf in Resources */,
-				E1A77CB5165D39F9009FF8F3 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1023,9 +1015,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E10A639B17B2D466004B68C4 /* flyby_dust.cpp in Sources */,
 				E1A77CAB165D39F9009FF8F3 /* main.m in Sources */,
-				E1A77CB2165D39F9009FF8F3 /* AppDelegate.mm in Sources */,
-				E184ECFD1784A054007CDEF3 /* textosterone.cpp in Sources */,
+				E10A639A17B2C7EB004B68C4 /* AppDelegate.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1046,22 +1038,6 @@
 				E1A77CA8165D39F9009FF8F3 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		E1A77CAD165D39F9009FF8F3 /* Credits.rtf */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E1A77CAE165D39F9009FF8F3 /* en */,
-			);
-			name = Credits.rtf;
-			sourceTree = "<group>";
-		};
-		E1A77CB3165D39F9009FF8F3 /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E1A77CB4165D39F9009FF8F3 /* en */,
-			);
-			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

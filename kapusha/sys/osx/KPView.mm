@@ -19,7 +19,7 @@ void log::sys_write(const char *message) { NSLog(@"%s", message); }
 
 ////////////////////////////////////////////////////////////////////////////////
 @implementation KPView
-- (id) initWithFrame:(NSRect)frame WithViewport:(kapusha::IViewport*)viewport {
+- (id) initWithFrame:(NSRect)frame withViewport:(kapusha::IViewport*)viewport {
   static const NSOpenGLPixelFormatAttribute attribs[] = {
     NSOpenGLPFADoubleBuffer,
     NSOpenGLPFADepthSize, 32,
