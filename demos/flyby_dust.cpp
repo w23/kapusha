@@ -59,7 +59,7 @@ Ground::Ground(Context *ctx, float size) {
   "}\n";
   static u32 tex[4] = { 0xffffffff, 0, 0, 0xffffffff };
   Sampler *sampler = new Sampler(Sampler::Nearest, Sampler::Nearest);
-  sampler->upload(ctx, Sampler::Meta(vec2i(2, 2), Sampler::Meta::RGBA8888), tex);
+  sampler->upload(ctx, Surface::Meta(vec2i(2, 2), Surface::Meta::RGBA8888), tex);
   Program *prog = new Program(svtx, sfrg);
   Material *mat = new Material(prog);
   mat->setUniform("us2_floor", sampler);
