@@ -12,6 +12,7 @@ void Surface::Meta::init() {
     case RGB888: bytesPerPixel = 3; break;
     case BGRA8888:
     case RGBA8888: bytesPerPixel = 4; break;
+    case RGBAF32: bytesPerPixel = 16; break;
     case Unknown: {}
   }
   // enforce 4-bytes alignment

@@ -10,7 +10,8 @@ public:
     vec2i size;
     enum Format {
       R8, RG88, RGB565, RGB888, RGBA8888, BGRA8888,
-      //! \todo RF16, RF32, ..., RGBAF32
+      //! \todo RF16, RF32, ...,
+      RGBAF32,
       Unknown
     } format;
     u32 bytesPerPixel, bytesPerRow;
