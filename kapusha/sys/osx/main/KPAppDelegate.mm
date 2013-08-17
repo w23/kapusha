@@ -1,22 +1,24 @@
-#import "AppDelegate.h"
+#import "KPAppDelegate.h"
 #import <kapusha/core.h>
+#import <kapusha/app.h>
 #import <kapusha/sys/osx/KPView.h>
 
-extern kapusha::IViewport *makeViewport();
-
-@interface KapushaAppDelegate ()
+@interface KPAppDelegate ()
 {
   NSWindow *window_;
 }
 @end
 
-@implementation KapushaAppDelegate
+@implementation KPAppDelegate
 - (void)dealloc { [super dealloc]; }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-  KP_LOG_OPEN("/tmp/Kapusha.log");
   
-  window_ = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 800, 600)
+  NSRect rect = NSMakeRect(0, 0,
+                           kapusha::the_application.prefer_resolution.x,
+                           kapusha::the_application.prefer_resolution.y);
+  
+  window_ = [[NSWindow alloc] initWithContentRect:rect
                                         styleMask:15
                                           backing:NSBackingStoreBuffered
                                             defer:YES];
@@ -24,7 +26,7 @@ extern kapusha::IViewport *makeViewport();
   
   NSRect bounds = NSMakeRect(0, 0, window_.frame.size.width, window_.frame.size.height);
   window_.contentView = [[KPView alloc] initWithFrame:bounds
-                                         withViewport:makeViewport()];
+                                         withViewport:kapusha::the_application.createViewport()];
   
   [window_ makeKeyAndOrderFront:self];
   window_.acceptsMouseMovedEvents = YES;
