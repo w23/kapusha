@@ -6,11 +6,12 @@
 namespace kapusha {
   //! Basic input state with timestamp
   class InputState {
+  public:
+    inline u32 getTimestamp() const { return timestamp_; }
+    inline u32 getDelta() const { return timestampDelta_; }
   protected:
     inline void accumulate(u32 time) { timestampDelta_ += time - timestamp_, timestamp_ = time; }
     inline void update(u32 time) { timestampDelta_ = 0, accumulate(time); }
-    inline u32 getTimestamp() const { return timestamp_; }
-    inline u32 getDelta() const { return timestampDelta_; }
     inline void resetDelta() { timestampDelta_ = 0; }
   private:
     u32 timestamp_;
