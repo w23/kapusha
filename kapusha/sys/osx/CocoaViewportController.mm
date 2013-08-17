@@ -12,7 +12,9 @@ namespace kapusha {
     delete glContext_;
   }
   
-  void CocoaViewportController::quit(int code) {}
+  void CocoaViewportController::quit(int code) {
+    [view_.window performClose:nil];
+  }
   
   void CocoaViewportController::requestRedraw() { [view_ requestRedraw]; }
   
