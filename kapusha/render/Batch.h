@@ -44,6 +44,7 @@ namespace kapusha {
       setAttribSource(material_->getProgram()->getAttributeLocation(attrib_name),
                       buffer, components, offset, stride);
     }
+    void clearAttributes();
     Material* getMaterial() const { return material_.get(); }
     Program::UniformState& uniforms() { return uniforms_; }
     void draw(Context *ctx) const;

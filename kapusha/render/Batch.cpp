@@ -21,6 +21,14 @@ namespace kapusha {
       }
     KP_ASSERT(!"Too many attributes");
   }
+  
+  void Batch::clearAttributes() {
+    for (int i = 0; i < MAX_BATCH_ATTRIBS; ++i) {
+      attribs_[i].index = -1;
+      attribs_[i].buffer.reset();
+    }
+  }
+  
   void Batch::draw(Context *ctx) const {
     KP_ASSERT(material_.valid());
     material_->use(ctx);
