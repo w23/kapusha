@@ -1,7 +1,7 @@
 // Kapusha/math
 // 2012 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
-#include <kapusha/math/math.h>
+#include <kapusha/math.h>
 #include "vec2.h"
 
 namespace kapusha {
@@ -26,7 +26,9 @@ namespace kapusha {
     T length_sq() const { return dot(*this); }
     T length() const { return sqrt(length_sq()); }
     T rlength() const { return rsqrt(length_sq()); }
-    vec3 recip() const { return vec3(recip(x), recip(y), recip(z)); }
+    vec3 recip() const { return vec3(::kapusha::recip(x),
+                                     ::kapusha::recip(y),
+                                     ::kapusha::recip(z)); }
     vec3 normalized() const { return *this * rlength(); }
     vec3 normalize() { return *this = normalized(); }
     vec3 cross(const vec3& r) const {
@@ -40,6 +42,11 @@ namespace kapusha {
                   clamp(y, min.y, max.y),
                   clamp(z, min.z, max.z));
     }
+    T min() const { return ::kapusha::min(x,::kapusha::min(y,z)); }
+    T max() const { return ::kapusha::max(x,::kapusha::max(y,z)); }
+    vec3 abs() const { return vec3(::kapusha::abs(x),
+                                   ::kapusha::abs(y),
+                                   ::kapusha::abs(z)); }
     
     vec3 &operator=(const T* ptr) { return *this = vec3(ptr[0],ptr[1],ptr[2]); }
     vec3 operator-() const { return vec3(-x, -y, -z); }
@@ -48,7 +55,7 @@ namespace kapusha {
     vec3 operator*(const vec3& r) const { return vec3(x*r.x, y*r.y, z*r.z); }
     vec3 operator*(T r) const { return vec3(x*r, y*r, z*r); }
     vec3 operator/(const vec3& r) const { return *this * r.recip(); }
-    vec3 operator/(T r) const { return *this * recip(r); }
+    vec3 operator/(T r) const { return *this * ::kapusha::recip(r); }
     vec3 &operator+=(const vec3& r) { return *this = *this + r; }
     vec3 &operator-=(const vec3& r) { return *this = *this - r; }
     vec3 &operator*=(const vec3& r) { return *this = *this * r; }
