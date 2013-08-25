@@ -26,10 +26,15 @@ namespace kapusha {
     T length_sq() const { return dot(*this); }
     T length() const { return sqrt(length_sq()); }
     T rlength() const { return rsqrt(length_sq()); }
+    T safe_rlength() const {
+      T len2 = length_sq();
+      return (len2 == 0) ? 0 : rsqrt(len2);
+    }
     vec3 recip() const { return vec3(::kapusha::recip(x),
                                      ::kapusha::recip(y),
                                      ::kapusha::recip(z)); }
     vec3 normalized() const { return *this * rlength(); }
+    vec3 safe_normalized() const { return *this * safe_rlength(); }
     vec3 normalize() { return *this = normalized(); }
     vec3 cross(const vec3& r) const {
       return vec3(y*r.z - z*r.y, z*r.x - x*r.z, x*r.y - y*r.x);
@@ -47,6 +52,9 @@ namespace kapusha {
     vec3 abs() const { return vec3(::kapusha::abs(x),
                                    ::kapusha::abs(y),
                                    ::kapusha::abs(z)); }
+    vec3 mod(vec3 d) const { return vec3(::kapusha::mod(x, d.x),
+                                         ::kapusha::mod(y, d.y),
+                                         ::kapusha::mod(z, d.z)); }
     
     vec3 &operator=(const T* ptr) { return *this = vec3(ptr[0],ptr[1],ptr[2]); }
     vec3 operator-() const { return vec3(-x, -y, -z); }
