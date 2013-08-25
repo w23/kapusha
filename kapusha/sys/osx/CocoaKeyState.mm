@@ -114,6 +114,7 @@ namespace kapusha {
     KeyF10,     //0x6D = kVK_F10
     KeyUnknown, //0x6E
     KeyF12,     //0x6F = kVK_F12
+    KeyUnknown, //0x70
     KeyUnknown, //0x71 = kVK_F15
     KeyUnknown, //0x72 = kVK_Help
     KeyHome,    //0x73 = kVK_Home
