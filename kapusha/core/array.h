@@ -7,7 +7,11 @@ namespace kapusha {
 //! \brief Basic array for mostly POD types
 class Array {
 public:
+#if !defined(_MSC_VER)
   inline Array() = default;
+#else
+  inline Array() {}
+#endif
   Array(std::size_t item_size, unsigned reserve = 0);
   ~Array();
   

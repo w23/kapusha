@@ -274,7 +274,9 @@ namespace kapusha {
     
     void resize(vec2i size) {
       size_ = size;
-      resizeViewport(vec2f(0.f, size.y), vec2f(size.x, 0.f));
+      resizeViewport(vec2f(0.f, static_cast<float>(size.y)),
+        vec2f(static_cast<float>(size.x), 0.f));
+      center_ = vec2f(size_) * .5f;
     }
 
     void setGrab(bool _grab, HWND window)
@@ -301,6 +303,7 @@ namespace kapusha {
 
     HWND window_;
     vec2i size_;
+    vec2f center_;
     bool grabbed_, ignore_;
   };
 
@@ -322,7 +325,7 @@ namespace kapusha {
 
       if (grabbed_)
       {
-        mouseMoveBy(lparam_to_vec2f(lParam), now);
+        mouseMoveBy(lparam_to_vec2f(lParam)-center_, now);
         grab();
       } else
         mouseMoveTo(lparam_to_vec2f(lParam), now);

@@ -48,8 +48,8 @@ namespace kapusha {
                   clamp(y, min.y, max.y),
                   clamp(z, min.z, max.z));
     }
-    T min() const { return ::kapusha::min(x,::kapusha::min(y,z)); }
-    T max() const { return ::kapusha::max(x,::kapusha::max(y,z)); }
+    T min() const { return ::kapusha::min(x, ::kapusha::min(y,z)); }
+    T max() const { return ::kapusha::max(x, ::kapusha::max(y,z)); }
     vec3 abs() const { return vec3(::kapusha::abs(x),
                                    ::kapusha::abs(y),
                                    ::kapusha::abs(z)); }

@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="core">
+      <UniqueIdentifier>{2d8f3032-61eb-4852-8a99-ed2505f8feb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render">
+      <UniqueIdentifier>{1be9954e-a6f7-4fdc-88ed-66158648f1ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="io">
+      <UniqueIdentifier>{c9592bc2-d449-4dd7-98ba-922839bc003b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="math">
+      <UniqueIdentifier>{5947aa6a-334f-458e-b30a-e83649b8e61b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3p">
+      <UniqueIdentifier>{8909ec91-c2ab-47e1-aa55-0c010a845687}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3p\glew">
+      <UniqueIdentifier>{70cb2d62-5da2-40a2-ad64-57b323493c8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sys">
+      <UniqueIdentifier>{1278242c-6daa-4c24-bc89-e23bff4cf5f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="viewport">
+      <UniqueIdentifier>{c27b4af3-2ff9-4ff0-bb66-1221c4cf2828}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ooo">
+      <UniqueIdentifier>{57fa5671-0500-4c71-9bb6-73e07b9a30c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{2488db55-bed6-4428-8897-2c4cbb48a86d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app">
+      <UniqueIdentifier>{e09fe4fa-a170-4ed6-b643-65b4cab8578f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="kapusha\core\Log.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\render\Batch.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\render\Buffer.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\render\Material.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\render\OpenGL.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\render\Program.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\core\Shared.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\io\Stream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\io\StreamFile.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\io\StreamFile_win.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\math\mat2.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\math\mat4.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\math\rect2.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\math\types.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\math\vec2.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\math\vec3.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\math\vec4.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="3p\glew\GL\glew.h">
+      <Filter>3p\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="3p\glew\GL\wglew.h">
+      <Filter>3p\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\sys\win\Window.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\viewport\Input.h">
+      <Filter>viewport</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\viewport\IViewport.h">
+      <Filter>viewport</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\core\assert.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\core\core.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\core\limits.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\core\list.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\core\types.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\core.h" />
+    <ClInclude Include="kapusha\kapusha.h" />
+    <ClInclude Include="kapusha\math.h" />
+    <ClInclude Include="kapusha\ooo.h" />
+    <ClInclude Include="kapusha\render.h" />
+    <ClInclude Include="kapusha\viewport.h" />
+    <ClInclude Include="kapusha\math\math.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\math\rect4.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\render\Context.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\render\Framebuffer.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\render\limits.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\render\Sampler.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\render\State.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\ooo\Camera.h">
+      <Filter>ooo</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\ooo\Node.h">
+      <Filter>ooo</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\ooo\Object.h">
+      <Filter>ooo</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\ooo\ooo.h">
+      <Filter>ooo</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\ooo\Reframe.h">
+      <Filter>ooo</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\utils\geometry.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\utils\noise.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\utils\SpectatorCameraController.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\core\Surface.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\app\Application.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\app.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="kapusha\core\Log.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\render\Batch.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\render\Buffer.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\render\Material.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\render\OpenGL.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\render\Program.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\io\Stream.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\io\StreamFile_win.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\math\math.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\sys\win\Window.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\viewport\Input.cpp">
+      <Filter>viewport</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\core\assert.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\render\Context.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\render\Framebuffer.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\render\Sampler.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\render\State.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\ooo\Camera.cpp">
+      <Filter>ooo</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\ooo\Node.cpp">
+      <Filter>ooo</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\ooo\Object.cpp">
+      <Filter>ooo</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\ooo\Reframe.cpp">
+      <Filter>ooo</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\utils\geometry.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\utils\noise.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\utils\SpectatorCameraController.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="3p\glew\GL\glew.cpp">
+      <Filter>3p\glew</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\core\Surface.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\sys\win\main.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

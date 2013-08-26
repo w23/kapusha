@@ -9,14 +9,14 @@ public:
   struct Meta {
     vec2i size;
     enum Format {
+      Unknown,
       R8, RG88, RGB565, RGB888, RGBA8888, BGRA8888,
       //! \todo RF16, RF32, ...,
-      RGBAF32,
-      Unknown
+      RGBAF32
     } format;
     u32 bytesPerPixel, bytesPerRow;
 
-    Meta() = default;
+    inline Meta() : size(0), format(Unknown) {}
     inline Meta(vec2i _size, int _bytesPerPixel)
       : size(_size), format(Unknown), bytesPerPixel(_bytesPerPixel) { init(); }
     inline Meta(vec2i _size, Format _format = RGBA8888)

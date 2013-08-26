@@ -15,7 +15,7 @@ namespace kapusha {
     
     n_bufs_ = 0;
     for (int i = 0; i < MAX_FRAMEBUFFER_ATTACHMENTS; ++i)
-      if (colorAttachments_[i]) {
+      if (colorAttachments_[i].get()) {
         buffers_[n_bufs_] = GL_COLOR_ATTACHMENT0 + i;
         ++n_bufs_;
       }
@@ -32,7 +32,7 @@ namespace kapusha {
   
   void Framebuffer::attachDepth(Context *ctx) {
     bind(ctx);
-    KP_ASSERT(colorAttachments_[0]);
+    KP_ASSERT(colorAttachments_[0].get());
     depthAttachmentRb_.makeDepth(colorAttachments_[0]->meta().size);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER,
                               GL_DEPTH_ATTACHMENT,

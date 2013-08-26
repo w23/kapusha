@@ -7,7 +7,11 @@
 namespace kapusha {
   template <typename T> struct rect2 {
     vec2<T> min, max;
+#if !defined(_MSC_VER)
     rect2() = default;
+#else
+    rect2() {}
+#endif
     rect2(T v) : min(v,v), max(v,v) {}
     rect2(T left, T bottom, T right, T top)
       : min(left, bottom), max(right, top) {}

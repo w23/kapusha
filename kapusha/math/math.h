@@ -3,6 +3,13 @@
 #pragma once
 #include <math.h>
 
+#if defined(min)
+#undef min
+#endif
+#if defined(max)
+#undef max
+#endif
+
 namespace kapusha {
   extern const float c_pi;
   extern const float c_2pi;
