@@ -342,7 +342,7 @@ namespace kapusha {
   {
   public:
     WindowController(HINSTANCE hInst, IViewport *viewport, int width, int height, bool fullscreen);
-    ~WindowController() {}
+    ~WindowController();
 
     virtual void quit(int code);
     virtual void requestRedraw();
@@ -497,8 +497,12 @@ namespace kapusha {
     wglSwapIntervalEXT(1);
 
     pointers_.resize(vec2i(width, height));
-    viewport->init(this, &context_);
-    viewport->resize(vec2i(width, height));
+    viewport_->init(this, &context_);
+    viewport_->resize(vec2i(width, height));
+  }
+
+  WindowController::~WindowController() {
+    viewport_->close();
   }
 
   int WindowController::run()
