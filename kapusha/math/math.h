@@ -31,6 +31,7 @@ namespace kapusha {
   inline float rsqrt(float f) { return recip(sqrt(f)); }
   inline float abs(float f) { return fabs(f); }
   inline float mod(float f, float d) { return f - d * floorf(f / d); }
+  inline float floor(float f) { return floorf(f); }
 
   inline int recip(int i) { return 1 / i; /* lol */ }
   inline double recip(double d) { return 1. / d; }

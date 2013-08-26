@@ -35,6 +35,9 @@ namespace kapusha {
     vec2 clamped(vec2 min, vec2 max) const {
       return vec2(clamp(x, min.x, max.x), clamp(y, min.y, max.y));
     }
+    vec2 floor() const {
+      return vec2(::kapusha::floor(x), ::kapusha::floor(y));
+    }
 
     vec2 operator-() const { return vec2(-x, -y); }
     vec2 operator+(const vec2& v) const { return vec2(x+v.x, y+v.y); }    
