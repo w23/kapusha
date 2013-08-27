@@ -1,4 +1,5 @@
 #pragma once
+#include <kapusha/viewport.h>
 
 namespace kapusha {
 

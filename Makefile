@@ -40,7 +40,8 @@ endif
 
 ifeq ($(KP_SDL),1)
 SOURCES += \
-	kapusha/sys/sdl/KPSDL.cpp
+	kapusha/sys/sdl/KPSDL.cpp \
+	kapusha/sys/sdl/main.cpp
 endif
 
 ifeq ($(KP_X11),1)

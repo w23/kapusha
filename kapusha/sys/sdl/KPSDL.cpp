@@ -4,9 +4,6 @@
 #include <kapusha/render/Context.h>
 
 namespace kapusha {
-  void log::sys_write(const char *message) {
-    fprintf(stderr, "%s\n", message);
-  }
 ///////////////////////////////////////////////////////////////////////////////
   class SDLContext : public Context { public: inline SDLContext() {} };
 
