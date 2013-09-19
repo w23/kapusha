@@ -42,6 +42,9 @@ namespace kapusha {
     vec2 floor() const {
       return vec2(::kapusha::floor(x), ::kapusha::floor(y));
     }
+    vec2 fract() const {
+      return vec2(::kapusha::fract(x), ::kapusha::fract(y));
+    }
 
     vec2 operator-() const { return vec2(-x, -y); }
     vec2 operator+(const vec2& v) const { return vec2(x+v.x, y+v.y); }    

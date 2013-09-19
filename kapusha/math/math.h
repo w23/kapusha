@@ -33,12 +33,13 @@ namespace kapusha {
   template <typename T> inline T max(T a, T b) { return (a < b) ? b : a; }
   template <typename T> inline T min(T a, T b) { return (a < b) ? a : b; }
   
-  inline float sqrt(float f) { return sqrtf(f); }
+  inline float sqrt(float f) { return ::sqrtf(f); }
   inline float recip(float f) { return 1.f / f; }
   inline float rsqrt(float f) { return recip(sqrt(f)); }
-  inline float abs(float f) { return fabs(f); }
-  inline float mod(float f, float d) { return f - d * floorf(f / d); }
-  inline float floor(float f) { return floorf(f); }
+  inline float abs(float f) { return ::fabs(f); }
+  inline float mod(float f, float d) { return f - d * ::floorf(f / d); }
+  inline float floor(float f) { return ::floorf(f); }
+  inline float fract(float f) { return floor(f) - f; }
 
   inline int recip(int i) { return 1 / i; /* lol */ }
   inline double recip(double d) { return 1. / d; }
