@@ -1,3 +1,5 @@
+#include <memory>
+#include <kapusha/app.h>
 #include <kapusha/viewport.h>
 #include <kapusha/render.h>
 #include <kapusha/ooo.h>
@@ -8,13 +10,13 @@ using namespace kapusha;
 
 class Ground : public Object {
 public:
-  Ground(Context *context, int detail = 128, float size = 1000.f, float height = 200.f)
+  Ground(int detail = 512, float size = 1000.f, float height = 200.f)
   : height_(height) {
     vec2i cells(detail);
     int vertices, indices;
     calculateXYPlaneStorage(cells, vertices, indices);
     vertex *vtx = new vertex[vertices];
-    u16 *idx = new u16[indices];
+    u32 *idx = new u32[indices];
     makeXYPlane(cells, vtx->pos, 6, idx, 0);
     for (int i = 0; i < vertices; ++i) {
       vec2f p(vtx[i].pos[0], vtx[i].pos[1]);
@@ -24,9 +26,9 @@ public:
     }
     calculateNormals(vtx->pos, 6, vtx->nor, 6, idx, indices);
     Buffer *vbuffer = new Buffer(Buffer::BindingArray);
-    vbuffer->load(context, vtx, sizeof(vertex) * vertices);
+    vbuffer->load(vtx, sizeof(vertex) * vertices);
     Buffer *ibuffer = new Buffer(Buffer::BindingIndex);
-    ibuffer->load(context, idx, sizeof(u16) * indices);
+    ibuffer->load(idx, sizeof(u32) * indices);
     
     Program *prog = new Program(g_shaderVertex, g_shaderFragment);
     Material *mat = new Material(prog);
@@ -37,7 +39,7 @@ public:
     batch->setAttribSource("av4_vertex", vbuffer, 3,  0, sizeof(vertex));
     batch->setAttribSource("av3_normal", vbuffer, 3, 12, sizeof(vertex));
     batch->setGeometry(Batch::GeometryTriangleStrip, 0,
-                       indices, Batch::IndexU16, ibuffer);
+                       indices, Batch::IndexU32, ibuffer);
     addBatch(batch);
   }
   float getHeight(vec2f at) const {
@@ -83,25 +85,22 @@ const char* Ground::g_shaderFragment =
 
 class Viewport : public IViewport {
 public:
-  Viewport() : camctl_(camera_) {}
-  void init(IViewportController* ctrl, Context *context);
+  Viewport(IViewportController* ctrl);
   void resize(vec2i size);
   void draw(int ms, float dt);
   void inputPointer(const PointerState& pointers);
-  void close();
 private:
   Object* createGround() const;
 private:
   IViewportController *ctrl_;
-  Context *context_;
   Camera camera_;
   SpectatorCameraController camctl_;
-  Ground *ground_;
+  std::unique_ptr<Ground> ground_;
 };
-void Viewport::init(IViewportController *ctrl, Context *context) {
-  ctrl_ = ctrl;
-  context_ = context;
-  ground_ = new Ground(context);
+
+Viewport::Viewport(IViewportController* ctrl)
+: ctrl_(ctrl), camctl_(camera_) {
+  ground_.reset(new Ground());
   glEnable(GL_DEPTH_TEST);
   GL_ASSERT
   glEnable(GL_CULL_FACE);
@@ -111,13 +110,12 @@ void Viewport::init(IViewportController *ctrl, Context *context) {
   glClearColor(.7f, .9f, 1.f, 1.f);
   camctl_.setSpeed(50.f);
 }
-void Viewport::close() {
-  delete ground_;
-}
+
 void Viewport::resize(vec2i size) {
   glViewport(0, 0, size.x, size.y);
   camera_.setAspect((float)size.x / (float)size.y);
 }
+
 void Viewport::draw(int ms, float dt) {
   camctl_.frame(dt, ctrl_);
   float h = 2.f + ground_->getHeight(camera_.position().xz());
@@ -127,9 +125,10 @@ void Viewport::draw(int ms, float dt) {
   GL_ASSERT
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   GL_ASSERT
-  ground_->draw(context_, camera_.getViewProjection());
+  ground_->draw(camera_.getViewProjection());
   ctrl_->requestRedraw();
 }
+
 void Viewport::inputPointer(const PointerState& pointers) {
   camctl_.pointers(pointers);
   if (pointers.main().wasPressed(PointerState::Pointer::LeftButton)) {
@@ -143,6 +142,24 @@ void Viewport::inputPointer(const PointerState& pointers) {
     camctl_.enableOrientation(false);
   }
 }
-IViewport *makeViewport() {
-  return new Viewport;
-}
+
+////////////////////////////////////////////////////////////////////////////////
+// Application config
+
+class ViewportFactory : public IViewportFactory {
+public:
+  virtual ~ViewportFactory() {}
+  virtual IViewport *create(IViewportController *controller) const {
+    return new Viewport(controller);
+  }
+};
+
+ViewportFactory viewport_factory;
+
+namespace kapusha {
+  Application the_application = {
+    "kapusha demo: terrain",
+    vec2i(1280, 720),
+    &viewport_factory
+  };
+} // namespace kapusha
