@@ -19,10 +19,10 @@ namespace kapusha {
     init(magnification, minification);
   }
 
-  Sampler::Sampler(Context *context, const Surface* source,
+  Sampler::Sampler(const Surface* source,
                    FilterMode magnification, FilterMode minification) {
     init(magnification, minification);
-    upload(context, source);
+    upload(source);
   }
 
   Sampler::~Sampler() { glDeleteTextures(1, &name_); }
@@ -32,7 +32,7 @@ namespace kapusha {
     magnification_ = filter;
   }
 
-  void Sampler::upload(Context *ctx, const Surface::Meta &meta, const void *data) {
+  void Sampler::upload(const Surface::Meta &meta, const void *data) {
     //L("Loading texture: %dx%d format = %d",
     //  meta.size.x, meta.size.y, meta.format);
     //! \todo table, not switch?
@@ -64,7 +64,7 @@ namespace kapusha {
 
       default: KP_ASSERT(!"Unsupported texture format"); return;
     }
-    bind(ctx);
+    bind();
     if (meta == meta_) {
       if (data) {
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, meta.size.x, meta.size.y,

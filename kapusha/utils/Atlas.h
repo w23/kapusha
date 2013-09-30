@@ -13,8 +13,8 @@ namespace kapusha {
     inline const Surface::Meta &meta() const { return surface_->meta(); }
     inline const Surface *getSurface() const { return surface_.get(); }
     
-    Sampler *getSampler(Context *ctx) const;
-    void commit(Context *context) const;
+    Sampler *getSampler() const;
+    void commit() const;
     /// \todo dropSampler();
     /// \todo optimize(); requires keeping a list of allocated rects
 

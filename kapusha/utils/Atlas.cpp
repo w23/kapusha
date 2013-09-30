@@ -71,15 +71,15 @@ rect2i Atlas::allocate(vec2i size, vec2i guard) {
   return rect2i(ret.min + guard, ret.min + guard + size);
 }
 
-  Sampler *Atlas::getSampler(Context *ctx) const {
-    commit(ctx);
+  Sampler *Atlas::getSampler() const {
+    commit();
     return sampler_.get();
   }
 
-void Atlas::commit(Context *context) const {
+void Atlas::commit() const {
   if (!dirty_) return;
-  if (!sampler_.get()) sampler_.reset(new Sampler(context, surface_.get()));
-  else sampler_->upload(context, surface_.get());
+  if (!sampler_.get()) sampler_.reset(new Sampler(surface_.get()));
+  else sampler_->upload(surface_.get());
   dirty_ = false;
 }
 } // namespace kapusha

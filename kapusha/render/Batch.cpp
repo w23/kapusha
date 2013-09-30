@@ -5,6 +5,7 @@
 #include "Material.h"
 #include "Buffer.h"
 #include "Batch.h"
+#include "Context.h"
 
 namespace kapusha {
   void Batch::setAttribSource(int attrib_location,
@@ -29,14 +30,14 @@ namespace kapusha {
     }
   }
   
-  void Batch::draw(Context *ctx) const {
+  void Batch::draw() const {
     KP_ASSERT(material_.valid());
-    material_->use(ctx);
-    uniforms_.apply(ctx);
+    material_->use();
+    uniforms_.apply();
     for (int i = 0; i < MAX_BATCH_ATTRIBS; ++i)
-      if (attribs_[i].index != -1) attribs_[i].bind(ctx);
+      if (attribs_[i].index != -1) attribs_[i].bind();
     if (indices_.valid()) {
-      indices_->bind(ctx, Buffer::BindingIndex);
+      indices_->bind(Buffer::BindingIndex);
       glDrawElements(geometryType_, count_, indexType_,
         reinterpret_cast<void*>(first_));
       GL_ASSERT
@@ -48,9 +49,9 @@ namespace kapusha {
       if (attribs_[i].index != -1) attribs_[i].unbind();
   }
 
-  void Batch::Attrib::bind(Context *ctx) const {
-    if (buffer.get()) buffer->bind(ctx, Buffer::BindingArray);
-    else ctx->bindBuffer(nullptr, Buffer::BindingArray);
+  void Batch::Attrib::bind() const {
+    if (buffer.get()) buffer->bind(Buffer::BindingArray);
+    else Context::bind_buffer(nullptr, Buffer::BindingArray);
     glVertexAttribPointer(index, components, GL_FLOAT, GL_FALSE, stride, offset);
     GL_ASSERT
     glEnableVertexAttribArray(index);

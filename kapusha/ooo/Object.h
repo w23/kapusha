@@ -12,7 +12,7 @@ namespace kapusha {
     int addBatch(Batch *batch, const char *mvp = "um4_mvp");
     int addBatch(Batch *batch, int mvp_loc);
     void removeFromParent() { removeFromSiblings(); }
-    void draw(Context *ctx, const mat4f& mvp) const;
+    void draw(const mat4f& mvp) const;
   private:
     struct BatchAttachment {
       SBatch batch;

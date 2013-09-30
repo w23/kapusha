@@ -32,7 +32,7 @@ namespace kapusha {
         setUniform(location, Uniform::Mat4, trans.tptr());
       }
       void setUniform(int location, Sampler *sampler);
-      void apply(Context *ctx) const;
+      void apply() const;
     private:
       struct Uniform {
         enum Type {
@@ -73,7 +73,7 @@ namespace kapusha {
     void bindAttributeLocation(const char* name, int location);
     int getAttributeLocation(const char* name) const;
     int getUniformLocation(const char* name) const;
-    inline void use(Context *ctx) const { ctx->useProgram(this); }
+    inline void use() const { Context::use_program(this); }
   private: // noncopyable
     Program& operator=(const Program& other) { return *this; }
     Program(const Program& other) {}

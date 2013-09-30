@@ -13,11 +13,11 @@ void Node::addObject(Object *object) {
   if (object_.valid()) object->insertAfterSibling(object_.get());
   else object_ = object;
 }
-void Node::draw(Context *ctx, const mat4f &mvp) const {
+void Node::draw(const mat4f &mvp) const {
   mat4f mat = mvp * frame_.getMatrix();
   Object *obj = object_.get();
-  while (obj) { obj->draw(ctx, mat); obj = obj->getNextSibling(); }
+  while (obj) { obj->draw(mat); obj = obj->getNextSibling(); }
   Node *node = first_child_.get();
-  while (node) { node->draw(ctx, mat); node = node->getNextSibling(); }
+  while (node) { node->draw(mat); node = node->getNextSibling(); }
 }
 } // namespace kapusha

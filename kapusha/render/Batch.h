@@ -47,7 +47,7 @@ namespace kapusha {
     void clearAttributes();
     Material* getMaterial() const { return material_.get(); }
     Program::UniformState& uniforms() { return uniforms_; }
-    void draw(Context *ctx) const;
+    void draw() const;
   private:
     struct Attrib {
       int index;
@@ -56,7 +56,7 @@ namespace kapusha {
       void *offset;
       int stride;
       Attrib() : index(-1) {}
-      inline void bind(Context *ctx) const;
+      inline void bind() const;
       inline void unbind() const;
     };
     Attrib attribs_[MAX_BATCH_ATTRIBS];

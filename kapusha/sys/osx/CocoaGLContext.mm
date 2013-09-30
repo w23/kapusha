@@ -22,5 +22,6 @@ namespace kapusha {
   
   void CocoaGLContext::makeCurrent() {
     [cocoaContext_ makeCurrentContext];
+    Context::make_current();
   }
 } // namespace kapusha

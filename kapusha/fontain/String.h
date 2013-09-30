@@ -19,8 +19,8 @@ public:
   ~String();
 
   inline const Atlas &atlas() const { return *atlas_.get(); }
-  inline const Sampler* getAtlasSampler(Context *ctx) const {
-    return atlas_->getSampler(ctx);
+  inline const Sampler* getAtlasSampler() const {
+    return atlas_->getSampler();
   }
   inline const Glyphs &glyphs() const { return glyphs_; }
   inline Glyphs &glyphs() { return glyphs_; }

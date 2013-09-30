@@ -5,10 +5,10 @@ namespace kapusha {
   
   Framebuffer::~Framebuffer() { glDeleteFramebuffers(1, &name_); }
   
-  void Framebuffer::attachColor(Context *ctx, Sampler *sampler, unsigned index) {
+  void Framebuffer::attachColor(Sampler *sampler, unsigned index) {
     KP_ASSERT(index < MAX_FRAMEBUFFER_ATTACHMENTS);
     colorAttachments_[index].reset(sampler);
-    bind(ctx);
+    bind();
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+index, GL_TEXTURE_2D, sampler->name(), 0);
     GL_ASSERT
     KP_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
@@ -29,8 +29,8 @@ namespace kapusha {
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, size.x, size.y);
   }
   
-  void Framebuffer::attachDepth(Context *ctx) {
-    bind(ctx);
+  void Framebuffer::attachDepth() {
+    bind();
     KP_ASSERT(colorAttachments_[0].get());
     depthAttachmentRb_.makeDepth(colorAttachments_[0]->meta().size);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER,

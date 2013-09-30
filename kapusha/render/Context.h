@@ -15,15 +15,19 @@ namespace kapusha {
     //! \warning You should destroy only shared contexts you've created yourself
     virtual ~Context() {}
     
+    //! Get current thread context
+    static Context *current_context();
+    
     //! Make a new context that shares resources with this one.
     //! Main usage: managing stuff in a separate thread
     //! \warning Must be created before any other GL calls
-    virtual Context *createSharedContext() const { return 0; }
+    virtual Context *create_shared_context() const { return 0; }
     
     //! Make this context current for this thread.
     //! Autocreated context that is passed with IViewportController is already
     //! current
-    virtual void makeCurrent() {}
+    //! \warning platform implementations should also call parent implementation
+    virtual void make_current();
     
     //! \todo bool isMobile();
     //! \todo const char *getVendorString() const;
@@ -32,20 +36,39 @@ namespace kapusha {
     //! \todo const char *getExtension(u32 index);
     //! \todo bool hasExtension(const char* name);
     //! \todo various limits
+    
+    //! Bind a buffer
+    static inline void bind_buffer(const Buffer *buffer, int binding) {
+      current_context()->do_bind_buffer(buffer, binding);
+    }
+    
+    //! Use a shader program
+    static inline void use_program(const Program *program) {
+      current_context()->do_use_program(program);
+    }
+    
+    //! Bind a sampler
+    static inline void bind_sampler(const Sampler *sampler, int unit) {
+      current_context()->do_bind_sampler(sampler, unit);
+    }
+    
+    //! Bind a framebuffer
+    static inline void bind_framebuffer(const Framebuffer *framebuffer) {
+      current_context()->do_bind_framebuffer(framebuffer);
+    }
 
-    //! Binds a buffer
-    void bindBuffer(const Buffer *buffer, int binding);
+protected: // implementation details
+    void do_bind_buffer(const Buffer *buffer, int binding);
+    void do_use_program(const Program *program);
+    void do_bind_sampler(const Sampler *sampler, int unit);
+    void do_bind_framebuffer(const Framebuffer *framebuffer);
     
-    //! Uses a shader program
-    void useProgram(const Program *program);
-    
-    //! Binds a sampler
-    void bindSampler(const Sampler *sampler, int unit);
-    
-    //! Binds a framebuffer
-    void bindFramebuffer(const Framebuffer *framebuffer);
-    
-  protected:
     inline Context() {}
+    
+    //! Set current thread context
+    //! \warning internals
+    static void set_current_context(Context *context);
+    
+    // TODO platform-agnostic static pthread_key_t s_current_context_key_;
   };
 } // namespace kapusha

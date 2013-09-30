@@ -9,12 +9,12 @@ namespace kapusha {
     Framebuffer();
     ~Framebuffer();
 
-    void attachColor(Context *ctx, Sampler *sampler, unsigned index);
-    void attachDepth(Context *ctx);
+    void attachColor(Sampler *sampler, unsigned index);
+    void attachDepth();
     //! \todo void attachDepth(Sampler *sampler);
     //! \todo void attachStencil(Sampler *sampler);
 
-    inline void bind(Context *ctx) const { ctx->bindFramebuffer(this); }
+    inline void bind() const { Context::bind_framebuffer(this); }
   private:
     struct Renderbuffer {
       unsigned name;

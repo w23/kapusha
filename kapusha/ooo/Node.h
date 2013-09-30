@@ -15,7 +15,7 @@ namespace kapusha {
     void addChild(Node *node);
     void addObject(Object *object);
     void removeFromParent() { removeFromSiblings(); }
-    void draw(Context *ctx, const mat4f &mvp) const;
+    void draw(const mat4f &mvp) const;
   protected:
     inline void setParent(Node *parent) { KP_ASSERT(!parent_); parent_ = parent; }
     Reframe frame_;

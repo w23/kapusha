@@ -2,7 +2,6 @@
 // 2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #include <string.h>
 #include "../core.h"
-#include "Context.h"
 #include "Program.h"
 
 namespace kapusha {
@@ -159,7 +158,7 @@ namespace kapusha {
     }
     KP_ASSERT(!"Not enough uniform slots");
   }
-  void Program::UniformState::apply(Context *ctx) const {
+  void Program::UniformState::apply() const {
     const float *data = storage_;
     for (int i = 0; i < MAX_STATE_UNIFORMS; ++i) {
       const Uniform& u = uniforms_[i];
@@ -181,7 +180,7 @@ namespace kapusha {
     for (int i = 0; i < MAX_STATE_UNIFORM_SAMPLERS; ++i) {
       if (samplers_[i].empty()) break;
       glUniform1i(samplers_[i].location, i); GL_ASSERT
-      samplers_[i].sampler->bind(ctx, i);
+      samplers_[i].sampler->bind(i);
     } // for uniform samplers
   } // UniformState::apply()
 } // namespace kapusha

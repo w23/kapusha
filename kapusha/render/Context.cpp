@@ -6,9 +6,24 @@
 #include "Context.h"
 
 namespace kapusha {
-  void Context::bindBuffer(const Buffer *buffer, int binding) {
+  // TODO static pthread_key_t s_current_context_key_;
+  static Context *g_current_context_ = nullptr;
+  void Context::set_current_context(Context *context) {
+    KP_ASSERT(!g_current_context_);
+    g_current_context_ = context;
+  }
+  Context *Context::current_context() {
+    KP_ASSERT(g_current_context_);
+    return g_current_context_;
+  }
+  
+  void Context::make_current() {
+    Context::set_current_context(this);
+  }
+  
+  void Context::do_bind_buffer(const Buffer *buffer, int binding) {
     if (buffer) {
-      if (binding == Buffer::BindingNative) binding = buffer->bindingHint();
+      if (binding == Buffer::BindingNative) binding = buffer->binding_hint();
       glBindBuffer(binding, buffer->name()); GL_ASSERT
     } else {
       KP_ASSERT(binding != Buffer::BindingNative);
@@ -16,16 +31,16 @@ namespace kapusha {
     }
   }
   
-  void Context::useProgram(const Program *program) {
+  void Context::do_use_program(const Program *program) {
     glUseProgram(program->name());
   }
   
-  void Context::bindSampler(const Sampler *sampler, int unit) {
+  void Context::do_bind_sampler(const Sampler *sampler, int unit) {
     if (unit != -1) { glActiveTexture(GL_TEXTURE0 + unit); GL_ASSERT }
     glBindTexture(GL_TEXTURE_2D, sampler->name()); GL_ASSERT
   }
   
-  void Context::bindFramebuffer(const Framebuffer *framebuffer) {
+  void Context::do_bind_framebuffer(const Framebuffer *framebuffer) {
     if (framebuffer) {
       glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->name()); GL_ASSERT
       glDrawBuffers(framebuffer->buffersCount(), framebuffer->buffers());

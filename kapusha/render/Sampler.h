@@ -20,22 +20,22 @@ namespace kapusha {
     };
     Sampler(FilterMode magnification = Linear,
             FilterMode minification = Nearest);//LinearMipmapLinear);
-    Sampler(Context *context, const Surface* source,
+    Sampler(const Surface* source,
             FilterMode magnification = Linear,
             FilterMode minification = Nearest);//LinearMipmapLinear);
     ~Sampler();
     void setMagFilter(FilterMode filter);
     inline void setMinFilter(FilterMode filter) { minification_ = filter; }
-    inline void allocate(Context *ctx, const Surface::Meta &meta) {
-      upload(ctx, meta, nullptr);
+    inline void allocate(const Surface::Meta &meta) {
+      upload(meta, nullptr);
     }
-    inline void upload(Context *ctx, const Surface *source) {
-      upload(ctx, source->meta(), source->pixels());
+    inline void upload(const Surface *source) {
+      upload(source->meta(), source->pixels());
     }
-    void upload(Context *ctx, const Surface::Meta &meta, const void *data);
+    void upload(const Surface::Meta &meta, const void *data);
     const Surface::Meta& meta() const { return meta_; }
-    inline void bind(Context *ctx, int unit = -1) const {
-      ctx->bindSampler(this, unit);
+    inline void bind(int unit = -1) const {
+      Context::bind_sampler(this, unit);
     }
   private:
     void init(FilterMode magnification, FilterMode minification);

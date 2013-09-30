@@ -17,12 +17,12 @@ namespace kapusha {
     KP_ASSERT(!"Too many batches attached to object");
     return -1;
   }
-  void Object::draw(Context *ctx, const mat4f& mvp) const {
+  void Object::draw(const mat4f& mvp) const {
     for (int i = 0; i < MAX_OBJECT_BATCHES; ++i) {
       const BatchAttachment &b = batches_[i];
       if (!b.batch.valid()) break;
       b.batch->uniforms().setUniform(b.mvp_loc, mvp);
-      b.batch->draw(ctx);
+      b.batch->draw();
     }
   }
 } // namespace kapusha
