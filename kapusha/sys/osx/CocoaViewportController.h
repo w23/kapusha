@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <kapusha/viewport.h>
 #include "CocoaGLContext.h"
 #include "CocoaKeyState.h"
@@ -8,7 +9,7 @@
 namespace kapusha {
   class CocoaViewportController : public IViewportController {
   public:
-    CocoaViewportController(KPView *view, IViewport *viewport);
+    CocoaViewportController(KPView *view, const IViewportFactory *factory);
     ~CocoaViewportController();
 
   public: // IViewportController
@@ -30,8 +31,9 @@ namespace kapusha {
 
   private:
     KPView *view_;
-    IViewport *viewport_;
-    CocoaGLContext *glContext_;
+    const IViewportFactory *factory_;
+    std::unique_ptr<IViewport> viewport_;
+    std::unique_ptr<CocoaGLContext> glContext_;
     CocoaPointerState pointerState_;
     CocoaKeyState keyState_;
     MachTime time_;

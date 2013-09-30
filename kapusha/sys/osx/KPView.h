@@ -1,9 +1,10 @@
 #import <Cocoa/Cocoa.h>
 
 namespace kapusha {
-  class IViewport;
+  class IViewportFactory;
 }
 
 @interface KPView : NSOpenGLView
-- (id) initWithFrame:(NSRect)frame withViewport:(kapusha::IViewport*)viewport;
+- (id) initWithFrame:(NSRect)frame
+     viewportFactory:(const kapusha::IViewportFactory*)viewport_factory;
 @end

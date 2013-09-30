@@ -19,7 +19,8 @@ void log::sys_write(const char *message) { NSLog(@"%s", message); }
 
 ////////////////////////////////////////////////////////////////////////////////
 @implementation KPView
-- (id) initWithFrame:(NSRect)frame withViewport:(kapusha::IViewport*)viewport {
+- (id) initWithFrame:(NSRect)frame
+     viewportFactory:(const kapusha::IViewportFactory*)viewport_factory {
   static const NSOpenGLPixelFormatAttribute attribs[] = {
     NSOpenGLPFADoubleBuffer,
     NSOpenGLPFADepthSize, 32,
@@ -27,12 +28,14 @@ void log::sys_write(const char *message) { NSLog(@"%s", message); }
     //NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core
     0
   };
+  
   NSOpenGLPixelFormat *pixfmt = [[[NSOpenGLPixelFormat alloc]
                                   initWithAttributes:attribs] autorelease];
   KP_ASSERT(pixfmt);
-  if (self = [super initWithFrame:frame pixelFormat:pixfmt]) {
-    viewportController_ = new CocoaViewportController(self, viewport);
-  }
+  
+  if (self = [super initWithFrame:frame pixelFormat:pixfmt])
+    viewportController_ = new CocoaViewportController(self, viewport_factory);
+  
   return self;
 }
 

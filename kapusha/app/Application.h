@@ -3,10 +3,13 @@
 
 namespace kapusha {
 class IViewport;
+class IViewportFactory;
 
+//! Kapusha-powered application startup settings
 struct Application {
+  const char *title;
   vec2i prefer_resolution;
-  IViewport *createViewport() const;
+  const IViewportFactory *viewport_factory;
 };
 
 extern Application the_application;

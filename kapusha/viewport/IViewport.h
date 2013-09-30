@@ -3,19 +3,12 @@
 #include "IViewportController.h"
 
 namespace kapusha {
-  class Context;
-  
-  //! Viewport is a place where all the fun happens
+  //! Viewport is the place where all the fun happens
+  //! Lifetime <= rendering context lifetime
   class IViewport {
   public:
+    //! Called just before the current gl context will become invalid.
     virtual ~IViewport() {}
-    
-    //! Called when GL context is up and set current, just before the mainloop
-    //! \param controller Pointer to IViewportController interface that will be
-    //!                   valid until close()
-    //! \param context The context
-    //! it will be valid for the whole lifetime of this viewport.
-    virtual void init(IViewportController* controller, Context *context) = 0;
     
     //! Viewport window size has been determined or changed
     //! Called for the first time just after init()
@@ -30,11 +23,14 @@ namespace kapusha {
     //! \param ms Monotonic time in milliseconds since some referential point
     //! \param dt Time since previous draw(), in seconds
     virtual void draw(int ms, float dt) = 0;
-    
-    //! Deinitialize
-    //! Called just before the current gl context will become invalid.
-    //! \warning this is not equal to dtor, as init() can be called again
-    //! for a new context
-    virtual void close() = 0;
+  };
+  
+  
+  class IViewportFactory {
+  public:
+    virtual IViewport *create(IViewportController *controller) const = 0;
+  protected:
+    //! This isn't meant to be deleted inside kapusha
+    virtual ~IViewportFactory() {}
   };
 } // namespace kapusha
