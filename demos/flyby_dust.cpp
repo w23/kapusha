@@ -1,3 +1,4 @@
+#include <kapusha/app.h>
 #include <kapusha/viewport.h>
 #include <kapusha/render.h>
 #include <kapusha/ooo.h>
@@ -6,18 +7,15 @@
 using namespace kapusha;
 class Viewport : public IViewport {
 public:
-  Viewport();
+  Viewport(IViewportController *controller);
   virtual ~Viewport() {}
-  virtual void init(IViewportController* ctrl, Context *context);
   virtual void resize(vec2i size);
   virtual void inputPointer(const PointerState& pointers);
   virtual void inputKey(const KeyState& keys);
   virtual void draw(int ms, float dt);
-  virtual void close();
   
 private:
   IViewportController *ctrl_;
-  Context *context_;
   Camera camera_;
   SpectatorCameraController camctl_;
 
@@ -26,15 +24,15 @@ private:
 
 class Ground : public Object {
 public:
-  Ground(Context *ctx, float size);
+  Ground(float size);
 };
 
 class Dust : public Object {
 public:
-  Dust(Context *ctx, int count, float size, float radius);
+  Dust(int count, float size, float radius);
 };
 
-Ground::Ground(Context *ctx, float size) {
+Ground::Ground(float size) {
   static const char* svtx =
   "uniform mat4 um4_mvp;\n"
   "attribute vec4 av4_vtx;\n"
@@ -59,7 +57,7 @@ Ground::Ground(Context *ctx, float size) {
   "}\n";
   static u32 tex[4] = { 0xffffffff, 0, 0, 0xffffffff };
   Sampler *sampler = new Sampler(Sampler::Nearest, Sampler::Nearest);
-  sampler->upload(ctx, Surface::Meta(vec2i(2, 2), Surface::Meta::RGBA8888), tex);
+  sampler->upload(Surface::Meta(vec2i(2, 2), Surface::Meta::RGBA8888), tex);
   Program *prog = new Program(svtx, sfrg);
   Material *mat = new Material(prog);
   mat->setUniform("us2_floor", sampler);
@@ -72,13 +70,13 @@ Ground::Ground(Context *ctx, float size) {
     vec3f( size, 0.f, -size)
   };
   Buffer *fsrect = new Buffer();
-  fsrect->load(ctx, rect, sizeof rect);
+  fsrect->load(rect, sizeof rect);
   batch->setAttribSource("av4_vtx", fsrect, 3);
   batch->setGeometry(Batch::GeometryTriangleFan, 0, 4);
   addBatch(batch);
 }
 
-Dust::Dust(Context *ctx, int count, float size, float radius) {
+Dust::Dust(int count, float size, float radius) {
   static const char* svtx =
   "uniform mat4 um4_mvp;\n"
   "attribute vec4 vtx;\n"
@@ -112,7 +110,7 @@ Dust::Dust(Context *ctx, int count, float size, float radius) {
 		     frand(0, radius),
 		     frand(-radius, radius));
   Buffer *fsrect = new Buffer();
-  fsrect->load(ctx, vertices, sizeof(*vertices) * count);
+  fsrect->load(vertices, sizeof(*vertices) * count);
   delete vertices;
   batch->setAttribSource("vtx", fsrect, 3, 0, sizeof(vec3f));
   batch->setGeometry(Batch::GeometryPoints, 0, count);
@@ -120,15 +118,12 @@ Dust::Dust(Context *ctx, int count, float size, float radius) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-Viewport::Viewport() : camctl_(camera_) {}
-void Viewport::init(IViewportController *ctrl, Context *context) {
-  ctrl_ = ctrl;
-  context_ = context;
-
+Viewport::Viewport(IViewportController *controller)
+ : ctrl_(controller), camctl_(camera_) {
   Node *ndust = new Node();
-  ndust->addObject(new Dust(context_, 8192, .1f, 20.f));
+  ndust->addObject(new Dust(8192, .1f, 20.f));
   Node *nground = new Node();
-  nground->addObject(new Ground(context_, 20.f));
+  nground->addObject(new Ground(20.f));
   root_.reset(new Node());
   root_->addChild(ndust);
   root_->addChild(nground);
@@ -144,7 +139,7 @@ void Viewport::init(IViewportController *ctrl, Context *context) {
   GL_ASSERT
 #endif
 }
-void Viewport::close() { root_.reset(); }
+
 void Viewport::resize(vec2i size) {
   glViewport(0, 0, size.x, size.y);
   camera_.setAspect((float)size.x / (float)size.y);
@@ -156,7 +151,7 @@ void Viewport::draw(int ms, float dt) {
   GL_ASSERT
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   GL_ASSERT
-  root_->draw(context_, camera_.getViewProjection());
+  root_->draw(camera_.getViewProjection());
   ctrl_->requestRedraw();
 }
 
@@ -179,6 +174,23 @@ void Viewport::inputPointer(const PointerState& pointers) {
   }
 }
 
-IViewport *makeViewport() {
-  return new Viewport;
-}
+////////////////////////////////////////////////////////////////////////////////
+// Application config
+
+class ViewportFactory : public IViewportFactory {
+public:
+  virtual ~ViewportFactory() {}
+  virtual IViewport *create(IViewportController *controller) const {
+    return new Viewport(controller);
+  }
+};
+
+ViewportFactory viewport_factory;
+
+namespace kapusha {
+  Application the_application = {
+    "kapusha demo: dust",
+    vec2i(1280, 720),
+    &viewport_factory
+  };
+} // namespace kapusha

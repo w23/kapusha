@@ -152,6 +152,7 @@
 		E1EB518B17A9608700A76D62 /* CocoaViewportController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1EB518917A9608700A76D62 /* CocoaViewportController.mm */; };
 		E1EB518C17A9608700A76D62 /* CocoaViewportController.h in Headers */ = {isa = PBXBuildFile; fileRef = E1EB518A17A9608700A76D62 /* CocoaViewportController.h */; };
 		E1EB518F17A9947000A76D62 /* CocoaGLContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = E167AAC91789E1890047DF38 /* CocoaGLContext.mm */; };
+		E1F5897217FA084900548AB8 /* libkapusha_main.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E10A64B317BE888C004B68C4 /* libkapusha_main.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -277,7 +278,7 @@
 		E19DA36B1732D277005B1F74 /* ooo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ooo.h; path = kapusha/ooo.h; sourceTree = "<group>"; };
 		E19DA36C1732D278005B1F74 /* render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = render.h; path = kapusha/render.h; sourceTree = "<group>"; };
 		E19DA36D1732D278005B1F74 /* viewport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = viewport.h; path = kapusha/viewport.h; sourceTree = "<group>"; };
-		E1A77CA1165D39F9009FF8F3 /* kapusha-samples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "kapusha-samples.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1A77CA1165D39F9009FF8F3 /* demo-dust.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "demo-dust.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1A77CA6165D39F9009FF8F3 /* kapusha-samples-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "kapusha-samples-Info.plist"; sourceTree = "<group>"; };
 		E1A77CA8165D39F9009FF8F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E1A77CAC165D39F9009FF8F3 /* kapusha-samples-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "kapusha-samples-Prefix.pch"; sourceTree = "<group>"; };
@@ -380,6 +381,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1F5897217FA084900548AB8 /* libkapusha_main.a in Frameworks */,
 				E131D514166204C500B0320A /* libkapusha.a in Frameworks */,
 				E1A77CBB165D3ADA009FF8F3 /* OpenGL.framework in Frameworks */,
 				E1A77CA3165D39F9009FF8F3 /* Cocoa.framework in Frameworks */,
@@ -559,7 +561,7 @@
 			children = (
 				E1993173164E141500E8D9CB /* samples-ios.app */,
 				E19931A7164E144F00E8D9CB /* libkapusha.a */,
-				E1A77CA1165D39F9009FF8F3 /* kapusha-samples.app */,
+				E1A77CA1165D39F9009FF8F3 /* demo-dust.app */,
 				E131D4FF166201F400B0320A /* libkapusha.a */,
 				E189E890169AB3F300541FE1 /* libkapushacore.a */,
 				E197CBF216B3AD88003FDEF6 /* libkapusha-glut.a */,
@@ -885,9 +887,9 @@
 			productReference = E19931A7164E144F00E8D9CB /* libkapusha.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		E1A77CA0165D39F9009FF8F3 /* samples-osx */ = {
+		E1A77CA0165D39F9009FF8F3 /* osx-demo-dust */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E1A77CB8165D39F9009FF8F3 /* Build configuration list for PBXNativeTarget "samples-osx" */;
+			buildConfigurationList = E1A77CB8165D39F9009FF8F3 /* Build configuration list for PBXNativeTarget "osx-demo-dust" */;
 			buildPhases = (
 				E1A77C9D165D39F9009FF8F3 /* Sources */,
 				E1A77C9E165D39F9009FF8F3 /* Frameworks */,
@@ -897,9 +899,9 @@
 			);
 			dependencies = (
 			);
-			name = "samples-osx";
+			name = "osx-demo-dust";
 			productName = "kapusha-samples-osx";
-			productReference = E1A77CA1165D39F9009FF8F3 /* kapusha-samples.app */;
+			productReference = E1A77CA1165D39F9009FF8F3 /* demo-dust.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -924,7 +926,7 @@
 			targets = (
 				E19931A6164E144F00E8D9CB /* kapusha-ios */,
 				E1993172164E141500E8D9CB /* samples-ios */,
-				E1A77CA0165D39F9009FF8F3 /* samples-osx */,
+				E1A77CA0165D39F9009FF8F3 /* osx-demo-dust */,
 				E131D4FE166201F400B0320A /* kapusha-osx */,
 				E189E876169AB3F300541FE1 /* kapusha-core-osx */,
 				E197CBD816B3AD88003FDEF6 /* kapusha-glut */,
@@ -1565,7 +1567,7 @@
 				INFOPLIST_FILE = "demos/main_osx/kapusha-samples-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = "kapusha-samples";
+				PRODUCT_NAME = "demo-dust";
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1595,7 +1597,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "demos/main_osx/kapusha-samples-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				PRODUCT_NAME = "kapusha-samples";
+				PRODUCT_NAME = "demo-dust";
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1667,7 +1669,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E1A77CB8165D39F9009FF8F3 /* Build configuration list for PBXNativeTarget "samples-osx" */ = {
+		E1A77CB8165D39F9009FF8F3 /* Build configuration list for PBXNativeTarget "osx-demo-dust" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E1A77CB6165D39F9009FF8F3 /* Debug */,
