@@ -159,6 +159,11 @@
 		E1F5897A17FA0D3300548AB8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DDFF8163D8F3A00869CF5 /* Cocoa.framework */; };
 		E1F5897C17FA0D3300548AB8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1A77CA7165D39F9009FF8F3 /* InfoPlist.strings */; };
 		E1F5898217FA0D6900548AB8 /* terrain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BE3877173438B80029FD4A /* terrain.cpp */; };
+		E1F5898517FB325300548AB8 /* Socket_nix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1F5898317FB325300548AB8 /* Socket_nix.cpp */; };
+		E1F5898617FB325300548AB8 /* Socket_nix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1F5898317FB325300548AB8 /* Socket_nix.cpp */; };
+		E1F5898717FB325300548AB8 /* Socket_nix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1F5898317FB325300548AB8 /* Socket_nix.cpp */; };
+		E1F5898817FB325300548AB8 /* Socket.h in Headers */ = {isa = PBXBuildFile; fileRef = E1F5898417FB325300548AB8 /* Socket.h */; };
+		E1F5898917FB325300548AB8 /* Socket.h in Headers */ = {isa = PBXBuildFile; fileRef = E1F5898417FB325300548AB8 /* Socket.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -322,6 +327,8 @@
 		E1EB518D17A9638C00A76D62 /* IViewportController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IViewportController.h; sourceTree = "<group>"; };
 		E1EB518E17A98CF000A76D62 /* KPView_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KPView_private.h; sourceTree = "<group>"; };
 		E1F5898017FA0D3300548AB8 /* osx-demo-terrain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "osx-demo-terrain.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1F5898317FB325300548AB8 /* Socket_nix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Socket_nix.cpp; sourceTree = "<group>"; };
+		E1F5898417FB325300548AB8 /* Socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -521,6 +528,8 @@
 		E18DDFDE163D8EED00869CF5 /* io */ = {
 			isa = PBXGroup;
 			children = (
+				E1F5898417FB325300548AB8 /* Socket.h */,
+				E1F5898317FB325300548AB8 /* Socket_nix.cpp */,
 				E18DDFDF163D8EED00869CF5 /* Stream.cpp */,
 				E18DDFE0163D8EED00869CF5 /* Stream.h */,
 				E18DE05C163D9E4600869CF5 /* StreamFile.h */,
@@ -779,6 +788,7 @@
 				E167AAD01789E22C0047DF38 /* CocoaKeyState.h in Headers */,
 				E167AAD41789E3BF0047DF38 /* CocoaPointerState.h in Headers */,
 				E167AAD91789E6920047DF38 /* MachTime.h in Headers */,
+				E1F5898817FB325300548AB8 /* Socket.h in Headers */,
 				E1EB518C17A9608700A76D62 /* CocoaViewportController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -788,6 +798,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E167AADA1789E6920047DF38 /* MachTime.h in Headers */,
+				E1F5898917FB325300548AB8 /* Socket.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1042,6 +1053,7 @@
 				E184ECD317847197007CDEF3 /* String.cpp in Sources */,
 				E184ECE617847224007CDEF3 /* map.cpp in Sources */,
 				E184ECE917847224007CDEF3 /* Surface.cpp in Sources */,
+				E1F5898617FB325300548AB8 /* Socket_nix.cpp in Sources */,
 				E184ECEF17848039007CDEF3 /* Face.cpp in Sources */,
 				E184ECF817849961007CDEF3 /* Atlas.cpp in Sources */,
 				E184ED001785E9E4007CDEF3 /* array.cpp in Sources */,
@@ -1061,6 +1073,7 @@
 				E189E87D169AB3F300541FE1 /* math.cpp in Sources */,
 				E172B428171604FD00475227 /* assert.cpp in Sources */,
 				E1BE3887173F7AAA0029FD4A /* noise.cpp in Sources */,
+				E1F5898717FB325300548AB8 /* Socket_nix.cpp in Sources */,
 				E184ED011785E9E4007CDEF3 /* array.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1121,6 +1134,7 @@
 				E19931BF164E4EC000E8D9CB /* Object.cpp in Sources */,
 				E19931C0164E4EC000E8D9CB /* OpenGL.cpp in Sources */,
 				E19931C1164E4EC000E8D9CB /* Program.cpp in Sources */,
+				E1F5898517FB325300548AB8 /* Socket_nix.cpp in Sources */,
 				E19931C3164E4EC700E8D9CB /* Stream.cpp in Sources */,
 				E19931C4164E4EC700E8D9CB /* StreamFile_posix.cpp in Sources */,
 				E19931C5164E4ECC00E8D9CB /* math.cpp in Sources */,
