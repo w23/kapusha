@@ -66,10 +66,16 @@ namespace kapusha {
       UniformSampler samplers_[MAX_STATE_UNIFORM_SAMPLERS];
     };
   public:
+    enum Validity {
+      AssertValid,
+      TolerateInvalid
+    };
+    
     //! Constructor compiles shaders and links program
     //! \fixme separate shader objects (for sharing and shit)
-    Program(const char* vertex, const char* fragment);
+    Program(const char* vertex, const char* fragment, Validity v = AssertValid);
     ~Program();
+    bool valid() const { return name_ && shader_vertex_ && shader_fragment_; }
     void bindAttributeLocation(const char* name, int location);
     int getAttributeLocation(const char* name) const;
     int getUniformLocation(const char* name) const;
@@ -81,6 +87,7 @@ namespace kapusha {
     unsigned name_;
     unsigned shader_vertex_;
     unsigned shader_fragment_;
+    Validity validity_;
     //! \todo UniformState current_state_;
   protected:
     friend class Context;

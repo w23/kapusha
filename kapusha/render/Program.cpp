@@ -42,8 +42,9 @@ namespace kapusha {
     printInfoLog<_ProgramInfoLogHelper>(program);
   }
   
-  Program::Program(const char* vertex, const char* fragment)
-    : name_(0), shader_vertex_(0), shader_fragment_(0) {
+  Program::Program(const char* vertex, const char* fragment, Validity val)
+    : name_(0), shader_vertex_(0), shader_fragment_(0), validity_(val) {
+    GL_ASSERT
     shader_vertex_ = compileShader(GL_VERTEX_SHADER, vertex);
     if (!shader_vertex_) return;
     shader_fragment_ = compileShader(GL_FRAGMENT_SHADER, fragment);
@@ -67,7 +68,11 @@ namespace kapusha {
         shader_fragment_ = shader_vertex_ = name_ = 0;
       }
     }
-    GL_ASSERT
+    if (val == AssertValid) {
+      GL_ASSERT
+    } else {
+      glGetError();
+    }
   } // Program::Program
   
   Program::~Program(){
@@ -112,13 +117,13 @@ namespace kapusha {
   int Program::getAttributeLocation(const char *name) const {
     KP_ASSERT(name_);
     int loc = glGetAttribLocation(name_, name); GL_ASSERT
-    KP_ASSERT(loc != -1);
+    if (validity_ == AssertValid) KP_ASSERT(loc != -1);
     return loc;
   }
   int Program::getUniformLocation(const char *name) const {
     KP_ASSERT(name_);
     int loc = glGetUniformLocation(name_, name); GL_ASSERT
-    KP_ASSERT(loc != -1);
+    if (validity_ == AssertValid) KP_ASSERT(loc != -1);
     return loc;
   }
 // UniformState ///////////////////////////////////////////////////////////////  
