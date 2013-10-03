@@ -27,14 +27,14 @@ GLXContext::~GLXContext() {
   glXDestroyContext(display_, context_);
 }
 
-Context *GLXContext::createSharedContext() const {
+Context *GLXContext::create_shared_context() const {
   return new GLXContext(this);
 }
 
-void GLXContext::makeCurrent() {
+void GLXContext::make_current() {
   //! \todo glXMakeContextCurrent
   KP_ENSURE(True == glXMakeCurrent(display_, drawable_, context_));
-  //KP_UNUSED(result);
+  Context::make_current();
 }
 
 } // namespace sys

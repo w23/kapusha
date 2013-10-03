@@ -6,9 +6,9 @@ namespace sys {
 
 class GLXViewportController : public IViewportController {
 public:
-  inline GLXViewportController() : display_(0) {}
+  inline GLXViewportController() : display_(0), viewport_(nullptr), size_(0) {}
   ~GLXViewportController();
-  int run(IViewport *viewport, vec2i size, bool fullscreen);
+  int run(const IViewportFactory *factory);
 
 public: // IViewportController
   void quit(int code) {}
@@ -20,11 +20,11 @@ public: // IViewportController
 
 private:
   void event_loop();
+
   ::Display *display_;
+  ::Window window_;
   IViewport *viewport_;
   vec2i size_;
-  bool fullscreen_;
-  ::Window window_;
   X11Pointers pointers_;
   X11Keys keys_;
 };

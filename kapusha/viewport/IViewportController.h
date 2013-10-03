@@ -13,13 +13,6 @@ namespace kapusha {
     //! \warning It is safe to call this from any thread
     virtual void requestRedraw() = 0;
     
-    //! Set target frames per second
-    //! \param fps Upper limit of frames per second we expect
-    //! Special values:
-    //!   0 - do not limit, redraw as fast as vsync (default)
-    //!  -1 - do not redraw constantly, only on request
-    virtual void setTargetFramerate(int fps) = 0;
-    
     //! Request fullscreen mode
     //! Requests fullscreen mode with native resolution
     //! \todo virtual void requestFullscreen() = 0;

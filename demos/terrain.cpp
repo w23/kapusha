@@ -148,18 +148,26 @@ void Viewport::inputPointer(const PointerState& pointers) {
 
 class ViewportFactory : public IViewportFactory {
 public:
+  ViewportFactory() {
+    p_.window_title = "kapusha demo: terrain";
+    p_.flags = Preferences::FlagOpenGL2_1;
+  }
   virtual ~ViewportFactory() {}
   virtual IViewport *create(IViewportController *controller) const {
     return new Viewport(controller);
   }
+  virtual const Preferences &preferences() const {
+    return p_;
+  }
+
+private:
+  Preferences p_;
 };
 
 ViewportFactory viewport_factory;
 
 namespace kapusha {
   Application the_application = {
-    "kapusha demo: terrain",
-    vec2i(1280, 720),
     &viewport_factory
   };
 } // namespace kapusha

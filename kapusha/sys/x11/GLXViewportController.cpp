@@ -18,11 +18,12 @@ GLXViewportController::~GLXViewportController() {
   if (display_) XCloseDisplay(display_);
 }
 
-int GLXViewportController::run(IViewport *viewport, vec2i size, bool fullscreen) {
-  viewport_ = viewport;
-  size_ = size;
-  fullscreen_ = fullscreen;
-  
+int GLXViewportController::run(const IViewportFactory *factory) {
+  const IViewportFactory::Preferences &prefs = factory->preferences();
+
+  vec2i size = prefs.prefer_resolution;
+  if (size.x <= 0 || size.y <= 0) size = vec2i(640, 480);
+
   display_ = XOpenDisplay(NULL);
   if (display_ == NULL) {
     L("Cannot connect to X server");
@@ -30,6 +31,7 @@ int GLXViewportController::run(IViewport *viewport, vec2i size, bool fullscreen)
   }
 
   GLXFBConfigSet fbset(display_);
+  //! \todo Implement config selection based on factory prefs
   GLXFBConfig fbcfg = fbset.get(0);
   if (fbcfg == NULL) {
     L("Cannot find appropriate glx framebuffer configuration");
@@ -60,10 +62,12 @@ int GLXViewportController::run(IViewport *viewport, vec2i size, bool fullscreen)
   
   {
     GLXContext context(display_, fbcfg, window_);
-    context.makeCurrent();
+    context.make_current();
 
-    viewport_->init(this, &context);
+    viewport_ = factory->create(this);
     event_loop();
+    delete viewport_;
+    viewport_ = nullptr;
   }
 
   XDestroyWindow(display_, window_);
@@ -79,7 +83,13 @@ void GLXViewportController::event_loop() {
       XNextEvent(display_, &event);
       switch (event.type) {
         case ConfigureNotify:
-          viewport_->resize(vec2i(event.xconfigure.width, event.xconfigure.height));
+          {
+            vec2i size = vec2i(event.xconfigure.width, event.xconfigure.height);
+            if (size_ != size) {
+              size_ = size;
+              viewport_->resize(size_);
+            }
+          }
         break;
         case Expose:
           //! \todo draw

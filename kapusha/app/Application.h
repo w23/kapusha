@@ -7,8 +7,6 @@ class IViewportFactory;
 
 //! Kapusha-powered application startup settings
 struct Application {
-  const char *title;
-  vec2i prefer_resolution;
   const IViewportFactory *viewport_factory;
 };
 

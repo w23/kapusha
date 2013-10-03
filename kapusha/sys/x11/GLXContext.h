@@ -16,8 +16,8 @@ public:
   //! \param share A previously created context to share resources with
   GLXContext(const GLXContext *share);
   virtual ~GLXContext();
-  virtual Context *createSharedContext() const;
-  virtual void makeCurrent();
+  virtual Context *create_shared_context() const;
+  virtual void make_current();
 private:
   void init(const GLXContext *share);
   //! \warning all these are managed outside
