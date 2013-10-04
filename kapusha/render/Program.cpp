@@ -144,6 +144,8 @@ namespace kapusha {
   }
   void Program::UniformState::setUniform(int location, Uniform::Type type,
                                          const float* data) {
+    if (location < 0) return;
+    //KP_ASSERT(location >= 0);
     const int size = type & Uniform::_MaskComponents;
     int offset = 0;
     for (int i = 0; i < MAX_STATE_UNIFORMS; ++i) {
