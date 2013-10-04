@@ -1,7 +1,8 @@
 #include <cstdlib>
-#include <unistd.h>
 #include <winsock2.h>
 #include "Socket.h"
+
+namespace kapusha {
 
 inline void sockaddr_to_Address(const sockaddr_in &sockaddr, Socket::Address &addr) {
   addr.host = ntohl(sockaddr.sin_addr.s_addr);
@@ -25,7 +26,7 @@ Socket::Address::Address(const char *_host, int _port) {
   port = _port;
 }
 
-Socket::Socket() {
+Socket::Socket(Type type) {
   WSADATA wsa_data;
   WSAStartup(MAKEWORD(2,2), &wsa_data);
   socket_ = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -55,7 +56,7 @@ void Socket::send_to(Address addr, const void *data, u32 size) {
   sockaddr_in to;
   Address_to_sockaddr(addr, to);
   //L("SOCKET INFO: send %d bytes", size);
-  ssize_t sent = ::sendto(socket_, reinterpret_cast<const char*>(data), size, 0, (sockaddr*)&to, sizeof(to));
+  std::size_t sent = ::sendto(socket_, reinterpret_cast<const char*>(data), size, 0, (sockaddr*)&to, sizeof(to));
   if (static_cast<u32>(sent) != size) {
     /// \todo this is actually recoverable
     L("SOCKET FATAL: Could only send %d bytes of %d: %d", sent, size, WSAGetLastError());
@@ -66,7 +67,7 @@ void Socket::send_to(Address addr, const void *data, u32 size) {
 u32 Socket::recv_from(Address &addr, void *data, u32 max_size) {
   sockaddr_in from;
   int addrlen = sizeof(from);
-  ssize_t size = ::recvfrom(socket_, reinterpret_cast<char*>(data), max_size, 0, (sockaddr*)&from, &addrlen);
+  std::size_t size = ::recvfrom(socket_, reinterpret_cast<char*>(data), max_size, 0, (sockaddr*)&from, &addrlen);
   if (size == -1) {
     /// \todo assert WSAGetLastError() == EWOULDBLOCK || ???
     return 0;
@@ -75,3 +76,5 @@ u32 Socket::recv_from(Address &addr, void *data, u32 max_size) {
   //L("SOCKET INFO: recv %d bytes", size);
   return size;
 }
+
+} // namespace kapusha

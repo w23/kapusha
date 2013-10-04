@@ -14,6 +14,5 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
   UNREFERENCED_PARAMETER(cmdLine);
   UNREFERENCED_PARAMETER(cmdShow);
 
-  return RunWindow(hInst, the_application.createViewport(),
-    the_application.prefer_resolution.x, the_application.prefer_resolution.y, false);
+  return RunWindow(hInst, the_application.viewport_factory);
 }

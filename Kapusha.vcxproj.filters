@@ -175,6 +175,15 @@
       <Filter>app</Filter>
     </ClInclude>
     <ClInclude Include="kapusha\app.h" />
+    <ClInclude Include="kapusha\sys\win\WGLContext.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\sys\win\windows_inc.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\io\Socket.h">
+      <Filter>io</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="kapusha\core\Log.cpp">
@@ -254,6 +263,12 @@
     </ClCompile>
     <ClCompile Include="kapusha\sys\win\main.cpp">
       <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\sys\win\WGLContext.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\io\Socket_win.cpp">
+      <Filter>io</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

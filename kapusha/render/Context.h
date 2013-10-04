@@ -21,7 +21,7 @@ namespace kapusha {
     //! Make a new context that shares resources with this one.
     //! Main usage: managing stuff in a separate thread
     //! \warning Must be created before any other GL calls
-    virtual Context *create_shared_context() const { return 0; }
+    virtual Context *create_shared_context() const { return nullptr; }
     
     //! Make this context current for this thread.
     //! Autocreated context that is passed with IViewportController is already

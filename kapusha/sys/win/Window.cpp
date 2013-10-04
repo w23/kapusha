@@ -1,16 +1,11 @@
-#include <windows.h>
-#include <windowsx.h>
-#undef min
-#undef max
+#include "windows_inc.h"
 #include <kapusha/core.h>
 #include <kapusha/viewport/IViewport.h>
 #include <kapusha/render/Context.h>
 #include "Timer.h"
+#include "WGLContext.h"
 
 namespace kapusha {
-
-///////////////////////////////////////////////////////////////////////////////
-  class WGLContext : public Context { public: inline WGLContext() {} };
 
 ///////////////////////////////////////////////////////////////////////////////
   class WindowsKeyState : public KeyState
@@ -341,7 +336,7 @@ namespace kapusha {
   class WindowController : public IViewportController
   {
   public:
-    WindowController(HINSTANCE hInst, IViewport *viewport, int width, int height, bool fullscreen);
+    WindowController(HINSTANCE hInst, const IViewportFactory *factory);
     ~WindowController();
 
     virtual void quit(int code);
@@ -366,7 +361,7 @@ namespace kapusha {
     bool need_redraw_;
     WindowsPointerState pointers_;
     WindowsKeyState keys_;
-    WGLContext context_;
+    WGLContext *context_;
   };
 
   void WindowController::quit(int code)
@@ -420,7 +415,6 @@ namespace kapusha {
       break;
 
     case WM_QUIT: //! \fixme we don't get here
-      viewport_->close();
       break;
 
     default:
@@ -448,11 +442,10 @@ namespace kapusha {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-  WindowController::WindowController(HINSTANCE hInst, IViewport *viewport,
-                                     int width, int height, bool fullscreen)
-    : viewport_(viewport)
-    , need_redraw_(true)
-  {
+  WindowController::WindowController(HINSTANCE hInst, const IViewportFactory *factory)
+    : viewport_(nullptr), need_redraw_(true) {
+    const IViewportFactory::Preferences &prefs = factory->preferences();
+
     WNDCLASSEX wndclass = { 0 };
     wndclass.cbSize = sizeof wndclass;
     wndclass.style = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
@@ -462,7 +455,10 @@ namespace kapusha {
     wndclass.lpszClassName = L"KapushaWindowClass";
     RegisterClassEx(&wndclass);
 
-    RECT wr = {0, 0, width, height};
+    vec2i size = prefs.prefer_resolution;
+    if (size.x <= 0 || size.y <= 0) size = vec2i(640, 480);
+
+    RECT wr = {0, 0, size.x, size.y};
     AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
 
     window_ = CreateWindowEx(WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,
@@ -473,16 +469,9 @@ namespace kapusha {
                              1, 1, // why not wr stuff? see MoveWindow below!11
                              NULL, NULL, hInst, this);
 
-    dc_ = GetDC(window_);
-    static const PIXELFORMATDESCRIPTOR pfd = {
-      sizeof(PIXELFORMATDESCRIPTOR), 1,
-      PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER, PFD_TYPE_RGBA,
-      32, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 32, 0, 0,
-      PFD_MAIN_PLANE, 0, 0, 0, 0 };
-    SetPixelFormat(dc_, ChoosePixelFormat(dc_, &pfd), &pfd);
-    wglMakeCurrent(dc_, wglCreateContext(dc_));
-
-    glewInit();
+    context_ = new WGLContext(dc_ = GetDC(window_));
+    context_->make_current();
+    glewInit(); //! \todo get rid of this
 
     ShowWindow(window_, SW_SHOW);
     SetForegroundWindow(window_);
@@ -496,13 +485,15 @@ namespace kapusha {
 
     wglSwapIntervalEXT(1);
 
-    pointers_.resize(vec2i(width, height));
-    viewport_->init(this, &context_);
-    viewport_->resize(vec2i(width, height));
+    pointers_.resize(size);
+
+    viewport_ = factory->create(this);
+    viewport_->resize(size);
   }
 
   WindowController::~WindowController() {
-    viewport_->close();
+    delete viewport_;
+    delete context_;
   }
 
   int WindowController::run()
@@ -510,20 +501,16 @@ namespace kapusha {
     MSG message;
     Timer timer;
     u32 prev = timer.now();
-    while (true)
-    {
-      if (need_redraw_)
-        while (PeekMessage(&message, NULL, 0, 0, PM_REMOVE))
-	      {
+    while (true) {
+      if (need_redraw_) {
+        while (PeekMessage(&message, NULL, 0, 0, PM_REMOVE)) {
 			    TranslateMessage(&message);
 			    DispatchMessage(&message);
 
           if (message.message == WM_QUIT)
             return (int) message.wParam;
         }
-      else 
-        if (!GetMessage(&message, NULL, 0, 0))
-          break;
+      } else if (!GetMessage(&message, NULL, 0, 0)) break;
 
       //if (need_redraw_)
       {
@@ -539,10 +526,8 @@ namespace kapusha {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-  int RunWindow(HINSTANCE hInst, IViewport *viewport,
-                int width, int height, bool fullscreen)
-  {
-    WindowController winctl(hInst, viewport, width, height, fullscreen);
+  int RunWindow(HINSTANCE hInst, const IViewportFactory *factory) {
+    WindowController winctl(hInst, factory);
     return winctl.run();
   }
 

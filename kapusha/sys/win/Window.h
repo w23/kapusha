@@ -1,8 +1,7 @@
 #pragma once
-#include <windows.h>
+#include "windows_inc.h"
 
 namespace kapusha {
-  class IViewport;
-  int RunWindow(HINSTANCE hInst, IViewport *viewport,
-                int width, int height, bool fullscreen);
+  class IViewportFactory;
+  int RunWindow(HINSTANCE hInst, const IViewportFactory *factory);
 }

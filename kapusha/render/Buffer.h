@@ -42,7 +42,7 @@ namespace kapusha {
     std::size_t size_;
   private: // noncopyable
     Buffer& operator=(const Buffer& right) { return *this; }
-    Buffer(const Buffer& right) {}
+    Buffer(const Buffer&) {}
   protected:
     friend class Context;
     inline unsigned name() const { return name_; }

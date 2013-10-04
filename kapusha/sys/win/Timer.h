@@ -1,4 +1,5 @@
 #pragma once
+#include "windows_inc.h"
 
 namespace kapusha {
   class Timer {

@@ -22,6 +22,7 @@
     <ClInclude Include="kapusha\core\list.h" />
     <ClInclude Include="kapusha\core\Surface.h" />
     <ClInclude Include="kapusha\core\types.h" />
+    <ClInclude Include="kapusha\io\Socket.h" />
     <ClInclude Include="kapusha\kapusha.h" />
     <ClInclude Include="kapusha\math.h" />
     <ClInclude Include="kapusha\math\math.h" />
@@ -54,6 +55,8 @@
     <ClInclude Include="kapusha\core\Shared.h" />
     <ClInclude Include="kapusha\render\Sampler.h" />
     <ClInclude Include="kapusha\render\State.h" />
+    <ClInclude Include="kapusha\sys\win\WGLContext.h" />
+    <ClInclude Include="kapusha\sys\win\windows_inc.h" />
     <ClInclude Include="kapusha\utils\geometry.h" />
     <ClInclude Include="kapusha\utils\noise.h" />
     <ClInclude Include="kapusha\utils\SpectatorCameraController.h" />
@@ -67,6 +70,7 @@
     <ClCompile Include="3p\glew\GL\glew.cpp" />
     <ClCompile Include="kapusha\core\assert.cpp" />
     <ClCompile Include="kapusha\core\Surface.cpp" />
+    <ClCompile Include="kapusha\io\Socket_win.cpp" />
     <ClCompile Include="kapusha\ooo\Camera.cpp" />
     <ClCompile Include="kapusha\ooo\Node.cpp" />
     <ClCompile Include="kapusha\ooo\Object.cpp" />
@@ -84,6 +88,7 @@
     <ClCompile Include="kapusha\render\Sampler.cpp" />
     <ClCompile Include="kapusha\render\State.cpp" />
     <ClCompile Include="kapusha\sys\win\main.cpp" />
+    <ClCompile Include="kapusha\sys\win\WGLContext.cpp" />
     <ClCompile Include="kapusha\utils\geometry.cpp" />
     <ClCompile Include="kapusha\utils\noise.cpp" />
     <ClCompile Include="kapusha\utils\SpectatorCameraController.cpp" />
