@@ -12,10 +12,7 @@ namespace kapusha {
         --size_; // do not count null char
       }
     }
-
-    ~wstring() {
-      delete [] wstring_;
-    }
+    ~wstring() { delete [] wstring_; }
 
     int size() const { return size_; }
     operator const wchar_t*() const { return wstring_; }
