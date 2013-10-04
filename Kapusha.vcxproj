@@ -57,6 +57,7 @@
     <ClInclude Include="kapusha\render\State.h" />
     <ClInclude Include="kapusha\sys\win\WGLContext.h" />
     <ClInclude Include="kapusha\sys\win\windows_inc.h" />
+    <ClInclude Include="kapusha\sys\win\wstring.h" />
     <ClInclude Include="kapusha\utils\geometry.h" />
     <ClInclude Include="kapusha\utils\noise.h" />
     <ClInclude Include="kapusha\utils\SpectatorCameraController.h" />

@@ -4,6 +4,7 @@
 #include <kapusha/render/Context.h>
 #include "Timer.h"
 #include "WGLContext.h"
+#include "wstring.h"
 
 namespace kapusha {
 
@@ -462,7 +463,7 @@ namespace kapusha {
     AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
 
     window_ = CreateWindowEx(WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,
-                             wndclass.lpszClassName, NULL,
+                             wndclass.lpszClassName, wstring(prefs.window_title),
                              WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_OVERLAPPEDWINDOW,
                              // | WS_VISIBLE, -- makes aero go awaY (?!?!)
                              CW_USEDEFAULT, CW_USEDEFAULT,
