@@ -1,6 +1,7 @@
 #import "KPAppDelegate.h"
 #import <kapusha/core.h>
 #import <kapusha/app.h>
+#import <kapusha/viewport.h>
 #import <kapusha/sys/osx/KPView.h>
 
 @interface KPAppDelegate () {
@@ -12,15 +13,19 @@
 - (void)dealloc { [super dealloc]; }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-  NSRect rect = NSMakeRect(0, 0,
-                           kapusha::the_application.prefer_resolution.x,
-                           kapusha::the_application.prefer_resolution.y);
+  const kapusha::IViewportFactory::Preferences &prefs
+    = kapusha::the_application.viewport_factory->preferences();
+  
+  kapusha::vec2i size = prefs.prefer_resolution;
+  if (size.x <= 0 || size.y <= 0) size = kapusha::vec2i(640, 480);
+  
+  NSRect rect = NSMakeRect(0, 0, size.x, size.y);
   
   window_ = [[NSWindow alloc] initWithContentRect:rect
                                         styleMask:15
                                           backing:NSBackingStoreBuffered
                                             defer:YES];
-  window_.title = [NSString stringWithCString:kapusha::the_application.title
+  window_.title = [NSString stringWithCString:prefs.window_title
                                      encoding:NSUTF8StringEncoding];
   window_.delegate = self;
   
