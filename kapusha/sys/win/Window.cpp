@@ -389,6 +389,7 @@ namespace kapusha {
 
   LRESULT WindowController::processEvent(UINT msg, WPARAM wParam, LPARAM lParam)
   {
+	  if (viewport_)
     switch (msg)
     {
     //case WM_SIZING:
@@ -484,7 +485,7 @@ namespace kapusha {
     // LE FOUCQUE
     MoveWindow(window_, 0, 0, wr.right-wr.left, wr.bottom-wr.top, TRUE);
 
-    wglSwapIntervalEXT(1);
+	if (wglSwapIntervalEXT) wglSwapIntervalEXT(1);
 
     pointers_.resize(size);
 
