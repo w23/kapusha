@@ -1,3 +1,3 @@
-include kapusha.mk
+include libkapusha.mk
 
-all: libkapusha.a libkapusha_main.a
+all: libkapusha.a
