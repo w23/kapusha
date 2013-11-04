@@ -1,7 +1,0 @@
-//
-// Prefix header for all source files of the 'kapusha-samples-osx' target in the 'kapusha-samples-osx' project
-//
-
-#ifdef __OBJC__
-  #import <Cocoa/Cocoa.h>
-#endif

@@ -183,14 +183,15 @@ public:
   virtual IViewport *create(IViewportController *controller) const {
     return new Viewport(controller);
   }
+  virtual const Preferences &preferences() const { return prefs_; }
+private:
+  Preferences prefs_;
 };
 
 ViewportFactory viewport_factory;
 
 namespace kapusha {
   Application the_application = {
-    "kapusha demo: dust",
-    vec2i(1280, 720),
     &viewport_factory
   };
 } // namespace kapusha

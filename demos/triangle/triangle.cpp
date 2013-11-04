@@ -1,22 +1,21 @@
-// kapusha
-// (c) 2012-2013 Ivan 'w23' Avdeev, me@w23.ru
+#include <kapusha/app.h>
 #include <kapusha/viewport.h>
 #include <kapusha/render.h>
 
 using namespace kapusha;
+
 class Viewport : public IViewport {
 public:
-  virtual void init(IViewportController* controller, Context *context);
+  Viewport(IViewportController* controller);
+  virtual ~Viewport() {}
   virtual void resize(vec2i);
   virtual void draw(int ms, float dt);
-  virtual void close();
 private:
   IViewportController *controller_;
-  Context *context_;
   SBatch triangleBatch_;
 }; // class Viewport
 
-void Viewport::init(IViewportController* controller, Context *context) {
+Viewport::Viewport(IViewportController* controller) : controller_(controller) {
   static const char *vertex_shader =
     "attribute vec4 vertex;\n"
     "void main() { gl_Position = vertex; }\n";
@@ -26,15 +25,12 @@ void Viewport::init(IViewportController* controller, Context *context) {
     vec2f(1.f, -1.f), vec2f(0.f, 1.f), vec2f(-1.f, -1.f)
   };
 
-  controller_ = controller;
-  context_ = context;
   Program *prog = new Program(vertex_shader, fragment_shader);
-  prog->bindAttributeLocation("vertex", 0);
   Buffer *buf = new Buffer(Buffer::BindingArray);
-  buf->load(context_, vertices, sizeof(vertices), Buffer::StaticDraw);
+  buf->load(vertices, sizeof(vertices), Buffer::StaticDraw);
   triangleBatch_.reset(new Batch());
   triangleBatch_->setMaterial(new Material(prog));
-  triangleBatch_->setAttribSource(0, buf, 2, 0, sizeof(vec2f));
+  triangleBatch_->setAttribSource("vertex", buf, 2, 0, sizeof(vec2f));
   triangleBatch_->setGeometry(Batch::GeometryTriangleList, 0, 3);
 }
 
@@ -44,13 +40,27 @@ void Viewport::resize(vec2i size) {
 
 void Viewport::draw(int ms, float dt) {
   glClear(GL_COLOR_BUFFER_BIT);
-  triangleBatch_->draw(context_);
+  triangleBatch_->draw();
 }
 
-void Viewport::close() {
-  triangleBatch_.reset();
-}
+////////////////////////////////////////////////////////////////////////////////
+// Application config
 
-kapusha::IViewport *makeViewport() {
-  return new Viewport();
-}
+class ViewportFactory : public IViewportFactory {
+public:
+  virtual ~ViewportFactory() {}
+  virtual IViewport *create(IViewportController *controller) const {
+    return new Viewport(controller);
+  }
+  virtual const Preferences &preferences() const { return prefs_; }
+private:
+  Preferences prefs_;
+};
+
+ViewportFactory viewport_factory;
+
+namespace kapusha {
+  Application the_application = {
+    &viewport_factory
+  };
+} // namespace kapusha

@@ -1,3 +1,4 @@
+#include <kapusha/app.h>
 #include <kapusha/viewport.h>
 #include <kapusha/render.h>
 #include <kapusha/ooo.h>
@@ -109,29 +110,26 @@ static const char *fragmentShaderPathTracer =
 "}\n";
 
 using namespace kapusha;
+
 class Viewport : public IViewport {
 public:
-  Viewport() : camctl_(camera_) {}
+  Viewport(IViewportController *ctrl);
   virtual ~Viewport() {}
-  virtual void init(IViewportController *ctrl, Context *context);
   virtual void resize(vec2i);
   virtual void draw(int ms, float dt);
-  void inputPointer(const PointerState &pointers);
-  void inputKey(const KeyState &keys);
-  virtual void close();
+  virtual void inputPointer(const PointerState &pointers);
+  virtual void inputKey(const KeyState &keys);
 private:
-  Context *context_;
+  IViewportController *ctrl_;
   Camera camera_;
   SpectatorCameraController camctl_;
-  IViewportController *ctrl_;
-  Batch *batch_;
-  Batch *output_;
-  Sampler *sampler_;
-  Framebuffer *fb_;
+  SBatch batch_;
+  SBatch output_;
+  SSampler sampler_;
+  SFramebuffer fb_;
 };
-void Viewport::init(IViewportController *ctrl, Context *context) {
-  context_ = context;
-  ctrl_ = ctrl;
+
+Viewport::Viewport(IViewportController *ctrl) : ctrl_(ctrl), camctl_(camera_) {
   static const char* svtx =
   "uniform vec2 aspect;\n"
   "uniform vec3 uv3_forward;\n"
@@ -151,7 +149,7 @@ void Viewport::init(IViewportController *ctrl, Context *context) {
     vec2f( 1.f, -1.f)
   };
   Buffer *fsrect = new Buffer();
-  fsrect->load(context_, rect, sizeof rect);
+  fsrect->load(rect, sizeof rect);
   Program *prog = new Program(svtx, fragmentShaderPathTracer);
   //prog->bindAttributeLocation("vtx", 0);
   batch_ = new Batch();
@@ -182,29 +180,25 @@ void Viewport::init(IViewportController *ctrl, Context *context) {
   Program *oprog = new Program(osvtx, osfrg);
   output_ = new Batch();
   Material *omat = new Material(oprog);
-  omat->setUniform("frame", sampler_);
+  omat->setUniform("frame", sampler_.get());
   omat->blend().disable();
   output_->setMaterial(omat);
   output_->setAttribSource("vtx", fsrect, 2);
   output_->setGeometry(Batch::GeometryTriangleFan, 0, 4);
 }
-void Viewport::close() {
-  delete batch_;
-  delete fb_;
-  delete output_;
-  context_ = 0;
-}
+
 void Viewport::resize(vec2i size) {
   glViewport(0, 0, size.x, size.y);
   glClear(GL_COLOR_BUFFER_BIT);
   vec2f aspect((float)size.x / size.y, 1.f);
   batch_->getMaterial()->setUniform("aspect", aspect);
-  sampler_->upload(context_, Surface::Meta(size), 0);
-  fb_->attachColor(context_, sampler_, 0);
-  fb_->bind(context_);
+  sampler_->upload(Surface::Meta(size), 0);
+  fb_->attachColor(sampler_.get(), 0);
+  fb_->bind();
   glViewport(0, 0, size.x, size.y);
   glClear(GL_COLOR_BUFFER_BIT);
 }
+
 void Viewport::draw(int ms, float dt) {
   camctl_.frame(dt, ctrl_);
   camera_.setPosition(camera_.position().clamped(vec3f(-.9f), vec3f(.9f)));
@@ -213,13 +207,14 @@ void Viewport::draw(int ms, float dt) {
   batch_->getMaterial()->setUniform("t", time);
   batch_->getMaterial()->setUniform("uv3_pos", camera_.position());
   batch_->getMaterial()->setUniform("uv3_forward", camera_.forward().normalized());
-  fb_->bind(context_);
-  batch_->draw(context_);
-  context_->bindFramebuffer(0);
+  fb_->bind();
+  batch_->draw();
+  Context::bind_framebuffer(nullptr);
   glClear(GL_COLOR_BUFFER_BIT);
-  output_->draw(context_);
+  output_->draw();
   ctrl_->requestRedraw();
 }
+
 void Viewport::inputPointer(const PointerState& pointers) {
   camctl_.pointers(pointers);
   if (pointers.main().wasPressed(PointerState::Pointer::LeftButton)) {
@@ -233,9 +228,29 @@ void Viewport::inputPointer(const PointerState& pointers) {
     camctl_.enableOrientation(false);
   }
 }
+
 void Viewport::inputKey(const KeyState &keys) {
   if (keys.isKeyPressed(KeyState::KeyEsc)) ctrl_->quit(0);
 }
-IViewport *makeViewport() {
-  return new Viewport;
-}
+
+////////////////////////////////////////////////////////////////////////////////
+// Application config
+
+class ViewportFactory : public IViewportFactory {
+public:
+  virtual ~ViewportFactory() {}
+  virtual IViewport *create(IViewportController *controller) const {
+    return new Viewport(controller);
+  }
+  virtual const Preferences &preferences() const { return prefs_; }
+private:
+  Preferences prefs_;
+};
+
+ViewportFactory viewport_factory;
+
+namespace kapusha {
+  Application the_application = {
+    &viewport_factory
+  };
+} // namespace kapusha
