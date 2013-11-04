@@ -27,7 +27,7 @@ GLXContext::~GLXContext() {
   glXDestroyContext(display_, context_);
 }
 
-Context *GLXContext::create_shared_context() const {
+Context *GLXContext::create_shared() const {
   return new GLXContext(this);
 }
 

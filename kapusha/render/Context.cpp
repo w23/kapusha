@@ -8,17 +8,17 @@
 namespace kapusha {
   // TODO static pthread_key_t s_current_context_key_;
   static Context *g_current_context_ = nullptr;
-  void Context::set_current_context(Context *context) {
+  void Context::set_current(Context *context) {
     KP_ASSERT(!g_current_context_);
     g_current_context_ = context;
   }
-  Context *Context::current_context() {
+  Context *Context::current() {
     KP_ASSERT(g_current_context_);
     return g_current_context_;
   }
   
   void Context::make_current() {
-    Context::set_current_context(this);
+    Context::set_current(this);
   }
   
   void Context::do_bind_buffer(const Buffer *buffer, int binding) {
