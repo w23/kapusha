@@ -1,7 +1,8 @@
 KAPUSHA_ROOT := $(dir $(lastword $(MAKEFILE_LIST)))
-include $(KAPUSHA_ROOT)/common.mk
+include $(KAPUSHA_ROOT)common.mk
+OBJDIR ?= obj
 
-KAPUSHA_SRC = $(KAPUSHA_ROOT)/kapusha
+KAPUSHA_SRC = $(KAPUSHA_ROOT)kapusha
 
 SOURCES += \
 	$(KAPUSHA_SRC)/core/assert.cpp \
@@ -32,7 +33,7 @@ SOURCES += \
 	$(KAPUSHA_SRC)/utils/Atlas.cpp \
 	$(KAPUSHA_SRC)/utils/noise.cpp
 
-ifeq ($(WITH_RASPBERRY),1)
+ifeq ($(OS_RASPBERRY),1)
 SOURCES += \
 	$(KAPUSHA_SRC)/sys/rpi/VideoCore.cpp \
 	$(KAPUSHA_SRC)/sys/rpi/EGL.cpp \
@@ -53,11 +54,13 @@ SOURCES += \
 	$(KAPUSHA_SRC)/sys/x11/main.cpp
 endif
 
-ifeq ($(WITH_WINDOWS), 1)
+ifeq ($(OS_WINDOWS), 1)
 SOURCES += \
 	3p/glew/GL/glew.cpp \
 	$(KAPUSHA_SRC)/sys/win/Window.cpp
-else
+endif
+
+ifeq ($(OS_POSIX), 1)
 SOURCES += \
 	$(KAPUSHA_SRC)/io/StreamFile_posix.cpp
 endif
@@ -68,10 +71,13 @@ SOURCES += \
 	$(KAPUSHA_SRC)/fontain/harftype/Face.cpp
 endif
 
-MODULES=$(SOURCES:.cpp=.o)
-DEPENDS=$(SOURCES:.cpp=.d)
+# Generate rules for .d and .o files
+$(foreach src,$(SOURCES), $(eval $(call MAKE_RULES,$(src))))
 
 -include $(DEPENDS)
 
+$(PRODUCT): $(MODULES) $(METADEPS)
+	$(LINK.cc) $(MODULES) -o $@
+
 clean:
-	@rm -f $(MODULES) $(DEPENDS) $(PRODUCTS)
+	@rm -f $(MODULES) $(DEPENDS) $(PRODUCT)
