@@ -1,5 +1,6 @@
 #pragma once
-#include "input.h"
+#include "Pointers.h"
+#include "Keys.h"
 
 namespace kapusha {
   //! An interface for doing OS/platform-specific stuff
@@ -11,27 +12,26 @@ namespace kapusha {
     
     //! Request redraw
     //! \warning It is safe to call this from any thread
-    virtual void requestRedraw() = 0;
+    //! \todo virtual void request_redraw() = 0;
     
     //! Request fullscreen mode
     //! Requests fullscreen mode with native resolution
-    //! \todo virtual void requestFullscreen() = 0;
+    //! \todo virtual void request_fullscreen() = 0;
     
-    //! Set the mouse cursor free of any window/screen boundaries
-    //! \param relative_only Set this true if you want mouse-aiming
-    //! \warning Pointer::getPosition() will return garbage if this is set to true
-    virtual void setRelativeOnlyPointer(bool relative_only) = 0;
+    //! Grab user input
+    //! This means:
+    //!  * pointers are grabbed
+    //!  * pointers return delta only data, their positions bear no meaning
+    //!  * mouse cursor is hidden
+    //! \param grab True means grab, false means release
+    virtual void grab_input(bool grab) = 0;
     
-    //! Hide mouse cursor
-    //! \param hide Does cursor need to be hidden
-    virtual void hideCursor(bool hide) = 0;
-    
-    //! Current pointer state
+    //! Current pointers state
     //! \return current pointer input state
-    virtual const PointerState& pointerState() const = 0;
+    virtual const Pointers& pointers() const = 0;
     
-    //! Current key state
+    //! Current keys state
     //! \return current key input state
-    virtual const KeyState& keyState() const = 0;
+    virtual const Keys& keys() const = 0;
   };
 } // namespace kapusha

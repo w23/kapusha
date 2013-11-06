@@ -13,7 +13,6 @@ SOURCES += \
 	$(KAPUSHA_SRC)/math/math.cpp \
 	$(KAPUSHA_SRC)/io/Stream.cpp \
 	$(KAPUSHA_SRC)/io/Socket_nix.cpp \
-	$(KAPUSHA_SRC)/viewport/input.cpp \
 	$(KAPUSHA_SRC)/render/Program.cpp \
 	$(KAPUSHA_SRC)/render/Material.cpp \
 	$(KAPUSHA_SRC)/render/Batch.cpp \

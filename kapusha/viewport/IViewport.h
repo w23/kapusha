@@ -1,5 +1,4 @@
 #pragma once
-#include "input.h"
 #include "IViewportController.h"
 
 namespace kapusha {
@@ -16,8 +15,8 @@ namespace kapusha {
     virtual void resize(vec2i size) = 0;
     
     //! User input
-    virtual void inputPointer(const PointerState& pointers) {}
-    virtual void inputKey(const KeyState& keys) {}
+    virtual void in_pointers(const Pointers& pointers) {}
+    virtual void in_keys(const Keys& keys) {}
     
     //! Paint stuff
     //! \param ms Monotonic time in milliseconds since some referential point
