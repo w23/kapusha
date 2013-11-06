@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <errno.h>
+#include <time.h>
 #include <X11/Xlib.h>
-#include <X11/Xlib-xcb.h>
-#include <xcb/xcb.h>
 #include <GL/glx.h>
 #ifdef None
 #undef None // this is ridiculous

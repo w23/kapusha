@@ -12,11 +12,9 @@ public:
 
 public: // IViewportController
   void quit(int code) {}
-  void requestRedraw() {}
-  void setRelativeOnlyPointer(bool relative_only) {}
-  void hideCursor(bool hide) {}
-  const PointerState& pointerState() const { return pointers_; }
-  const KeyState& keyState() const { return keys_; }
+  void grab_input(bool grab) {}
+  const Pointers& pointers() const { return pointers_; }
+  const Keys& keys() const { return keys_; }
 
 private:
   void event_loop();

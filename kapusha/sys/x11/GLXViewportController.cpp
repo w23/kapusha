@@ -60,6 +60,9 @@ int GLXViewportController::run(const IViewportFactory *factory) {
 
   //! \todo glXCreateWindow
   
+  XSelectInput(display_, window_, KeyPressMask | KeyReleaseMask
+    | ButtonPressMask | ButtonReleaseMask | PointerMotionMask
+    | StructureNotifyMask);
   {
     GLXContext context(display_, fbcfg, window_);
     context.make_current();
@@ -82,20 +85,22 @@ void GLXViewportController::event_loop() {
       XEvent event;
       XNextEvent(display_, &event);
       switch (event.type) {
-        case ConfigureNotify:
-          {
+        case ConfigureNotify: {
             vec2i size = vec2i(event.xconfigure.width, event.xconfigure.height);
             if (size_ != size) {
               size_ = size;
+              pointers_.resize(size_);
               viewport_->resize(size_);
             }
           }
         break;
-        case Expose:
-          //! \todo draw
-        break;
-        //case KeyPress:
-        //  return;
+
+        default:
+          if (pointers_.process(event)) {
+            viewport_->in_pointers(pointers_);
+          } else if (keys_.process(event)) {
+            viewport_->in_keys(keys_);
+          } else L("Unexpected XEvent %d", event.type);
       }
     }
 

@@ -3,10 +3,10 @@
 namespace kapusha {
 namespace sys {
 
-  class X11Keys : public KeyState {
+  class X11Keys : public Keys {
   public:
 	X11Keys() {}
-	//! \todo
+    bool process(const XEvent &event) { return false; }
   };
 
 } // namespace sys

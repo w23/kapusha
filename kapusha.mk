@@ -50,6 +50,7 @@ ifeq ($(WITH_X11),1)
 SOURCES += \
 	$(KAPUSHA_SRC)/sys/x11/GLXContext.cpp \
 	$(KAPUSHA_SRC)/sys/x11/GLXViewportController.cpp \
+	$(KAPUSHA_SRC)/sys/x11/X11Pointers.cpp \
 	$(KAPUSHA_SRC)/sys/x11/main.cpp
 endif
 
