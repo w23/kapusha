@@ -88,7 +88,7 @@ public:
   Viewport(IViewportController* ctrl);
   void resize(vec2i size);
   void draw(int ms, float dt);
-  void inputPointer(const PointerState& pointers);
+  void in_pointers(const Pointers& pointers);
 private:
   Object* createGround() const;
 private:
@@ -108,7 +108,7 @@ Viewport::Viewport(IViewportController* ctrl)
   camera_.setProjection(90.f, 1.f, .1f, 1000.f);
   camera_.lookAt(vec3f(100.f), vec3f(0.f));
   glClearColor(.7f, .9f, 1.f, 1.f);
-  camctl_.setSpeed(50.f);
+  camctl_.set_speed(50.f);
 }
 
 void Viewport::resize(vec2i size) {
@@ -126,20 +126,17 @@ void Viewport::draw(int ms, float dt) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   GL_ASSERT
   ground_->draw(camera_.getViewProjection());
-  ctrl_->requestRedraw();
 }
 
-void Viewport::inputPointer(const PointerState& pointers) {
+void Viewport::in_pointers(const Pointers &pointers) {
   camctl_.pointers(pointers);
-  if (pointers.main().wasPressed(PointerState::Pointer::LeftButton)) {
-    ctrl_->setRelativeOnlyPointer(true);
-    ctrl_->hideCursor(true);
-    camctl_.enableOrientation(true);
+  if (pointers.main().was_pressed(Pointers::Pointer::LeftButton)) {
+    ctrl_->grab_input(true);
+    camctl_.enable_orientation(true);
   }
-  if (pointers.main().wasReleased(PointerState::Pointer::LeftButton)) {
-    ctrl_->setRelativeOnlyPointer(false);
-    ctrl_->hideCursor(false);
-    camctl_.enableOrientation(false);
+  if (pointers.main().was_released(Pointers::Pointer::LeftButton)) {
+    ctrl_->grab_input(false);
+    camctl_.enable_orientation(false);
   }
 }
 
