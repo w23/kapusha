@@ -6,7 +6,7 @@ namespace sys {
   class X11Keys : public Keys {
   public:
 	X11Keys() {}
-    bool process(const XEvent &event) { return false; }
+    bool process(const XEvent &event);
   };
 
 } // namespace sys
