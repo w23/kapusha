@@ -90,5 +90,5 @@ $$($1.MODULE): $1 $$($1.DEPFILE) $(METADEPS)
 
 $$($1.DEPFILE): $1 $(METADEPS)
 	@mkdir -p $$(dir $$($1.DEPFILE))
-	$(CXX) $(CXXFLAGS) -MM $1 -MT $$($1.MODULE) -MF $$($1.DEPFILE)
+	$(CXX) $(CXXFLAGS) -MM $1 -MT $$($1.MODULE) -MT $$($1.DEPFILE) -MF $$($1.DEPFILE)
 endef

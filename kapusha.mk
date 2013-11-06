@@ -71,10 +71,10 @@ SOURCES += \
 	$(KAPUSHA_SRC)/fontain/harftype/Face.cpp
 endif
 
--include $(DEPENDS)
-
 # Generate rules for .d and .o files
 $(foreach src,$(SOURCES), $(eval $(call MAKE_RULES,$(src))))
+
+-include $(DEPFILES)
 
 $(PRODUCT): $(MODULES) $(METADEPS)
 	$(LINK.cc) $(MODULES) -o $@
