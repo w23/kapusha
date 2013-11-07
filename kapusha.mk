@@ -81,4 +81,4 @@ $(PRODUCT): $(MODULES) $(METADEPS)
 	$(LINK.cc) $(MODULES) -o $@
 
 clean:
-	@rm -f $(MODULES) $(DEPENDS) $(PRODUCT)
+	@rm -f $(MODULES) $(DEPFILES) $(PRODUCT)
