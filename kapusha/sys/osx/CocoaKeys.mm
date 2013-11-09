@@ -1,7 +1,7 @@
-#include "CocoaKeyState.h"
+#include "CocoaKeys.h"
 
 namespace kapusha {
-  const int CocoaKeyState::keymap[128] = {
+  const int CocoaKeys::keymap_[128] = {
     KeyA,       //0x00 = kVK_ANSI_A
     KeyS,       //0x01 = kVK_ANSI_S
     KeyD,       //0x02 = kVK_ANSI_D
@@ -132,12 +132,12 @@ namespace kapusha {
     KeyUnknown  //0x7F
   };
   
-  bool CocoaKeyState::processEvent(NSEvent* event, u32 time) {
+  bool CocoaKeys::process_event(NSEvent* event, u32 time) {
     KP_ASSERT([event keyCode] < 128);
-    int keyc = keymap[[event keyCode]];
+    int keyc = keymap_[[event keyCode]];
     //! \fixme go use IOKit HID isntead of this total ridiculousness
     if (event.type != NSFlagsChanged)
-      return key(keyc, event.type == NSKeyDown, time);
+      return evt_key(keyc, event.type == NSKeyDown, time);
     else {
       int kbit;
       switch (keyc) {
@@ -154,7 +154,7 @@ namespace kapusha {
           L("Unknown key %d", keyc);
           return false;
       }
-      return key(keyc, event.modifierFlags & kbit, time);
+      return evt_key(keyc, event.modifierFlags & kbit, time);
     }
   }
 

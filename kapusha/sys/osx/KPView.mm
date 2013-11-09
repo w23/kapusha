@@ -74,22 +74,22 @@ void log::sys_write(const char *message) { NSLog(@"%s", message); }
 - (BOOL)acceptsFirstResponder { return YES; }
 - (BOOL)becomeFirstResponder { return YES; }
 - (BOOL)resignFirstResponder { return YES; }
-- (void) mouseAlwaysRelative:(BOOL)relative {
+- (void)mouseAlwaysRelative:(BOOL)relative {
   KP_ENSURE(kCGErrorSuccess==CGAssociateMouseAndMouseCursorPosition(!relative));
 }
 #pragma mark Mouse events
 //! \todo right, middle buttons, wheel, maybe less functions
 - (void) mouseDragged:(NSEvent *)theEvent { [self mouseMoved:theEvent]; }
 - (void) mouseMoved:(NSEvent *)theEvent {
-  viewportController_->mouseMoved(self, theEvent);
+  viewportController_->mouse_moved(self, theEvent);
 }
 
 - (void) mouseDown:(NSEvent *)theEvent {
-  viewportController_->mouseDown(self, theEvent);
+  viewportController_->mouse_down(self, theEvent);
 }
 
 - (void) mouseUp:(NSEvent *)theEvent {
-  viewportController_->mouseUp(self, theEvent);
+  viewportController_->mouse_up(self, theEvent);
 }
 
 #pragma mark Key events

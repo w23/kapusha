@@ -2,26 +2,26 @@
 
 namespace kapusha {
   CocoaGLContext::CocoaGLContext(NSOpenGLContext *cocoaContext)
-  : cocoaContext_([cocoaContext retain]) {
+  : cocoa_context_([cocoaContext retain]) {
     KP_ASSERT(cocoaContext != nil);
   }
   
   CocoaGLContext::~CocoaGLContext() {
-    [cocoaContext_ release];
+    [cocoa_context_ release];
   }
   
-  Context *CocoaGLContext::createSharedContext() {
-    CGLContextObj cglctxobj = (CGLContextObj)[cocoaContext_ CGLContextObj];
+  Context *CocoaGLContext::create_shared() {
+    CGLContextObj cglctxobj = (CGLContextObj)[cocoa_context_ CGLContextObj];
     CGLPixelFormatObj cglpixfmt = CGLGetPixelFormat(cglctxobj);
     NSOpenGLPixelFormat *pixfmt = [[[NSOpenGLPixelFormat alloc]initWithCGLPixelFormatObj:cglpixfmt] autorelease];
     NSOpenGLContext *newContext = [[[NSOpenGLContext alloc]
                                     initWithFormat:pixfmt
-                                    shareContext:cocoaContext_] autorelease];
+                                    shareContext:cocoa_context_] autorelease];
     return new CocoaGLContext(newContext);
   }
   
-  void CocoaGLContext::makeCurrent() {
-    [cocoaContext_ makeCurrentContext];
+  void CocoaGLContext::make_current() {
+    [cocoa_context_ makeCurrentContext];
     Context::make_current();
   }
 } // namespace kapusha

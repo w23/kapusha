@@ -7,9 +7,9 @@ namespace kapusha {
   public:
     CocoaGLContext(NSOpenGLContext *cocoaContext);
     virtual ~CocoaGLContext();
-    virtual Context *createSharedContext();
-    virtual void makeCurrent();
+    virtual Context *create_shared();
+    virtual void make_current();
   private:
-    NSOpenGLContext *cocoaContext_;
+    NSOpenGLContext *cocoa_context_;
   };
 } // namespace kapusha

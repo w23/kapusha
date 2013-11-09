@@ -2,8 +2,8 @@
 #include <memory>
 #include <kapusha/viewport.h>
 #include "CocoaGLContext.h"
-#include "CocoaKeyState.h"
-#include "CocoaPointerState.h"
+#include "CocoaKeys.h"
+#include "CocoaPointers.h"
 #import "KPView.h"
 
 namespace kapusha {
@@ -14,28 +14,25 @@ namespace kapusha {
 
   public: // IViewportController
     void quit(int code);
-    void requestRedraw();
-    void setTargetFramerate(int fps);
-    void setRelativeOnlyPointer(bool relative_only);
-    void hideCursor(bool hide);
-    const PointerState& pointerState() const;
-    const KeyState& keyState() const;
+    void grab_input(bool grab);
+    const Pointers& pointers() const;
+    const Keys& keys() const;
 
     void init();
     void resize(vec2i size);
     void draw();
-    void mouseMoved(NSView *view, NSEvent *event);
-    void mouseDown(NSView *view, NSEvent *event);
-    void mouseUp(NSView *view, NSEvent *event);
+    void mouse_moved(NSView *view, NSEvent *event);
+    void mouse_down(NSView *view, NSEvent *event);
+    void mouse_up(NSView *view, NSEvent *event);
     void key(NSEvent* event, u32 time);
 
   private:
     KPView *view_;
     const IViewportFactory *factory_;
     std::unique_ptr<IViewport> viewport_;
-    std::unique_ptr<CocoaGLContext> glContext_;
-    CocoaPointerState pointerState_;
-    CocoaKeyState keyState_;
+    std::unique_ptr<CocoaGLContext> context_;
+    CocoaPointers pointers_;
+    CocoaKeys keys_;
     MachTime time_;
     u32 prevFrameTime_;
   };

@@ -3,11 +3,11 @@
 #include <kapusha/viewport.h>
 
 namespace kapusha {
-  class CocoaKeyState : public KeyState {
+  class CocoaKeys : public Keys {
   public:
-    bool processEvent(NSEvent* event, u32 time);
+    bool process_event(NSEvent* event, u32 time);
   private:
-    static const int keymap[128];
+    static const int keymap_[128];
   };
 } // namespace kapusha
 

@@ -4,7 +4,7 @@
 namespace kapusha {
   CocoaViewportController::CocoaViewportController(KPView *view,
                                                    const IViewportFactory *factory)
-    : view_(view), factory_(factory), glContext_(nullptr) {
+    : view_(view), factory_(factory), context_(nullptr) {
   }
   
   CocoaViewportController::~CocoaViewportController() {
@@ -14,33 +14,27 @@ namespace kapusha {
     [view_.window performClose:nil];
   }
   
-  void CocoaViewportController::requestRedraw() { [view_ requestRedraw]; }
-  
-  void CocoaViewportController::setTargetFramerate(int fps) {}
-  
-  void CocoaViewportController::setRelativeOnlyPointer(bool relative_only) {
-    [view_ mouseAlwaysRelative:relative_only];
-    pointerState_.setRelative(relative_only);
-  }
-  
-  void CocoaViewportController::hideCursor(bool hide) {
-    if (hide) CGDisplayHideCursor(kCGDirectMainDisplay);
+  void CocoaViewportController::grab_input(bool grab) {
+    if (grab) CGDisplayHideCursor(kCGDirectMainDisplay);
     else CGDisplayShowCursor(kCGDirectMainDisplay);
+
+    [view_ mouseAlwaysRelative:grab];
+    pointers_.set_relative(grab);
   }
   
-  const PointerState& CocoaViewportController::pointerState() const {
-    return pointerState_;
+  const Pointers& CocoaViewportController::pointers() const {
+    return pointers_;
   }
   
-  const KeyState& CocoaViewportController::keyState() const {
-    return keyState_;
+  const Keys& CocoaViewportController::keys() const {
+    return keys_;
   }
   
   void CocoaViewportController::init() {
-    KP_ASSERT(!glContext_);
+    KP_ASSERT(!context_);
     KP_ASSERT(!viewport_);
-    glContext_.reset(new CocoaGLContext([view_ openGLContext]));
-    glContext_->make_current();
+    context_.reset(new CocoaGLContext([view_ openGLContext]));
+    context_->make_current();
     viewport_.reset(factory_->create(this));
     time_.reset();
     prevFrameTime_ = 0;
@@ -49,7 +43,7 @@ namespace kapusha {
   void CocoaViewportController::resize(vec2i size) {
     KP_ASSERT(viewport_);
     viewport_->resize(size);
-    pointerState_.resize(size);
+    pointers_.resize(size);
   }
   
   void CocoaViewportController::draw() {
@@ -60,26 +54,26 @@ namespace kapusha {
     prevFrameTime_ = now;
   }
   
-  void CocoaViewportController::mouseMoved(NSView *view, NSEvent *event) {
+  void CocoaViewportController::mouse_moved(NSView *view, NSEvent *event) {
     KP_ASSERT(viewport_);
-    pointerState_.mouseMoveTo(view, event);
-    viewport_->inputPointer(pointerState_);
+    pointers_.mouse_move_to(view, event);
+    viewport_->in_pointers(pointers_);
   }
   
-  void CocoaViewportController::mouseDown(NSView *view, NSEvent *event) {
+  void CocoaViewportController::mouse_down(NSView *view, NSEvent *event) {
     KP_ASSERT(viewport_);
-    pointerState_.mouseDown(view, event);
-    viewport_->inputPointer(pointerState_);
+    pointers_.mouse_down(view, event);
+    viewport_->in_pointers(pointers_);
   }
   
-  void CocoaViewportController::mouseUp(NSView *view, NSEvent *event) {
+  void CocoaViewportController::mouse_up(NSView *view, NSEvent *event) {
     KP_ASSERT(viewport_);
-    pointerState_.mouseUp(view, event);
-    viewport_->inputPointer(pointerState_);
+    pointers_.mouse_up(view, event);
+    viewport_->in_pointers(pointers_);
   }
   
   void CocoaViewportController::key(NSEvent* event, u32 time) {
     KP_ASSERT(viewport_);
-    if (keyState_.processEvent(event, time)) viewport_->inputKey(keyState_);
+    if (keys_.process_event(event, time)) viewport_->in_keys(keys_);
   }
 } // namespace kapusha
