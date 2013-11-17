@@ -8,7 +8,7 @@ namespace kapusha {
   template <typename T> struct vec3 {
     T x, y, z;
 
-    inline vec3() {}
+    inline vec3() = default;
     inline vec3(T v) : x(v), y(v), z(v) {}
     inline vec3(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
     inline vec3(const T* p) : x(p[0]), y(p[1]), z(p[2]) {}
