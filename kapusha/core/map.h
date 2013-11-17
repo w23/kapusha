@@ -1,5 +1,5 @@
 #pragma once
-#include "array.h"
+#include "Array.h"
 
 namespace kapusha {
   //! \brief naive u32->POD map
