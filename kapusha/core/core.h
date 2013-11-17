@@ -7,5 +7,5 @@
 #include "shared.h"
 #include "list.h"
 #include "Surface.h"
-#include "array.h"
+#include "Array.h"
 #include "map.h"
