@@ -5,7 +5,7 @@ namespace kapusha {
   //! \brief naive u32->POD map
   class Map {
   public:
-    Map(std::size_t item_size);
+    Map(u32 item_size);
 
     const void *find(u32 key) const;
     inline void *find(u32 key) {
@@ -13,14 +13,14 @@ namespace kapusha {
     }
     void *set(u32 key, const void* data);
 
-  private:
+  protected:
     //! \brief trivial hash
     inline static u32 bucket(u32 key) {
       key ^= key >> 16;
       key ^= key >> 8;
       return key & 63;
     }
-    std::size_t itemSize_;
+    u32 item_size_;
     Array buckets_[64];
   }; // class Map
 

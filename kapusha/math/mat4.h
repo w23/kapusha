@@ -63,5 +63,14 @@ namespace kapusha {
       return *this;
     }
     mat4x4 &makeRotation(vec3<T> axis, T angle);
+
+    static mat4x4 make_translation(vec3<T> translation) {
+      mat4x4 m;
+      m.rows[0] = vec4<T>(1, 0, 0, translation.x);
+      m.rows[1] = vec4<T>(0, 1, 0, translation.y);
+      m.rows[2] = vec4<T>(0, 0, 1, translation.z);
+      m.rows[3] = vec4<T>(0, 0, 0, 1);
+      return m;
+    }
   }; // mat4x4
 } // namespace kapusha

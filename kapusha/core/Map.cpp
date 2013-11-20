@@ -1,8 +1,8 @@
-#include "map.h"
+#include "Map.h"
 
 namespace kapusha {
-  Map::Map(std::size_t item_size) : itemSize_(item_size) {
-    for (int i = 0; i < 64; ++i) buckets_[i].init(item_size + 4);
+  Map::Map(u32 item_size) : item_size_(item_size) {
+    for (int i = 0; i < 64; ++i) buckets_[i].init(item_size_ + 4);
   }
 
   const void *Map::find(u32 key) const {
@@ -23,15 +23,13 @@ namespace kapusha {
       if (key == *reinterpret_cast<u32*>(item)) {
         void *item_data = reinterpret_cast<u32*>(item) + 1;
         if (data)
-          memcpy(item_data, data, itemSize_);
+          memcpy(item_data, data, item_size_);
         return item_data;
       }
     }
     u32 *item = reinterpret_cast<u32*>(b.alloc_back(1));
     *item = key;
-    if (data) memcpy(item + 1, data, itemSize_);
+    if (data) memcpy(item + 1, data, item_size_);
     return item + 1;
-
   }
-  
 } // namespace kapusha

@@ -8,7 +8,7 @@ SOURCES += \
 	$(KAPUSHA_SRC)/core/assert.cpp \
 	$(KAPUSHA_SRC)/core/log.cpp \
 	$(KAPUSHA_SRC)/core/Array.cpp \
-	$(KAPUSHA_SRC)/core/map.cpp \
+	$(KAPUSHA_SRC)/core/Map.cpp \
 	$(KAPUSHA_SRC)/core/Surface.cpp \
 	$(KAPUSHA_SRC)/math/math.cpp \
 	$(KAPUSHA_SRC)/io/Stream.cpp \
