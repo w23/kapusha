@@ -8,13 +8,13 @@ namespace kapusha {
     //! initial retain count should be zero
     //! motivation: 1) most usages are more convenient with this
     //!             2) other usages mostly ok with manual delete
-    Shareable() : retainCount_(0) {}
+    Shareable() : retain_count_(0) {}
     virtual ~Shareable() {}
-    inline void retain() { ++retainCount_; }
-    void release() { if(!--retainCount_) delete this; }
-    inline int getRetainCount() const { return retainCount_; }
+    inline void retain() { ++retain_count_; }
+    void release() { if(!--retain_count_) delete this; }
+    inline int retain_count() const { return retain_count_; }
   private:
-    int retainCount_;
+    int retain_count_;
   };
   
   //! convenience store
