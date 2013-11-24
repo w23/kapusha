@@ -5,7 +5,7 @@
 #include "assert.h"
 #include "log.h"
 #include "shared.h"
-#include "List.h"
+#include "list.h"
 #include "Surface.h"
 #include "Array.h"
 #include "Map.h"
