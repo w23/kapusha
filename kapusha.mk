@@ -24,9 +24,7 @@ SOURCES += \
 	$(KAPUSHA_SRC)/render/Context.cpp \
 	$(KAPUSHA_SRC)/render/Framebuffer.cpp \
 	$(KAPUSHA_SRC)/ooo/Reframe.cpp \
-	$(KAPUSHA_SRC)/ooo/Object.cpp \
 	$(KAPUSHA_SRC)/ooo/Camera.cpp \
-	$(KAPUSHA_SRC)/ooo/Node.cpp \
 	$(KAPUSHA_SRC)/fontain/String.cpp \
 	$(KAPUSHA_SRC)/utils/SpectatorCameraController.cpp \
 	$(KAPUSHA_SRC)/utils/geometry.cpp \
