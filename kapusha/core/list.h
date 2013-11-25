@@ -22,6 +22,9 @@ struct list {
       return *this;
     }
     inline bool operator==(iterator r) const { return item_ == r.item_; }
+    inline bool operator!=(iterator r) const { return !(*this == r); }
+    inline bool operator==(const void *r) const { return item_->object == r; }
+    inline bool operator!=(const void *r) const { return !(*this == r); }
     template <typename T> T *get() const {
       return reinterpret_cast<T*>(item_->object);
     }
