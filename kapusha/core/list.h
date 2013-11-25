@@ -29,6 +29,7 @@ struct list {
       return reinterpret_cast<T*>(item_->object);
     }
   protected:
+    friend class list;
     item *item_;
   }; // struct iterator
   
