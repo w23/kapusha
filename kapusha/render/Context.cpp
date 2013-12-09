@@ -43,8 +43,10 @@ namespace kapusha {
   void Context::do_bind_framebuffer(const Framebuffer *framebuffer) {
     if (framebuffer) {
       glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->name()); GL_ASSERT
+#if !KAPUSHA_GLES
       glDrawBuffers(framebuffer->buffersCount(), framebuffer->buffers());
       GL_ASSERT
+#endif
     }
     else { glBindFramebuffer(GL_FRAMEBUFFER, 0); GL_ASSERT
       GL_ASSERT

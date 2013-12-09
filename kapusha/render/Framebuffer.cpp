@@ -1,5 +1,11 @@
 #include "Framebuffer.h"
 
+#if defined(GL_DEPTH_COMPONENT24)
+#define KP_DEPTH_COMPONENT GL_DEPTH_COMPONENT24
+#else
+#define KP_DEPTH_COMPONENT GL_DEPTH_COMPONENT16
+#endif
+
 namespace kapusha {
   Framebuffer::Framebuffer() : n_bufs_(0) { glGenFramebuffers(1, &name_); }
   
@@ -26,7 +32,7 @@ namespace kapusha {
     GL_ASSERT
     glBindRenderbuffer(GL_RENDERBUFFER, name);
     GL_ASSERT
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, size.x, size.y);
+    glRenderbufferStorage(GL_RENDERBUFFER, KP_DEPTH_COMPONENT, size.x, size.y);
   }
   
   void Framebuffer::attachDepth() {

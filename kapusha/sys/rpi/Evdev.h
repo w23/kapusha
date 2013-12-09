@@ -1,6 +1,7 @@
 #pragma once
 #include <linux/input.h>
-#include <kapusha/viewport/input.h>
+#include <kapusha/viewport/Pointers.h>
+#include <kapusha/viewport/Keys.h>
 
 namespace kapusha {
 
@@ -14,21 +15,18 @@ namespace kapusha {
   };
 
   //! \todo evdev multitouch (someday, when i get some hw to test it on)
-  class EvdevPointerState : public PointerState {
+  class EvdevPointerState : public Pointers {
   protected:
     friend class Evdev;
     inline EvdevPointerState(vec2i vpsize);
-    inline void setRelative(bool only) {
-      relativeOnly_ = only;
-    }
     EventProcessingState process(u32 kptime, const input_event &e);
 
   private:
     EventProcessingState state_;
-    bool relativeOnly_;
+    bool track_cursor_;
   }; // class EvdevPointerState
 
-  class EvdevKeyState : public KeyState {
+  class EvdevKeyState : public Keys {
   protected:
     friend class Evdev;
     EvdevKeyState() : state_(EventComplete) {}
@@ -36,7 +34,7 @@ namespace kapusha {
 
   private:
 #define EVDEV_MAXKEY KEY_DELETE // 111
-    static const Keys s_keymap_[EVDEV_MAXKEY+1];
+    static const Types s_keymap_[EVDEV_MAXKEY+1];
     EventProcessingState state_;
   };
 
@@ -44,23 +42,18 @@ namespace kapusha {
 
   class Evdev {
   public:
-    Evdev(IViewport *viewport, vec2i vpsize,
-        const char *file_mouse,
-        const char *file_kbd);
+    Evdev(vec2i vpsize, const char *file_mouse, const char *file_kbd);
     ~Evdev();
+    inline void set_viewport(IViewport *viewport) { viewport_ = viewport; }
     void run(bool block);
 
-    inline void setRelativeOnly(bool ronly) {
-      pointer_.setRelative(ronly);
-    }
-
-    const PointerState& pointerState() const { return pointer_; }
-    const KeyState& keyState() const { return key_; }
+    const Pointers& pointers() const { return pointer_; }
+    const Keys& keys() const { return key_; }
 
   private:
     IViewport *viewport_;
-    int fileMouse_;
-    int fileKeyboard_;
+    int file_mouse_;
+    int file_keyboard_;
     int maxFds_;
     EvdevPointerState pointer_;
     EvdevKeyState key_;

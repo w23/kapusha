@@ -58,9 +58,11 @@ namespace kapusha {
         //internal = GL_LUMINANCE, format = GL_LUMINANCE, type = GL_UNSIGNED_BYTE;
         internal = GL_ALPHA, format = GL_ALPHA, type = GL_UNSIGNED_BYTE;
         break;
+#if defined(GL_RGBA_FLOAT32_APPLE)
       case Surface::Meta::RGBAF32:
         internal = GL_RGBA_FLOAT32_APPLE, format = GL_RGBA, type = GL_FLOAT;
         break;
+#endif
 
       default: KP_ASSERT(!"Unsupported texture format"); return;
     }

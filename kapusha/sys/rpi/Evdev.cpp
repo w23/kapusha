@@ -10,23 +10,22 @@
 #include "Evdev.h"
 
 namespace kapusha {
-  EvdevPointerState::EvdevPointerState(vec2i vpsize)
+
+  EvdevPointerState::EvdevPointerState(vec2i vpsize) 
     : state_(EventComplete)
-    , relativeOnly_(false)
-  {
-    resizeViewport(vec2f(0.f, vpsize.y), vec2f(vpsize.x, 0.f));
+    , track_cursor_(false) {
+    evt_resize_viewport(vec2f(0.f, vpsize.y), vec2f(vpsize.x, 0.f));
   }
 
-  EventProcessingState
-  EvdevPointerState::process(u32 kptime, const input_event &e) {
-    //L("\tmouse state == %d", state_);
-    if (state_ == EventComplete) beginUpdate();
+  EventProcessingState EvdevPointerState::process(u32 kptime,
+    const input_event &e) {
+    if (state_ == EventComplete) evt_begin_update();
 
     switch (e.type) {
       case EV_SYN:
         if (e.code != SYN_REPORT || state_ != EventProcessing)
           return EventIgnored;
-        endUpdate(kptime);
+        evt_end_update(kptime);
         return state_ = EventComplete;
 
       case EV_KEY: {
@@ -43,34 +42,29 @@ namespace kapusha {
               break;
             default: return EventIgnored;
           }
-          if (e.value == 0)
-            pointers_[0].flags_ &= ~btn;
-          else
-            pointers_[0].flags_ |= btn;
-          pointers_[0].flagsChanged_ |= btn;
+          if (e.value == 0) pointers_[0].flags_ &= ~btn;
+          else pointers_[0].flags_ |= btn;
+          pointers_[0].flags_change_ |= btn;
         }
         return state_ = EventProcessing;
 
-      case EV_REL:
-        {
+      case EV_REL: {
           vec2f d(0);
-          if (e.code == REL_X)
-            d.x = scale_.x * e.value;
-          else if (e.code == REL_Y)
-            d.y = scale_.y * e.value;
+          if (e.code == REL_X) d.x = scale_.x * e.value;
+          else if (e.code == REL_Y) d.y = scale_.y * e.value;
           else return EventIgnored;
           
           pointers_[0].flags_ |= Pointer::Moved;
-          pointers_[0].flagsChanged_ |= Pointer::Moved;
+          pointers_[0].flags_change_ |= Pointer::Moved;
 
-          if (relativeOnly_)
+          if (track_cursor_)
           {
-            pointers_[0].pointDelta_ += d;
-            pointers_[0].point_ = vec2f(.5f);
-          } else {
             vec2f newpos = (pointers_[0].point_ + d).clamped(-1.f, 1.f);
-            pointers_[0].pointDelta_ += newpos - pointers_[0].point_;
+            pointers_[0].point_delta_ += newpos - pointers_[0].point_;
             pointers_[0].point_ = newpos;
+          } else {
+            pointers_[0].point_delta_ += d;
+            pointers_[0].point_ = vec2f(.5f);
           }
         }
         return state_ = EventProcessing;
@@ -81,7 +75,7 @@ namespace kapusha {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  const KeyState::Keys EvdevKeyState::s_keymap_[EVDEV_MAXKEY+1] = {
+  const Keys::Types EvdevKeyState::s_keymap_[EVDEV_MAXKEY+1] = {
     KeyUnknown, // KEY_RESERVED	0
     KeyEsc,     // KEY_ESC      1
     Key1,       // KEY_1        2
@@ -196,41 +190,32 @@ namespace kapusha {
     KeyDel      // KEY_DELETE   111
   };
 
-  EventProcessingState
-  EvdevKeyState::process(u32 kptime, const input_event &e)
-  {
-    switch (e.type)
-    {
+  EventProcessingState EvdevKeyState::process(u32 kptime,
+    const input_event &e) {
+    switch (e.type) {
       case EV_KEY:
-        if (e.code > EVDEV_MAXKEY || e.value == 2)
-          return EventIgnored;
-
-        if (key(s_keymap_[e.code], e.value, kptime))
-          return state_ = EventComplete;
-
+        if (e.code > EVDEV_MAXKEY || e.value == 2) return EventIgnored;
+        if (evt_key(s_keymap_[e.code], e.value, kptime)) return state_ = EventComplete;
       default: return EventIgnored;
     }
   }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  Evdev::Evdev(IViewport *viewport, vec2i vpsize,
-               const char *file_mouse,
-               const char *file_kbd)
-    : viewport_(viewport)
-    , fileMouse_(open(file_mouse, O_RDONLY))
-    , fileKeyboard_(open(file_kbd, O_RDONLY))
-    , maxFds_(1 + ((fileMouse_ > fileKeyboard_) ? fileMouse_ : fileKeyboard_))
-    , pointer_(vpsize)
-  {
+  Evdev::Evdev(vec2i vpsize, const char *file_mouse, const char *file_kbd)
+    : viewport_(nullptr)
+    , file_mouse_(open(file_mouse, O_RDONLY))
+    , file_keyboard_(open(file_kbd, O_RDONLY))
+    , maxFds_(1 + ((file_mouse_ > file_keyboard_) ? file_mouse_ : file_keyboard_))
+    , pointer_(vpsize) {
     L("Using %s as mouse input", file_mouse);
     L("Using %s as keyboard input", file_kbd);
-    KP_ASSERT(fileMouse_ != -1);
-    KP_ASSERT(fileKeyboard_ != -1);
+    KP_ASSERT(file_mouse_ != -1);
+    KP_ASSERT(file_keyboard_ != -1);
 
 #if !DEBUG
-    ioctl(fileMouse_, EVIOCGRAB, 1);
-    ioctl(fileKeyboard_, EVIOCGRAB, 1);
+    ioctl(file_mouse_, EVIOCGRAB, 1);
+    ioctl(file_keyboard_, EVIOCGRAB, 1);
 #endif
 
     timeval tv;
@@ -241,32 +226,29 @@ namespace kapusha {
 #define EVIOCSCLOCKID _IOW('E', 0xa0, int)
 #endif
     unsigned int clk = CLOCK_MONOTONIC;
-    KP_ENSURE(-1 != ioctl(fileMouse_, EVIOCSCLOCKID, &clk));
-    KP_ENSURE(-1 != ioctl(fileKeyboard_, EVIOCSCLOCKID, &clk));
+    KP_ENSURE(-1 != ioctl(file_mouse_, EVIOCSCLOCKID, &clk));
+    KP_ENSURE(-1 != ioctl(file_keyboard_, EVIOCSCLOCKID, &clk));
   }
 
-  Evdev::~Evdev()
-  {
-    ioctl(fileMouse_, EVIOCGRAB, 0);
-    ioctl(fileKeyboard_, EVIOCGRAB, 0);
-    close(fileMouse_);
-    close(fileKeyboard_);
+  Evdev::~Evdev() {
+    ioctl(file_mouse_, EVIOCGRAB, 0);
+    ioctl(file_keyboard_, EVIOCGRAB, 0);
+    close(file_mouse_);
+    close(file_keyboard_);
   }
 
-  u32 Evdev::localtime(const timeval &tv) const
-  {
+  u32 Evdev::localtime(const timeval &tv) const {
     return (tv.tv_sec - localSecOffset_) * 1000 + tv.tv_usec / 1000;
   }
 
-  void Evdev::run(bool block)
-  {
+  void Evdev::run(bool block) {
 #define N_EVENTS 32
     input_event event[N_EVENTS];
 
     fd_set fds;
     FD_ZERO(&fds);
-    FD_SET(fileMouse_, &fds);
-    FD_SET(fileKeyboard_, &fds);
+    FD_SET(file_mouse_, &fds);
+    FD_SET(file_keyboard_, &fds);
 
     timeval tv, *ptv = 0;
     if (!block)
@@ -282,15 +264,13 @@ namespace kapusha {
     KP_ASSERT(selval != -1);
     if (selval < 1) return;
     
-    if (FD_ISSET(fileMouse_, &fds))
-    {
-      size_t nread = read(fileMouse_, event, sizeof(event));
+    if (FD_ISSET(file_mouse_, &fds)) {
+      size_t nread = read(file_mouse_, event, sizeof(event));
       KP_ASSERT(nread > 0);
       KP_ASSERT(nread % sizeof(input_event) == 0);
       int nevents = nread / sizeof(input_event);
       //L("mouse events: %d", nevents);
-      for (int i = 0; i < nevents; ++i)
-      {
+      for (int i = 0; i < nevents; ++i) {
         EventProcessingState points = 
           pointer_.process(localtime(event[i].time), event[i]);
 
@@ -301,21 +281,19 @@ namespace kapusha {
         //    event[i].type, event[i].code, event[i].value);
 
         if (points == EventComplete)
-          viewport_->inputPointer(pointer_);
+          viewport_->in_pointers(pointer_);
 
         //! \todo scroll (wheel) state
       }
     } // if FD_ISSET(mouse)
 
-    if (FD_ISSET(fileKeyboard_, &fds))
-    {
-      size_t nread = read(fileKeyboard_, event, sizeof(event));
+    if (FD_ISSET(file_keyboard_, &fds)) {
+      size_t nread = read(file_keyboard_, event, sizeof(event));
       KP_ASSERT(nread > 0);
       KP_ASSERT(nread % sizeof(input_event) == 0);
       int nevents = nread / sizeof(input_event);
       //L("keyboard events: %d", nevents);
-      for (int i = 0; i < nevents; ++i)
-      {
+      for (int i = 0; i < nevents; ++i) {
         EventProcessingState keys =
             key_.process(localtime(event[i].time), event[i]);
         
@@ -326,7 +304,7 @@ namespace kapusha {
         //    event[i].type, event[i].code, event[i].value);
 
         if (keys == EventComplete)
-          viewport_->inputKey(key_);
+          viewport_->in_keys(key_);
 
         //! \todo scroll (some keyboards have wheel too)
       }
