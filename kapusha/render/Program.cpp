@@ -45,9 +45,9 @@ namespace kapusha {
   Program::Program(const char* vertex, const char* fragment, Validity val)
     : name_(0), shader_vertex_(0), shader_fragment_(0), validity_(val) {
     GL_ASSERT
-    shader_vertex_ = compileShader(GL_VERTEX_SHADER, vertex);
+    shader_vertex_ = compile_shader(GL_VERTEX_SHADER, vertex);
     if (!shader_vertex_) return;
-    shader_fragment_ = compileShader(GL_FRAGMENT_SHADER, fragment);
+    shader_fragment_ = compile_shader(GL_FRAGMENT_SHADER, fragment);
     if (!shader_fragment_) {
       glDeleteShader(shader_vertex_);
       shader_vertex_ = 0;
@@ -81,7 +81,7 @@ namespace kapusha {
     if (shader_vertex_) glDeleteShader(shader_vertex_);
   }
   
-  unsigned Program::compileShader(unsigned type, const char* source) {
+  unsigned Program::compile_shader(unsigned type, const char* source) {
     unsigned shader = glCreateShader(type);
     glShaderSource(shader, 1, &source, 0);
     glCompileShader(shader);
@@ -109,18 +109,19 @@ namespace kapusha {
     return shader;
   } // Program::compileShader
   
-  void Program::bindAttributeLocation(const char *name, int location) {
+  /*void Program::bind_attrib_location(const char *name, int location) {
     KP_ASSERT(!"this is currently broken, as relinking program is required");
     KP_ASSERT(name_);
     glBindAttribLocation(name_, location, name); GL_ASSERT
-  }
-  int Program::getAttributeLocation(const char *name) const {
+  }*/
+
+  int Program::get_attrib_location(const char *name) const {
     KP_ASSERT(name_);
     int loc = glGetAttribLocation(name_, name); GL_ASSERT
     if (validity_ == AssertValid) KP_ASSERT(loc != -1);
     return loc;
   }
-  int Program::getUniformLocation(const char *name) const {
+  int Program::get_uniform_location(const char *name) const {
     KP_ASSERT(name_);
     int loc = glGetUniformLocation(name_, name); GL_ASSERT
     if (validity_ == AssertValid) KP_ASSERT(loc != -1);
@@ -129,11 +130,11 @@ namespace kapusha {
 // UniformState ///////////////////////////////////////////////////////////////  
   void Program::UniformState::clear() {
     for (int i = 0; i < MAX_STATE_UNIFORMS; ++i)
-      uniforms_[i].type = Uniform::None;
+      uniform_state_[i].type = Uniform::None;
     for (int i = 0; i < MAX_STATE_UNIFORM_SAMPLERS; ++i)
       samplers_[i].sampler.reset();
   }
-  void Program::UniformState::setUniform(int location, Sampler *sampler) {
+  void Program::UniformState::set_uniform(int location, Sampler *sampler) {
     for (int i = 0; i < MAX_STATE_UNIFORM_SAMPLERS; ++i)
       if (samplers_[i].empty() || samplers_[i].location == location) {
         samplers_[i].location = location;
@@ -142,14 +143,14 @@ namespace kapusha {
       }
     KP_ASSERT(!"Not enough uniform storage for texture");
   }
-  void Program::UniformState::setUniform(int location, Uniform::Type type,
-                                         const float* data) {
+  void Program::UniformState::set_uniform(int location, Uniform::Type type,
+										  const float* data) {
     if (location < 0) return;
     //KP_ASSERT(location >= 0);
     const int size = type & Uniform::_MaskComponents;
     int offset = 0;
     for (int i = 0; i < MAX_STATE_UNIFORMS; ++i) {
-      Uniform& uni = uniforms_[i];
+      Uniform& uni = uniform_state_[i];
       if (uni.type == Uniform::None) {
         KP_ASSERT((offset+size) < MAX_STATE_UNIFORM_STORAGE);
         uni.type = type;
@@ -168,7 +169,7 @@ namespace kapusha {
   void Program::UniformState::apply() const {
     const float *data = storage_;
     for (int i = 0; i < MAX_STATE_UNIFORMS; ++i) {
-      const Uniform& u = uniforms_[i];
+      const Uniform& u = uniform_state_[i];
       const int size = u.type & UniformState::Uniform::_MaskComponents;
       if (u.type == UniformState::Uniform::None) break;
       switch(u.type) {

@@ -1,5 +1,3 @@
-// kapusha/render
-// 2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
 #include "OpenGL.h"
 #include "Buffer.h"
@@ -8,45 +6,46 @@
 namespace kapusha {
   class Batch : public Shareable {
   public:
-    enum GeometryType {
-      GeometryPoints = GL_POINTS,
-      GeometryLineList = GL_LINES,
-      GeometryLineLoop = GL_LINE_LOOP,
-      GeometryLineStrip = GL_LINE_STRIP,
-      GeometryTriangleList = GL_TRIANGLES,
-      GeometryTriangleStrip = GL_TRIANGLE_STRIP,
-      GeometryTriangleFan = GL_TRIANGLE_FAN
+    enum class Geometry {
+      Points = GL_POINTS,
+      LineList = GL_LINES,
+      LineLoop = GL_LINE_LOOP,
+      LineStrip = GL_LINE_STRIP,
+      TriangleList = GL_TRIANGLES,
+      TriangleStrip = GL_TRIANGLE_STRIP,
+      TriangleFan = GL_TRIANGLE_FAN
     };
-    enum IndexType {
-      IndexU8 = GL_UNSIGNED_BYTE,
-      IndexU16 = GL_UNSIGNED_SHORT,
-      IndexU32 = GL_UNSIGNED_INT
+    enum Index {
+      U8 = GL_UNSIGNED_BYTE,
+      U16 = GL_UNSIGNED_SHORT,
+      U32 = GL_UNSIGNED_INT
     };
+
   public:
-    Batch() {}
+    Batch();
     ~Batch() {}
-    inline void setMaterial(Material* material) { material_ = material; }
-    inline void setGeometry(GeometryType gtype, unsigned first, unsigned count,
-                            IndexType itype = IndexU16, Buffer *index = 0) {
+    inline void set_material(Material* material) { material_ = material; }
+    inline void set_geometry(Geometry gtype, unsigned first, unsigned count,
+                             Index itype = U16, Buffer *index = 0) {
       indices_ = index;
       first_ = first;
       count_ = count;
-      geometryType_ = gtype;
-      indexType_ = itype;
+      geometry_type_ = static_cast<int>(gtype);
+      index_type_ = itype;
     }
-    void setAttribSource(int attrib_location,
+    void set_attrib_source(int attrib_location,
                          Buffer* buffer, u32 components = 3,
                          u32 offset = 0, u32 stride = 0);
-    inline void setAttribSource(const char *attrib_name,
+    inline void set_attrib_source(const char *attrib_name,
                          Buffer* buffer, u32 components = 3,
                          u32 offset = 0, u32 stride = 0) {
       KP_ASSERT(material_.valid());
-      setAttribSource(material_->getProgram()->getAttributeLocation(attrib_name),
+      set_attrib_source(material_->program()->get_attrib_location(attrib_name),
                       buffer, components, offset, stride);
     }
-    void clearAttributes();
-    Material* getMaterial() const { return material_.get(); }
-    Program::UniformState& uniforms() { return uniforms_; }
+    void clear_attributes();
+    Material* material() const { return material_.get(); }
+    Program::UniformState& uniform_state() { return uniform_state_; }
     void draw() const;
   private:
     struct Attrib {
@@ -61,11 +60,11 @@ namespace kapusha {
     };
     Attrib attribs_[MAX_BATCH_ATTRIBS];
     SMaterial material_;
-    Program::UniformState uniforms_;
+    Program::UniformState uniform_state_;
     SBuffer indices_;
     unsigned first_, count_;
-    unsigned geometryType_;
-    unsigned indexType_;
+    unsigned geometry_type_;
+    unsigned index_type_;
   };
   typedef shared<Batch> SBatch;
 } // namespace kapusha

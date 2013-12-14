@@ -23,10 +23,11 @@ namespace kapusha {
   
   void Context::do_bind_buffer(const Buffer *buffer, int binding) {
     if (buffer) {
-      if (binding == Buffer::BindingNative) binding = buffer->binding_hint();
+      if (binding == Buffer::Binding::Native)
+		binding = static_cast<int>(buffer->binding_hint());
       glBindBuffer(binding, buffer->name()); GL_ASSERT
     } else {
-      KP_ASSERT(binding != Buffer::BindingNative);
+      KP_ASSERT(binding != Buffer::Binding::Native);
       glBindBuffer(binding, 0);
     }
   }

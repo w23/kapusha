@@ -8,11 +8,12 @@
 namespace kapusha {
   class Buffer : public Shareable {
   public:
-    enum Binding {
-      BindingNative = -1,
-      BindingArray = GL_ARRAY_BUFFER,
-      BindingIndex = GL_ELEMENT_ARRAY_BUFFER
-    };
+    enum class Binding {
+      Native = -1,
+      Array = GL_ARRAY_BUFFER,
+      Index = GL_ELEMENT_ARRAY_BUFFER
+	};
+
     enum Usage {
 #if !KAPUSHA_GLES
       StreamRead = GL_STREAM_READ,
@@ -27,14 +28,14 @@ namespace kapusha {
       DynamicDraw = GL_DYNAMIC_DRAW
     };
   public:
-    Buffer(Binding binding_hint = BindingArray);
+    Buffer(Binding binding_hint = Binding::Array);
     ~Buffer();
     void load(void* data, std::size_t size, Usage usage = StaticDraw);
     inline void alloc(std::size_t size, Usage usage = StaticDraw) {
       load(static_cast<void*>(0), size, usage);
     }
-    inline void bind(Binding binding = BindingNative) const {
-      Context::bind_buffer(this, binding);
+    inline void bind(Binding binding = Binding::Native) const {
+      Context::bind_buffer(this, static_cast<int>(binding));
     }
   private:
     Binding binding_hint_;
@@ -49,4 +50,11 @@ namespace kapusha {
     inline Binding binding_hint() const { return binding_hint_; }
   };
   typedef shared<Buffer> SBuffer;
+
+  inline bool operator==(Buffer::Binding b, int v) {
+	return static_cast<int>(b) == v;
+  };
+  inline bool operator!=(Buffer::Binding b, int v) { return !(b == v); }
+  inline bool operator!=(int v, Buffer::Binding b) { return !(b == v); }
+  inline bool operator==(int v, Buffer::Binding b) { return b == v; }
 } // namespace kapusha

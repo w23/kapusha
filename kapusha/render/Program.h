@@ -11,27 +11,27 @@ namespace kapusha {
   public:
     struct UniformState {
       void clear();
-      inline void setUniform(int location, float value) {
-        setUniform(location, Uniform::Float, &value);
+      inline void set_uniform(int location, float value) {
+        set_uniform(location, Uniform::Float, &value);
       }
-      inline void setUniform(int location, const vec2f &value) {
-        setUniform(location, Uniform::Vec2, value.tptr());
+      inline void set_uniform(int location, const vec2f &value) {
+        set_uniform(location, Uniform::Vec2, value.tptr());
       }
-      inline void setUniform(int location, const vec3f &value) {
-        setUniform(location, Uniform::Vec3, value.tptr());
+      inline void set_uniform(int location, const vec3f &value) {
+        set_uniform(location, Uniform::Vec3, value.tptr());
       }
-      inline void setUniform(int location, const vec4f &value) {
-        setUniform(location, Uniform::Vec4, value.tptr());
+      inline void set_uniform(int location, const vec4f &value) {
+        set_uniform(location, Uniform::Vec4, value.tptr());
       }
-      inline void setUniform(int location, const mat2f &value) {
+      inline void set_uniform(int location, const mat2f &value) {
         mat2f trans(value.transposed());
-        setUniform(location, Uniform::Mat2, trans.tptr());
+        set_uniform(location, Uniform::Mat2, trans.tptr());
       }
-      inline void setUniform(int location, const mat4f &value) {
+      inline void set_uniform(int location, const mat4f &value) {
         mat4f trans(value.transposed());
-        setUniform(location, Uniform::Mat4, trans.tptr());
+        set_uniform(location, Uniform::Mat4, trans.tptr());
       }
-      void setUniform(int location, Sampler *sampler);
+      void set_uniform(int location, Sampler *sampler);
       void apply() const;
     private:
       struct Uniform {
@@ -60,8 +60,8 @@ namespace kapusha {
         inline UniformSampler() {}
         inline bool empty() const { return !sampler.valid(); }
       };
-      void setUniform(int location, Uniform::Type type, const float* data);
-      Uniform uniforms_[MAX_STATE_UNIFORMS];
+      void set_uniform(int location, Uniform::Type type, const float* data);
+      Uniform uniform_state_[MAX_STATE_UNIFORMS];
       float storage_[MAX_STATE_UNIFORM_STORAGE];
       UniformSampler samplers_[MAX_STATE_UNIFORM_SAMPLERS];
     };
@@ -76,14 +76,14 @@ namespace kapusha {
     Program(const char* vertex, const char* fragment, Validity v = AssertValid);
     ~Program();
     bool valid() const { return name_ && shader_vertex_ && shader_fragment_; }
-    void bindAttributeLocation(const char* name, int location);
-    int getAttributeLocation(const char* name) const;
-    int getUniformLocation(const char* name) const;
+    // \todo relink void bind_attrib_location(const char* name, int location);
+    int get_attrib_location(const char* name) const;
+    int get_uniform_location(const char* name) const;
     inline void use() const { Context::use_program(this); }
   private: // noncopyable
     Program& operator=(const Program& other) { return *this; }
     Program(const Program& other) {}
-    static unsigned compileShader(unsigned name, const char* source);
+    static unsigned compile_shader(unsigned name, const char* source);
     unsigned name_;
     unsigned shader_vertex_;
     unsigned shader_fragment_;
