@@ -30,7 +30,7 @@ namespace kapusha {
   public:
     Buffer(Binding binding_hint = Binding::Array);
     ~Buffer();
-    void load(void* data, std::size_t size, Usage usage = StaticDraw);
+    void load(const void* data, std::size_t size, Usage usage = StaticDraw);
     inline void alloc(std::size_t size, Usage usage = StaticDraw) {
       load(static_cast<void*>(0), size, usage);
     }

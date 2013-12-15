@@ -11,7 +11,7 @@ namespace kapusha {
   }
   Buffer::~Buffer() { glDeleteBuffers(1, &name_); GL_ASSERT }
   
-  void Buffer::load(void *data, std::size_t size, Usage usage) {
+  void Buffer::load(const void *data, std::size_t size, Usage usage) {
     bind();
     if (size == size_) {
       glBufferSubData(static_cast<GLenum>(binding_hint_), 0, size, data);
