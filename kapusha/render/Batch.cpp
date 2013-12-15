@@ -9,11 +9,15 @@ namespace kapusha {
   Batch::Batch() : count_(0) {}
 
   void Batch::set_attrib_source(int attrib_location,
-    Buffer* buffer, u32 components, u32 offset, u32 stride) {
+    Buffer* buffer, u32 components,
+	AttribType type, u32 offset, u32 stride,
+	AttributeNormalization norm) {
     for (int i = 0; i < MAX_BATCH_ATTRIBS; ++i)
       if (attribs_[i].index == -1) {
         attribs_[i].index = attrib_location;
         attribs_[i].buffer = buffer;
+		attribs_[i].type = static_cast<GLenum>(type);
+		attribs_[i].normalized = static_cast<GLenum>(norm);
         attribs_[i].components = components;
         attribs_[i].offset = reinterpret_cast<void*>(offset);
         attribs_[i].stride = stride;
@@ -52,7 +56,7 @@ namespace kapusha {
   void Batch::Attrib::bind() const {
     if (buffer.get()) buffer->bind(Buffer::Binding::Array);
     else Context::bind_buffer(nullptr, static_cast<int>(Buffer::Binding::Array));
-    glVertexAttribPointer(index, components, GL_FLOAT, GL_FALSE, stride, offset);
+    glVertexAttribPointer(index, components, type, normalized, stride, offset);
     GL_ASSERT
     glEnableVertexAttribArray(index);
     GL_ASSERT

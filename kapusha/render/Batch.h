@@ -15,33 +15,49 @@ namespace kapusha {
       TriangleStrip = GL_TRIANGLE_STRIP,
       TriangleFan = GL_TRIANGLE_FAN
     };
-    enum Index {
+    enum class Index {
       U8 = GL_UNSIGNED_BYTE,
       U16 = GL_UNSIGNED_SHORT,
       U32 = GL_UNSIGNED_INT
     };
+	enum class AttribType {
+	  S8 = GL_BYTE,
+	  U8 = GL_UNSIGNED_BYTE,
+	  S16 = GL_SHORT,
+	  U16 = GL_UNSIGNED_SHORT,
+	  Fixed = GL_FIXED,
+	  Float = GL_FLOAT
+	};
+	enum AttributeNormalization {
+	  Normalized = GL_TRUE,
+	  Unnormalized = GL_FALSE
+	};
 
   public:
     Batch();
     ~Batch() {}
     inline void set_material(Material* material) { material_ = material; }
     inline void set_geometry(Geometry gtype, unsigned first, unsigned count,
-                             Index itype = U16, Buffer *index = 0) {
+                             Index itype = Index::U16, Buffer *index = 0) {
       indices_ = index;
       first_ = first;
       count_ = count;
       geometry_type_ = static_cast<int>(gtype);
-      index_type_ = itype;
+      index_type_ = static_cast<int>(itype);
     }
     void set_attrib_source(int attrib_location,
                          Buffer* buffer, u32 components = 3,
-                         u32 offset = 0, u32 stride = 0);
+						 AttribType type = AttribType::Float,
+                         u32 offset = 0, u32 stride = 0,
+						 AttributeNormalization norm = Unnormalized);
     inline void set_attrib_source(const char *attrib_name,
                          Buffer* buffer, u32 components = 3,
-                         u32 offset = 0, u32 stride = 0) {
+						 AttribType type = AttribType::Float,
+                         u32 offset = 0, u32 stride = 0,
+						 AttributeNormalization norm = Unnormalized) {
       KP_ASSERT(material_.valid());
       set_attrib_source(material_->program()->get_attrib_location(attrib_name),
-                      buffer, components, offset, stride);
+                      buffer, components, type, offset, stride, norm);
     }
     void clear_attributes();
     Material* material() const { return material_.get(); }
@@ -52,6 +68,8 @@ namespace kapusha {
       int index;
       SBuffer buffer;
       int components;
+	  GLenum type;
+	  GLboolean normalized;
       void *offset;
       int stride;
       Attrib() : index(-1) {}
