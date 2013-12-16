@@ -13,6 +13,9 @@ namespace kapusha {
     inline bool is_shift_pressed() const {
       return press_vector_[KeyLeftShift] || press_vector_[KeyRightShift];
     }
+    inline bool is_ctrl_pressed() const {
+      return press_vector_[KeyLeftCtrl] || press_vector_[KeyRightCtrl];
+	}
     
     //! Key codes, they're mostly ASCII
     //! \fixme more
