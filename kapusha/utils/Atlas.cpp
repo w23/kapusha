@@ -14,7 +14,7 @@ Atlas::Atlas(const Surface::Meta& smeta) : surface_(new Surface(smeta)),
 rect2i Atlas::insert(const Surface *surface, vec2i guard) {
   const vec2i size = surface->meta().size + guard * 2;
   rect2i rect = allocate(size, guard);
-  if (rect.isValid()) surface_->blit(rect.min, surface);
+  if (rect.is_valid()) surface_->blit(rect.min, surface);
   return rect;
 }
 rect2i Atlas::allocate(vec2i size, vec2i guard) {

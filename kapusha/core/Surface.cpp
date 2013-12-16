@@ -34,7 +34,7 @@ void Surface::clear() {
 void Surface::blit(vec2i pos, const Surface *source) {
   KP_ASSERT(meta_.format == source->meta().format);
   KP_ASSERT(meta_.bytesPerPixel == source->meta().bytesPerPixel);
-  KP_ASSERT(rect2i(meta_.size).doesContain(rect2i(source->meta().size)+pos));
+  KP_ASSERT(rect2i(meta_.size).does_contain(rect2i(source->meta().size)+pos));
 
   const u8 *psrc = reinterpret_cast<const u8*>(source->pixels_);
   u8 *pdst = reinterpret_cast<u8*>(pixels_)
