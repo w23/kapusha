@@ -75,6 +75,8 @@ namespace kapusha {
       KeyX = 'X',
       KeyY = 'Y',
       KeyZ = 'Z',
+	  KeypadPlus,
+	  KeypadMinus,
       //! modifiers are keys too
       KeyDel = 127,
       KeyIns,

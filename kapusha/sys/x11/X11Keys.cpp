@@ -65,6 +65,8 @@ static Keys::Types xkeyevent_to_keytype(const XKeyEvent *event) {
     XKKK(x, X);
     XKKK(y, Y);
     XKKK(z, Z);
+	XKKK(KP_Add, padPlus);
+	XKKK(KP_Subtract, padMinus);
     XKKK(F1, F1);
     XKKK(F2, F2);
     XKKK(F3, F3);
