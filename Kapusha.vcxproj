@@ -11,8 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="3p\glew\GL\glew.h" />
-    <ClInclude Include="3p\glew\GL\wglew.h" />
     <ClInclude Include="kapusha\app.h" />
     <ClInclude Include="kapusha\app\Application.h" />
     <ClInclude Include="kapusha\core.h" />
@@ -29,8 +27,6 @@
     <ClInclude Include="kapusha\math\rect4.h" />
     <ClInclude Include="kapusha\ooo.h" />
     <ClInclude Include="kapusha\ooo\Camera.h" />
-    <ClInclude Include="kapusha\ooo\Node.h" />
-    <ClInclude Include="kapusha\ooo\Object.h" />
     <ClInclude Include="kapusha\ooo\ooo.h" />
     <ClInclude Include="kapusha\ooo\Reframe.h" />
     <ClInclude Include="kapusha\render.h" />
@@ -56,6 +52,8 @@
     <ClInclude Include="kapusha\render\Sampler.h" />
     <ClInclude Include="kapusha\render\State.h" />
     <ClInclude Include="kapusha\sys\win\WGLContext.h" />
+    <ClInclude Include="kapusha\sys\win\WindowsKeys.h" />
+    <ClInclude Include="kapusha\sys\win\WindowsPointers.h" />
     <ClInclude Include="kapusha\sys\win\windows_inc.h" />
     <ClInclude Include="kapusha\sys\win\wstring.h" />
     <ClInclude Include="kapusha\utils\geometry.h" />
@@ -65,16 +63,16 @@
     <ClInclude Include="kapusha\viewport\IViewport.h" />
     <ClInclude Include="kapusha\viewport\Input.h" />
     <ClInclude Include="kapusha\core\Log.h" />
-    <ClInclude Include="kapusha\sys\win\Window.h" />
+    <ClInclude Include="kapusha\sys\win\WindowController.h" />
+    <ClInclude Include="kapusha\viewport\IViewportController.h" />
+    <ClInclude Include="kapusha\viewport\Keys.h" />
+    <ClInclude Include="kapusha\viewport\Pointers.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="3p\glew\GL\glew.cpp" />
     <ClCompile Include="kapusha\core\assert.cpp" />
     <ClCompile Include="kapusha\core\Surface.cpp" />
     <ClCompile Include="kapusha\io\Socket_win.cpp" />
     <ClCompile Include="kapusha\ooo\Camera.cpp" />
-    <ClCompile Include="kapusha\ooo\Node.cpp" />
-    <ClCompile Include="kapusha\ooo\Object.cpp" />
     <ClCompile Include="kapusha\ooo\Reframe.cpp" />
     <ClCompile Include="kapusha\render\Batch.cpp" />
     <ClCompile Include="kapusha\render\Buffer.cpp" />
@@ -90,12 +88,13 @@
     <ClCompile Include="kapusha\render\State.cpp" />
     <ClCompile Include="kapusha\sys\win\main.cpp" />
     <ClCompile Include="kapusha\sys\win\WGLContext.cpp" />
+    <ClCompile Include="kapusha\sys\win\WindowsKeys.cpp" />
+    <ClCompile Include="kapusha\sys\win\WindowsPointers.cpp" />
     <ClCompile Include="kapusha\utils\geometry.cpp" />
     <ClCompile Include="kapusha\utils\noise.cpp" />
     <ClCompile Include="kapusha\utils\SpectatorCameraController.cpp" />
-    <ClCompile Include="kapusha\viewport\Input.cpp" />
     <ClCompile Include="kapusha\core\Log.cpp" />
-    <ClCompile Include="kapusha\sys\win\Window.cpp" />
+    <ClCompile Include="kapusha\sys\win\WindowController.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{68E4D3F2-26BD-4A4A-92D1-10F2A163ED24}</ProjectGuid>

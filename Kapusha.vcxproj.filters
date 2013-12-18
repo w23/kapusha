@@ -16,9 +16,6 @@
     <Filter Include="3p">
       <UniqueIdentifier>{8909ec91-c2ab-47e1-aa55-0c010a845687}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3p\glew">
-      <UniqueIdentifier>{70cb2d62-5da2-40a2-ad64-57b323493c8a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sys">
       <UniqueIdentifier>{1278242c-6daa-4c24-bc89-e23bff4cf5f3}</UniqueIdentifier>
     </Filter>
@@ -87,15 +84,6 @@
     <ClInclude Include="kapusha\math\vec4.h">
       <Filter>math</Filter>
     </ClInclude>
-    <ClInclude Include="3p\glew\GL\glew.h">
-      <Filter>3p\glew</Filter>
-    </ClInclude>
-    <ClInclude Include="3p\glew\GL\wglew.h">
-      <Filter>3p\glew</Filter>
-    </ClInclude>
-    <ClInclude Include="kapusha\sys\win\Window.h">
-      <Filter>sys</Filter>
-    </ClInclude>
     <ClInclude Include="kapusha\viewport\Input.h">
       <Filter>viewport</Filter>
     </ClInclude>
@@ -147,12 +135,6 @@
     <ClInclude Include="kapusha\ooo\Camera.h">
       <Filter>ooo</Filter>
     </ClInclude>
-    <ClInclude Include="kapusha\ooo\Node.h">
-      <Filter>ooo</Filter>
-    </ClInclude>
-    <ClInclude Include="kapusha\ooo\Object.h">
-      <Filter>ooo</Filter>
-    </ClInclude>
     <ClInclude Include="kapusha\ooo\ooo.h">
       <Filter>ooo</Filter>
     </ClInclude>
@@ -187,6 +169,22 @@
     <ClInclude Include="kapusha\sys\win\wstring.h">
       <Filter>sys</Filter>
     </ClInclude>
+    <ClInclude Include="kapusha\viewport\IViewportController.h">
+      <Filter>viewport</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\viewport\Keys.h">
+      <Filter>viewport</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\viewport\Pointers.h">
+      <Filter>viewport</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\sys\win\WindowsPointers.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\sys\win\WindowsKeys.h" />
+    <ClInclude Include="kapusha\sys\win\WindowController.h">
+      <Filter>sys</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="kapusha\core\Log.cpp">
@@ -216,12 +214,6 @@
     <ClCompile Include="kapusha\math\math.cpp">
       <Filter>math</Filter>
     </ClCompile>
-    <ClCompile Include="kapusha\sys\win\Window.cpp">
-      <Filter>sys</Filter>
-    </ClCompile>
-    <ClCompile Include="kapusha\viewport\Input.cpp">
-      <Filter>viewport</Filter>
-    </ClCompile>
     <ClCompile Include="kapusha\core\assert.cpp">
       <Filter>core</Filter>
     </ClCompile>
@@ -240,12 +232,6 @@
     <ClCompile Include="kapusha\ooo\Camera.cpp">
       <Filter>ooo</Filter>
     </ClCompile>
-    <ClCompile Include="kapusha\ooo\Node.cpp">
-      <Filter>ooo</Filter>
-    </ClCompile>
-    <ClCompile Include="kapusha\ooo\Object.cpp">
-      <Filter>ooo</Filter>
-    </ClCompile>
     <ClCompile Include="kapusha\ooo\Reframe.cpp">
       <Filter>ooo</Filter>
     </ClCompile>
@@ -258,9 +244,6 @@
     <ClCompile Include="kapusha\utils\SpectatorCameraController.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="3p\glew\GL\glew.cpp">
-      <Filter>3p\glew</Filter>
-    </ClCompile>
     <ClCompile Include="kapusha\core\Surface.cpp">
       <Filter>core</Filter>
     </ClCompile>
@@ -272,6 +255,13 @@
     </ClCompile>
     <ClCompile Include="kapusha\io\Socket_win.cpp">
       <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\sys\win\WindowsPointers.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\sys\win\WindowsKeys.cpp" />
+    <ClCompile Include="kapusha\sys\win\WindowController.cpp">
+      <Filter>sys</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

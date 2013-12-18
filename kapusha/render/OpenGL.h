@@ -3,11 +3,16 @@
 #pragma once
 
 #ifdef _WIN32
-#include <GL/glew.h>
-#include <GL/wglew.h>
-#undef min
-#undef max
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
 #include <GL/gl.h>
+#define GL_GLEXT_PROTOTYPES
+#include <3p/gl/glext.h>
 #elif defined(__APPLE__)
 #include "TargetConditionals.h"
 #if TARGET_OS_IPHONE || TARGET_OS_IPHONE_SIMULATOR
