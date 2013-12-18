@@ -11,7 +11,7 @@ WindowController::WindowController(HINSTANCE hInst, const IViewportFactory *fact
   WNDCLASSEX wndclass = { 0 };
   wndclass.cbSize = sizeof wndclass;
   wndclass.style = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
-  wndclass.lpfnWndProc = windowProc;
+  wndclass.lpfnWndProc = window_proc;
   wndclass.hInstance = hInst;
   wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
   wndclass.lpszClassName = L"KapushaWindowClass";
@@ -33,6 +33,10 @@ WindowController::WindowController(HINSTANCE hInst, const IViewportFactory *fact
 
   context_ = new WGLContext(dc_ = GetDC(window_));
   context_->make_current();
+  context_->load_procs();
+
+  viewport_ = factory->create(this);
+  //viewport_->resize(size);
 
   ShowWindow(window_, SW_SHOW);
   SetForegroundWindow(window_);
@@ -46,10 +50,7 @@ WindowController::WindowController(HINSTANCE hInst, const IViewportFactory *fact
 
   //if (wglSwapIntervalEXT) wglSwapIntervalEXT(1);
 
-  pointers_.resize(size);
-
-  viewport_ = factory->create(this);
-  viewport_->resize(size);
+  //pointers_.resize(size);
 }
 
 WindowController::~WindowController() {
@@ -97,7 +98,7 @@ LRESULT WindowController::process_event(UINT msg, WPARAM wParam, LPARAM lParam) 
   return DefWindowProc(window_, msg, wParam, lParam);
 }
 
-LRESULT CALLBACK windowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK window_proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
   WindowController *winctl = reinterpret_cast<WindowController*>(
     GetWindowLongPtr(hWnd, GWLP_USERDATA));
   if (winctl) return winctl->process_event(msg, wParam, lParam);

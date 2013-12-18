@@ -9,6 +9,7 @@ namespace kapusha {
     virtual Context *create_shared_context() const { return nullptr; }
     virtual void make_current();
 
+    void load_procs();
   private:
     HDC dc_;
     HGLRC glrc_;

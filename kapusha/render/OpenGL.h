@@ -11,8 +11,8 @@
 #endif
 #include <windows.h>
 #include <GL/gl.h>
-#define GL_GLEXT_PROTOTYPES
 #include <3p/gl/glext.h>
+#include <kapusha/sys/win/gl_proc.h>
 #elif defined(__APPLE__)
 #include "TargetConditionals.h"
 #if TARGET_OS_IPHONE || TARGET_OS_IPHONE_SIMULATOR
