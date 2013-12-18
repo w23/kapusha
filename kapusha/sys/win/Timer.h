@@ -1,5 +1,7 @@
 #pragma once
+#pragma comment(lib, "winmm.lib")
 #include "windows_inc.h"
+#include <mmsystem.h>
 
 namespace kapusha {
   class Timer {

@@ -185,6 +185,9 @@
     <ClInclude Include="kapusha\sys\win\WindowController.h">
       <Filter>sys</Filter>
     </ClInclude>
+    <ClInclude Include="kapusha\sys\win\Timer.h">
+      <Filter>sys</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="kapusha\core\Log.cpp">

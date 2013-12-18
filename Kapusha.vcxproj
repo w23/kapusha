@@ -51,6 +51,7 @@
     <ClInclude Include="kapusha\core\Shared.h" />
     <ClInclude Include="kapusha\render\Sampler.h" />
     <ClInclude Include="kapusha\render\State.h" />
+    <ClInclude Include="kapusha\sys\win\Timer.h" />
     <ClInclude Include="kapusha\sys\win\WGLContext.h" />
     <ClInclude Include="kapusha\sys\win\WindowsKeys.h" />
     <ClInclude Include="kapusha\sys\win\WindowsPointers.h" />
