@@ -54,15 +54,6 @@
     <ClInclude Include="kapusha\core\Shared.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="kapusha\io\Stream.h">
-      <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="kapusha\io\StreamFile.h">
-      <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="kapusha\io\StreamFile_win.h">
-      <Filter>io</Filter>
-    </ClInclude>
     <ClInclude Include="kapusha\math\mat2.h">
       <Filter>math</Filter>
     </ClInclude>
@@ -210,12 +201,6 @@
     </ClCompile>
     <ClCompile Include="kapusha\render\Program.cpp">
       <Filter>render</Filter>
-    </ClCompile>
-    <ClCompile Include="kapusha\io\Stream.cpp">
-      <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="kapusha\io\StreamFile_win.cpp">
-      <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="kapusha\math\math.cpp">
       <Filter>math</Filter>

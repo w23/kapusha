@@ -1,7 +1,6 @@
 // kapusha/render
 // 2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #include "OpenGL.h"
-#include "../io/Stream.h"
 #include "Buffer.h"
 
 namespace kapusha {
