@@ -35,8 +35,8 @@ else # Not on windows
 endif
 
 # If SDL is specifically on
-ifneq ($(WITH_SDL),1)
-	WITH_X11 := 1
+ifeq ($(WITH_SDL),1)
+	WITH_X11 := 0
 	WITH_EGL := 0
 endif # With SDL
 

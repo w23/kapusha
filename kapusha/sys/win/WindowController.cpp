@@ -98,7 +98,7 @@ LRESULT WindowController::process_event(UINT msg, WPARAM wParam, LPARAM lParam) 
   return DefWindowProc(window_, msg, wParam, lParam);
 }
 
-LRESULT CALLBACK window_proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK WindowController::window_proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
   WindowController *winctl = reinterpret_cast<WindowController*>(
     GetWindowLongPtr(hWnd, GWLP_USERDATA));
   if (winctl) return winctl->process_event(msg, wParam, lParam);

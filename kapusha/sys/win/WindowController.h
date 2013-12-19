@@ -20,7 +20,7 @@ namespace kapusha {
     int run();
 
   protected:
-    friend LRESULT CALLBACK window_proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    static LRESULT CALLBACK window_proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     LRESULT process_event(UINT msg, WPARAM wParam, LPARAM lParam);
 
   private:

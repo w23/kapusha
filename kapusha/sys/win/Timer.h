@@ -1,5 +1,7 @@
 #pragma once
+#ifndef __GNUC__
 #pragma comment(lib, "winmm.lib")
+#endif
 #include "windows_inc.h"
 #include <mmsystem.h>
 
