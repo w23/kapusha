@@ -172,7 +172,6 @@
     <ClInclude Include="kapusha\sys\win\WindowsPointers.h">
       <Filter>sys</Filter>
     </ClInclude>
-    <ClInclude Include="kapusha\sys\win\WindowsKeys.h" />
     <ClInclude Include="kapusha\sys\win\WindowController.h">
       <Filter>sys</Filter>
     </ClInclude>
@@ -180,6 +179,9 @@
       <Filter>sys</Filter>
     </ClInclude>
     <ClInclude Include="kapusha\sys\win\gl_proc.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\sys\win\WindowsKeys.h">
       <Filter>sys</Filter>
     </ClInclude>
   </ItemGroup>
@@ -250,8 +252,10 @@
     <ClCompile Include="kapusha\sys\win\WindowsPointers.cpp">
       <Filter>sys</Filter>
     </ClCompile>
-    <ClCompile Include="kapusha\sys\win\WindowsKeys.cpp" />
     <ClCompile Include="kapusha\sys\win\WindowController.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\sys\win\WindowsKeys.cpp">
       <Filter>sys</Filter>
     </ClCompile>
   </ItemGroup>
