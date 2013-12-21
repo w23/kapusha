@@ -43,14 +43,14 @@ SOURCES += \
 	$(KAPUSHA_SRC)/sys/sdl/main.cpp
 endif
 
-#ifeq ($(WITH_X11),1)
-#SOURCES += \
-#	$(KAPUSHA_SRC)/sys/x11/GLXContext.cpp \
-#	$(KAPUSHA_SRC)/sys/x11/GLXViewportController.cpp \
-#	$(KAPUSHA_SRC)/sys/x11/X11Pointers.cpp \
-#	$(KAPUSHA_SRC)/sys/x11/X11Keys.cpp \
-#	$(KAPUSHA_SRC)/sys/x11/main.cpp
-#endif
+ifeq ($(WITH_X11),1)
+SOURCES += \
+	$(KAPUSHA_SRC)/sys/x11/GLXContext.cpp \
+	$(KAPUSHA_SRC)/sys/x11/GLXViewportController.cpp \
+	$(KAPUSHA_SRC)/sys/x11/X11Pointers.cpp \
+	$(KAPUSHA_SRC)/sys/x11/X11Keys.cpp \
+	$(KAPUSHA_SRC)/sys/x11/main.cpp
+endif
 
 ifeq ($(OS_WINDOWS), 1)
 SOURCES += \

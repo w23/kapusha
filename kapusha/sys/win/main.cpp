@@ -1,4 +1,4 @@
-#include <kapusha/core/Log.h>
+#include <kapusha/core/log.h>
 #include <kapusha/app.h>
 #include "WindowController.h"
 
