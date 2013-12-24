@@ -10,8 +10,8 @@ namespace kapusha {
 
   void Batch::set_attrib_source(int attrib_location,
     Buffer* buffer, u32 components,
-	AttribType type, u32 offset, u32 stride,
-	AttributeNormalization norm) {
+	u32 offset, u32 stride,
+	AttribType type, AttributeNormalization norm) {
     for (int i = 0; i < MAX_BATCH_ATTRIBS; ++i)
       if (attribs_[i].index == -1) {
         attribs_[i].index = attrib_location;

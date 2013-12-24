@@ -47,17 +47,17 @@ namespace kapusha {
     }
     void set_attrib_source(int attrib_location,
                          Buffer* buffer, u32 components = 3,
-						 AttribType type = AttribType::Float,
                          u32 offset = 0, u32 stride = 0,
+                         AttribType type = AttribType::Float,
 						 AttributeNormalization norm = Unnormalized);
     inline void set_attrib_source(const char *attrib_name,
                          Buffer* buffer, u32 components = 3,
-						 AttribType type = AttribType::Float,
                          u32 offset = 0, u32 stride = 0,
+                         AttribType type = AttribType::Float,
 						 AttributeNormalization norm = Unnormalized) {
       KP_ASSERT(material_.valid());
       set_attrib_source(material_->program()->get_attrib_location(attrib_name),
-                      buffer, components, type, offset, stride, norm);
+                      buffer, components, offset, stride, type, norm);
     }
     void clear_attributes();
     Material* material() const { return material_.get(); }
