@@ -1,4 +1,4 @@
-#include <kapusha/app.h>
+#include "../sys.h"
 #include "GLXViewportController.h"
 
 using namespace kapusha;
@@ -11,5 +11,5 @@ void log::sys_write(const char *message) {
 
 int main(int argc, char *argv[]) {
   sys::GLXViewportController controller;
-  return controller.run(the_application.viewport_factory);
+  return controller.run(create_factory());
 }

@@ -1,5 +1,5 @@
 #include <kapusha/core/log.h>
-#include <kapusha/app.h>
+#include <kapusha/sys/sys.h>
 #include "WindowController.h"
 
 using namespace kapusha;
@@ -14,6 +14,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
   UNREFERENCED_PARAMETER(cmdLine);
   UNREFERENCED_PARAMETER(cmdShow);
 
-  WindowController controller(hInst, the_application.viewport_factory);
+  WindowController controller(hInst, ::kapusha::create_factory());
   return controller.run();
 }

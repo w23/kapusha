@@ -1,7 +1,7 @@
 #import "KPAppDelegate.h"
 #import <kapusha/core.h>
-#import <kapusha/app.h>
 #import <kapusha/viewport.h>
+#import <kapusha/sys/sys.h>
 #import <kapusha/sys/osx/KPView.h>
 
 @interface KPAppDelegate () {
@@ -31,7 +31,7 @@
   
   NSRect bounds = NSMakeRect(0, 0, window_.frame.size.width, window_.frame.size.height);
   window_.contentView = [[KPView alloc] initWithFrame:bounds
-                                         viewportFactory:kapusha::the_application.viewport_factory];
+                                         viewportFactory:kapusha::create_factory()];
   
   [window_ makeKeyAndOrderFront:self];
   window_.acceptsMouseMovedEvents = YES;
