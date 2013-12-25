@@ -1,5 +1,4 @@
 #include <memory>
-#include <kapusha/app.h>
 #include <kapusha/viewport.h>
 #include <kapusha/render.h>
 #include <kapusha/ooo.h>
@@ -8,7 +7,7 @@
 #include <kapusha/utils/noise.h>
 using namespace kapusha;
 
-class Ground : public Object {
+class Ground {
 public:
   Ground(int detail = 512, float size = 1000.f, float height = 200.f)
   : height_(height) {
@@ -25,22 +24,23 @@ public:
       vtx[i].pos[1] = getHeight(vec2f(vtx[i].pos[0], vtx[i].pos[2]));
     }
     calculateNormals(vtx->pos, 6, vtx->nor, 6, idx, indices);
-    Buffer *vbuffer = new Buffer(Buffer::BindingArray);
+    Buffer *vbuffer = new Buffer(Buffer::Binding::Array);
     vbuffer->load(vtx, sizeof(vertex) * vertices);
-    Buffer *ibuffer = new Buffer(Buffer::BindingIndex);
+    Buffer *ibuffer = new Buffer(Buffer::Binding::Index);
     ibuffer->load(idx, sizeof(u32) * indices);
     
     Program *prog = new Program(g_shaderVertex, g_shaderFragment);
     Material *mat = new Material(prog);
-    mat->setUniform("uv3_light_dir", vec3f(.5f, 1.f, .5f).normalized());
-    mat->setUniform("uv3_light_color", vec3f(1.f, 1.f, .9f));
+    mat->set_uniform("uv3_light_dir", vec3f(.5f, 1.f, .5f).normalized());
+    mat->set_uniform("uv3_light_color", vec3f(1.f, 1.f, .9f));
     Batch* batch = new Batch();
-    batch->setMaterial(mat);
-    batch->setAttribSource("av4_vertex", vbuffer, 3,  0, sizeof(vertex));
-    batch->setAttribSource("av3_normal", vbuffer, 3, 12, sizeof(vertex));
-    batch->setGeometry(Batch::GeometryTriangleStrip, 0,
-                       indices, Batch::IndexU32, ibuffer);
-    addBatch(batch);
+    batch->set_material(mat);
+    batch->set_attrib_source("av4_vertex", vbuffer, 3,  0, sizeof(vertex));
+    batch->set_attrib_source("av3_normal", vbuffer, 3, 12, sizeof(vertex));
+    batch->set_geometry(Batch::Geometry::TriangleStrip, 0,
+                       indices, Batch::Index::U32, ibuffer);
+    batch_ = batch;
+    loc_mvp_ = mat->get_uniform_location("um4_mvp");
   }
   float getHeight(vec2f at) const {
     float z = 0;
@@ -49,17 +49,23 @@ public:
       z += lerp_noise(at * k) * a;
     return z * height_;
   }
+  void draw(const mat4f mvp) {
+    batch_->uniform_state().set_uniform(loc_mvp_, mvp);
+    batch_->draw();
+  }
 private:
   float height_;
   struct vertex {
     float pos[3];
     float nor[3];
   };
+  int loc_mvp_;
+  SBatch batch_;
   static const char *g_shaderVertex;
   static const char *g_shaderFragment;
 };
 const char* Ground::g_shaderVertex =
-"uniform mat4 um4_mvp, um4_model;\n"
+"uniform mat4 um4_mvp;\n"
 "attribute vec4 av4_vertex;\n"
 "attribute vec3 av3_normal;\n"
 "varying "
@@ -90,7 +96,7 @@ public:
   void draw(int ms, float dt);
   void in_pointers(const Pointers& pointers);
 private:
-  Object* createGround() const;
+  Ground* createGround() const;
 private:
   IViewportController *ctrl_;
   Camera camera_;
@@ -161,10 +167,9 @@ private:
   Preferences p_;
 };
 
-ViewportFactory viewport_factory;
-
 namespace kapusha {
-  Application the_application = {
-    &viewport_factory
-  };
+  const IViewportFactory *create_factory() {
+    static const ViewportFactory factory;
+    return &factory;
+  }
 } // namespace kapusha
