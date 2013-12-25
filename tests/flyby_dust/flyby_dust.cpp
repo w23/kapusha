@@ -1,25 +1,23 @@
-#include <kapusha/app.h>
 #include <kapusha/viewport.h>
 #include <kapusha/render.h>
 #include <kapusha/ooo.h>
 #include <kapusha/utils/SpectatorCameraController.h>
 
 using namespace kapusha;
-class Viewport : public IViewport {
-public:
-  Viewport(IViewportController *controller);
-  virtual ~Viewport() {}
-  virtual void resize(vec2i size);
-  virtual void inputPointer(const PointerState& pointers);
-  virtual void inputKey(const KeyState& keys);
-  virtual void draw(int ms, float dt);
-  
-private:
-  IViewportController *ctrl_;
-  Camera camera_;
-  SpectatorCameraController camctl_;
 
-  SNode root_;
+class Object {
+public:
+  void setBatch(Batch *batch, const char *mvp_uniform_name = "um4_mvp") {
+    batch_ = batch;
+    loc_mvp_ = batch_->material()->get_uniform_location(mvp_uniform_name);
+  }
+  void draw(const mat4f &mvp) {
+    batch_->uniform_state().set_uniform(loc_mvp_, mvp);
+    batch_->draw();
+  }
+private:
+  SBatch batch_;
+  int loc_mvp_;
 };
 
 class Ground : public Object {
@@ -30,6 +28,24 @@ public:
 class Dust : public Object {
 public:
   Dust(int count, float size, float radius);
+};
+
+class Viewport : public IViewport {
+public:
+  Viewport(IViewportController *controller);
+  virtual ~Viewport() {}
+  virtual void resize(vec2i size);
+  virtual void in_pointers(const Pointers& pointers);
+  virtual void in_keys(const Keys& keys);
+  virtual void draw(int ms, float dt);
+  
+private:
+  IViewportController *ctrl_;
+  Camera camera_;
+  SpectatorCameraController camctl_;
+
+  Ground ground_;
+  Dust dust_;
 };
 
 Ground::Ground(float size) {
@@ -60,9 +76,9 @@ Ground::Ground(float size) {
   sampler->upload(Surface::Meta(vec2i(2, 2), Surface::Meta::RGBA8888), tex);
   Program *prog = new Program(svtx, sfrg);
   Material *mat = new Material(prog);
-  mat->setUniform("us2_floor", sampler);
+  mat->set_uniform("us2_floor", sampler);
   Batch* batch = new Batch();
-  batch->setMaterial(mat);
+  batch->set_material(mat);
   vec3f rect[4] = {
     vec3f(-size, 0.f, -size),
     vec3f(-size, 0.f,  size),
@@ -71,9 +87,9 @@ Ground::Ground(float size) {
   };
   Buffer *fsrect = new Buffer();
   fsrect->load(rect, sizeof rect);
-  batch->setAttribSource("av4_vtx", fsrect, 3);
-  batch->setGeometry(Batch::GeometryTriangleFan, 0, 4);
-  addBatch(batch);
+  batch->set_attrib_source("av4_vtx", fsrect, 3);
+  batch->set_geometry(Batch::Geometry::TriangleFan, 0, 4);
+  setBatch(batch);
 }
 
 Dust::Dust(int count, float size, float radius) {
@@ -103,7 +119,7 @@ Dust::Dust(int count, float size, float radius) {
   ;
   Program *prog = new Program(svtx, sfrg);
   Batch* batch = new Batch();
-  batch->setMaterial(new Material(prog));
+  batch->set_material(new Material(prog));
   vec3f *vertices = new vec3f[count], *p = vertices;
   for (int i = 0; i < count; ++i, ++p)
     *p = vec3f(frand(-radius, radius),
@@ -112,22 +128,14 @@ Dust::Dust(int count, float size, float radius) {
   Buffer *fsrect = new Buffer();
   fsrect->load(vertices, sizeof(*vertices) * count);
   delete vertices;
-  batch->setAttribSource("vtx", fsrect, 3, 0, sizeof(vec3f));
-  batch->setGeometry(Batch::GeometryPoints, 0, count);
-  addBatch(batch);
+  batch->set_attrib_source("vtx", fsrect, 3, 0, sizeof(vec3f));
+  batch->set_geometry(Batch::Geometry::Points, 0, count);
+  setBatch(batch);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 Viewport::Viewport(IViewportController *controller)
- : ctrl_(controller), camctl_(camera_) {
-  Node *ndust = new Node();
-  ndust->addObject(new Dust(8192, .1f, 20.f));
-  Node *nground = new Node();
-  nground->addObject(new Ground(20.f));
-  root_.reset(new Node());
-  root_->addChild(ndust);
-  root_->addChild(nground);
-
+ : ctrl_(controller), camctl_(camera_), dust_(8192, .1f, 20.f), ground_(20.f) {
   glEnable(GL_DEPTH_TEST);
   GL_ASSERT
   glEnable(GL_CULL_FACE);
@@ -151,26 +159,26 @@ void Viewport::draw(int ms, float dt) {
   GL_ASSERT
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   GL_ASSERT
-  root_->draw(camera_.getViewProjection());
-  ctrl_->requestRedraw();
+  ground_.draw(camera_.getViewProjection());
+  dust_.draw(camera_.getViewProjection());
 }
 
-void Viewport::inputKey(const KeyState &keys) {
-  if (keys.isKeyPressed(KeyState::KeyEsc))
+void Viewport::in_keys(const Keys &keys) {
+  if (keys.is_key_pressed(Keys::KeyEsc))
     ctrl_->quit(0);
 }
 
-void Viewport::inputPointer(const PointerState& pointers) {
+void Viewport::in_pointers(const Pointers& pointers) {
   camctl_.pointers(pointers);
-  if (pointers.main().wasPressed(PointerState::Pointer::LeftButton)) {
-    ctrl_->setRelativeOnlyPointer(true);
-    ctrl_->hideCursor(true);
-    camctl_.enableOrientation(true);
+  if (pointers.main().was_pressed(Pointers::Pointer::LeftButton)) {
+    ctrl_->grab_input(true);
+    //ctrl_->hideCursor(true);
+    camctl_.enable_orientation(true);
   }
-  if (pointers.main().wasReleased(PointerState::Pointer::LeftButton)) {
-    ctrl_->setRelativeOnlyPointer(false);
-    ctrl_->hideCursor(false);
-    camctl_.enableOrientation(false);
+  if (pointers.main().was_released(Pointers::Pointer::LeftButton)) {
+    ctrl_->grab_input(false);
+    //ctrl_->hideCursor(false);
+    camctl_.enable_orientation(false);
   }
 }
 
@@ -188,10 +196,9 @@ private:
   Preferences prefs_;
 };
 
-ViewportFactory viewport_factory;
-
 namespace kapusha {
-  Application the_application = {
-    &viewport_factory
-  };
+  const IViewportFactory *create_factory() {
+    static const ViewportFactory factory;
+    return &factory;
+  }
 } // namespace kapusha
