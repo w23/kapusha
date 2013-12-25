@@ -28,9 +28,6 @@
     <Filter Include="utils">
       <UniqueIdentifier>{2488db55-bed6-4428-8897-2c4cbb48a86d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="app">
-      <UniqueIdentifier>{e09fe4fa-a170-4ed6-b643-65b4cab8578f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kapusha\core\Log.h">
@@ -144,10 +141,6 @@
     <ClInclude Include="kapusha\core\Surface.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="kapusha\app\Application.h">
-      <Filter>app</Filter>
-    </ClInclude>
-    <ClInclude Include="kapusha\app.h" />
     <ClInclude Include="kapusha\sys\win\WGLContext.h">
       <Filter>sys</Filter>
     </ClInclude>
@@ -183,6 +176,12 @@
     </ClInclude>
     <ClInclude Include="kapusha\sys\win\WindowsKeys.h">
       <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\sys\sys.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\core\Array.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -257,6 +256,9 @@
     </ClCompile>
     <ClCompile Include="kapusha\sys\win\WindowsKeys.cpp">
       <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\core\Array.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

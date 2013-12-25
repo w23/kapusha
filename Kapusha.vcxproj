@@ -11,9 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="kapusha\app.h" />
-    <ClInclude Include="kapusha\app\Application.h" />
     <ClInclude Include="kapusha\core.h" />
+    <ClInclude Include="kapusha\core\Array.h" />
     <ClInclude Include="kapusha\core\assert.h" />
     <ClInclude Include="kapusha\core\core.h" />
     <ClInclude Include="kapusha\core\limits.h" />
@@ -48,6 +47,7 @@
     <ClInclude Include="kapusha\core\Shared.h" />
     <ClInclude Include="kapusha\render\Sampler.h" />
     <ClInclude Include="kapusha\render\State.h" />
+    <ClInclude Include="kapusha\sys\sys.h" />
     <ClInclude Include="kapusha\sys\win\gl_proc.h" />
     <ClInclude Include="kapusha\sys\win\Timer.h" />
     <ClInclude Include="kapusha\sys\win\WGLContext.h" />
@@ -68,6 +68,7 @@
     <ClInclude Include="kapusha\viewport\Pointers.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="kapusha\core\Array.cpp" />
     <ClCompile Include="kapusha\core\assert.cpp" />
     <ClCompile Include="kapusha\core\Surface.cpp" />
     <ClCompile Include="kapusha\io\Socket_win.cpp" />
