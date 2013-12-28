@@ -44,8 +44,8 @@ private:
   Camera camera_;
   SpectatorCameraController camctl_;
 
-  Ground ground_;
   Dust dust_;
+  Ground ground_;
 };
 
 Ground::Ground(float size) {
