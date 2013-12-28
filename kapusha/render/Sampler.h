@@ -8,7 +8,7 @@
 
 namespace kapusha {
   class Framebuffer;
-  class Sampler : public Shareable {
+  class Sampler : public Object {
   public:
     enum FilterMode {
       Linear = GL_LINEAR,

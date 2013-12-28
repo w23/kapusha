@@ -7,7 +7,7 @@
 
 namespace kapusha {
   //! Simple class for handling shader programs
-  class Program : public Shareable {
+  class Program : public Object {
   public:
     struct UniformState {
       void clear();

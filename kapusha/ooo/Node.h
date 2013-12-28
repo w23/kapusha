@@ -1,5 +1,3 @@
-// kapusha/ooo
-// 2012-2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
 #include "../core.h"
 #include "Reframe.h"

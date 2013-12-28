@@ -4,7 +4,7 @@
 #include "Material.h"
 
 namespace kapusha {
-  class Batch : public Shareable {
+  class Batch : public Object {
   public:
     enum class Geometry {
       Points = GL_POINTS,

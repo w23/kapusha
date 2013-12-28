@@ -4,7 +4,7 @@
 
 namespace kapusha {
 //! \brief Bottom-to-top (OpenGL-style) 2D surface
-class Surface : public Shareable {
+class Surface : public Object {
 public:
   struct Meta {
     vec2i size;

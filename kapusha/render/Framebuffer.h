@@ -4,7 +4,7 @@
 #include "Sampler.h"
 
 namespace kapusha {
-  class Framebuffer : public Shareable {
+  class Framebuffer : public Object {
   public:
     Framebuffer();
     ~Framebuffer();

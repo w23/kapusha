@@ -48,7 +48,10 @@
     <ClInclude Include="kapusha\render\Program.h">
       <Filter>render</Filter>
     </ClInclude>
-    <ClInclude Include="kapusha\core\Shared.h">
+    <ClInclude Include="kapusha\core\shared.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\core\Object.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="kapusha\math\mat2.h">
@@ -188,7 +191,13 @@
     <ClCompile Include="kapusha\core\Log.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="kapusha\render\Batch.cpp">
+    <ClCompile Include="kapusha\core\shared.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\core\Object.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Compile="kapusha\render\Batch.cpp">
       <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="kapusha\render\Buffer.cpp">

@@ -5,7 +5,7 @@
 namespace kapusha {
   class Sampler;
   //! Basic material that contains uniform values for specific program
-  class Material : public Shareable {
+  class Material : public Object {
   public:
     inline Material(Program *program) : program_(program) {}
     ~Material() {}

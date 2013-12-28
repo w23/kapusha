@@ -5,7 +5,7 @@
 
 namespace kapusha {
   //! Object is a collection of batches 
-  class Object : public Shareable {
+  class Object : public Object {
   public:
     Object() {}
     virtual ~Object() {}

@@ -6,7 +6,7 @@
 #include "Context.h"
 
 namespace kapusha {
-  class Buffer : public Shareable {
+  class Buffer : public Object {
   public:
     enum class Binding {
       Native = -1,

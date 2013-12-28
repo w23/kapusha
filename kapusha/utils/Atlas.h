@@ -3,7 +3,7 @@
 #include <kapusha/render.h>
 
 namespace kapusha {
-  class Atlas : public Shareable {
+  class Atlas : public Object {
   public:
     Atlas(const Surface::Meta &meta);
 

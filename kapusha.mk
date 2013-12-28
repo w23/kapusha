@@ -6,6 +6,8 @@ KAPUSHA_SRC = $(KAPUSHA_ROOT)kapusha
 
 SOURCES += \
 	$(KAPUSHA_SRC)/core/assert.cpp \
+	$(KAPUSHA_SRC)/core/shared.cpp \
+	$(KAPUSHA_SRC)/core/Object.cpp \
 	$(KAPUSHA_SRC)/core/log.cpp \
 	$(KAPUSHA_SRC)/core/Array.cpp \
 	$(KAPUSHA_SRC)/core/Map.cpp \

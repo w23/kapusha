@@ -44,7 +44,8 @@
     <ClInclude Include="kapusha\math\vec2.h" />
     <ClInclude Include="kapusha\math\vec3.h" />
     <ClInclude Include="kapusha\math\vec4.h" />
-    <ClInclude Include="kapusha\core\Shared.h" />
+    <ClInclude Include="kapusha\core\shared.h" />
+    <ClInclude Include="kapusha\core\Object.h" />
     <ClInclude Include="kapusha\render\Sampler.h" />
     <ClInclude Include="kapusha\render\State.h" />
     <ClInclude Include="kapusha\sys\sys.h" />
@@ -71,6 +72,8 @@
     <ClCompile Include="kapusha\core\Array.cpp" />
     <ClCompile Include="kapusha\core\assert.cpp" />
     <ClCompile Include="kapusha\core\Surface.cpp" />
+    <ClCompile Include="kapusha\core\shared.cpp" />
+    <ClCompile Include="kapusha\core\Object.cpp" />
     <ClCompile Include="kapusha\io\Socket_win.cpp" />
     <ClCompile Include="kapusha\ooo\Camera.cpp" />
     <ClCompile Include="kapusha\ooo\Reframe.cpp" />
