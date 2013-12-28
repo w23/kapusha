@@ -20,12 +20,12 @@ private:
   int loc_mvp_;
 };
 
-class Ground : public Object {
+class Ground : public ::Object {
 public:
   Ground(float size);
 };
 
-class Dust : public Object {
+class Dust : public ::Object {
 public:
   Dust(int count, float size, float radius);
 };

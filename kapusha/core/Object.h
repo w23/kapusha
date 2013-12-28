@@ -29,6 +29,6 @@ public:
   inline int retain_count() const { return retain_count_; }
 
 private:
-  std::atomic_int retain_count_;
+  std::atomic<int> retain_count_;
 };
 } // namespace kapusha
