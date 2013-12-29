@@ -9,15 +9,26 @@ class String : public Object {
 public:
   explicit String(const char *string = nullptr, int length = -1);
   explicit String(const String &string);
+
+  /// \warning valid non-zero length and zero-terminated buffer expected
+  explicit String(const buffer_t &buffer);
+
+  /// \warning valid non-zero length and zero-terminated buffer expected
+  explicit String(buffer_t &&buffer);
+
   ~String();
 
   inline bool empty() const { return length_ == 0; }
   inline size_t length() const { return length_; }
-  inline const char *str() const { return string_; }
+  inline const char *str() const { return buffer_.data_as<char>(); }
   inline char operator[](size_t index) const {
-    KP_ASSERT(index < length_);
-    return string_[index];
+    KP_ASSERT(index < buffer_.size());
+    return buffer_.data_as<char>()[index];
   }
+  inline const buffer_t &buffer() const { return buffer_; }
+  inline operator const char*() const { return str(); }
+  inline operator const buffer_t&() const { return buffer_; }
+  inline operator const buffer_t*() const { return &buffer_; }
 
   bool operator==(const String &other) const;
   bool operator==(const char *other) const;
@@ -25,19 +36,11 @@ public:
 private: // force immutability
   String &operator=(const String &other);
   String &operator=(const String &&other);
-  String &operator=(const char *other);
 
 private:
   void init(const char *source, size_t length);
-
-  /// length of string in chars, not including zero terminator
   size_t length_;
-
-  /// pointer to a zero-terminated string
-  const char *string_;
-
-  /// special case of an empty string points here
-  static const char *g_empty_;
+  buffer_t buffer_;
 }; // class String
 typedef shared<String> SString;
 } // namespace kapusha

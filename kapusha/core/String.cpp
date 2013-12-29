@@ -2,45 +2,29 @@
 #include "String.h"
 
 namespace kapusha {
-const char *String::g_empty_ = "";
-
-String::String(const char *string, int length) {
-  if (!string) length = 0;
-  if (length < 0)
-    init(string, strlen(string));
-  else
-    init(string, length);
+String::String(const char *string, int length)
+  : length_((length < 0) ? (string?strlen(string):0) : length)
+  , buffer_(length_ + 1, string) {
+  buffer_.data_as<char>()[length_] = 0;
 }
 
-String::String(const String &string) {
-  init(string.string_, string.length_);
-}
+String::String(const String &string)
+  : length_(string.length_), buffer_(string.buffer_) {}
 
-void String::init(const char *source, size_t length) {
-  if (length == 0) {
-    length_ = 0;
-    string_ = g_empty_;
-    return;
-  }
+String::String(const buffer_t &buffer)
+  : length_(buffer_.size() - 1), buffer_(buffer) {}
 
-  length_ = length;
-  char *string = new char[length_ + 1];
-  memcpy(string, source, length_);
-  string[length_] = 0; // source string can be non-zero-terminated
-  string_ = string;
-}
+String::String(buffer_t &&buffer)
+  : length_(buffer_.size() - 1), buffer_(std::move(buffer)) {}
 
-String::~String() {
-  if (length_) delete[] string_;
-}
+String::~String() {}
 
 bool String::operator==(const String &other) const {
-  if (length_ != other.length_) return false;
-  return 0 == memcmp(string_, other.string_, length_);
+  return buffer_ == other.buffer_;
 }
 
 bool String::operator==(const char *other) const {
-  return 0 == strncmp(string_, other, length_);
+  return 0 == strncmp(buffer_.data_as<char>(), other, length_);
 }
 
 } // namespace kapusha
