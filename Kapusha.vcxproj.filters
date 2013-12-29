@@ -261,6 +261,7 @@
     <ClInclude Include="kapusha\core\buffer.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="kapusha\sys.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="core">
