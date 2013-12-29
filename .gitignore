@@ -1,5 +1,6 @@
 Debug/
 Release/
+doc/
 .DS_Store
 xcuserdata
 project.xcworkspace
@@ -10,6 +11,7 @@ project.xcworkspace
 *.log
 *.d
 *.sdf
+*.suo
 /ipch
 *.user
 *.exe
