@@ -152,7 +152,7 @@ void Viewport::in_pointers(const Pointers &pointers) {
 class ViewportFactory : public IViewportFactory {
 public:
   ViewportFactory() {
-    p_.window_title = "kapusha demo: terrain";
+    p_.window_title = "kapusha test: terrain";
     p_.flags = Preferences::FlagOpenGL2_1;
   }
   virtual ~ViewportFactory() {}
@@ -167,9 +167,8 @@ private:
   Preferences p_;
 };
 
-namespace kapusha {
-  const IViewportFactory *create_factory() {
-    static const ViewportFactory factory;
-    return &factory;
-  }
-} // namespace kapusha
+const kapusha::IViewportFactory *kapusha_main(
+  kapusha::ObjectArrayOf<kapusha::String> *args) {
+  static const ViewportFactory factory;
+  return &factory;
+}

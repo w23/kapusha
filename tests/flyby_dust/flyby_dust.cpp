@@ -196,9 +196,8 @@ private:
   Preferences prefs_;
 };
 
-namespace kapusha {
-  const IViewportFactory *create_factory() {
-    static const ViewportFactory factory;
-    return &factory;
-  }
-} // namespace kapusha
+const kapusha::IViewportFactory *kapusha_main(
+  kapusha::ObjectArrayOf<kapusha::String> *args) {
+  static const ViewportFactory factory;
+  return &factory;
+}

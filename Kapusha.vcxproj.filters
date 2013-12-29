@@ -82,6 +82,18 @@
     <ClCompile Include="kapusha\sys\win\WindowsPointers.cpp">
       <Filter>sys</Filter>
     </ClCompile>
+    <ClCompile Include="kapusha\core\String.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\sys\win\WString.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\core\ObjectArray.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\core\buffer.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kapusha\core.h" />
@@ -237,8 +249,17 @@
     <ClInclude Include="kapusha\sys\win\WindowsPointers.h">
       <Filter>sys</Filter>
     </ClInclude>
-    <ClInclude Include="kapusha\sys\win\wstring.h">
+    <ClInclude Include="kapusha\core\String.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\sys\win\WString.h">
       <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\core\ObjectArray.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\core\buffer.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

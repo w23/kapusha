@@ -14,9 +14,12 @@
     <ClInclude Include="kapusha\core.h" />
     <ClInclude Include="kapusha\core\Array.h" />
     <ClInclude Include="kapusha\core\assert.h" />
+    <ClInclude Include="kapusha\core\buffer.h" />
     <ClInclude Include="kapusha\core\core.h" />
     <ClInclude Include="kapusha\core\limits.h" />
     <ClInclude Include="kapusha\core\list.h" />
+    <ClInclude Include="kapusha\core\ObjectArray.h" />
+    <ClInclude Include="kapusha\core\String.h" />
     <ClInclude Include="kapusha\core\Surface.h" />
     <ClInclude Include="kapusha\core\types.h" />
     <ClInclude Include="kapusha\io\Socket.h" />
@@ -55,7 +58,7 @@
     <ClInclude Include="kapusha\sys\win\WindowsKeys.h" />
     <ClInclude Include="kapusha\sys\win\WindowsPointers.h" />
     <ClInclude Include="kapusha\sys\win\windows_inc.h" />
-    <ClInclude Include="kapusha\sys\win\wstring.h" />
+    <ClInclude Include="kapusha\sys\win\WString.h" />
     <ClInclude Include="kapusha\utils\geometry.h" />
     <ClInclude Include="kapusha\utils\noise.h" />
     <ClInclude Include="kapusha\utils\SpectatorCameraController.h" />
@@ -71,6 +74,9 @@
   <ItemGroup>
     <ClCompile Include="kapusha\core\Array.cpp" />
     <ClCompile Include="kapusha\core\assert.cpp" />
+    <ClCompile Include="kapusha\core\buffer.cpp" />
+    <ClCompile Include="kapusha\core\ObjectArray.cpp" />
+    <ClCompile Include="kapusha\core\String.cpp" />
     <ClCompile Include="kapusha\core\Surface.cpp" />
     <ClCompile Include="kapusha\core\shared.cpp" />
     <ClCompile Include="kapusha\core\Object.cpp" />
@@ -91,6 +97,7 @@
     <ClCompile Include="kapusha\sys\win\WGLContext.cpp" />
     <ClCompile Include="kapusha\sys\win\WindowsKeys.cpp" />
     <ClCompile Include="kapusha\sys\win\WindowsPointers.cpp" />
+    <ClCompile Include="kapusha\sys\win\WString.cpp" />
     <ClCompile Include="kapusha\utils\geometry.cpp" />
     <ClCompile Include="kapusha\utils\noise.cpp" />
     <ClCompile Include="kapusha\utils\SpectatorCameraController.cpp" />
@@ -138,6 +145,7 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <AdditionalIncludeDirectories>$(ProjectDir)3p\glew;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/GR- %(AdditionalOptions)</AdditionalOptions>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -160,6 +168,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
