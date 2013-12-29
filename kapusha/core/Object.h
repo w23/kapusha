@@ -28,6 +28,11 @@ public:
   /// Get current retain count
   inline int retain_count() const { return retain_count_; }
 
+private: // Object is noncopyable by default
+  Object(const Object &object);
+  Object &operator=(const Object &object);
+  Object &operator=(const Object &&object);
+
 private:
   std::atomic<int> retain_count_;
 };
