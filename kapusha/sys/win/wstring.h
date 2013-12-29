@@ -1,23 +1,26 @@
 #pragma once
+#include <kapusha/core/String.h>
 #include "windows_inc.h"
 
 namespace kapusha {
-  class wstring {
-  public:
-    wstring(const char *string) : wstring_(nullptr), size_(0) {
-      size_ = MultiByteToWideChar(CP_UTF8, 0, string, -1, NULL, 0);
-      if (size_ > 0) {
-        wstring_ = new wchar_t[size_];
-        MultiByteToWideChar(CP_UTF8, 0, string, -1, wstring_, size_);
-        --size_; // do not count null char
-      }
-    }
-    ~wstring() { delete [] wstring_; }
+/// \brief char(utf-8) <-> wchar conversion helper
+///
+/// Internal representation is windows-native wchar_t
+class WString {
+public:
+  explicit WString(const wchar_t *string = nullptr, int length = -1);
+  explicit WString(const char *string);
+  ~WString();
 
-    int size() const { return size_; }
-    operator const wchar_t*() const { return wstring_; }
-  private:
-    wchar_t *wstring_;
-    int size_;
-  };
+  inline int length() const { return length_; }
+  inline operator const wchar_t*() const { return string_; }
+  operator String*() const;
+
+  static String *toString(const wchar_t *wstring, int length = -1);
+private:
+  const wchar_t *string_;
+  int length_;
+
+  static const wchar_t *g_empty_;
+}; // class WString
 } // namespace kapusha

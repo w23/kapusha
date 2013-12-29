@@ -24,7 +24,7 @@ WindowController::WindowController(HINSTANCE hInst, const IViewportFactory *fact
   AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
 
   window_ = CreateWindowEx(WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,
-                           wndclass.lpszClassName, wstring(prefs.window_title),
+                           wndclass.lpszClassName, WString(prefs.window_title),
                            WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_OVERLAPPEDWINDOW,
                            // | WS_VISIBLE, -- makes aero go awaY (?!?!)
                            CW_USEDEFAULT, CW_USEDEFAULT,
