@@ -4,19 +4,26 @@
 namespace kapusha {
 class shared_base {
 public:
-  inline shared_base(Object* t = nullptr) : t_(t) { if (t_) t_->retain(); }
-  inline shared_base(const shared_base& other)
+  inline shared_base(Object *t = nullptr) : t_(t) { if (t_) t_->retain(); }
+  inline shared_base(const shared_base &other)
     : t_(other.t_) { if (t_) t_->retain(); }
+  inline shared_base(shared_base &&other)
+    : t_(other.t_) { other.t_ = nullptr; }
   inline ~shared_base() { if (t_) t_->release(); }
   void reset(Object* r = nullptr);
   inline bool valid() const { return t_ != nullptr; }
-  inline shared_base& operator=(Object* t) { reset(t); return *this; }
-  inline shared_base& operator=(const shared_base& right) {
-    reset(right.t_);
+  inline shared_base &operator=(Object *t) { reset(t); return *this; }
+  inline shared_base &operator=(const shared_base &other) {
+    reset(other.t_);
+    return *this;
+  }
+  inline shared_base &operator=(shared_base &&other) {
+    t_ = other.t_;
+    other.t_ = nullptr;
     return *this;
   }
 protected:
-  Object* t_;
+  Object *t_;
 }; // class shared_base
 
 /// \brief Scope-based auto-container for objects derived from Object class
@@ -34,7 +41,7 @@ public:
   inline T *get() const { return static_cast<T*>(t_); }
   inline T &operator*() const { return *static_cast<T*>(t_); }
   inline T *operator->() const { return static_cast<T*>(t_); }
-  inline shared &operator=(T* t) { reset(t); return *this; }
+  inline shared &operator=(T *t) { reset(t); return *this; }
 }; // class shared<>
 
 typedef shared<Object> SAnything;
