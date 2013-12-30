@@ -25,7 +25,9 @@ namespace kapusha {
 	  U8 = GL_UNSIGNED_BYTE,
 	  S16 = GL_SHORT,
 	  U16 = GL_UNSIGNED_SHORT,
+#if defined(GL_FIXED)
 	  Fixed = GL_FIXED,
+#endif
 	  Float = GL_FLOAT
 	};
 	enum AttributeNormalization {

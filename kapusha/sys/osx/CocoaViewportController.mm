@@ -33,9 +33,9 @@ namespace kapusha {
   void CocoaViewportController::init() {
     KP_ASSERT(!context_);
     KP_ASSERT(!viewport_);
-    context_.reset(new CocoaGLContext([view_ openGLContext]));
+    context_ = new CocoaGLContext([view_ openGLContext]);
     context_->make_current();
-    viewport_.reset(factory_->create(this));
+    viewport_ = factory_->create(this);
     time_.reset();
     prevFrameTime_ = 0;
   }

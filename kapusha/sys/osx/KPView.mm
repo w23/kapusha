@@ -1,7 +1,7 @@
-#include <mach/mach_time.h>
+#import <mach/mach_time.h>
 #import "KPView.h"
 #import "KPView_private.h"
-#include "CocoaViewportController.h"
+#import "CocoaViewportController.h"
 
 using namespace kapusha;
 void log::sys_write(const char *message) { NSLog(@"%s", message); }

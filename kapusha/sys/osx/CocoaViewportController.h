@@ -1,9 +1,9 @@
 #pragma once
-#include <memory>
-#include <kapusha/viewport.h>
-#include "CocoaGLContext.h"
-#include "CocoaKeys.h"
-#include "CocoaPointers.h"
+#import <memory.h>
+#import <kapusha/viewport.h>
+#import "CocoaGLContext.h"
+#import "CocoaKeys.h"
+#import "CocoaPointers.h"
 #import "KPView.h"
 
 namespace kapusha {
@@ -29,8 +29,8 @@ namespace kapusha {
   private:
     KPView *view_;
     const IViewportFactory *factory_;
-    std::unique_ptr<IViewport> viewport_;
-    std::unique_ptr<CocoaGLContext> context_;
+    pointer<IViewport> viewport_;
+    pointer<CocoaGLContext> context_;
     CocoaPointers pointers_;
     CocoaKeys keys_;
     MachTime time_;

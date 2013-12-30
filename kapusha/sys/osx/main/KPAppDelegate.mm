@@ -13,8 +13,10 @@
 - (void)dealloc { [super dealloc]; }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+  const kapusha::IViewportFactory *viewport_factory = kapusha_main(nullptr);
+  
   const kapusha::IViewportFactory::Preferences &prefs
-    = kapusha::the_application.viewport_factory->preferences();
+    = viewport_factory->preferences();
   
   kapusha::vec2i size = prefs.prefer_resolution;
   if (size.x <= 0 || size.y <= 0) size = kapusha::vec2i(640, 480);
@@ -31,7 +33,7 @@
   
   NSRect bounds = NSMakeRect(0, 0, window_.frame.size.width, window_.frame.size.height);
   window_.contentView = [[KPView alloc] initWithFrame:bounds
-                                         viewportFactory:kapusha::create_factory()];
+                                         viewportFactory:viewport_factory];
   
   [window_ makeKeyAndOrderFront:self];
   window_.acceptsMouseMovedEvents = YES;

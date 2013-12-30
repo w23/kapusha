@@ -12,3 +12,4 @@
 #include "String.h"
 #include "ObjectArray.h"
 #include "buffer.h"
+#include "pointer.h"
