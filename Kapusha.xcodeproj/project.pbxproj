@@ -102,8 +102,6 @@
 		E197CBE916B3AD88003FDEF6 /* Reframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D556E5167C996600A360F6 /* Reframe.cpp */; };
 		E197CBEC16B3AD88003FDEF6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
 		E197CBF316B3ADA9003FDEF6 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE042163D925600869CF5 /* GLUT.framework */; };
-		E197CBF616B3AED8003FDEF6 /* Glut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E197CBF416B3AED8003FDEF6 /* Glut.cpp */; };
-		E197CBF716B3AED8003FDEF6 /* Glut.h in Headers */ = {isa = PBXBuildFile; fileRef = E197CBF516B3AED8003FDEF6 /* Glut.h */; };
 		E1993176164E141500E8D9CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993175164E141500E8D9CB /* UIKit.framework */; };
 		E1993178164E141500E8D9CB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993177164E141500E8D9CB /* Foundation.framework */; };
 		E199317A164E141500E8D9CB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1993179164E141500E8D9CB /* CoreGraphics.framework */; };
@@ -264,8 +262,6 @@
 		E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamFile_posix.cpp; sourceTree = "<group>"; };
 		E18DE05C163D9E4600869CF5 /* StreamFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamFile.h; sourceTree = "<group>"; };
 		E197CBF216B3AD88003FDEF6 /* libkapusha-glut.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libkapusha-glut.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E197CBF416B3AED8003FDEF6 /* Glut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Glut.cpp; sourceTree = "<group>"; };
-		E197CBF516B3AED8003FDEF6 /* Glut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Glut.h; sourceTree = "<group>"; };
 		E1993173164E141500E8D9CB /* samples-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "samples-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1993175164E141500E8D9CB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		E1993177164E141500E8D9CB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -640,15 +636,6 @@
 			path = tests;
 			sourceTree = "<group>";
 		};
-		E197CBD616B3A882003FDEF6 /* glut */ = {
-			isa = PBXGroup;
-			children = (
-				E197CBF416B3AED8003FDEF6 /* Glut.cpp */,
-				E197CBF516B3AED8003FDEF6 /* Glut.h */,
-			);
-			path = glut;
-			sourceTree = "<group>";
-		};
 		E1A77CCB165D528A009FF8F3 /* osx */ = {
 			isa = PBXGroup;
 			children = (
@@ -671,7 +658,6 @@
 		E1A77CFD165D5531009FF8F3 /* sys */ = {
 			isa = PBXGroup;
 			children = (
-				E197CBD616B3A882003FDEF6 /* glut */,
 				E1A77CCB165D528A009FF8F3 /* osx */,
 			);
 			name = sys;
@@ -805,7 +791,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E197CBF716B3AED8003FDEF6 /* Glut.h in Headers */,
 				E1BE38971743F1E70029FD4A /* Context.h in Headers */,
 				E1BE389E174400860029FD4A /* Framebuffer.h in Headers */,
 			);
@@ -1092,7 +1077,6 @@
 				E197CBE516B3AD88003FDEF6 /* OpenGL.cpp in Sources */,
 				E197CBE616B3AD88003FDEF6 /* Program.cpp in Sources */,
 				E197CBE916B3AD88003FDEF6 /* Reframe.cpp in Sources */,
-				E197CBF616B3AED8003FDEF6 /* Glut.cpp in Sources */,
 				E19DA3611732325F005B1F74 /* Sampler.cpp in Sources */,
 				E19DA3661732325F005B1F74 /* State.cpp in Sources */,
 				E1BE3873173395610029FD4A /* SpectatorCameraController.cpp in Sources */,
