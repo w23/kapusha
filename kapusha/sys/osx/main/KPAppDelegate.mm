@@ -13,7 +13,13 @@
 - (void)dealloc { [super dealloc]; }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-  const kapusha::IViewportFactory *viewport_factory = kapusha_main(nullptr);
+  NSArray *ns_args = [[NSProcessInfo processInfo] arguments];
+  kapusha::shared<kapusha::ObjectArrayOf<kapusha::String> > args =
+    new kapusha::ObjectArrayOf<kapusha::String>([ns_args count]);
+  for (NSString *arg in ns_args)
+    args->push_back(new kapusha::String([arg UTF8String]));
+  
+  const kapusha::IViewportFactory *viewport_factory = kapusha_main(args.get());
   
   const kapusha::IViewportFactory::Preferences &prefs
     = viewport_factory->preferences();
