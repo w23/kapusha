@@ -14,10 +14,10 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
   NSArray *ns_args = [[NSProcessInfo processInfo] arguments];
-  kapusha::shared<kapusha::ObjectArrayOf<kapusha::String> > args =
-    new kapusha::ObjectArrayOf<kapusha::String>([ns_args count]);
+  kapusha::core::StringArray::shared args =
+    new kapusha::core::StringArray([ns_args count]);
   for (NSString *arg in ns_args)
-    args->push_back(new kapusha::String([arg UTF8String]));
+    args->push_back(new kapusha::core::String([arg UTF8String]));
   
   const kapusha::IViewportFactory *viewport_factory = kapusha_main(args.get());
   

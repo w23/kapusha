@@ -2,7 +2,7 @@
 
 namespace kapusha {
   
-void list::insert(iterator before, void *object) {
+void core::list::insert(iterator before, void *object) {
   item *it = new item(object);
   it->next = before.item_;
   it->prev = before.item_->prev;
@@ -13,7 +13,7 @@ void list::insert(iterator before, void *object) {
   if (before == back_) back_ = it;
 }
 
-list::iterator list::remove(iterator it) {
+  core::list::iterator core::list::remove(iterator it) {
   iterator ret(it.item_->next);
   it.item_->next->prev = it.item_->prev;
   it.item_->prev->next = it.item_->next;

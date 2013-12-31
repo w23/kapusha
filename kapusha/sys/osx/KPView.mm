@@ -4,7 +4,7 @@
 #import "CocoaViewportController.h"
 
 using namespace kapusha;
-void log::sys_write(const char *message) { NSLog(@"%s", message); }
+void core::log::sys_write(const char *message) { NSLog(@"%s", message); }
 
 ////////////////////////////////////////////////////////////////////////////////
 @interface KPView () {

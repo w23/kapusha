@@ -5,13 +5,13 @@
 
 namespace kapusha {
 
-Atlas::Atlas(const Surface::Meta& smeta) : surface_(new Surface(smeta)),
+Atlas::Atlas(const core::Surface::Meta& smeta) : surface_(new core::Surface(smeta)),
   freeRects_(PREALLOCATED_RECTS), dirty_(true) {
   freeRects_.push_back(rect2i(smeta.size));
   surface_->clear();
 }
 
-rect2i Atlas::insert(const Surface *surface, vec2i guard) {
+rect2i Atlas::insert(const core::Surface *surface, vec2i guard) {
   const vec2i size = surface->meta().size + guard * 2;
   rect2i rect = allocate(size, guard);
   if (rect.is_valid()) surface_->blit(rect.min, surface);
