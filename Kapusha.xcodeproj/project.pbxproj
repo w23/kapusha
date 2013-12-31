@@ -69,12 +69,6 @@
 		E172B426171604FD00475227 /* assert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E172B423171604FD00475227 /* assert.cpp */; };
 		E172B427171604FD00475227 /* assert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E172B423171604FD00475227 /* assert.cpp */; };
 		E172B428171604FD00475227 /* assert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E172B423171604FD00475227 /* assert.cpp */; };
-		E184ECD217847197007CDEF3 /* String.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECCC17847197007CDEF3 /* String.cpp */; };
-		E184ECD317847197007CDEF3 /* String.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECCC17847197007CDEF3 /* String.cpp */; };
-		E184ECD417847197007CDEF3 /* String.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECCC17847197007CDEF3 /* String.cpp */; };
-		E184ECE517847224007CDEF3 /* map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECE317847224007CDEF3 /* map.cpp */; };
-		E184ECE617847224007CDEF3 /* map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECE317847224007CDEF3 /* map.cpp */; };
-		E184ECE717847224007CDEF3 /* map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECE317847224007CDEF3 /* map.cpp */; };
 		E184ECE817847224007CDEF3 /* Surface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECE417847224007CDEF3 /* Surface.cpp */; };
 		E184ECE917847224007CDEF3 /* Surface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECE417847224007CDEF3 /* Surface.cpp */; };
 		E184ECEA17847224007CDEF3 /* Surface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E184ECE417847224007CDEF3 /* Surface.cpp */; };
@@ -217,9 +211,7 @@
 		E184ECCD17847197007CDEF3 /* String.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = String.h; sourceTree = "<group>"; };
 		E184ECD7178471FA007CDEF3 /* array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = array.h; sourceTree = "<group>"; };
 		E184ECD8178471FA007CDEF3 /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
-		E184ECD9178471FA007CDEF3 /* map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = map.h; sourceTree = "<group>"; };
 		E184ECDA178471FA007CDEF3 /* Surface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Surface.h; sourceTree = "<group>"; };
-		E184ECE317847224007CDEF3 /* map.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = map.cpp; sourceTree = "<group>"; };
 		E184ECE417847224007CDEF3 /* Surface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Surface.cpp; sourceTree = "<group>"; };
 		E184ECEC17848039007CDEF3 /* Face.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Face.cpp; sourceTree = "<group>"; };
 		E184ECED17848039007CDEF3 /* Face.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Face.h; sourceTree = "<group>"; };
@@ -280,8 +272,6 @@
 		E19DA36C1732D278005B1F74 /* render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = render.h; path = kapusha/render.h; sourceTree = "<group>"; };
 		E19DA36D1732D278005B1F74 /* viewport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = viewport.h; path = kapusha/viewport.h; sourceTree = "<group>"; };
 		E1A77CA1165D39F9009FF8F3 /* demo-dust.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "demo-dust.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E1A8E7DF16915BD10084718E /* Render.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Render.cpp; sourceTree = "<group>"; };
-		E1BD0C1D164F72A900A3454C /* Render.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Render.h; sourceTree = "<group>"; };
 		E1BD8D6716BECE1500FBE9DC /* rect4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rect4.h; sourceTree = "<group>"; };
 		E1BE386F173395610029FD4A /* SpectatorCameraController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpectatorCameraController.cpp; sourceTree = "<group>"; };
 		E1BE3870173395610029FD4A /* SpectatorCameraController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpectatorCameraController.h; sourceTree = "<group>"; };
@@ -422,11 +412,11 @@
 		E172B422171602D200475227 /* viewport */ = {
 			isa = PBXGroup;
 			children = (
-				E1C33730182E678900F56270 /* Keys.h */,
-				E1C33731182E678900F56270 /* Pointers.h */,
 				E15E63FA165E84150032BBC2 /* Input.h */,
 				E18DDFEC163D8EED00869CF5 /* IViewport.h */,
 				E1EB518D17A9638C00A76D62 /* IViewportController.h */,
+				E1C33730182E678900F56270 /* Keys.h */,
+				E1C33731182E678900F56270 /* Pointers.h */,
 			);
 			name = viewport;
 			path = kapusha/viewport;
@@ -496,8 +486,6 @@
 				E18DDFD9163D8EED00869CF5 /* OpenGL.h */,
 				E18DDFDA163D8EED00869CF5 /* Program.cpp */,
 				E18DDFDB163D8EED00869CF5 /* Program.h */,
-				E1A8E7DF16915BD10084718E /* Render.cpp */,
-				E1BD0C1D164F72A900A3454C /* Render.h */,
 				E12C83C016BD500E000C2818 /* Limits.h */,
 				E1BE38911743F1E60029FD4A /* Context.cpp */,
 				E1BE38921743F1E60029FD4A /* Context.h */,
@@ -546,32 +534,30 @@
 		E18DDFEB163D8EED00869CF5 /* core */ = {
 			isa = PBXGroup;
 			children = (
-				E15461D61871D49300E0F475 /* buffer.cpp */,
-				E15461D71871D49300E0F475 /* buffer.h */,
-				E15461D81871D49300E0F475 /* list.cpp */,
-				E15461D91871D49300E0F475 /* Object.cpp */,
-				E15461DA1871D49300E0F475 /* Object.h */,
-				E15461DB1871D49300E0F475 /* ObjectArray.cpp */,
-				E15461DC1871D49300E0F475 /* ObjectArray.h */,
-				E15461DD1871D49300E0F475 /* shared.cpp */,
-				E15461DE1871D49300E0F475 /* String.cpp */,
-				E15461DF1871D49300E0F475 /* String.h */,
 				E184ECFE1785E9E4007CDEF3 /* array.cpp */,
 				E184ECD7178471FA007CDEF3 /* array.h */,
 				E172B423171604FD00475227 /* assert.cpp */,
 				E172B424171604FD00475227 /* assert.h */,
+				E15461D61871D49300E0F475 /* buffer.cpp */,
+				E15461D71871D49300E0F475 /* buffer.h */,
 				E18DDFEF163D8EED00869CF5 /* core.h */,
 				E172B425171604FD00475227 /* limits.h */,
+				E15461D81871D49300E0F475 /* list.cpp */,
 				E184ECD8178471FA007CDEF3 /* list.h */,
 				E18DDFED163D8EED00869CF5 /* log.cpp */,
 				E18DDFEE163D8EED00869CF5 /* log.h */,
-				E184ECE317847224007CDEF3 /* map.cpp */,
-				E184ECD9178471FA007CDEF3 /* map.h */,
+				E15461D91871D49300E0F475 /* Object.cpp */,
+				E15461DA1871D49300E0F475 /* Object.h */,
+				E15461DB1871D49300E0F475 /* ObjectArray.cpp */,
+				E15461DC1871D49300E0F475 /* ObjectArray.h */,
+				E15461FA1871E2A100E0F475 /* pointer.h */,
+				E15461DD1871D49300E0F475 /* shared.cpp */,
 				E1E74B6E1644551C0038E873 /* shared.h */,
+				E15461DE1871D49300E0F475 /* String.cpp */,
+				E15461DF1871D49300E0F475 /* String.h */,
 				E184ECE417847224007CDEF3 /* Surface.cpp */,
 				E184ECDA178471FA007CDEF3 /* Surface.h */,
 				E168ED901697E6250020F03F /* types.h */,
-				E15461FA1871E2A100E0F475 /* pointer.h */,
 			);
 			name = core;
 			path = kapusha/core;
@@ -1028,8 +1014,6 @@
 				E1BE3886173F7AAA0029FD4A /* noise.cpp in Sources */,
 				E1BE38941743F1E70029FD4A /* Context.cpp in Sources */,
 				E1BE389B174400860029FD4A /* Framebuffer.cpp in Sources */,
-				E184ECD317847197007CDEF3 /* String.cpp in Sources */,
-				E184ECE617847224007CDEF3 /* map.cpp in Sources */,
 				E184ECE917847224007CDEF3 /* Surface.cpp in Sources */,
 				E1F5898617FB325300548AB8 /* Socket_nix.cpp in Sources */,
 				E184ECF817849961007CDEF3 /* Atlas.cpp in Sources */,
@@ -1084,8 +1068,6 @@
 				E1BE3888173F7AAA0029FD4A /* noise.cpp in Sources */,
 				E1BE38951743F1E70029FD4A /* Context.cpp in Sources */,
 				E1BE389C174400860029FD4A /* Framebuffer.cpp in Sources */,
-				E184ECD417847197007CDEF3 /* String.cpp in Sources */,
-				E184ECE717847224007CDEF3 /* map.cpp in Sources */,
 				E184ECEA17847224007CDEF3 /* Surface.cpp in Sources */,
 				E184ED021785E9E4007CDEF3 /* array.cpp in Sources */,
 			);
@@ -1127,8 +1109,6 @@
 				E15461E01871D49300E0F475 /* buffer.cpp in Sources */,
 				E1BE389A174400860029FD4A /* Framebuffer.cpp in Sources */,
 				E15461E51871D49300E0F475 /* list.cpp in Sources */,
-				E184ECD217847197007CDEF3 /* String.cpp in Sources */,
-				E184ECE517847224007CDEF3 /* map.cpp in Sources */,
 				E184ECE817847224007CDEF3 /* Surface.cpp in Sources */,
 				E184ECF717849961007CDEF3 /* Atlas.cpp in Sources */,
 				E184ECFF1785E9E4007CDEF3 /* array.cpp in Sources */,
