@@ -8,7 +8,6 @@
 #include "list.h"
 #include "Surface.h"
 #include "Array.h"
-#include "Map.h"
 #include "String.h"
 #include "ObjectArray.h"
 #include "buffer.h"
