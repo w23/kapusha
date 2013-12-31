@@ -1,9 +1,8 @@
 #pragma once
+#include <kapusha/core/String.h>
 
 namespace kapusha {
-  class IViewportFactory;
-  class String;
-  template <typename T> class ObjectArrayOf;
+class IViewportFactory;
 } // namespace kapusha
 
 /// \brief main() function for kapusha/sys-based apps
@@ -14,5 +13,4 @@ namespace kapusha {
 ///   Does not include executable file name
 /// \return Viewport factory that will be read for context parameters and
 ///   will be used to create a viewport.
-const kapusha::IViewportFactory *kapusha_main(
-  kapusha::ObjectArrayOf<kapusha::String> *args);
+const kapusha::IViewportFactory *kapusha_main(kapusha::core::StringArray *args);

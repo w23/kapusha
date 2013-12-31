@@ -4,6 +4,7 @@
 #include "assert.h"
 
 namespace kapusha {
+namespace core {
 //! \brief Basic array for mostly POD types
 class Array {
 public:
@@ -84,4 +85,5 @@ public:
   const T& operator[](unsigned index) const { return *get<T>(index); }
   T& operator[](unsigned index) { return *get<T>(index); }
 }; // class ArrayOf
+} // namespace core
 } // namespace kapusha

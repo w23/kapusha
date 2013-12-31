@@ -1,6 +1,8 @@
 #include "WString.h"
 
 namespace kapusha {
+namespace sys {
+namespace windows {
 const wchar_t *WString::g_empty_ = L"";
 
 WString::WString(const wchar_t *string, int length) {
@@ -31,13 +33,15 @@ WString::WString(const char *string) : string_(g_empty_), length_(0) {
 
 WString::~WString() { if (length_ != 0) delete [] string_; }
 
-String *WString::toString(const wchar_t *wstring, int wlength) {
+core::String *WString::toString(const wchar_t *wstring, int wlength) {
   int length = WideCharToMultiByte(CP_UTF8, 0, wstring, wlength, NULL, 0, NULL, NULL);
-  if (length < 1) return new String();
+  if (length < 1) return new core::String();
 
-  buffer_t buffer(length);
+  core::buffer_t buffer(length);
   WideCharToMultiByte(CP_UTF8, 0, wstring, wlength, buffer.data_as<char>(), length, NULL, NULL);
-  return new String(std::move(buffer));
+  return new core::String(std::move(buffer));
 }
 
+} // namespace windows
+} // namespace sys
 } // namespace kapusha

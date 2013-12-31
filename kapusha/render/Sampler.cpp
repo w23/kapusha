@@ -19,7 +19,7 @@ namespace kapusha {
     init(magnification, minification);
   }
 
-  Sampler::Sampler(const Surface* source,
+  Sampler::Sampler(const core::Surface *source,
                    FilterMode magnification, FilterMode minification) {
     init(magnification, minification);
     upload(source);
@@ -32,34 +32,34 @@ namespace kapusha {
     magnification_ = filter;
   }
 
-  void Sampler::upload(const Surface::Meta &meta, const void *data) {
+  void Sampler::upload(const core::Surface::Meta &meta, const void *data) {
     //L("Loading texture: %dx%d format = %d",
     //  meta.size.x, meta.size.y, meta.format);
     //! \todo table, not switch?
     unsigned internal, format, type;
     switch (meta.format) {
-      case Surface::Meta::RGBA8888:
+      case core::Surface::Meta::RGBA8888:
         internal = GL_RGBA, format = GL_RGBA, type = GL_UNSIGNED_BYTE;
         break;
-      case Surface::Meta::BGRA8888:
+      case core::Surface::Meta::BGRA8888:
         internal = GL_RGBA, format = GL_BGRA, type = GL_UNSIGNED_BYTE;
         break;
-      case Surface::Meta::RGB565:
+      case core::Surface::Meta::RGB565:
         internal = GL_RGB, format = GL_RGB, type = GL_UNSIGNED_SHORT_5_6_5;
         break;
-      case Surface::Meta::RG88:
+      case core::Surface::Meta::RG88:
 #if KAPUSHA_GLES
         internal = GL_LUMINANCE_ALPHA, format = GL_LUMINANCE_ALPHA, type = GL_UNSIGNED_BYTE;
 #else
         internal = GL_RG, format = GL_RG, type = GL_UNSIGNED_BYTE;
 #endif
         break;
-      case Surface::Meta::R8:
+      case core::Surface::Meta::R8:
         //internal = GL_LUMINANCE, format = GL_LUMINANCE, type = GL_UNSIGNED_BYTE;
         internal = GL_ALPHA, format = GL_ALPHA, type = GL_UNSIGNED_BYTE;
         break;
 #if defined(GL_RGBA_FLOAT32_APPLE)
-      case Surface::Meta::RGBAF32:
+      case core::Surface::Meta::RGBAF32:
         internal = GL_RGBA_FLOAT32_APPLE, format = GL_RGBA, type = GL_FLOAT;
         break;
 #endif

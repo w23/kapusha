@@ -4,9 +4,13 @@
 #include "WString.h"
 #include <shellapi.h> // CommandLineToArgvW
 
-using namespace kapusha;
+using kapusha::core::StringArray;
+using kapusha::sys::windows::WString;
 
-void log::sys_write(const char *message) {
+/// \todo move to sys::windows
+using kapusha::WindowController;
+
+void kapusha::core::log::sys_write(const char *message) {
   OutputDebugStringA(message);
   OutputDebugStringA("\n");
 }
@@ -16,7 +20,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
   UNREFERENCED_PARAMETER(cmdLine);
   UNREFERENCED_PARAMETER(cmdShow);
 
-  shared<ObjectArrayOf<String> > args(new ObjectArrayOf<String>());
+  StringArray::shared args(new StringArray());
   int wargc = 0;
   LPWSTR *wargv = CommandLineToArgvW(GetCommandLineW(), &wargc);
 
@@ -28,6 +32,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
 
   LocalFree(wargv);
 
-  WindowController controller(hInst, ::kapusha_main(args.get()));
+  WindowController controller(hInst, ::kapusha_main(args));
   return controller.run();
 }

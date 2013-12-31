@@ -2,6 +2,8 @@
 #include "Object.h"
 
 namespace kapusha {
+namespace core {
+
 class shared_base {
 public:
   inline shared_base(Object *t = nullptr) : t_(t) { if (t_) t_->retain(); }
@@ -36,8 +38,7 @@ public:
 #if !defined(_MSC_VER)
   inline explicit operator bool() const { return t_; }
 #endif
-  inline operator T*() const { return t_; }
-  inline operator const T*() const { return t_; }
+  inline operator T*() const { return static_cast<T*>(t_); }
   inline T *get() const { return static_cast<T*>(t_); }
   inline T &operator*() const { return *static_cast<T*>(t_); }
   inline T *operator->() const { return static_cast<T*>(t_); }
@@ -45,4 +46,6 @@ public:
 }; // class shared<>
 
 typedef shared<Object> SAnything;
+
+} // namespace core
 } // namespace kapusha

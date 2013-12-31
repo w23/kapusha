@@ -1,6 +1,7 @@
 #pragma once
 
 namespace kapusha {
+namespace core {
 /// \brief simple buffer for \a stuff
 struct buffer_t {
   explicit buffer_t(size_t size = 0, const void *data = nullptr);
@@ -30,4 +31,5 @@ private:
 
   void init_copy(size_t size, const void *data);
 }; // struct buffer_t
+} // namespace core
 } // namespace kapusha

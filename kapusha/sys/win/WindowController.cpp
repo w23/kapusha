@@ -4,6 +4,8 @@
 #include "wstring.h"
 
 namespace kapusha {
+using sys::windows::WString;
+
 WindowController::WindowController(HINSTANCE hInst, const IViewportFactory *factory)
   : viewport_(nullptr), need_redraw_(true) {
   const IViewportFactory::Preferences &prefs = factory->preferences();

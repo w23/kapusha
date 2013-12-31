@@ -8,7 +8,7 @@
 
 namespace kapusha {
   class Framebuffer;
-  class Sampler : public Object {
+  class Sampler : public core::Object {
   public:
     enum FilterMode {
       Linear = GL_LINEAR,
@@ -20,32 +20,32 @@ namespace kapusha {
     };
     Sampler(FilterMode magnification = Linear,
             FilterMode minification = Nearest);//LinearMipmapLinear);
-    Sampler(const Surface* source,
+    Sampler(const core::Surface* source,
             FilterMode magnification = Linear,
             FilterMode minification = Nearest);//LinearMipmapLinear);
     ~Sampler();
     void setMagFilter(FilterMode filter);
     inline void setMinFilter(FilterMode filter) { minification_ = filter; }
-    inline void allocate(const Surface::Meta &meta) {
+    inline void allocate(const core::Surface::Meta &meta) {
       upload(meta, nullptr);
     }
-    inline void upload(const Surface *source) {
+    inline void upload(const core::Surface *source) {
       upload(source->meta(), source->pixels());
     }
-    void upload(const Surface::Meta &meta, const void *data);
-    const Surface::Meta& meta() const { return meta_; }
+    void upload(const core::Surface::Meta &meta, const void *data);
+    const core::Surface::Meta& meta() const { return meta_; }
     inline void bind(int unit = -1) const {
       Context::bind_sampler(this, unit);
     }
   private:
     void init(FilterMode magnification, FilterMode minification);
     unsigned name_;
-    Surface::Meta meta_;
+    core::Surface::Meta meta_;
     FilterMode magnification_, minification_;
   protected:
     friend class Context;
     friend class Framebuffer;
     inline unsigned name() const { return name_; }
   }; // class Sampler
-  typedef shared<Sampler> SSampler;
+  typedef core::shared<Sampler> SSampler;
 } // namespace kapusha

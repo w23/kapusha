@@ -4,7 +4,7 @@
 #include "Sampler.h"
 
 namespace kapusha {
-  class Framebuffer : public Object {
+  class Framebuffer : public core::Object {
   public:
     Framebuffer();
     ~Framebuffer();
@@ -37,5 +37,5 @@ namespace kapusha {
     const GLenum *buffers() const { return buffers_; }
     int buffersCount() const { return n_bufs_; }
   };
-  typedef shared<Framebuffer> SFramebuffer;
+  typedef core::shared<Framebuffer> SFramebuffer;
 } // namespace kapusha

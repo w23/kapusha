@@ -7,7 +7,7 @@
 
 namespace kapusha {
   //! Simple class for handling shader programs
-  class Program : public Object {
+  class Program : public core::Object {
   public:
     struct UniformState {
       void clear();
@@ -93,5 +93,5 @@ namespace kapusha {
     friend class Context;
     inline unsigned name() const { return name_; }
   }; // class Program
-  typedef shared<Program> SProgram;
+  typedef core::shared<Program> SProgram;
 } // namespace kapusha

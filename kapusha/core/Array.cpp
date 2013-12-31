@@ -2,6 +2,7 @@
 #include "Array.h"
 
 namespace kapusha {
+namespace core {
 Array::Array(u32 item_size, u32 reserved) {
   init(item_size, reserved);
 }
@@ -62,5 +63,5 @@ void Array::erase(u32 index, u32 count) {
     item_size_ * (size_ - index - count));
   size_ -= count;
 }
-
+} // namespace core
 } // namespace kapusha

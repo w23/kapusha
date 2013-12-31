@@ -3,9 +3,12 @@
 #include "assert.h"
 
 namespace kapusha {
+namespace core {
+
 /// \brief Dynamic array of Objects
 class ObjectArray : public Object {
 public:
+  typedef shared<ObjectArray> shared;
   ObjectArray(size_t reserve = 0);
   ~ObjectArray();
 
@@ -31,4 +34,6 @@ public:
     return static_cast<T*>(ObjectArray::operator[](index));
   }
 }; // class ObjectArrayOf
+
+} // namespace core
 } // namespace kapusha

@@ -1,6 +1,8 @@
 #include "ObjectArray.h"
 
 namespace kapusha {
+namespace core {
+
 ObjectArray::ObjectArray(size_t reserve) : size_(0), reserved_(0)
   , buffer_(nullptr)  {
   this->reserve(reserve);
@@ -27,4 +29,5 @@ void ObjectArray::push_back(Object *object) {
   ++size_;
 }
 
+} // namespace core
 } // namespace kapusha

@@ -5,7 +5,7 @@
 namespace kapusha {
   class Sampler;
   //! Basic material that contains uniform values for specific program
-  class Material : public Object {
+  class Material : public core::Object {
   public:
     inline Material(Program *program) : program_(program) {}
     ~Material() {}
@@ -36,5 +36,5 @@ namespace kapusha {
     BlendState blend_;
     DepthState depth_;
   }; // class Material
-  typedef shared<Material> SMaterial;
+  typedef core::shared<Material> SMaterial;
 }

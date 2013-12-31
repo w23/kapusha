@@ -167,8 +167,7 @@ private:
   Preferences p_;
 };
 
-const kapusha::IViewportFactory *kapusha_main(
-  kapusha::ObjectArrayOf<kapusha::String> *args) {
+const kapusha::IViewportFactory *kapusha_main(kapusha::core::StringArray *args) {
   static const ViewportFactory factory;
   return &factory;
 }

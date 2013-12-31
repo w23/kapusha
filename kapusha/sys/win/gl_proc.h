@@ -1,6 +1,6 @@
 #pragma once
 
-//! \todo auto-generate this
+/// \todo auto-generate this
 #define KP_GL_PROCS \
   KP_GL_PROC(PFNGLDELETEBUFFERSPROC, glDeleteBuffers); \
   KP_GL_PROC(PFNGLGENBUFFERSPROC, glGenBuffers); \

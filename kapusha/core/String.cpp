@@ -2,6 +2,8 @@
 #include "String.h"
 
 namespace kapusha {
+namespace core {
+
 String::String(const char *string, int length)
   : length_((length < 0) ? (string?strlen(string):0) : length)
   , buffer_(length_ + 1, string) {
@@ -27,4 +29,5 @@ bool String::operator==(const char *other) const {
   return 0 == strncmp(buffer_.data_as<char>(), other, length_);
 }
 
+} // namespace core
 } // namespace kapusha

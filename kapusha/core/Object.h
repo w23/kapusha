@@ -4,6 +4,8 @@
 /// \warning kapusha does not support multiple inheritance by design
 
 namespace kapusha {
+namespace core {
+
 /// \brief Base object, provides reference-counting
 ///
 /// Every non-trivial class instances of which are potentially to be shared
@@ -36,4 +38,6 @@ private: // Object is noncopyable by default
 private:
   std::atomic<int> retain_count_;
 };
+
+} // namespace core
 } // namespace kapusha

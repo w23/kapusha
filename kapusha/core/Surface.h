@@ -2,7 +2,11 @@
 #include "shared.h"
 #include <kapusha/math.h>
 
+/// \todo this doesn't belong in here
+
 namespace kapusha {
+namespace core {
+
 //! \brief Bottom-to-top (OpenGL-style) 2D surface
 class Surface : public Object {
 public:
@@ -53,4 +57,6 @@ private:
   bool owner_;
 };
 typedef shared<Surface> SSurface;
+
+} // namespace core
 } // namespace kapusha

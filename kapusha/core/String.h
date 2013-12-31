@@ -2,11 +2,15 @@
 #include "assert.h"
 #include "shared.h"
 #include "buffer.h"
+#include "ObjectArray.h"
 
 namespace kapusha {
+namespace core {
+
 /// \brief LOL Immutable string
 class String : public Object {
 public:
+  typedef shared<String> shared;
   explicit String(const char *string = nullptr, int length = -1);
   explicit String(const String &string);
 
@@ -43,4 +47,13 @@ private:
   buffer_t buffer_;
 }; // class String
 typedef shared<String> SString;
+
+class StringArray : public ObjectArrayOf<String> {
+public:
+  typedef ObjectArrayOf<String> base;
+  typedef core::shared<StringArray> shared;
+  StringArray(size_t reserved = 0) : base(reserved) {}
+};
+
+} // namespace core
 } // namespace kapusha

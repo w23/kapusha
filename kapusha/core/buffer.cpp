@@ -2,6 +2,7 @@
 #include "buffer.h"
 
 namespace kapusha {
+namespace core {
 buffer_t::buffer_t(size_t size, const void *data) : data_(nullptr) {
   init_copy(size, data);
 }
@@ -51,4 +52,5 @@ bool buffer_t::operator==(const buffer_t &other) const {
   return 0 == memcmp(data_, other.data_, size_);
 }
 
+} // namespace core
 } // namespace kapusha

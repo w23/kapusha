@@ -6,7 +6,7 @@
 #include "Context.h"
 
 namespace kapusha {
-  class Buffer : public Object {
+  class Buffer : public core::Object {
   public:
     enum class Binding {
       Native = -1,
@@ -49,7 +49,7 @@ namespace kapusha {
     inline unsigned name() const { return name_; }
     inline Binding binding_hint() const { return binding_hint_; }
   };
-  typedef shared<Buffer> SBuffer;
+  typedef core::shared<Buffer> SBuffer;
 
   inline bool operator==(Buffer::Binding b, int v) {
 	return static_cast<int>(b) == v;

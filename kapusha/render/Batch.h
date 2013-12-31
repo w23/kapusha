@@ -4,7 +4,7 @@
 #include "Material.h"
 
 namespace kapusha {
-  class Batch : public Object {
+  class Batch : public core::Object {
   public:
     enum class Geometry {
       Points = GL_POINTS,
@@ -86,5 +86,5 @@ namespace kapusha {
     unsigned geometry_type_;
     unsigned index_type_;
   };
-  typedef shared<Batch> SBatch;
+  typedef core::shared<Batch> SBatch;
 } // namespace kapusha

@@ -73,7 +73,7 @@ Ground::Ground(float size) {
   "}\n";
   static u32 tex[4] = { 0xffffffff, 0, 0, 0xffffffff };
   Sampler *sampler = new Sampler(Sampler::Nearest, Sampler::Nearest);
-  sampler->upload(Surface::Meta(vec2i(2, 2), Surface::Meta::RGBA8888), tex);
+  sampler->upload(core::Surface::Meta(vec2i(2, 2), core::Surface::Meta::RGBA8888), tex);
   Program *prog = new Program(svtx, sfrg);
   Material *mat = new Material(prog);
   mat->set_uniform("us2_floor", sampler);
@@ -196,8 +196,7 @@ private:
   Preferences prefs_;
 };
 
-const kapusha::IViewportFactory *kapusha_main(
-  kapusha::ObjectArrayOf<kapusha::String> *args) {
+const kapusha::IViewportFactory *kapusha_main(kapusha::core::StringArray *args) {
   static const ViewportFactory factory;
   return &factory;
 }

@@ -3,6 +3,7 @@
 #include "Surface.h"
 
 namespace kapusha {
+namespace core {
 
 void Surface::Meta::init() {
   switch(format) {
@@ -48,4 +49,5 @@ void Surface::blit(vec2i pos, const Surface *source) {
   }
 }
 
+} // namespace core
 } // namespace kapusha

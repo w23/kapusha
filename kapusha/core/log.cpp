@@ -4,6 +4,7 @@
 #include "limits.h"
 
 namespace kapusha {
+namespace core {
   static FILE *g_log_file;
   static char g_log_messsage_buffer[KAPUSHA_MAX_LOG_MESSAGE_SIZE];
   void log::open(const char* filename) {
@@ -25,4 +26,5 @@ namespace kapusha {
     sys_write(g_log_messsage_buffer);
     va_end(args);
   }
+} // namespace core
 } // namespace kapusha

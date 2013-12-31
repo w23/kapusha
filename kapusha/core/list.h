@@ -2,6 +2,7 @@
 #include "shared.h"
 
 namespace kapusha {
+namespace core {
 
 // A list of simple pointers
 struct list {
@@ -44,4 +45,6 @@ private:
   item end_;
   item *front_, *back_;
 }; // struct list
+
+} // namespace core
 } // namespace kapusha
