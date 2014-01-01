@@ -1,7 +1,7 @@
-#include <cstdarg>
-#include <cstdio>
-#include "core.h"
+#include "extern.h"
 #include "limits.h"
+#include "assert.h"
+#include "log.h"
 
 namespace kapusha {
 namespace core {

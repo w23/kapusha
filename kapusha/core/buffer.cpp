@@ -1,4 +1,4 @@
-#include <cstring>
+#include "extern.h"
 #include "buffer.h"
 
 namespace kapusha {

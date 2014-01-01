@@ -4,12 +4,12 @@
 using namespace kapusha;
 
 namespace kapusha {
-void log::sys_write(const char *message) {
+void core::log::sys_write(const char *message) {
   fprintf(stderr, "KPLOG: %s\n", message);
 }
 } // namespace kapusha
 
 int main(int argc, char *argv[]) {
   sys::GLXViewportController controller;
-  return controller.run(create_factory());
+  return controller.run(kapusha_main(nullptr));
 }

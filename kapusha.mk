@@ -10,10 +10,15 @@ SOURCES += \
 	$(KAPUSHA_SRC)/core/Object.cpp \
 	$(KAPUSHA_SRC)/core/log.cpp \
 	$(KAPUSHA_SRC)/core/Array.cpp \
-	$(KAPUSHA_SRC)/core/Map.cpp \
 	$(KAPUSHA_SRC)/core/list.cpp \
 	$(KAPUSHA_SRC)/core/Surface.cpp \
-	$(KAPUSHA_SRC)/math/math.cpp \
+	$(KAPUSHA_SRC)/core/String.cpp \
+	$(KAPUSHA_SRC)/core/buffer.cpp
+
+SOURCES += \
+	$(KAPUSHA_SRC)/math/math.cpp
+
+SOURCES += \
 	$(KAPUSHA_SRC)/render/Program.cpp \
 	$(KAPUSHA_SRC)/render/Material.cpp \
 	$(KAPUSHA_SRC)/render/Batch.cpp \
@@ -22,10 +27,13 @@ SOURCES += \
 	$(KAPUSHA_SRC)/render/Buffer.cpp \
 	$(KAPUSHA_SRC)/render/OpenGL.cpp \
 	$(KAPUSHA_SRC)/render/Context.cpp \
-	$(KAPUSHA_SRC)/render/Framebuffer.cpp \
+	$(KAPUSHA_SRC)/render/Framebuffer.cpp
+
+SOURCES += \
 	$(KAPUSHA_SRC)/ooo/Reframe.cpp \
-	$(KAPUSHA_SRC)/ooo/Camera.cpp \
-	$(KAPUSHA_SRC)/fontain/String.cpp \
+	$(KAPUSHA_SRC)/ooo/Camera.cpp
+
+SOURCES += \
 	$(KAPUSHA_SRC)/utils/SpectatorCameraController.cpp \
 	$(KAPUSHA_SRC)/utils/geometry.cpp \
 	$(KAPUSHA_SRC)/utils/Atlas.cpp \
@@ -68,7 +76,7 @@ SOURCES += \
 	$(KAPUSHA_SRC)/io/Socket_nix.cpp
 endif
 
-ifeq ($(WITH_HARFTYPE),1)
+ifeq ($(WITH_HARFTYPE), 1)
 SOURCES += \
 	$(KAPUSHA_SRC)/fontain/harftype/Freetype.cpp \
 	$(KAPUSHA_SRC)/fontain/harftype/Face.cpp

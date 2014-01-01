@@ -10,7 +10,7 @@ namespace core {
 /// \brief LOL Immutable string
 class String : public Object {
 public:
-  typedef shared<String> shared;
+  typedef core::shared<String> shared;
   explicit String(const char *string = nullptr, int length = -1);
   explicit String(const String &string);
 

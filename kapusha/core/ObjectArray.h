@@ -8,7 +8,7 @@ namespace core {
 /// \brief Dynamic array of Objects
 class ObjectArray : public Object {
 public:
-  typedef shared<ObjectArray> shared;
+  typedef core::shared<ObjectArray> shared;
   ObjectArray(size_t reserve = 0);
   ~ObjectArray();
 

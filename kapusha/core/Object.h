@@ -1,5 +1,5 @@
 #pragma once
-#include <atomic>
+#include "extern.h"
 
 /// \warning kapusha does not support multiple inheritance by design
 

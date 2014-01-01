@@ -1,4 +1,4 @@
-#include <cstdlib>
+#include "extern.h"
 #include "core.h"
 
 namespace kapusha {
