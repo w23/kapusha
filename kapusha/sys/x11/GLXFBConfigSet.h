@@ -3,7 +3,7 @@
 class GLXFBConfigSet {
 public:
   enum class Buffering { None, Double };
-  //! \todo enum class ColorMode { RGB565, RGB888 };
+  /// \todo enum class ColorMode { RGB565, RGB888 };
   inline GLXFBConfigSet(::Display *dpy);
   inline GLXFBConfigSet(::Display *dpy, int multisampling,
                               int color_bits = 32, int depth_bits = 24,
@@ -37,8 +37,8 @@ GLXFBConfigSet::GLXFBConfigSet(::Display *dpy,
     GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
     GLX_RENDER_TYPE, GLX_RGBA_BIT,
     GLX_CONFIG_CAVEAT, GLX_NONE,
-    GLX_BUFFER_SIZE, color_bits, //!< \todo replace with individual colors
-    //! \todo GLX_RED_SIZE, GLX_GREEN_SIZE, GLX_BLUE_SIZE,
+    GLX_BUFFER_SIZE, color_bits, ///< \todo replace with individual colors
+    /// \todo GLX_RED_SIZE, GLX_GREEN_SIZE, GLX_BLUE_SIZE,
     GLX_DEPTH_SIZE, depth_bits,
     GLX_DOUBLEBUFFER, (buffering == Buffering::None) ? False : True,
     GLX_SAMPLE_BUFFERS, (multisampling > 0) ? 1 : 0,
