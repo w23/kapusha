@@ -14,7 +14,8 @@ SOURCES += \
 	$(KAPUSHA_SRC)/core/Surface.cpp \
 	$(KAPUSHA_SRC)/core/String.cpp \
 	$(KAPUSHA_SRC)/core/buffer.cpp \
-	$(KAPUSHA_SRC)/core/ObjectArray.cpp
+	$(KAPUSHA_SRC)/core/ObjectArray.cpp \
+	$(KAPUSHA_SRC)/core/ObjectIntrusiveList.cpp
 
 SOURCES += \
 	$(KAPUSHA_SRC)/math/math.cpp

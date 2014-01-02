@@ -5,7 +5,10 @@ namespace core {
 
 void shared_base::reset(Object* r) {
   if (r == t_) return;
-  if (t_) t_->release();
+  Object *prev = t_;
+  // must be nullptr when release() is done, see IntrusiveList
+  t_ = nullptr;
+  if (prev) prev->release();
   if ((t_ = r)) t_->retain();
 }
 
