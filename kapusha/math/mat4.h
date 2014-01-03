@@ -47,30 +47,21 @@ namespace kapusha {
 
     const T *tptr() const { return rows[0].tptr(); }
 
-    mat4x4 &makeIdentity() { return *this = mat4x4(1); }
-    mat4x4 &makeScale(vec3<T> scale) {
+    mat4x4 &make_identity() { return *this = mat4x4(1); }
+    mat4x4 &make_scale(vec3<T> scale) {
       rows[0] = vec4<T>(scale.x, 0,	  0,	   0);
       rows[1] = vec4<T>(0,	 scale.y, 0,	   0);
       rows[2] = vec4<T>(0,	 0,	  scale.z, 0);
       rows[3] = vec4<T>(0,	 0,	  0,	   1);
       return *this;
     }
-    mat4x4 &makeTranslation(vec3<T> translation) {
+    mat4x4 &make_translation(vec3<T> translation) {
       rows[0] = vec4<T>(1, 0, 0, translation.x);
       rows[1] = vec4<T>(0, 1, 0, translation.y);
       rows[2] = vec4<T>(0, 0, 1, translation.z);
       rows[3] = vec4<T>(0, 0, 0, 1);
       return *this;
     }
-    mat4x4 &makeRotation(vec3<T> axis, T angle);
-
-    static mat4x4 make_translation(vec3<T> translation) {
-      mat4x4 m;
-      m.rows[0] = vec4<T>(1, 0, 0, translation.x);
-      m.rows[1] = vec4<T>(0, 1, 0, translation.y);
-      m.rows[2] = vec4<T>(0, 0, 1, translation.z);
-      m.rows[3] = vec4<T>(0, 0, 0, 1);
-      return m;
-    }
+    mat4x4 &make_rotation(vec3<T> axis, T angle);
   }; // mat4x4
 } // namespace kapusha
