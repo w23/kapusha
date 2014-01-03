@@ -1,23 +1,28 @@
-// kapusha/ooo
-// 2012-2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #include "Node.h"
 
 namespace kapusha {
-void Node::addChild(Node *node) {
+namespace ooo {
+
+void Node::add_child(Node *node) {
   KP_ASSERT(node);
-  if (first_child_.valid()) node->insertAfterSibling(first_child_.get());
-  else first_child_ = node;
-  node->setParent(this);
+  node->sibling_item_.insert(children_);
 }
-void Node::addObject(Object *object) {
-  if (object_.valid()) object->insertAfterSibling(object_.get());
-  else object_ = object;
-}
+
+//void Node::add_object(Object *object) {
+//  KP_ASSERT(object);
+//  object->sibling_item_.insert(objects_);
+//}
+
 void Node::draw(const mat4f &mvp) const {
   mat4f mat = mvp * frame_.getMatrix();
-  Object *obj = object_.get();
-  while (obj) { obj->draw(mat); obj = obj->getNextSibling(); }
-  Node *node = first_child_.get();
-  while (node) { node->draw(mat); node = node->getNextSibling(); }
+
+//  for (auto it: objects_)
+//    it->draw(mat);
+
+  //for (auto it: children_)
+  for (auto it = children_.begin(); it != children_.end(); ++it)
+    it.as<Node>()->draw(mat);
 }
+
+} // namespace ooo
 } // namespace kapusha

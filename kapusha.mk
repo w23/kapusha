@@ -33,7 +33,10 @@ SOURCES += \
 
 SOURCES += \
 	$(KAPUSHA_SRC)/ooo/Reframe.cpp \
-	$(KAPUSHA_SRC)/ooo/Camera.cpp
+	$(KAPUSHA_SRC)/ooo/Camera.cpp \
+	$(KAPUSHA_SRC)/ooo/Node.cpp \
+	$(KAPUSHA_SRC)/ooo/Transform.cpp
+
 
 SOURCES += \
 	$(KAPUSHA_SRC)/utils/SpectatorCameraController.cpp \
