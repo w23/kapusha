@@ -9,6 +9,7 @@
 #include "mat4.h"
 #include "rect2.h"
 #include "rect4.h"
+#include "quat.h"
 
 namespace kapusha {
   typedef vec2<int> vec2i;
@@ -22,4 +23,5 @@ namespace kapusha {
   typedef rect2<int> rect2i;
   typedef rect2<float> rect2f;
   typedef rect4<float> rect4f;
+  typedef quat<float> quatf;
 } // namespace kapusha
