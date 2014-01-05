@@ -1,7 +1,7 @@
 #include "SpectatorCameraController.h"
 
 namespace kapusha {
-  SpectatorCameraController::SpectatorCameraController(Camera &camera)
+  SpectatorCameraController::SpectatorCameraController(ooo::camera_t &camera)
     : camera_(camera), key_forward_(Keys::KeyW), key_back_(Keys::KeyS)
     , key_strafe_left_(Keys::KeyA), key_strafe_right_(Keys::KeyD)
     , key_speed_(Keys::KeyLeftShift), sensitivity_(1.f)
@@ -10,9 +10,9 @@ namespace kapusha {
   }
   bool SpectatorCameraController::pointers(const Pointers &pointers) {
     if (orientation_ && pointers.main().was_moved()) {
-      camera_.rotatePitch(pointers.main().delta().y * sensitivity_);
-      camera_.rotateAxis(kapusha::vec3f(0.f, 1.f, 0.f),
-                         -pointers.main().delta().x * sensitivity_);
+      camera_.rotate_pitch(-pointers.main().delta().y * sensitivity_);
+      camera_.rotate_axis(vec3f(0.f, 1.f, 0.f), pointers.main().delta().x * sensitivity_);
+      camera_.calc_matrix();
       return true;
     }
     return false;
@@ -27,8 +27,9 @@ namespace kapusha {
     if (k.is_key_pressed(key_strafe_right_)) right += spd;
     if (k.is_key_pressed(key_strafe_left_)) right -= spd;
     if ((forward != 0) || (right != 0)) {
-      camera_.moveForward(forward);
-      camera_.moveRigth(right);
+      camera_.move_forward_by(forward);
+      camera_.move_rigth_by(right);
+      camera_.calc_matrix();
       return true;
     }
     return false;

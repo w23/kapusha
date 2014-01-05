@@ -1,54 +1,68 @@
-// kapusha/ooo
-// 2012-2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
-#include "Reframe.h"
+#include "Transform.h"
 
 namespace kapusha {
-  class Camera {
-  public:
-    Camera(vec3f pos = vec3f(1.f, 1.f, 1.f),
-           vec3f at = vec3f(0.f, 0.f, 0.f),
-           vec3f up = vec3f(0.f, 1.f, 0.f),
-           float fov = 60.f, float aspect = 1.f,
-           float znear = .1f, float zfar = 100.f);
+namespace ooo {
 
-    inline vec3f position() const { return -frame_.translation(); }
-    inline vec3f forward() const { return frame_.forward(); }
-    inline vec3f up() const { return frame_.up(); }
-    inline vec3f right() const { return frame_.right(); }
+struct camera_t {
+  camera_t();
 
-    void setProjection(float fov, float aspect, float znear, float zfar);
-    void setAspect(float aspect);
-    void setAspect(vec2i size);
+  /*vec3f pos = vec3f(1.f, 1.f, 1.f),
+    vec3f at = vec3f(0.f, 0.f, 0.f),
+    vec3f up = vec3f(0.f, 1.f, 0.f),
+    float fov = 60.f, float aspect = 1.f,
+    float znear = .1f, float zfar = 100.f);*/
 
-    void lookAt(vec3f pos, vec3f at, vec3f up = vec3f(0.f, 1.f, 0.f));
-    inline void setPosition(vec3f pos) { frame_.setTranslation(-pos); }
-    inline void move(vec3f units) { frame_.move(-units); }
-    inline void moveForward(float units) { frame_.moveForward(-units); }
-    inline void moveRigth(float units) { frame_.moveRight(-units); }
-    inline void moveUp(float units) { frame_.moveUp(-units); }
+  inline vec3f position() const { return -transform_.translation().xyz(); }
+  inline vec3f forward() const { return transform_.forward().xyz(); }
+  inline vec3f up() const { return transform_.up().xyz(); }
+  inline vec3f right() const { return transform_.right().xyz(); }
 
-    void setAtPosition(vec3f at);
-    inline void setOrientation(vec3f forward = vec3f(0.f, 0.f, -1.f),
-                               vec3f up = vec3f(0.f, 1.f, 0.f)) {
-      frame_.setOrientation(forward, up);
-    }
-    inline void rotatePitch(float radians) { frame_.rotatePitch(radians); }
-    inline void rotateRoll(float radians) { frame_.rotateRoll(radians); }
-    inline void rotateYaw(float radians) { frame_.rotateYaw(radians); }
-    inline void rotateAxis(vec3f axis, float radians) {
-      frame_.rotateAxis(axis, radians);
-    }
+  void look_at(vec3f pos, vec3f at, vec3f up = vec3f(0.f, 1.f, 0.f));
+  inline void move_to(vec3f pos) { transform_.translate_to(-vec4f(pos)); }
+  inline void move_by(vec3f units) { transform_.translate_by(-vec4f(units)); }
+  inline void move_forward_by(float units) { transform_.translate_forward(-units); }
+  inline void move_rigth_by(float units) { transform_.translate_right(-units); }
+  inline void move_up_by(float units) { transform_.translate_up(-units); }
 
-    void update();
-    inline const mat4f &getProjection() const { return projection_; }
-    inline const mat4f &getView() const { return frame_.getMatrix(); }
-    inline const mat4f &getViewProjection() const { return viewProjection_; }
+  void look_at(vec3f at);
+  inline void set_direction(vec3f forward = vec3f(0.f, 0.f, -1.f),
+    vec3f up = vec3f(0.f, 1.f, 0.f)) {
+    transform_.set_direction(vec4f(forward), vec4f(up));
+  }
+  inline void rotate_head(float radians) { transform_.rotate_head(radians); }
+  inline void rotate_pitch(float radians) { transform_.rotate_pitch(radians); }
+  inline void rotate_roll(float radians) { transform_.rotate_roll(radians); }
+  inline void rotate_axis(vec3f axis, float radians) {
+    transform_.rotate_axis(radians, axis);
+  }
 
+  void update_aspect(vec2i size);
+
+  void calc_matrix();
+  inline const mat4f &matrix_projection() const { return projection_.matrix(); }
+  inline const mat4f &matrix_view() const { return transform_.matrix(); }
+  inline const mat4f &matrix() const { return view_projection_; }
+
+  struct projection_t {
+    inline projection_t() {}
+
+    void set_perspective(float fov, float aspect, float znear, float zfar);
+    void update_aspect(float aspect);
+    void update_aspect(vec2i size);
+
+    inline const mat4f matrix() const { return matrix_; }
+    inline operator const mat4f &() { return matrix_; }
   private:
-    Reframe frame_;
-    mat4f projection_;
-    mat4f viewProjection_;
     float fov_, aspect_, znear_, zfar_;
+    mat4f matrix_;
   };
+
+private:
+  transform_t transform_;
+  projection_t projection_;
+  mat4f view_projection_;
+};
+
+} // namespace ooo
 } // namespace kapusha

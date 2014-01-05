@@ -5,7 +5,7 @@
 namespace kapusha {
   class SpectatorCameraController {
   public:
-    SpectatorCameraController(Camera &camera);
+    SpectatorCameraController(ooo::camera_t &camera);
     void enable_orientation(bool enable) { orientation_ = enable; }
     bool pointers(const Pointers &pointers);
     bool frame(float dt, const IViewportController *vctrl);
@@ -16,7 +16,7 @@ namespace kapusha {
     KP_DECLARE_SETTER(float, speed_factor)
 #undef KP_DECLARE_SETTER
   private:
-    Camera &camera_;
+    ooo::camera_t &camera_;
     Keys::Types key_forward_, key_back_;
     Keys::Types key_strafe_left_, key_strafe_right_;
     Keys::Types key_speed_;

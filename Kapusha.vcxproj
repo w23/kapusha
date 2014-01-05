@@ -26,11 +26,13 @@
     <ClInclude Include="kapusha\kapusha.h" />
     <ClInclude Include="kapusha\math.h" />
     <ClInclude Include="kapusha\math\math.h" />
+    <ClInclude Include="kapusha\math\quat.h" />
     <ClInclude Include="kapusha\math\rect4.h" />
     <ClInclude Include="kapusha\ooo.h" />
     <ClInclude Include="kapusha\ooo\Camera.h" />
     <ClInclude Include="kapusha\ooo\ooo.h" />
     <ClInclude Include="kapusha\ooo\Reframe.h" />
+    <ClInclude Include="kapusha\ooo\Transform.h" />
     <ClInclude Include="kapusha\render.h" />
     <ClInclude Include="kapusha\render\Batch.h" />
     <ClInclude Include="kapusha\render\Buffer.h" />
@@ -84,6 +86,7 @@
     <ClCompile Include="kapusha\io\Socket_win.cpp" />
     <ClCompile Include="kapusha\ooo\Camera.cpp" />
     <ClCompile Include="kapusha\ooo\Reframe.cpp" />
+    <ClCompile Include="kapusha\ooo\Transform.cpp" />
     <ClCompile Include="kapusha\render\Batch.cpp" />
     <ClCompile Include="kapusha\render\Buffer.cpp" />
     <ClCompile Include="kapusha\render\Context.cpp" />

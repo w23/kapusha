@@ -27,6 +27,10 @@ namespace kapusha {
         vec4<T>(rows[0].w, rows[1].w, rows[2].w, rows[3].w));
     }
 
+    T trace() const {
+      return rows[0].x + rows[1].y + rows[2].z + rows[3].w;
+    }
+
     mat4x4 operator*(T r) const {
       return mat4x4(rows[0]*r, rows[1]*r, rows[2]*r, rows[3]*r);
     }

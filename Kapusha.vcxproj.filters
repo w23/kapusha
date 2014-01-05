@@ -94,6 +94,9 @@
     <ClCompile Include="kapusha\core\buffer.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="kapusha\ooo\Transform.cpp">
+      <Filter>ooo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kapusha\core.h" />
@@ -262,6 +265,12 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="kapusha\sys.h" />
+    <ClInclude Include="kapusha\ooo\Transform.h">
+      <Filter>ooo</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\math\quat.h">
+      <Filter>math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="core">

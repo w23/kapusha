@@ -41,7 +41,7 @@ public:
   
 private:
   IViewportController *ctrl_;
-  Camera camera_;
+  ooo::camera_t camera_;
   SpectatorCameraController camctl_;
 
   Dust dust_;
@@ -150,17 +150,16 @@ Viewport::Viewport(IViewportController *controller)
 
 void Viewport::resize(vec2i size) {
   glViewport(0, 0, size.x, size.y);
-  camera_.setAspect((float)size.x / (float)size.y);
+  camera_.update_aspect(size);
 }
 
 void Viewport::draw(int ms, float dt) {
   camctl_.frame(dt, ctrl_);
-  camera_.update();
   GL_ASSERT
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   GL_ASSERT
-  ground_.draw(camera_.getViewProjection());
-  dust_.draw(camera_.getViewProjection());
+  ground_.draw(camera_.matrix());
+  dust_.draw(camera_.matrix());
 }
 
 void Viewport::in_keys(const Keys &keys) {

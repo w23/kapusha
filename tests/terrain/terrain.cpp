@@ -99,7 +99,7 @@ private:
   Ground* createGround() const;
 private:
   IViewportController *ctrl_;
-  Camera camera_;
+  ooo::camera_t camera_;
   SpectatorCameraController camctl_;
   std::unique_ptr<Ground> ground_;
 };
@@ -109,29 +109,34 @@ Viewport::Viewport(IViewportController* ctrl)
   ground_.reset(new Ground());
   glEnable(GL_DEPTH_TEST);
   GL_ASSERT
-  glEnable(GL_CULL_FACE);
+  //glEnable(GL_CULL_FACE);
   GL_ASSERT
-  camera_.setProjection(90.f, 1.f, .1f, 1000.f);
-  camera_.lookAt(vec3f(100.f), vec3f(0.f));
+  //camera_.setProjection(90.f, 1.f, .1f, 1000.f);
+  camera_.look_at(vec3f(100.f), vec3f(0.f));
   glClearColor(.7f, .9f, 1.f, 1.f);
   camctl_.set_speed(50.f);
 }
 
 void Viewport::resize(vec2i size) {
   glViewport(0, 0, size.x, size.y);
-  camera_.setAspect((float)size.x / (float)size.y);
+  camera_.update_aspect(size);
 }
 
 void Viewport::draw(int ms, float dt) {
   camctl_.frame(dt, ctrl_);
   float h = 2.f + ground_->getHeight(camera_.position().xz());
   if (h > camera_.position().y)
-    camera_.move(vec3f(0., h - camera_.position().y, 0.));
-  camera_.update();
+    camera_.move_by(vec3f(0., h - camera_.position().y, 0.));
+  camera_.calc_matrix();
   GL_ASSERT
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   GL_ASSERT
-  ground_->draw(camera_.getViewProjection());
+  ground_->draw(camera_.matrix());
+
+  //ooo::transform_t tr;
+  //ooo::camera_t::projection_t proj;
+  //proj.set_perspective(60.f, 1.f, .1f, 1000.f);
+  //ground_->draw(proj.matrix());//mat4f().make_translation(vec3f(0.f, 0.f, -100.f)));
 }
 
 void Viewport::in_pointers(const Pointers &pointers) {
