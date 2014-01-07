@@ -12,16 +12,20 @@
 #include "quat.h"
 
 namespace kapusha {
-  typedef vec2<int> vec2i;
-  typedef vec2<float> vec2f;
-  typedef vec3<float> vec3f;
-  typedef vec3<int> vec3i;
-  typedef vec4<float> vec4f;
-  typedef vec4<u8> vec4b;
-  typedef mat2x2<float> mat2f;
-  typedef mat4x4<float> mat4f;
-  typedef rect2<int> rect2i;
-  typedef rect2<float> rect2f;
-  typedef rect4<float> rect4f;
-  typedef quat<float> quatf;
+namespace math {
+
+typedef vec2<int> vec2i;
+typedef vec2<f32> vec2f;
+typedef vec3<f32> vec3f;
+typedef vec3<int> vec3i;
+typedef vec4<f32> vec4f;
+typedef vec4<u8> vec4b;
+typedef mat2x2<f32> mat2f;
+typedef mat4x4<f32> mat4f;
+typedef rect2<int> rect2i;
+typedef rect2<f32> rect2f;
+typedef rect4<f32> rect4f;
+typedef quat<f32> quatf;
+
+} // namespace math
 } // namespace kapusha

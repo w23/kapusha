@@ -26,7 +26,7 @@ bool WindowsPointers::process_event(UINT msg, WPARAM wParam, LPARAM lParam, u32 
   return true;
 }
 
-void WindowsPointers::resize(vec2i size) {
+void WindowsPointers::resize(math::vec2i size) {
   size_ = size;
   evt_resize_viewport(vec2f(0.f, static_cast<float>(size.y)),
     vec2f(static_cast<float>(size.x), 0.f));

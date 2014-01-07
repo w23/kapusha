@@ -7,6 +7,7 @@ namespace kapusha {
   //! State of pointer-type input
   class Pointers : public Input {
   public:
+    typedef math::vec2f vec2f;
     //! Single pointer
     struct Pointer {
       enum Flags {

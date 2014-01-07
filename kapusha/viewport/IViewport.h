@@ -2,6 +2,8 @@
 #include "IViewportController.h"
 
 namespace kapusha {
+  using math::vec2i;
+
   //! Viewport is the place where all the fun happens
   //! Lifetime <= rendering context lifetime
   class IViewport {

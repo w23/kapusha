@@ -3,6 +3,7 @@
 
 namespace kapusha {
 namespace ooo {
+using namespace math;
 
 struct camera_t {
   camera_t();

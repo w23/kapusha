@@ -20,7 +20,7 @@ namespace kapusha {
       unsigned name;
       Renderbuffer() : name(0) {}
       ~Renderbuffer() { if (name) glDeleteRenderbuffers(1, &name); }
-      void makeDepth(vec2i size);
+      void makeDepth(math::vec2i size);
     };
     
     unsigned name_;

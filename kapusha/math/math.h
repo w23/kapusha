@@ -1,52 +1,43 @@
 // Kapusha/math
 // 2012 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
-#include <math.h>
+#include "f32.h"
 
-#if defined(min)
 #undef min
-#endif
-#if defined(max)
 #undef max
-#endif
 
 namespace kapusha {
-  extern const float c_pi;
-  extern const float c_2pi;
-  extern const float c_pi2;
-  extern const float c_pi4;
-  extern const float c_kdeg2rad;
-  extern const float c_krad2deg;
-  
-  //! float random
-  //! \return random float value in [0..1]
-  extern float frand();
-  
-  //! float random in range
-  //! \param min minimum value
-  //! \param max maximum value
-  //! \return random float value in [min..max]
-  extern float frand(float min, float max);
-  template <typename T> inline T clamp(T value, T min, T max) {
-    return (value < min) ? min : ((value > max) ? max : value);
-  }
-  template <typename T> inline T max(T a, T b) { return (a < b) ? b : a; }
-  template <typename T> inline T min(T a, T b) { return (a < b) ? a : b; }
-  
-  inline float sqrt(float f) { return ::sqrtf(f); }
-  inline float recip(float f) { return 1.f / f; }
-  inline float rsqrt(float f) { return recip(sqrt(f)); }
-  inline float abs(float f) { return ::fabs(f); }
-  inline float mod(float f, float d) { return f - d * ::floorf(f / d); }
-  inline float floor(float f) { return ::floorf(f); }
-  inline float fract(float f) { return floor(f) - f; }
+namespace math {
 
-  inline int recip(int i) { return 1 / i; /* lol */ }
-  inline double recip(double d) { return 1. / d; }
+extern const f32 c_pi;
+extern const f32 c_2pi;
+extern const f32 c_pi2;
+extern const f32 c_pi4;
+extern const f32 c_kdeg2rad;
+extern const f32 c_krad2deg;
+
+/// float random
+/// \return random float value in [0..1]
+/// \todo this should be in a completely separate module
+extern f32 frand();
+
+/// float random in range
+/// \param min minimum value
+/// \param max maximum value
+/// \return random float value in [min..max]
+extern f32 frand(f32 min, f32 max);
   
-  template <typename T, typename V> inline V lerp(V a, V b, T t) {
-    return a + (b - a) * t;
-  }
+template <typename T> inline T clamp(T value, T min, T max) {
+  return (value < min) ? min : ((value > max) ? max : value);
+}
+template <typename T> inline T max(T a, T b) { return (a < b) ? b : a; }  
+template <typename T> inline T min(T a, T b) { return (a < b) ? a : b; }
+
+template <typename T, typename V> inline V lerp(V   a, V b, T t) {
+  return a + (b - a) * t;
+}
+
+} // namespace math
 } // namespace kapusha
 
 #include "types.h"

@@ -49,9 +49,6 @@
     <ClCompile Include="kapusha\render\Program.cpp">
       <Filter>render</Filter>
     </ClCompile>
-    <ClCompile Include="kapusha\ooo\Reframe.cpp">
-      <Filter>ooo</Filter>
-    </ClCompile>
     <ClCompile Include="kapusha\render\Sampler.cpp">
       <Filter>render</Filter>
     </ClCompile>
@@ -195,9 +192,6 @@
     <ClInclude Include="kapusha\math\rect4.h">
       <Filter>math</Filter>
     </ClInclude>
-    <ClInclude Include="kapusha\ooo\Reframe.h">
-      <Filter>ooo</Filter>
-    </ClInclude>
     <ClInclude Include="kapusha\render\Sampler.h">
       <Filter>render</Filter>
     </ClInclude>
@@ -269,6 +263,12 @@
       <Filter>ooo</Filter>
     </ClInclude>
     <ClInclude Include="kapusha\math\quat.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\math\number.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\math\f32.h">
       <Filter>math</Filter>
     </ClInclude>
   </ItemGroup>

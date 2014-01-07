@@ -2,6 +2,7 @@
 #include "math.h"
 
 namespace kapusha {
+namespace math {
 
 /// \brief Naive quaternion
 template <typename T>
@@ -25,7 +26,7 @@ struct quat {
 
   quat conjugate() const { return quat(-imag(), real()); }
   T norm() { return q.length(); }
-  quat &normalize() {  return operator*=(recip(norm())); }
+  quat &normalize() { q *= norm().recip(); return *this; }
 
   quat operator*(const quat &other) const {
     return quat(imag().cross(other.imag())
@@ -49,36 +50,37 @@ struct quat {
 
 template <typename T>
 quat<T>::quat(const mat4x4<T> &m) {
-  float trace = m.trace(); // trace of mat4 should already have +1
-  if (trace > 0) {
-    float r = sqrt(trace) * 2;
-    q.w = r / 4;
-    r = -1 / r;
+  T trace = m.trace(); // trace of mat4 should already have +1
+  if (trace > T(0)) {
+    T r = sqrt(trace) * T(2);
+    q.w = r / T(4);
+    r = T(-1) / r;
     q.x = r * (m.rows[1].z - m.rows[2].y);
     q.y = r * (m.rows[2].x - m.rows[0].z);
     q.z = r * (m.rows[0].y - m.rows[1].x);
   } else if ((m.rows[0].x > m.rows[1].y) && (m.rows[0].x > m.rows[2].z)) {
-    float r = sqrt(1 + m.rows[0].x - m.rows[1].y - m.rows[2].z) * 2;
-    q.x = r / 4;
-    r = -1 / r;
+    T r = T(T(1) + m.rows[0].x - m.rows[1].y - m.rows[2].z).sqrt() * T(2);
+    q.x = r / T(4);
+    r = T(-1) / r;
     q.z = r * (m.rows[1].z - m.rows[2].y);
     q.x = r * (m.rows[2].x - m.rows[0].z);
     q.w = r * (m.rows[0].y - m.rows[1].x);
   } else if (m.rows[1].y > m.rows[2].z) {
-    float r = sqrt(1 + m.rows[1].y - m.rows[0].x - m.rows[2].z) * 2;
-    q.y = r / 4;
-    r = -1 / r;
+    T r = T(T(1) + m.rows[1].y - m.rows[0].x - m.rows[2].z).sqrt() * T(2);
+    q.y = r / T(4);
+    r = T(-1) / r;
     q.z = r * (m.rows[1].z - m.rows[2].y);
     q.w = r * (m.rows[2].x - m.rows[0].z);
     q.x = r * (m.rows[0].y - m.rows[1].x);
   } else {
-    float r = sqrt(1 + m.rows[2].z - m.rows[0].x - m.rows[1].y) * 2;
-    q.z = r / 4;
-    r = -1 / r;
+    T r = T(T(1) + m.rows[2].z - m.rows[0].x - m.rows[1].y).sqrt() * T(2);
+    q.z = r / T(4);
+    r = T(-1) / r;
     q.y = r * (m.rows[1].z - m.rows[2].y);
     q.x = r * (m.rows[2].x - m.rows[0].z);
     q.w = r * (m.rows[0].y - m.rows[1].x);
   }
 }
 
+} // namespace math
 } // namespace kapusha

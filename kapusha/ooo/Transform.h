@@ -3,6 +3,7 @@
 
 namespace kapusha {
 namespace ooo {
+using namespace math;
 
 /// \todo Some unit tests would be nice
 

@@ -6,6 +6,7 @@
 #endif
 
 namespace kapusha {
+  using namespace math;
   //! function to calculate normals for a mesh with arbitrary vtx fmt in place
   //! \param *_stride is in float units
   //! \param indices_count must be > 2

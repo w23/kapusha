@@ -74,7 +74,7 @@ LRESULT WindowController::process_event(UINT msg, WPARAM wParam, LPARAM lParam) 
       GetClientRect(window_, &rect);
       vec2i size(rect.right, rect.bottom);
       pointers_.resize(size);
-      scale_ = vec2f(1.f) / vec2f(size);
+      scale_ = math::vec2f(1.f) / math::vec2f(size);
       viewport_->resize(size);
 	  break;
 	  }

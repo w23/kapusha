@@ -6,7 +6,7 @@ class WindowsPointers : public Pointers {
 public:
   WindowsPointers() : grabbed_(false), ignore_(false) {}
   bool process_event(UINT msg, WPARAM wParam, LPARAM lParam, u32 now);
-  void resize(vec2i size);
+  void resize(math::vec2i size);
   void grab(bool grab_in, HWND window);
     
 private:
@@ -17,8 +17,8 @@ private:
   }
 
   HWND window_;
-  vec2i size_;
-  vec2f center_;
+  math::vec2i size_;
+  math::vec2f center_;
   bool grabbed_, ignore_;
 };
 } // namespace kapusha

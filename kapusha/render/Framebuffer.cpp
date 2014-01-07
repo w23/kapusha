@@ -27,7 +27,7 @@ namespace kapusha {
       }
   }
   
-  void Framebuffer::Renderbuffer::makeDepth(vec2i size) {
+  void Framebuffer::Renderbuffer::makeDepth(math::vec2i size) {
     if (name == 0) glGenRenderbuffers(1, &name);
     GL_ASSERT
     glBindRenderbuffer(GL_RENDERBUFFER, name);

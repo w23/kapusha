@@ -10,6 +10,7 @@ namespace core {
 //! \brief Bottom-to-top (OpenGL-style) 2D surface
 class Surface : public Object {
 public:
+  typedef math::vec2i vec2i;
   typedef core::shared<Surface> shared;
   struct Meta {
     vec2i size;
