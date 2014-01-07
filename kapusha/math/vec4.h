@@ -1,12 +1,10 @@
-// kapusha/math
-// 2012 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
 #include <kapusha/math.h>
 
 namespace kapusha {
   template <typename T> struct vec4 {
     T x, y, z, w;
-    
+
     inline vec4() {}
     inline vec4(T v) : x(v), y(v), z(v), w(v) {}
     inline vec4(T _x, T _y, T _z = 0, T _w = 0)
@@ -15,11 +13,12 @@ namespace kapusha {
       : x(v.x), y(v.y), z(_z), w(_w) {}
     inline explicit vec4(const vec3<T>& v, T _w = 0)
       : x(v.x), y(v.y), z(v.z), w(_w) {}
-    
+
     vec2<T> xy() const { return vec2<T>(x, y); } 
     vec2<T> zw() const { return vec2<T>(z, w); }
     vec3<T> xyz() const { return vec3<T>(x, y, z); }
-    
+
+    inline bool is_direction() const { return w == 0; }
     T dot(vec4 r) const { return x*r.x + y*r.y + z*r.z + w*r.w; }
     T length_sq() const { return dot(*this); }
     T length() const { return sqrt(length_sq()); }
