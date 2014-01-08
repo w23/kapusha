@@ -22,14 +22,14 @@ namespace kapusha {
       if (idx[0] == idx[1] || idx[1] == idx[2] || idx[2] == idx[0]) continue;
       if (i&1) swap(idx[0], idx[1]);
       // calc triangle normal
-      vec3f v0(reinterpret_cast<const math::f32*>(vertices_ptr_in + idx[0]*vertices_stride)),
-            v1(reinterpret_cast<const math::f32*>(vertices_ptr_in + idx[1]*vertices_stride)),
-            v2(reinterpret_cast<const math::f32*>(vertices_ptr_in + idx[2]*vertices_stride));
-      vec3f n(((v1-v0).cross(v2-v0)).normalized());
+      vec3f v0(vertices_ptr_in + idx[0]*vertices_stride),
+            v1(vertices_ptr_in + idx[1]*vertices_stride),
+            v2(vertices_ptr_in + idx[2]*vertices_stride);
+      vec3f n(normalize(cross(v1-v0, v2-v0)));
       // add the normal to all vertices
 #define _NORMALSUM(i) \
       { float *np = normals_ptr_out + idx[i]*normals_stride; \
-        vec3f N(vec3f(reinterpret_cast<const math::f32*>(np)) + n); np[0] = N.x; np[1] = N.y; np[2] = N.z; }
+        vec3f N(vec3f(np) + n); np[0] = N.x; np[1] = N.y; np[2] = N.z; }
       _NORMALSUM(0);
       _NORMALSUM(1);
       _NORMALSUM(2);
@@ -38,13 +38,13 @@ namespace kapusha {
     // 3rd pass -- normalize all normals
     for (int i = 0; i < indices_count; ++i) {
       float *np = normals_ptr_out + indices[i] * normals_stride;
-      vec3f n(vec3f(reinterpret_cast<const math::f32*>(np)).normalized());
+      vec3f n(normalize(vec3f(np)));
       np[0] = n.x; np[1] = n.y; np[2] = n.z;
     }
   }
   
   void calculateXYPlaneStorage(vec2i cells, int &vertices, int &indices) {
-    vertices = (cells+vec2i(1)).product();
+    vertices = area(cells+vec2i(1));
     indices = (cells.x + 2) * cells.y * 2 - 2;
   }
   

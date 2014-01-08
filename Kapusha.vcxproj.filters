@@ -265,9 +265,6 @@
     <ClInclude Include="kapusha\math\quat.h">
       <Filter>math</Filter>
     </ClInclude>
-    <ClInclude Include="kapusha\math\number.h">
-      <Filter>math</Filter>
-    </ClInclude>
     <ClInclude Include="kapusha\math\f32.h">
       <Filter>math</Filter>
     </ClInclude>

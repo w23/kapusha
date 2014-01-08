@@ -144,7 +144,7 @@ namespace kapusha {
     KP_ASSERT(!"Not enough uniform storage for texture");
   }
   void Program::UniformState::set_uniform(int location, Uniform::Type type,
-    const math::f32* data) {
+    const f32* data) {
     if (location < 0) return;
     //KP_ASSERT(location >= 0);
     const int size = type & Uniform::_MaskComponents;

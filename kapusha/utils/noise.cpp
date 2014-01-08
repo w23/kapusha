@@ -1,13 +1,13 @@
 #include "noise.h"
 
 namespace kapusha {
-  math::f32 hash(int x) {
+  f32 hash(int x) {
     // stolen from teh internets!
     x = (x<<13) ^ x;
     return (1.f - ((x*(x*x*15731+789221)+1376312589)&0x7fffffff)/1073741824.f);
   }
-  math::f32 hash(vec2i p) { return hash(p.x + p.y * 27644437); }
-  math::f32 lerp_noise(vec2f x) {
+  f32 hash(vec2i p) { return hash(p.x + p.y * 27644437); }
+  f32 lerp_noise(vec2f x) {
     vec2f f(floorf(x.x), floorf(x.y)), t(x-f);
     vec2i p(f);
     return lerp(lerp(hash(p), hash(p+vec2i(1,0)), t.x),

@@ -5,8 +5,7 @@ namespace kapusha {
 namespace math {
 
 /// \brief Naive quaternion
-template <typename T>
-struct quat {
+template <typename T> struct quat {
   vec4<T> q;
 
 #if _MSC_VER < 1800
@@ -19,61 +18,62 @@ struct quat {
   inline quat(const quat<U> &other) : q(other.q) {}
   inline quat(const vec3<T>& i, T r) : q(i, r) {}
   quat(T angle, const vec3<T> &axis) : q(axis * sin(angle), cos(angle)) {}
-  quat(const mat4x4<T> &m);
+  quat(const mat4<T> &m);
 
   inline T real() const { return q.w; }
   inline vec3<T> imag() const { return q.xyz(); }
 
+  /// \todo move from here to math namespace
   quat conjugate() const { return quat(-imag(), real()); }
-  T norm() { return q.length(); }
-  quat &normalize() { q *= norm().recip(); return *this; }
+  T norm() { return length(q); }
+  quat &normalize() { q *= recip(norm()); return *this; }
 
   quat operator*(const quat &other) const {
-    return quat(imag().cross(other.imag())
+    return quat(cross(imag(), other.imag())
       + imag() * other.real() + other.imag() * real(),
-      real() * other.real() - imag().dot(other.imag()));
+      real() * other.real() - dot(imag(), other.imag()));
   }
   quat &operator*=(const quat &other) { return *this = *this * other; }
 
-  mat4x4<T> calc_matrix() const {
-    T x2 = q.x * q.x, y2 = q.y * q.y, z2 = q.z * q.z,
+  mat4<T> calc_matrix() const {
+    const T
+      x2 = q.x * q.x, y2 = q.y * q.y, z2 = q.z * q.z,
       xy = q.x * q.y, wz = q.w * q.z, xz = q.x * q.z,
       wy = q.w * q.y, yz = q.y * q.z, wx = q.w * q.x;
-    return mat4x4<T>(
+    return mat4<T>(
       vec4<T>(1 - 2 * (y2 + z2), 2 * (xy - wz), 2 * (xz + wy), 0),
       vec4<T>(2 * (xy + wz), 1 - 2 * (x2 + z2), 2 * (yz - wx), 0),
       vec4<T>(2 * (xz - wy), 2 * (yz + wx), 1 - 2 * (x2 + y2), 0),
-      vec4<T>(0, 0, 0, 1)
-      );
+      vec4<T>(0, 0, 0, 1));
   }
 }; // struct quat
 
 template <typename T>
-quat<T>::quat(const mat4x4<T> &m) {
-  T trace = m.trace(); // trace of mat4 should already have +1
-  if (trace > T(0)) {
-    T r = sqrt(trace) * T(2);
+quat<T>::quat(const mat4<T> &m) {
+  const T tr = trace(m); // trace of mat4 should already have +1
+  if (tr > T(0)) {
+    T r = sqrt(tr) * T(2);
     q.w = r / T(4);
     r = T(-1) / r;
     q.x = r * (m.rows[1].z - m.rows[2].y);
     q.y = r * (m.rows[2].x - m.rows[0].z);
     q.z = r * (m.rows[0].y - m.rows[1].x);
   } else if ((m.rows[0].x > m.rows[1].y) && (m.rows[0].x > m.rows[2].z)) {
-    T r = T(T(1) + m.rows[0].x - m.rows[1].y - m.rows[2].z).sqrt() * T(2);
+    T r = sqrt(T(1) + m.rows[0].x - m.rows[1].y - m.rows[2].z) * T(2);
     q.x = r / T(4);
     r = T(-1) / r;
     q.z = r * (m.rows[1].z - m.rows[2].y);
     q.x = r * (m.rows[2].x - m.rows[0].z);
     q.w = r * (m.rows[0].y - m.rows[1].x);
   } else if (m.rows[1].y > m.rows[2].z) {
-    T r = T(T(1) + m.rows[1].y - m.rows[0].x - m.rows[2].z).sqrt() * T(2);
+    T r = sqrt(T(1) + m.rows[1].y - m.rows[0].x - m.rows[2].z) * T(2);
     q.y = r / T(4);
     r = T(-1) / r;
     q.z = r * (m.rows[1].z - m.rows[2].y);
     q.w = r * (m.rows[2].x - m.rows[0].z);
     q.x = r * (m.rows[0].y - m.rows[1].x);
   } else {
-    T r = T(T(1) + m.rows[2].z - m.rows[0].x - m.rows[1].y).sqrt() * T(2);
+    T r = sqrt(T(1) + m.rows[2].z - m.rows[0].x - m.rows[1].y) * T(2);
     q.z = r / T(4);
     r = T(-1) / r;
     q.y = r * (m.rows[1].z - m.rows[2].y);

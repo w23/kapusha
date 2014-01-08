@@ -27,7 +27,6 @@
     <ClInclude Include="kapusha\math.h" />
     <ClInclude Include="kapusha\math\f32.h" />
     <ClInclude Include="kapusha\math\math.h" />
-    <ClInclude Include="kapusha\math\number.h" />
     <ClInclude Include="kapusha\math\quat.h" />
     <ClInclude Include="kapusha\math\rect4.h" />
     <ClInclude Include="kapusha\ooo.h" />

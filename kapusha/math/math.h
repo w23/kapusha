@@ -1,7 +1,7 @@
 // Kapusha/math
 // 2012 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
-#include "f32.h"
+#include "types.h"
 
 #undef min
 #undef max
@@ -20,7 +20,7 @@ extern const f32 c_krad2deg;
 /// \return random float value in [0..1]
 /// \todo this should be in a completely separate module
 extern f32 frand();
-
+  
 /// float random in range
 /// \param min minimum value
 /// \param max maximum value
@@ -33,11 +33,12 @@ template <typename T> inline T clamp(T value, T min, T max) {
 template <typename T> inline T max(T a, T b) { return (a < b) ? b : a; }  
 template <typename T> inline T min(T a, T b) { return (a < b) ? a : b; }
 
-template <typename T, typename V> inline V lerp(V   a, V b, T t) {
+template <typename T, typename V> inline V lerp(V a, V b, T t) {
   return a + (b - a) * t;
 }
 
 } // namespace math
+
+using namespace math;
 } // namespace kapusha
 
-#include "types.h"

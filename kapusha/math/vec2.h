@@ -1,7 +1,4 @@
-// Kapusha/math
-// 2012 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
-#include <kapusha/math.h>
 
 namespace kapusha {
 namespace math {
@@ -15,46 +12,30 @@ template <typename T> struct vec2 {
 #else
   inline vec2() {}
 #endif
+
   inline explicit vec2(T v) : x(v), y(v) {}
   inline vec2(T _x, T _y) : x(_x), y(_y) {}
-  template <typename R> inline vec2(const vec2<R>& v)
+  template <typename R> inline explicit vec2(const vec2<R>& v)
     : x(static_cast<T>(v.x)), y(static_cast<T>(v.y)) {}
   template <typename R> inline vec2& operator=(const vec2<R>& v) {
     x = static_cast<T>(v.x), y = static_cast<T>(v.y); return *this;
   }
   const T *tptr() const { return &x; }
 
-  vec2<T> yx() const { return vec2(y, x); }
-
-  T product() const { return x * y; }
-  T dot(vec2 r) const { return x*r.x + y*r.y; }
-  T length_sq() const { return dot(*this); }
-  T length() const { return sqrt(length_sq()); }
-  T rlength() const { return rsqrt(length_sq()); }
-  vec2 recip() const { return vec2(x.recip(), y.recip()); }
-  vec2 normalized() const { return *this * rlength(); }
-  vec2 normalize() { return *this = normalized(); }
-  vec2 abs() const { return vec2(abs(x), abs(y)); }
-  vec2 clamped(T min, T max) const {
-    return vec2(clamp(x, min, max), clamp(y, min, max));
-  }
-  vec2 clamped(vec2 min, vec2 max) const {
-    return vec2(clamp(x, min.x, max.x), clamp(y, min.y, max.y));
-  }
-  vec2 floor() const {
-    return vec2(::kapusha::floor(x), ::kapusha::floor(y));
-  }
-  vec2 fract() const {
-    return vec2(::kapusha::fract(x), ::kapusha::fract(y));
-  }
+  vec2<T> xx() const { return vec2<T>(x, x); }
+  vec2<T> yy() const { return vec2<T>(y, y); }
+  vec2<T> xy() const { return vec2<T>(x, y); }
+  vec2<T> yx() const { return vec2<T>(y, x); }
+  
+  /// \todo to vec3/vec4 swizzles
 
   vec2 operator-() const { return vec2(-x, -y); }
-  vec2 operator+(const vec2& v) const { return vec2(x+v.x, y+v.y); }    
+  vec2 operator+(const vec2& v) const { return vec2(x+v.x, y+v.y); }
   vec2 operator-(const vec2& v) const { return vec2(x-v.x, y-v.y); }
   vec2 operator*(const vec2& v) const { return vec2(x*v.x, y*v.y); }
-  vec2 operator/(const vec2& v) const { return *this * v.recip(); }
+  vec2 operator/(const vec2& v) const { return *this * recip(v); }
   vec2 operator*(T r) const { return vec2(x*r, y*r); }
-  vec2 operator/(T r) const { return *this * ::kapusha::recip(r); }
+  vec2 operator/(T r) const { return *this * recip(r); }
   vec2& operator+=(const vec2& v) { return *this = *this + v; }
   vec2& operator-=(const vec2& v) { return *this = *this - v; }
   vec2& operator*=(const vec2& v) { return *this = *this * v; }
@@ -65,17 +46,39 @@ template <typename T> struct vec2 {
   }
   template <typename R> vec2 operator/(const vec2<R>& v) const {
     return vec2(x/v.x, y/v.y);
-  }    
+  }
   bool operator==(const vec2<T>& v) const { return v.x == x && v.y == y; } 
   bool operator!=(const vec2<T>& v) const { return v.x != x || v.y != y; }
-  bool operator<(const vec2<T>& v) const { return length_sq() < v.length_sq(); }
-  
+  // ??? bool operator<(const vec2<T>& v) const { return length2(*this) < length2(v); }
 };
-  
-template <typename T>
-vec2<T> operator*(T t, const vec2<T>& v)
-{
+
+template <typename T> vec2<T> operator*(T t, const vec2<T>& v) {
   return v * t;
+}
+
+template <typename T> T area(vec2<T> v) { return v.x * v.y; }
+template <typename T> T dot(vec2<T> a, vec2<T> b) { return a.x*b.x + a.y*b.y; }
+template <typename T> T length2(vec2<T> v) { return dot(v, v); }
+template <typename T> T length(vec2<T> v) { return sqrt(length2(v)); }
+template <typename T> T rlength(vec2<T> v) { return rsqrt(length2(v)); }
+template <typename T> vec2<T> recip(vec2<T> v) {
+  return vec2<T>(recip(v.x), recip(v.y));
+}
+template <typename T> vec2<T> normalize(vec2<T> v) { return v * rlength(v); }
+template <typename T> vec2<T> abs(vec2<T> v) {
+  return vec2<T>(abs(v.x), abs(v.y));
+}
+template <typename T> vec2<T> clamp(vec2<T> v, T min, T max) {
+  return vec2<T>(clamp(v.x, min, max), clamp(v.y, min, max));
+}
+template <typename T> vec2<T> clamp(vec2<T> v, vec2<T> min, vec2<T> max) {
+  return vec2<T>(clamp(v.x, min.x, max.x), clamp(v.y, min.y, max.y));
+}
+template <typename T> vec2<T> floor(vec2<T> v) {
+  return vec2<T>(floor(v.x), floor(v.y));
+}
+template <typename T> vec2<T> fract(vec2<T> v) {
+  return vec2<T>(fract(v.x), fract(v.y));
 }
 
 } // namespace math

@@ -12,7 +12,7 @@ class Program : public core::Object {
 public:
   struct UniformState {
     void clear();
-    inline void set_uniform(int location, math::f32 value) {
+    inline void set_uniform(int location, f32 value) {
       set_uniform(location, Uniform::Float, &value);
     }
     inline void set_uniform(int location, const vec2f &value) {
@@ -25,11 +25,11 @@ public:
       set_uniform(location, Uniform::Vec4, value.tptr());
     }
     inline void set_uniform(int location, const mat2f &value) {
-      mat2f trans(value.transposed());
+      mat2f trans(transpose(value));
       set_uniform(location, Uniform::Mat2, trans.tptr());
     }
     inline void set_uniform(int location, const mat4f &value) {
-      mat4f trans(value.transposed());
+      mat4f trans(transpose(value));
       set_uniform(location, Uniform::Mat4, trans.tptr());
     }
     void set_uniform(int location, Sampler *sampler);
@@ -61,7 +61,7 @@ public:
       inline UniformSampler() {}
       inline bool empty() const { return !sampler.valid(); }
     };
-    void set_uniform(int location, Uniform::Type type, const math::f32 *data);
+    void set_uniform(int location, Uniform::Type type, const f32 *data);
     Uniform uniform_state_[MAX_STATE_UNIFORMS];
     float storage_[MAX_STATE_UNIFORM_STORAGE];
     UniformSampler samplers_[MAX_STATE_UNIFORM_SAMPLERS];

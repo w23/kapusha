@@ -23,7 +23,7 @@ void transform_t::orient_at(vec4f at, vec4f up) {
 }
 
 void transform_t::calc_matrix() {
-  matrix_ = orientation_.matrix() * mat4f().make_translation(translation_.xyz());
+  matrix_ = orientation_.matrix() * mat4_translation(translation_.xyz());
 }
 
 transform_t::orientation_t::orientation_t() : q_(0.f), matrix_(1.f) {}
@@ -34,8 +34,8 @@ void transform_t::orientation_t::set(const quatf &q) {
 }
 
 void transform_t::orientation_t::set_direction(vec4f forward, vec4f up) {
-  vec4f right = up.normalized().cross(forward.normalize());
-  up = forward.cross(right);
+  vec4f right = cross(normalize(up), normalize(forward));
+  up = cross(forward, right);
   matrix_ = mat4f(right, up, forward);
   q_ = quatf(matrix_);
 }

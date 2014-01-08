@@ -31,7 +31,7 @@ public:
     
     Program *prog = new Program(g_shaderVertex, g_shaderFragment);
     Material *mat = new Material(prog);
-    mat->set_uniform("uv3_light_dir", vec3f(.5f, 1.f, .5f).normalized());
+    mat->set_uniform("uv3_light_dir", normalize(vec3f(.5f, 1.f, .5f)));
     mat->set_uniform("uv3_light_color", vec3f(1.f, 1.f, .9f));
     Batch* batch = new Batch();
     batch->set_material(mat);
