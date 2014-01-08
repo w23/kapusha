@@ -41,30 +41,27 @@ void transform_t::orientation_t::set_direction(vec4f forward, vec4f up) {
 }
 
 void transform_t::orientation_t::rotate_head(float radians) {
-  q_ *= quatf(radians, up().xyz());
+  q_ = normalize(q_ * quatf(radians, up().xyz()));
   calc_matrix();
 }
 
 void transform_t::orientation_t::rotate_pitch(float radians) {
-  q_ *= quatf(radians, right().xyz());
-  q_.normalize();
+  q_ = normalize(q_ * quatf(radians, right().xyz()));
   calc_matrix();
 }
 
 void transform_t::orientation_t::rotate_roll(float radians) {
-  q_ = quatf(radians, forward().xyz()) * q_;
-  q_.normalize();
+  q_ = normalize(quatf(radians, forward().xyz()) * q_);
   calc_matrix();
 }
 
 void transform_t::orientation_t::rotate_axis(float radians, vec3f axis) {
-  q_ *= quatf(radians, axis);
-  q_.normalize();
+  q_ = normalize(q_ * quatf(radians, axis));
   calc_matrix();
 }
 
 void transform_t::orientation_t::calc_matrix() {
-  matrix_ = q_.calc_matrix();
+  matrix_ = mat4_rotation(q_);
 }
 
 } // namespace ooo
