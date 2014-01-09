@@ -7,18 +7,18 @@
 
 namespace kapusha {
 namespace render {
+
 Batch::Batch() : count_(0) {}
 
 void Batch::set_attrib_source(int attrib_location,
-  Buffer* buffer, u32 components,
-  u32 offset, u32 stride,
-  AttribType type, AttributeNormalization norm) {
+  Buffer *buffer, u32 components, u32 offset, u32 stride,
+  AttribType type, AttribNormalization norm) {
   for (int i = 0; i < MAX_BATCH_ATTRIBS; ++i)
     if (attribs_[i].index == -1) {
       attribs_[i].index = attrib_location;
       attribs_[i].buffer = buffer;
-		attribs_[i].type = static_cast<GLenum>(type);
-		attribs_[i].normalized = static_cast<GLenum>(norm);
+      attribs_[i].type = static_cast<GLenum>(type);
+      attribs_[i].normalized = static_cast<GLenum>(norm);
       attribs_[i].components = components;
       attribs_[i].offset = reinterpret_cast<void*>(offset);
       attribs_[i].stride = stride;
@@ -35,7 +35,7 @@ void Batch::clear_attributes() {
 }
 
 void Batch::draw() const {
-	if (count_ == 0) return;
+  if (count_ == 0) return;
   KP_ASSERT(material_.valid());
   material_->use();
   uniform_state_.apply();
@@ -67,5 +67,6 @@ void Batch::Attrib::unbind() const {
   glDisableVertexAttribArray(index);
   GL_ASSERT
 }
+
 } // namespace render
 } // namespace kapusha

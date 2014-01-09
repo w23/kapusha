@@ -42,7 +42,7 @@ public:
     batch->set_geometry(Batch::Geometry::TriangleStrip, 0,
                        indices, Batch::Index::U32, ibuffer);
     batch_ = batch;
-    loc_mvp_ = mat->get_uniform_location("um4_mvp");
+    loc_mvp_ = mat->uniform_location("um4_mvp");
   }
   float getHeight(vec2f at) const {
     float z = 0;
@@ -62,7 +62,7 @@ private:
     float nor[3];
   };
   int loc_mvp_;
-  SBatch batch_;
+  Batch::shared batch_;
   static const char *g_shaderVertex;
   static const char *g_shaderFragment;
 };

@@ -57,10 +57,10 @@ public:
       Uniform() : type(None) {}
     };
     struct UniformSampler {
-      SSampler sampler;
+      Sampler::shared sampler;
       int location;
       inline UniformSampler() {}
-      inline bool empty() const { return !sampler.valid(); }
+      inline bool empty() const { return !sampler; }
     };
     void set_uniform(int location, Uniform::Type type, const f32 *data);
     Uniform uniform_state_[MAX_STATE_UNIFORMS];
@@ -68,6 +68,8 @@ public:
     UniformSampler samplers_[MAX_STATE_UNIFORM_SAMPLERS];
   };
 public:
+  typedef core::shared<Program> shared;
+
   enum Validity {
     AssertValid,
     TolerateInvalid
@@ -79,8 +81,8 @@ public:
   ~Program();
   bool valid() const { return name_ && shader_vertex_ && shader_fragment_; }
   // \todo relink void bind_attrib_location(const char* name, int location);
-  int get_attrib_location(const char* name) const;
-  int get_uniform_location(const char* name) const;
+  int attrib_location(const char* name) const;
+  int uniform_location(const char* name) const;
   inline void use() const { Context::use_program(this); }
 private: // noncopyable
   Program& operator=(const Program& other) { return *this; }
@@ -95,7 +97,6 @@ protected:
   friend class Context;
   inline unsigned name() const { return name_; }
 }; // class Program
-typedef core::shared<Program> SProgram;
 
 } // namespace render
 } // namespace kapusha

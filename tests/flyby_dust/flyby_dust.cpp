@@ -10,14 +10,14 @@ class Object {
 public:
   void setBatch(Batch *batch, const char *mvp_uniform_name = "um4_mvp") {
     batch_ = batch;
-    loc_mvp_ = batch_->material()->get_uniform_location(mvp_uniform_name);
+    loc_mvp_ = batch_->material()->uniform_location(mvp_uniform_name);
   }
   void draw(const mat4f &mvp) {
     batch_->uniform_state().set_uniform(loc_mvp_, mvp);
     batch_->draw();
   }
 private:
-  SBatch batch_;
+  Batch::shared batch_;
   int loc_mvp_;
 };
 

@@ -8,45 +8,45 @@
 
 namespace kapusha {
 namespace render {
-  Framebuffer::Framebuffer() : n_bufs_(0) { glGenFramebuffers(1, &name_); }
+
+Framebuffer::Framebuffer() : n_bufs_(0) { glGenFramebuffers(1, &name_); }
+Framebuffer::~Framebuffer() { glDeleteFramebuffers(1, &name_); }
+
+void Framebuffer::attach_color(Sampler *sampler, unsigned index) {
+  KP_ASSERT(index < MAX_FRAMEBUFFER_ATTACHMENTS);
+  color_attachments_[index].reset(sampler);
+  bind();
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+index, GL_TEXTURE_2D, sampler->name(), 0);
+  GL_ASSERT
+  KP_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
   
-  Framebuffer::~Framebuffer() { glDeleteFramebuffers(1, &name_); }
-  
-  void Framebuffer::attachColor(Sampler *sampler, unsigned index) {
-    KP_ASSERT(index < MAX_FRAMEBUFFER_ATTACHMENTS);
-    colorAttachments_[index].reset(sampler);
-    bind();
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+index, GL_TEXTURE_2D, sampler->name(), 0);
-    GL_ASSERT
-    KP_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
-    
-    n_bufs_ = 0;
-    for (int i = 0; i < MAX_FRAMEBUFFER_ATTACHMENTS; ++i)
-      if (colorAttachments_[i].get()) {
-        buffers_[n_bufs_] = GL_COLOR_ATTACHMENT0 + i;
-        ++n_bufs_;
-      }
-  }
-  
-  void Framebuffer::Renderbuffer::makeDepth(math::vec2i size) {
-    if (name == 0) glGenRenderbuffers(1, &name);
-    GL_ASSERT
-    glBindRenderbuffer(GL_RENDERBUFFER, name);
-    GL_ASSERT
-    glRenderbufferStorage(GL_RENDERBUFFER, KP_DEPTH_COMPONENT, size.x, size.y);
-  }
-  
-  void Framebuffer::attachDepth() {
-    bind();
-    KP_ASSERT(colorAttachments_[0].get());
-    depthAttachmentRb_.makeDepth(colorAttachments_[0]->meta().size);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER,
-                              GL_DEPTH_ATTACHMENT,
-                              GL_RENDERBUFFER,
-                              depthAttachmentRb_.name);
-    GL_ASSERT
-    KP_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
-  }
+  n_bufs_ = 0;
+  for (int i = 0; i < MAX_FRAMEBUFFER_ATTACHMENTS; ++i)
+    if (color_attachments_[i].get()) {
+      buffers_[n_bufs_] = GL_COLOR_ATTACHMENT0 + i;
+      ++n_bufs_;
+    }
+}
+
+void Framebuffer::Renderbuffer::make_depth(vec2i size) {
+  if (name_ == 0) glGenRenderbuffers(1, &name_);
+  GL_ASSERT
+  glBindRenderbuffer(GL_RENDERBUFFER, name_);
+  GL_ASSERT
+  glRenderbufferStorage(GL_RENDERBUFFER, KP_DEPTH_COMPONENT, size.x, size.y);
+}
+
+void Framebuffer::attach_depth() {
+  bind();
+  KP_ASSERT(color_attachments_[0]);
+  depth_attachment_rb_.make_depth(color_attachments_[0]->meta().size);
+  glFramebufferRenderbuffer(GL_FRAMEBUFFER,
+                            GL_DEPTH_ATTACHMENT,
+                            GL_RENDERBUFFER,
+                            depth_attachment_rb_.name());
+  GL_ASSERT
+  KP_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
+}
 
 } // namespace render
 } // namespace kapusha
