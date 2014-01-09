@@ -3,6 +3,8 @@
 #include "State.h"
 
 namespace kapusha {
+namespace render {
+
   class Sampler;
   //! Basic material that contains uniform values for specific program
   class Material : public core::Object {
@@ -37,4 +39,6 @@ namespace kapusha {
     DepthState depth_;
   }; // class Material
   typedef core::shared<Material> SMaterial;
-}
+
+} // namespace render
+} // namespace kapusha

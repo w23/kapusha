@@ -4,6 +4,7 @@
 #include "Sampler.h"
 
 namespace kapusha {
+namespace render {
   class Framebuffer : public core::Object {
   public:
     Framebuffer();
@@ -38,4 +39,6 @@ namespace kapusha {
     int buffersCount() const { return n_bufs_; }
   };
   typedef core::shared<Framebuffer> SFramebuffer;
+
+} // namespace render
 } // namespace kapusha

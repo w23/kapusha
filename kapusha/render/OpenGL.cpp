@@ -5,6 +5,7 @@
 #include "OpenGL.h"
 
 namespace kapusha {
+namespace render {
 #define __V_GL_V_PAIR(a) {GL_##a,"GL_"#a}
   static struct {
     int code;
@@ -36,4 +37,6 @@ namespace kapusha {
       abort();
     }
   }
+
+} // namespace render
 } // namespace kapusha

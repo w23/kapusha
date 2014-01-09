@@ -9,6 +9,8 @@
 #endif
 
 namespace kapusha {
+namespace render {
+
   void Sampler::init(FilterMode magnification, FilterMode minification) {
     glGenTextures(1, &name_);
     setMagFilter(magnification);
@@ -84,4 +86,6 @@ namespace kapusha {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); GL_ASSERT
     meta_ = meta;
   }
+
+} // namespace render
 } // namespace kapusha

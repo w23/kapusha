@@ -36,11 +36,12 @@
 #endif
 
 namespace kapusha {
+namespace render {
 #if DEBUG
   void glAssert(const char*, int);
-#define GL_ASSERT ::kapusha::glAssert(__FILE__,__LINE__);
+#define GL_ASSERT ::kapusha::render::glAssert(__FILE__,__LINE__);
 #else
 #define GL_ASSERT {}
 #endif
-  
+} // namespace render
 } // namespace kapusha

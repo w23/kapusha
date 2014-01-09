@@ -2,7 +2,7 @@
 #include <kapusha/render/Context.h>
 
 namespace kapusha {
-  class WGLContext : public Context {
+  class WGLContext : public render::Context {
   public:
     WGLContext(HDC dc);
     virtual ~WGLContext();

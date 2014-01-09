@@ -5,6 +5,8 @@
 #include "../math.h"
 
 namespace kapusha {
+namespace render {
+
 struct BlendState {
   enum Mode {
     ModeWhatever = 0,
@@ -99,4 +101,6 @@ private:
   bool write_;
   Comparison comparison_;
 };
+
+} // namespace render
 } // namespace kapusha

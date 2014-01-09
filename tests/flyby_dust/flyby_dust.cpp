@@ -4,6 +4,7 @@
 #include <kapusha/utils/SpectatorCameraController.h>
 
 using namespace kapusha;
+using namespace kapusha::render;
 
 class Object {
 public:

@@ -6,6 +6,7 @@
 #include "Context.h"
 
 namespace kapusha {
+namespace render {
   class Buffer : public core::Object {
   public:
     enum class Binding {
@@ -57,4 +58,6 @@ namespace kapusha {
   inline bool operator!=(Buffer::Binding b, int v) { return !(b == v); }
   inline bool operator!=(int v, Buffer::Binding b) { return !(b == v); }
   inline bool operator==(int v, Buffer::Binding b) { return b == v; }
+
+} // namespace render
 } // namespace kapusha

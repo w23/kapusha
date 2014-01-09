@@ -6,7 +6,8 @@
 #include "Context.h"
 
 namespace kapusha {
-using namespace math;
+namespace render {
+
 //! Simple class for handling shader programs
 class Program : public core::Object {
 public:
@@ -95,4 +96,6 @@ protected:
   inline unsigned name() const { return name_; }
 }; // class Program
 typedef core::shared<Program> SProgram;
+
+} // namespace render
 } // namespace kapusha

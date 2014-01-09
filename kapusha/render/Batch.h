@@ -4,6 +4,7 @@
 #include "Material.h"
 
 namespace kapusha {
+namespace render {
   class Batch : public core::Object {
   public:
     enum class Geometry {
@@ -87,4 +88,5 @@ namespace kapusha {
     unsigned index_type_;
   };
   typedef core::shared<Batch> SBatch;
+} // namespace render
 } // namespace kapusha

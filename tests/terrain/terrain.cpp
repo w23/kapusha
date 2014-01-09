@@ -5,7 +5,9 @@
 #include <kapusha/utils/SpectatorCameraController.h>
 #include <kapusha/utils/geometry.h>
 #include <kapusha/utils/noise.h>
+
 using namespace kapusha;
+using namespace kapusha::render;
 
 class Ground {
 public:

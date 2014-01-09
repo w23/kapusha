@@ -7,6 +7,7 @@
 #endif
 
 namespace kapusha {
+namespace render {
   Framebuffer::Framebuffer() : n_bufs_(0) { glGenFramebuffers(1, &name_); }
   
   Framebuffer::~Framebuffer() { glDeleteFramebuffers(1, &name_); }
@@ -46,4 +47,6 @@ namespace kapusha {
     GL_ASSERT
     KP_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
   }
+
+} // namespace render
 } // namespace kapusha

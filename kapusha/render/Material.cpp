@@ -4,6 +4,7 @@
 #include "Material.h"
 
 namespace kapusha {
+namespace render {
   void Material::use() const {
     program_->use();
     uniform_state_.apply();
@@ -31,4 +32,6 @@ namespace kapusha {
   void Material::set_uniform(const char *name, Sampler *sampler) {
     uniform_state_.set_uniform(get_uniform_location(name), sampler);
   }
+
+} // namespace render
 } // namespace kapusha

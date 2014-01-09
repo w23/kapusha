@@ -4,6 +4,7 @@
 #include "OpenGL.h"
 
 namespace kapusha {
+namespace render {
 class Buffer;
 class Program;
 class Sampler;
@@ -75,4 +76,6 @@ private: // noncopyable
   Context(const Context &other);
   Context &operator=(const Context &other);
 }; // class Context
+
+} // namespace render
 } // namespace kapusha

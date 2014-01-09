@@ -5,6 +5,8 @@
 #include "Program.h"
 
 namespace kapusha {
+namespace render {
+
   struct _ShaderInfoLogHelper {
     static int length(unsigned object) {
       int result;
@@ -191,4 +193,6 @@ namespace kapusha {
       samplers_[i].sampler->bind(i);
     } // for uniform samplers
   } // UniformState::apply()
+
+} // namespace render
 } // namespace kapusha

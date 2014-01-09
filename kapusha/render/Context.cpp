@@ -6,6 +6,7 @@
 #include "Context.h"
 
 namespace kapusha {
+namespace render {
   // TODO static pthread_key_t s_current_context_key_;
   static Context *g_current_context_ = nullptr;
   void Context::set_current(Context *context) {
@@ -53,4 +54,5 @@ namespace kapusha {
       GL_ASSERT
     }
   }
+} // namespace render
 } // namespace kapusha

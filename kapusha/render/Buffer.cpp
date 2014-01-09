@@ -4,6 +4,7 @@
 #include "Buffer.h"
 
 namespace kapusha {
+namespace render {
   Buffer::Buffer(Binding binding_hint) : binding_hint_(binding_hint), size_(0) {
     KP_ASSERT(binding_hint_ != Binding::Native);
     glGenBuffers(1, &name_); GL_ASSERT
@@ -21,4 +22,6 @@ namespace kapusha {
       size_ = size;
     }
   }
+
+} // namespace render
 } // namespace kapusha

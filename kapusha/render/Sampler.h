@@ -7,6 +7,8 @@
 #include "Context.h"
 
 namespace kapusha {
+namespace render {
+
   class Framebuffer;
   class Sampler : public core::Object {
   public:
@@ -48,4 +50,6 @@ namespace kapusha {
     inline unsigned name() const { return name_; }
   }; // class Sampler
   typedef core::shared<Sampler> SSampler;
+
+} // namespace render
 } // namespace kapusha

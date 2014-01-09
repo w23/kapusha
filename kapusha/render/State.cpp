@@ -4,6 +4,7 @@
 #include "State.h"
 
 namespace kapusha {
+namespace render {
   void BlendState::apply() const {
     if (mode_ == ModeWhatever) return;
     if (mode_ == ModeDisabled) { glDisable(GL_BLEND); return; }
@@ -29,4 +30,6 @@ namespace kapusha {
     glDepthFunc(comparison_);
     GL_ASSERT
   }
+
+} // namespace render
 } // namespace kapusha
