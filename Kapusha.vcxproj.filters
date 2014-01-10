@@ -61,9 +61,6 @@
     <ClCompile Include="kapusha\utils\SpectatorCameraController.cpp">
       <Filter>ooo</Filter>
     </ClCompile>
-    <ClCompile Include="kapusha\render\State.cpp">
-      <Filter>render</Filter>
-    </ClCompile>
     <ClCompile Include="kapusha\core\Surface.cpp">
       <Filter>core</Filter>
     </ClCompile>

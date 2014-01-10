@@ -37,7 +37,7 @@ void Batch::clear_attributes() {
 void Batch::draw() const {
   if (count_ == 0) return;
   KP_ASSERT(material_.valid());
-  material_->use();
+  Context::use_material(material_);
   uniform_state_.apply();
   for (int i = 0; i < MAX_BATCH_ATTRIBS; ++i)
     if (attribs_[i].index != -1) attribs_[i].bind();

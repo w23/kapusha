@@ -83,7 +83,7 @@ public:
   // \todo relink void bind_attrib_location(const char* name, int location);
   int attrib_location(const char* name) const;
   int uniform_location(const char* name) const;
-  inline void use() const { Context::use_program(this); }
+
 private: // noncopyable
   Program& operator=(const Program& other) { return *this; }
   Program(const Program& other) {}

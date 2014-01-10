@@ -137,10 +137,6 @@ Dust::Dust(int count, float size, float radius) {
 ///////////////////////////////////////////////////////////////////////////////
 Viewport::Viewport(IViewportController *controller)
  : ctrl_(controller), camctl_(camera_), dust_(8192, .1f, 20.f), ground_(20.f) {
-  glEnable(GL_DEPTH_TEST);
-  GL_ASSERT
-  glEnable(GL_CULL_FACE);
-  GL_ASSERT
 #if !KAPUSHA_GLES
   glEnable(GL_POINT_SPRITE);
   GL_ASSERT

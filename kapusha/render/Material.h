@@ -31,16 +31,19 @@ public:
   Program::UniformState &uniform_state() { return uniform_state_; }
   const Program::UniformState &uniform_state() const { return uniform_state_; }
 
-  BlendState &blend() { return blend_; }
-
-  //! Make current material -- sets program and uniforms
-  void use() const;
+  blend_t &blend() { return blend_; }
+  depth_t &depth() { return depth_; }
+  cull_t &cull() { return cull_; }
+  const blend_t &blend() const { return blend_; }
+  const depth_t &depth() const { return depth_; }
+  const cull_t &cull() const { return cull_; }
 
 private:
   Program::shared program_;
   Program::UniformState uniform_state_;
-  BlendState blend_;
-  DepthState depth_;
+  blend_t blend_;
+  depth_t depth_;
+  cull_t cull_;
 }; // class Material
 
 } // namespace render

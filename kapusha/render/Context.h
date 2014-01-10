@@ -2,11 +2,13 @@
 // 2013 (c) Ivan 'w23' Avdeev, me@w23.ru
 #pragma once
 #include "OpenGL.h"
+#include "State.h"
 
 namespace kapusha {
 namespace render {
 class Buffer;
 class Program;
+class Material;
 class Sampler;
 class Framebuffer;
 
@@ -58,12 +60,11 @@ public:
     current()->do_bind_framebuffer(framebuffer);
   }
 
-protected: // implementation details
-  void do_bind_buffer(const Buffer *buffer, int binding);
-  void do_use_program(const Program *program);
-  void do_bind_sampler(const Sampler *sampler, int unit);
-  void do_bind_framebuffer(const Framebuffer *framebuffer);
+  static inline void use_material(const Material *material) {
+    current()->do_use_material(material);
+  }
 
+protected: // implementation details
   inline Context() {}
 
   /// Set current thread context
@@ -75,6 +76,21 @@ protected: // implementation details
 private: // noncopyable
   Context(const Context &other);
   Context &operator=(const Context &other);
+
+  void do_bind_buffer(const Buffer *buffer, int binding);
+  void do_use_program(const Program *program);
+  void do_bind_sampler(const Sampler *sampler, int unit);
+  void do_bind_framebuffer(const Framebuffer *framebuffer);
+  void do_use_material(const Material *material);
+
+  struct blendstate_t : public blend_t { void update(const blend_t &state); };
+  struct depthstate_t : public depth_t { void update(const depth_t &state); };
+  struct cullstate_t : public cull_t { void update(const cull_t &state); };
+
+  blendstate_t blend_;
+  depthstate_t depth_;
+  cullstate_t cull_;
+
 }; // class Context
 
 } // namespace render

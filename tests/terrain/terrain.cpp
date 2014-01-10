@@ -33,6 +33,8 @@ public:
     
     Program *prog = new Program(g_shaderVertex, g_shaderFragment);
     Material *mat = new Material(prog);
+    mat->cull().mode = cull_t::Enabled;
+    mat->depth().mode = depth_t::Enabled;
     mat->set_uniform("uv3_light_dir", normalize(vec3f(.5f, 1.f, .5f)));
     mat->set_uniform("uv3_light_color", vec3f(1.f, 1.f, .9f));
     Batch* batch = new Batch();
@@ -109,11 +111,6 @@ private:
 Viewport::Viewport(IViewportController* ctrl)
 : ctrl_(ctrl), camctl_(camera_) {
   ground_.reset(new Ground());
-  glEnable(GL_DEPTH_TEST);
-  GL_ASSERT
-  //glEnable(GL_CULL_FACE);
-  GL_ASSERT
-  //camera_.setProjection(90.f, 1.f, .1f, 1000.f);
   camera_.look_at(vec3f(100.f), vec3f(0.f));
   glClearColor(.7f, .9f, 1.f, 1.f);
   camctl_.set_speed(50.f);

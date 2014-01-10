@@ -48,6 +48,11 @@ template <typename T> struct vec4 {
 
   inline bool is_direction() const { return w == 0; }
 
+  bool operator==(vec4 other) const {
+    return x == other.x && y == other.y && z == other.z && w == other.w;
+  }
+  bool operator!=(vec4 other) const { return !(other == *this); }
+
   vec4 operator-() const { return vec4(-x, -y, -z, -w); }
   vec4 operator*(T r) const { return vec4(x*r, y*r, z*r, w*r); }
   vec4 operator/(T r) const { return *this * recip(r); }

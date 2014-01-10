@@ -95,7 +95,6 @@
     <ClCompile Include="kapusha\render\Program.cpp" />
     <ClCompile Include="kapusha\math\math.cpp" />
     <ClCompile Include="kapusha\render\Sampler.cpp" />
-    <ClCompile Include="kapusha\render\State.cpp" />
     <ClCompile Include="kapusha\sys\win\main.cpp" />
     <ClCompile Include="kapusha\sys\win\WGLContext.cpp" />
     <ClCompile Include="kapusha\sys\win\WindowsKeys.cpp" />

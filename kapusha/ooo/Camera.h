@@ -8,12 +8,6 @@ using namespace math;
 struct camera_t {
   camera_t();
 
-  /*vec3f pos = vec3f(1.f, 1.f, 1.f),
-    vec3f at = vec3f(0.f, 0.f, 0.f),
-    vec3f up = vec3f(0.f, 1.f, 0.f),
-    float fov = 60.f, float aspect = 1.f,
-    float znear = .1f, float zfar = 100.f);*/
-
   inline vec3f position() const { return -transform_.translation().xyz(); }
   inline vec3f forward() const { return transform_.forward().xyz(); }
   inline vec3f up() const { return transform_.up().xyz(); }

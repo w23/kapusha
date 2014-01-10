@@ -6,12 +6,6 @@
 namespace kapusha {
 namespace render {
 
-void Material::use() const {
-  program_->use();
-  uniform_state_.apply();
-  blend_.apply();
-  depth_.apply();
-}
 void Material::set_uniform(const char *name, float value) {
   uniform_state_.set_uniform(uniform_location(name), value);
 }

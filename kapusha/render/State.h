@@ -7,11 +7,10 @@
 namespace kapusha {
 namespace render {
 
-struct BlendState {
+struct blend_t {
   enum Mode {
-    ModeWhatever = 0,
-    ModeDisabled = 1,
-    ModeEnabled = 2
+    Disabled = 0,
+    Enabled = 1
   };
   enum Function {
     ConstOne = GL_ONE,
@@ -37,43 +36,25 @@ struct BlendState {
     Subtract = GL_FUNC_SUBTRACT,
     ReverseSubtract = GL_FUNC_REVERSE_SUBTRACT
   };
-  inline BlendState(Mode mode = ModeWhatever, Equation equ = Add,
-                    Function funcSource = ConstOne,
-                    Function funcDest = ConstZero,
-             math::vec4f color = math::vec4f(0.f))
-    : mode_(mode), funcSrcColor_(funcSource), funcSrcAlpha_(funcSource)
-    , funcDstColor_(funcDest), funcDstAlpha_(funcDest)
-    , equColor_(equ), equAlpha_(equ), color_(color) {}
-  inline void setMode(Mode mode) { mode_ = mode; }
-  inline void enable() { setMode(ModeEnabled); }
-  inline void disable() { setMode(ModeDisabled); }
-  inline void setFunction(Function source, Function destination) {
-    funcSrcColor_ = funcSrcAlpha_ = source;
-    funcDstColor_ = funcDstAlpha_ = destination;
-  }
-  inline void setFunction(Function sourceColor, Function sourceAlpha,
-                          Function destColor, Function destAlpha) {
-    funcSrcColor_ = sourceColor; funcSrcAlpha_ = sourceAlpha;
-    funcDstColor_ = destColor; funcDstAlpha_ = destAlpha;
-  }
-  inline void setEquation(Equation equ) { equColor_ = equAlpha_ = equ; }
-  inline void setEquation(Equation color, Equation alpha) {
-    equColor_ = color; equAlpha_ = alpha;
-  }
-  void apply() const;
-private:
-  Mode mode_;
-  Function funcSrcColor_, funcSrcAlpha_;
-  Function funcDstColor_, funcDstAlpha_;
-  Equation equColor_, equAlpha_;
-  math::vec4f color_;
+
+  inline blend_t(Mode mode_in = Disabled, Equation equ_in = Add,
+    Function func_src_in = ConstOne, Function func_dst_in = ConstZero,
+    vec4f color_in = vec4f(0.f))
+    : mode(mode_in), func_src_color(func_src_in), func_src_alpha(func_src_in)
+    , func_dst_color(func_dst_in), func_dst_alpha(func_dst_in)
+    , equ_color(equ_in), equ_alpha(equ_in), color(color_in) {}
+
+  Mode mode;
+  Function func_src_color, func_src_alpha;
+  Function func_dst_color, func_dst_alpha;
+  Equation equ_color, equ_alpha;
+  vec4f color;
 };
 
-struct DepthState {
+struct depth_t {
   enum Mode {
-    Whatever = 0,
-    Disabled = 1,
-    Enabled = 2
+    Disabled = 0,
+    Enabled = 1
   };
   enum Comparison {
     Never = GL_NEVER,
@@ -85,22 +66,36 @@ struct DepthState {
     GreaterOrEqual = GL_GEQUAL,
     Greater = GL_GREATER
   };
-  inline DepthState(Mode mode = Whatever, bool write = true,
-                    Comparison comp = Less)
-    : mode_(mode), write_(write), comparison_(comp) {}
-  inline void setMode(Mode mode) { mode_ = mode; }
-  inline void enable() { setMode(Enabled); }
-  inline void disable() { setMode(Disabled); }
-  inline void setWriteEnable(bool write) { write_ = write; }
-  inline void writeEnable() { setWriteEnable(true); }
-  inline void writeDisable() { setWriteEnable(false); }
-  inline void setComparison(Comparison comparison) { comparison_ = comparison; }
-  void apply() const;
-private:
-  Mode mode_;
-  bool write_;
-  Comparison comparison_;
+
+  inline depth_t(Mode mode_in = Disabled, Mode write_in = Enabled,
+    Comparison comp_in = LessOrEqual)
+    : mode(mode_in), write(write_in), comparison(comp_in) {}
+
+  Mode mode;
+  Mode write;
+  Comparison comparison;
 };
+
+struct cull_t {
+  enum Mode { Disabled = 0, Enabled = 1 };
+  enum CullFace {
+    Front = GL_FRONT,
+    Back = GL_BACK,
+    FrontAndBack = GL_FRONT_AND_BACK
+  };
+  enum FrontFace {
+    Clockwise = GL_CW,
+    Counterclockwise = GL_CCW
+  };
+
+  inline cull_t(Mode mode_in = Disabled, CullFace cull_face_in = Back,
+    FrontFace front_face_in = Counterclockwise)
+    : mode(mode_in), cull_face(cull_face_in), front_face(front_face_in) {}
+
+  Mode mode;
+  CullFace cull_face;
+  FrontFace front_face;
+}; // struct cull_t
 
 } // namespace render
 } // namespace kapusha
