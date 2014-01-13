@@ -52,5 +52,18 @@ bool buffer_t::operator==(const buffer_t &other) const {
   return 0 == memcmp(data_, other.data_, size_);
 }
 
+void buffer_t::resize(size_t new_size) {
+  if (new_size == size_) return;
+
+  char *new_data = nullptr;
+  if (new_size != 0) {
+    new_data = new char[new_size];
+    memcpy(new_data, data_, (size_ < new_size) ? size_ : new_size);
+  }
+  delete[] data_;
+  data_ = new_data;
+  size_ = new_size;
+}
+
 } // namespace core
 } // namespace kapusha
