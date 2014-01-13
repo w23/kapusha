@@ -3,11 +3,15 @@
 
 namespace kapusha {
 namespace core {
-array_t::array_t(u32 item_size, u32 reserve) : item_size_(item_size), size_(0)
-  , reserved_(reserve), buffer_(item_size * reserve) {
-}
+array_t::array_t(u32 item_size, u32 reserve, item_dtor_f item_dtor)
+  : item_size_(item_size), size_(0), reserved_(reserve), item_dtor_(item_dtor)
+  , buffer_(item_size * reserve) {}
 
-array_t::~array_t() {}
+array_t::~array_t() {
+  if (item_dtor_)
+    for (u32 i = 0; i < size_; ++i)
+      item_dtor_(operator[](i));
+}
 
 u32 array_t::push_back(const void *items, u32 count) {
   u32 old_size = size_;
@@ -27,6 +31,9 @@ void array_t::resize(u32 items) {
     while (reserved < items) reserved <<= 1;
     reserve(reserved);
   }
+  if (items < size_ && item_dtor_)
+    for (u32 i = items; i < size_; ++i)
+      item_dtor_(operator[](i));
   size_ = items;
 }
 
@@ -46,10 +53,14 @@ void array_t::insert(u32 index, const void *items, u32 count) {
 
 void array_t::erase(u32 index, u32 count) {
   KP_ASSERT((index + count) <= size_);
+  if (item_dtor_)
+    for (u32 i = 0; i < count; ++i)
+      item_dtor_(operator[](i + index));
   memmove(buffer_.data() + item_size_ * index,
     buffer_.data() + item_size_ * (index + count),
     item_size_ * (size_ - index - count));
   size_ -= count;
 }
+
 } // namespace core
 } // namespace kapusha

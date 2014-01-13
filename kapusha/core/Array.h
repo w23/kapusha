@@ -14,7 +14,10 @@ public:
 #else
   inline array_t() {}
 #endif
-  array_t(u32 item_size, u32 reserve = 0);
+
+  typedef void (*item_dtor_f)(void *item);
+
+  array_t(u32 item_size, u32 reserve = 0, item_dtor_f item_dtor = nullptr);
   ~array_t();
 
   inline u32 item_size() const { return item_size_; }
@@ -34,12 +37,12 @@ public:
   void *alloc(u32 index, u32 count = 1);
   void insert(u32 index, const void *items, u32 count = 1);
 
-  inline const void *get(u32 index) const {
+  inline const void *operator[](u32 index) const {
     KP_ASSERT(index < size_);
     return buffer_.data() + item_size_ * index;
   }
 
-  inline void *get(u32 index) {
+  inline void *operator[](u32 index) {
     KP_ASSERT(index < size_);
     return buffer_.data() + item_size_ * index;
   }
@@ -61,6 +64,7 @@ public:
 private:
   u32 item_size_;
   u32 size_, reserved_;
+  item_dtor_f item_dtor_;
   buffer_t buffer_;
 }; // class Array
 
