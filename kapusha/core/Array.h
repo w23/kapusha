@@ -1,27 +1,27 @@
 #pragma once
 #include "types.h"
 #include "assert.h"
+#include "buffer.h"
 
 namespace kapusha {
 namespace core {
+
 //! \brief Basic array for mostly POD types
-class Array {
+class array_t {
 public:
 #if !defined(_MSC_VER)
-  inline Array() = default;
+  inline array_t() = default;
 #else
-  inline Array() {}
+  inline array_t() {}
 #endif
-  Array(u32 item_size, u32 reserve = 0);
-  ~Array();
-  
-  void init(u32 item_size, u32 reserve = 0);
+  array_t(u32 item_size, u32 reserve = 0);
+  ~array_t();
 
   inline u32 item_size() const { return item_size_; }
   inline u32 size() const { return size_; }
   inline u32 total_size_in_bytes() const { return size() * item_size(); }
   inline void clear() { size_ = 0; }
-  
+
   void reserve(u32 items);
   void resize(u32 items);
 
@@ -36,12 +36,12 @@ public:
 
   inline const void *get(u32 index) const {
     KP_ASSERT(index < size_);
-    return items_ + item_size_ * index;
+    return buffer_.data() + item_size_ * index;
   }
 
   inline void *get(u32 index) {
     KP_ASSERT(index < size_);
-    return items_ + item_size_ * index;
+    return buffer_.data() + item_size_ * index;
   }
 
   template <typename T>
@@ -60,26 +60,25 @@ public:
 
 private:
   u32 item_size_;
-  u32 reserved_;
-  u32 size_;
-  u8 *items_;
+  u32 size_, reserved_;
+  buffer_t buffer_;
 }; // class Array
 
 //! \brief Template wrapper around array for more pleasure
-template <typename T> class ArrayOf : public Array {
+template <typename T> class array_of_t : public array_t {
 public:
-  inline ArrayOf(unsigned reserve = 0) : Array(sizeof(T), reserve) {}
+  inline array_of_t(unsigned reserve = 0) : array_t(sizeof(T), reserve) {}
   inline unsigned push_back(const T* item, unsigned count = 1) {
-    return Array::push_back(item, count);
+    return array_t::push_back(item, count);
   }
   inline unsigned push_back(const T* begin, const T *end) {
-    return Array::push_back(begin, end - begin);
+    return array_t::push_back(begin, end - begin);
   }
   inline unsigned push_back(const T& item) {
-    return Array::push_back(&item, 1);
+    return array_t::push_back(&item, 1);
   }
   inline void insert(unsigned index, const T& item) {
-    Array::insert(index, &item, 1);
+    array_t::insert(index, &item, 1);
   }
   const T& operator[](unsigned index) const { return *get<T>(index); }
   T& operator[](unsigned index) { return *get<T>(index); }

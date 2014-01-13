@@ -3,63 +3,51 @@
 
 namespace kapusha {
 namespace core {
-Array::Array(u32 item_size, u32 reserved) {
-  init(item_size, reserved);
+array_t::array_t(u32 item_size, u32 reserve) : item_size_(item_size), size_(0)
+  , reserved_(reserve), buffer_(item_size * reserve) {
 }
 
-void Array::init(u32 item_size, u32 reserved) {
-  item_size_ = item_size;
-  reserved_ = 0;
-  size_ = 0;
-  items_ = nullptr;
-  reserve(reserved);
-}
+array_t::~array_t() {}
 
-Array::~Array() {
-  delete[] items_;
-}
-
-u32 Array::push_back(const void *items, u32 count) {
+u32 array_t::push_back(const void *items, u32 count) {
   u32 old_size = size_;
   insert(size_, items, count);
   return old_size;
 }
 
-void Array::reserve(u32 reserved) {
-  if (reserved <= reserved_) return;
-
-  u8 *items = new u8[item_size_ * reserved];
-  memcpy(items, items_, item_size_ * size_);
-  delete[] items_;
-  reserved_ = reserved;
-  items_ = items;
+void array_t::reserve(u32 items) {
+  if (items <= reserved_) return;
+  reserved_ = items;
+  buffer_.resize(reserved_ * item_size_);
 }
 
-void Array::resize(u32 size) {
-  if (size > reserved_) {
+void array_t::resize(u32 items) {
+  if (items > reserved_) {
     u32 reserved = reserved_ ? reserved_ : 1;
-    while (reserved < size) reserved <<= 1;
+    while (reserved < items) reserved <<= 1;
     reserve(reserved);
   }
-  size_ = size;
+  size_ = items;
 }
 
-void *Array::alloc(u32 index, u32 count) {
+void *array_t::alloc(u32 index, u32 count) {
   KP_ASSERT(index <= size_);
   u32 new_size = size_ + count;
   reserve(new_size);
-  void *slot = items_ + item_size_ * index;
-  memmove(items_ + item_size_ * (index + count), slot, item_size_ * (size_ - index));
+  void *slot = buffer_.data() + item_size_ * index;
+  memmove(buffer_.data() + item_size_ * (index + count), slot,
+    item_size_ * (size_ - index));
   size_ = new_size;
   return slot;
 }
-void Array::insert(u32 index, const void *items, u32 count) {
+void array_t::insert(u32 index, const void *items, u32 count) {
    memcpy(alloc(index, count), items, item_size_ * count);
 }
 
-void Array::erase(u32 index, u32 count) {
+void array_t::erase(u32 index, u32 count) {
   KP_ASSERT((index + count) <= size_);
-  memmove(items_ + item_size_ * index, items_ + item_size_ * (index + count),
+  memmove(buffer_.data() + item_size_ * index,
+    buffer_.data() + item_size_ * (index + count),
     item_size_ * (size_ - index - count));
   size_ -= count;
 }
