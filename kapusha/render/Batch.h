@@ -44,8 +44,8 @@ public:
   ~Batch() {}
 
   inline void set_material(Material *material) { material_ = material; }
-  inline void set_geometry(Geometry gtype, unsigned first, unsigned count,
-    Index itype = Index::U16, Buffer *index = 0) {
+  inline void set_geometry(Geometry gtype, u32 first, u32 count,
+    Index itype = Index::U16, Buffer *index = nullptr) {
     indices_ = index;
     first_ = first;
     count_ = count;
@@ -71,15 +71,16 @@ public:
   Program::UniformState& uniform_state() { return uniform_state_; }
   void draw() const;
 
+
 private:
   struct Attrib {
-    int index;
+    u32 index;
     Buffer::shared buffer;
-    int components;
+    u32 components;
     GLenum type;
     GLboolean normalized;
     void *offset;
-    int stride;
+    u32 stride;
     Attrib() : index(-1) {}
     inline void bind() const;
     inline void unbind() const;

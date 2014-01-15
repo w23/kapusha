@@ -91,6 +91,18 @@
     <ClCompile Include="kapusha\ooo\Transform.cpp">
       <Filter>ooo</Filter>
     </ClCompile>
+    <ClCompile Include="kapusha\ooo\tagged_array.cpp">
+      <Filter>ooo</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\ooo\Visual.cpp">
+      <Filter>ooo</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\ooo\Mesh.cpp">
+      <Filter>ooo</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\ooo\Material.cpp">
+      <Filter>ooo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kapusha\core.h" />
@@ -264,6 +276,21 @@
     </ClInclude>
     <ClInclude Include="kapusha\math\f32.h">
       <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\ooo\Visual.h">
+      <Filter>ooo</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\ooo\Mesh.h">
+      <Filter>ooo</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\ooo\Material.h">
+      <Filter>ooo</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\ooo\Tag.h">
+      <Filter>ooo</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\ooo\tagged_array.h">
+      <Filter>ooo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
