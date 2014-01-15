@@ -26,6 +26,15 @@ template <typename T> struct mat4 {
   inline explicit mat4(const T *p) { memcpy(rows, p, sizeof(mat4)); }
   const T *tptr() const { return rows[0].tptr(); }
 
+#define M4MCR(C,R,r,c) \
+  inline T m##R##C() const { return rows[r].##c; } \
+  inline T &m##R##C() { return rows[r].##c; }
+  M4MCR(1,1,0,x) M4MCR(2,1,0,y) M4MCR(3,1,0,z) M4MCR(4,1,0,w)
+  M4MCR(1,2,1,x) M4MCR(2,2,1,y) M4MCR(3,2,1,z) M4MCR(4,2,1,w)
+  M4MCR(1,3,2,x) M4MCR(2,3,2,y) M4MCR(3,3,2,z) M4MCR(4,3,2,w)
+  M4MCR(1,4,3,x) M4MCR(2,4,3,y) M4MCR(3,4,3,z) M4MCR(4,4,3,w)
+#undef M4MCR
+
   mat4 operator*(T r) const {
     return mat4(rows[0]*r, rows[1]*r, rows[2]*r, rows[3]*r);
   }

@@ -7,10 +7,10 @@ template <typename T> struct vec2 {
   typedef T type;
   T x, y;
 
-#if !defined(_MSC_VER)
-  inline vec2() = default;
-#else
+#if defined(_MSC_VER) && _MSC_VER < 1800
   inline vec2() {}
+#else
+  inline vec2() = default;
 #endif
 
   inline explicit vec2(T v) : x(v), y(v) {}

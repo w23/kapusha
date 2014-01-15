@@ -16,7 +16,7 @@ template <typename T> struct quat {
   quat(T v) : q(0, 0, 0, v) {}
   template <typename U>
   inline quat(const quat<U> &other) : q(other.q) {}
-  inline quat(const vec4<T>& v) : q(v) {}
+  inline explicit quat(const vec4<T>& v) : q(v) {}
   inline quat(const vec3<T>& i, T r) : q(i, r) {}
   quat(T angle, const vec3<T> &axis) : q(axis * sin(angle), cos(angle)) {}
   quat(const mat4<T> &m);

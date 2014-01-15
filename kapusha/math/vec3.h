@@ -7,7 +7,7 @@ namespace math {
 template <typename T> struct vec3 {
   T x, y, z;
 
-#if _MSC_VER < 1800
+#if defined(_MSC_VER) && _MSC_VER < 1800
   inline vec3() {}
 #else
   inline vec3() = default;
