@@ -8,15 +8,20 @@ array_t::array_t(u32 item_size, u32 reserve, item_dtor_f item_dtor)
   , buffer_(item_size * reserve) {}
 
 array_t::~array_t() {
-  if (item_dtor_)
-    for (u32 i = 0; i < size_; ++i)
-      item_dtor_(operator[](i));
+  clear();
 }
 
 u32 array_t::push_back(const void *items, u32 count) {
   u32 old_size = size_;
   insert(size_, items, count);
   return old_size;
+}
+
+void array_t::clear() {
+  if (item_dtor_)
+    for (u32 i = 0; i < size_; ++i)
+      item_dtor_(operator[](i));
+  size_ = 0;
 }
 
 void array_t::reserve(u32 items) {
