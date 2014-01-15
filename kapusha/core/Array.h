@@ -63,6 +63,18 @@ public:
     return reinterpret_cast<const T*>(buffer_.data()) + index;
   }
 
+  template <typename T>
+  inline const T *cast(u32 index) const {
+    KP_ASSERT(index < size_);
+    return reinterpret_cast<const T*>(operator[](index));
+  }
+
+  template <typename T>
+  inline T *cast(u32 index) {
+    KP_ASSERT(index < size_);
+    return reinterpret_cast<T*>(operator[](index));
+  }
+
 private:
   u32 item_size_;
   u32 size_, reserved_;
