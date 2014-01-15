@@ -23,6 +23,7 @@ template <typename T> struct mat4 {
                 const vec4<T>& r3 = vec4<T>(0,0,0,1)) {
     rows[0] = r0; rows[1] = r1; rows[2] = r2; rows[3] = r3;
   }
+  inline explicit mat4(const T *p) { memcpy(rows, p, sizeof(mat4)); }
   const T *tptr() const { return rows[0].tptr(); }
 
   mat4 operator*(T r) const {

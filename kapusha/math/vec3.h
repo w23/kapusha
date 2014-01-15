@@ -15,7 +15,7 @@ template <typename T> struct vec3 {
 
   inline vec3(T v) : x(v), y(v), z(v) {}
   inline vec3(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
-  inline vec3(const T* p) : x(p[0]), y(p[1]), z(p[2]) {}
+  inline explicit vec3(const T* p) : x(p[0]), y(p[1]), z(p[2]) {}
   inline explicit vec3(const vec2<T>& v, T _z = 0)
     : x(v.x), y(v.y), z(_z) {}
   template <typename U> inline explicit vec3(const vec3<U>& v)

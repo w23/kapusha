@@ -43,7 +43,8 @@ namespace kapusha {
       int flags_, flags_change_;
       vec2f point_, point_delta_; //! in normalized viewport coordinates
 
-      Pointer() : flags_(0), flags_change_(0), point_(0), point_delta_(0) {}
+      Pointer() : flags_(0), flags_change_(0), point_(0.f), point_delta_(0.f)
+        {}
       inline void evt_prepare() { flags_ ^= _Event; }
       inline void evt_clear() { flags_ = 0; }
       inline void evt_update_flags(int flags_add, int flags_remove = 0) {

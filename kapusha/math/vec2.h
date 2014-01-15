@@ -14,6 +14,7 @@ template <typename T> struct vec2 {
 #endif
 
   inline explicit vec2(T v) : x(v), y(v) {}
+  inline explicit vec2(const T *p) : x(p[0]), y(p[1]) {}
   inline vec2(T _x, T _y) : x(_x), y(_y) {}
   template <typename R> inline explicit vec2(const vec2<R>& v)
     : x(static_cast<T>(v.x)), y(static_cast<T>(v.y)) {}

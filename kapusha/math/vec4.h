@@ -20,6 +20,7 @@ template <typename T> struct vec4 {
     : x(v.x), y(v.y), z(_z), w(_w) {}
   inline explicit vec4(const vec3<T> &v, T _w = 0)
     : x(v.x), y(v.y), z(v.z), w(_w) {}
+  inline explicit vec4(const T *p) : x(p[0]), y(p[1]), z(p[2]), w(p[3]) {}
   const T *tptr() const { return &x; }
 
   vec2<T> xx() const { return vec2<T>(x, x); }
