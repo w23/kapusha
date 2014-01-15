@@ -1,6 +1,6 @@
 #pragma once
 #include <kapusha/core/types.h>
-#include <math.h>
+#include <cmath>
 
 namespace kapusha {
 namespace math {
@@ -15,6 +15,13 @@ inline f32 rsqrt(f32 v) { return recip(sqrt(v)); }
 inline f32 sin(f32 v) { return ::sinf(v); }
 inline f32 cos(f32 v) { return ::cosf(v); }
 inline f32 tan(f32 v) { return ::tanf(v); }
+inline f32 copysign(f32 value, f32 sign) {
+#if defined(_MSC_VER) && _MSC_VER < 1800
+  return static_cast<f32>(::_copysign(value, sign));
+#else
+  return ::copysign(value, sign);
+#endif
+}
 
 } // namespace math
 } // namespace kapusha
