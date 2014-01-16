@@ -36,7 +36,7 @@ template <typename T> struct vec3 {
   vec2<T> yz() const { return vec2<T>(y, z); }
   vec2<T> zy() const { return vec2<T>(z, y); }
 
-#define SWIZ_(X, Y, Z) inline vec3 X##Y##Z##() const { return vec3(X, Y, Z); }
+#define SWIZ_(X, Y, Z) inline vec3 X ## Y ## Z() const { return vec3(X, Y, Z); }
   SWIZ_(x, x, x) SWIZ_(x, x, y) SWIZ_(x, x, z)
   SWIZ_(x, y, x) SWIZ_(x, y, y) SWIZ_(x, y, z)
   SWIZ_(x, z, x) SWIZ_(x, z, y) SWIZ_(x, z, z)
@@ -56,8 +56,8 @@ template <typename T> struct vec3 {
   vec3 operator-(const vec3& r) const { return vec3(x-r.x, y-r.y, z-r.z); }
   vec3 operator*(const vec3& r) const { return vec3(x*r.x, y*r.y, z*r.z); }
   vec3 operator*(T r) const { return vec3(x*r, y*r, z*r); }
-  vec3 operator/(const vec3& r) const { return *this * r.recip(); }
-  vec3 operator/(T r) const { return *this * ::kapusha::recip(r); }
+  vec3 operator/(const vec3& r) const { return operator*(recip(r)); }
+  vec3 operator/(T r) const { return operator*(recip(r)); }
   vec3 &operator+=(const vec3& r) { return *this = *this + r; }
   vec3 &operator-=(const vec3& r) { return *this = *this - r; }
   vec3 &operator*=(const vec3& r) { return *this = *this * r; }
@@ -103,7 +103,7 @@ template <typename T> vec3<T> clamp(vec3<T> v, vec3<T> min, vec3<T> max) {
 template <typename T> T min(vec3<T> v) { return min(v.x, min(v.y, v.z)); }
 template <typename T> T max(vec3<T> v) { return max(v.x, max(v.y, v.z)); }
 template <typename T> vec3<T> abs(vec3<T> v) {
-  return vec3(abs(v.x), abs(v.y), abs(v.z));
+  return vec3<T>(abs(v.x), abs(v.y), abs(v.z));
 }
 template <typename T> vec3<T> mod(vec3<T> v, vec3<T> d) {
   return vec3<T>(mod(v.x, d.x), mod(v.y, d.y), mod(v.z, d.z));

@@ -70,6 +70,11 @@ void Visual::set_uniform(s32 location, const Material::value_t &value) {
     case Material::value_t::Mat4:
       batch_->uniform_state().set_uniform(location, mat4f(value.data.fp));
     break;
+    case Material::value_t::None:
+    default:
+//      KP_ASSERT(!"Invalid/unsupported uniform value type");
+//      L("Invalid/unsupported uniform value type");
+      return;
   }
 }
 

@@ -74,7 +74,7 @@ public:
 
 private:
   struct Attrib {
-    u32 index;
+    int index;
     Buffer::shared buffer;
     u32 components;
     GLenum type;

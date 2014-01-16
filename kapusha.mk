@@ -25,23 +25,22 @@ SOURCES += \
 	$(KAPUSHA_SRC)/render/Material.cpp \
 	$(KAPUSHA_SRC)/render/Batch.cpp \
 	$(KAPUSHA_SRC)/render/Sampler.cpp \
-	$(KAPUSHA_SRC)/render/State.cpp \
 	$(KAPUSHA_SRC)/render/Buffer.cpp \
 	$(KAPUSHA_SRC)/render/OpenGL.cpp \
 	$(KAPUSHA_SRC)/render/Context.cpp \
 	$(KAPUSHA_SRC)/render/Framebuffer.cpp
 
 SOURCES += \
-	$(KAPUSHA_SRC)/ooo/Reframe.cpp \
 	$(KAPUSHA_SRC)/ooo/Camera.cpp \
-	$(KAPUSHA_SRC)/ooo/Node.cpp \
-	$(KAPUSHA_SRC)/ooo/Transform.cpp
-
+	$(KAPUSHA_SRC)/ooo/Transform.cpp \
+	$(KAPUSHA_SRC)/ooo/Material.cpp \
+	$(KAPUSHA_SRC)/ooo/Mesh.cpp \
+	$(KAPUSHA_SRC)/ooo/Visual.cpp \
+	$(KAPUSHA_SRC)/ooo/tagged_array.cpp
 
 SOURCES += \
 	$(KAPUSHA_SRC)/utils/SpectatorCameraController.cpp \
 	$(KAPUSHA_SRC)/utils/geometry.cpp \
-	$(KAPUSHA_SRC)/utils/Atlas.cpp \
 	$(KAPUSHA_SRC)/utils/noise.cpp
 
 ifeq ($(OS_RASPBERRY),1)

@@ -46,7 +46,7 @@ struct camera_t {
     void update_aspect(float aspect);
     void update_aspect(vec2i size);
 
-    inline const mat4f matrix() const { return matrix_; }
+    inline const mat4f &matrix() const { return matrix_; }
     inline operator const mat4f &() { return matrix_; }
   private:
     float fov_, aspect_, znear_, zfar_;

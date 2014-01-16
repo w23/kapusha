@@ -23,12 +23,17 @@ template <typename T> struct mat4 {
                 const vec4<T>& r3 = vec4<T>(0,0,0,1)) {
     rows[0] = r0; rows[1] = r1; rows[2] = r2; rows[3] = r3;
   }
-  inline explicit mat4(const T *p) { memcpy(rows, p, sizeof(mat4)); }
+  inline explicit mat4(const T *p) {
+    rows[0] = vec4<T>(p);
+    rows[1] = vec4<T>(p+4);
+    rows[2] = vec4<T>(p+8);
+    rows[3] = vec4<T>(p+12);
+  }
   const T *tptr() const { return rows[0].tptr(); }
 
 #define M4MCR(C,R,r,c) \
-  inline T m##R##C() const { return rows[r].##c; } \
-  inline T &m##R##C() { return rows[r].##c; }
+  inline T m ## R ## C() const { return rows[r].c; } \
+  inline T &m ## R ## C() { return rows[r].c; }
   M4MCR(1,1,0,x) M4MCR(2,1,0,y) M4MCR(3,1,0,z) M4MCR(4,1,0,w)
   M4MCR(1,2,1,x) M4MCR(2,2,1,y) M4MCR(3,2,1,z) M4MCR(4,2,1,w)
   M4MCR(1,3,2,x) M4MCR(2,3,2,y) M4MCR(3,3,2,z) M4MCR(4,3,2,w)
@@ -92,7 +97,7 @@ template <typename T> mat4<T> mat4_rotation(vec3<T> axis, T angle) {
     vec4<T>(c1*a2.x + c, c1*xy - s*axis.z, c1*xz + s*axis.y, 0),
     vec4<T>(c1*xy + s*axis.z, c1 * a2.y+c, c1*yz - s*axis.x, 0),
     vec4<T>(c1*xz - s*axis.y, c1*yz + s*axis.x, c1*a2.z + c, 0),
-    vec4<T>( 0, 0, 0, 1))
+    vec4<T>( 0, 0, 0, 1));
 }
 
 } // namespace math

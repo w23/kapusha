@@ -16,7 +16,7 @@ template <typename T> struct mat2 {
   inline mat2(const vec2<T>& row0, const vec2<T>& row1) {
     rows[0] = row0; rows[1] = row1;
   }
-  inline explicit mat2(const T *p) { rows[0] = vec2f(p); rows[1] = vec2f(p+2); }
+  inline explicit mat2(const T *p) { rows[0] = vec2<T>(p); rows[1] = vec2<T>(p+2); }
   inline const T *tptr() const { return rows[0].tptr(); }
 
   vec2<T> operator*(const vec2<T> &r) const {

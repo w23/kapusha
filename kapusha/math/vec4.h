@@ -33,7 +33,7 @@ template <typename T> struct vec4 {
   vec2<T> yz() const { return vec2<T>(y, z); }
   vec2<T> zy() const { return vec2<T>(z, y); }
 
-#define SWIZ_(X, Y, Z) inline vec3<T> X##Y##Z##() const { return vec3<T>(X, Y, Z); }
+#define SWIZ_(X, Y, Z) inline vec3<T> X ## Y ## Z() const { return vec3<T>(X, Y, Z); }
   SWIZ_(x, x, x) SWIZ_(x, x, y) SWIZ_(x, x, z)
   SWIZ_(x, y, x) SWIZ_(x, y, y) SWIZ_(x, y, z)
   SWIZ_(x, z, x) SWIZ_(x, z, y) SWIZ_(x, z, z)

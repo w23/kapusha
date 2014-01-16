@@ -9,6 +9,9 @@
 #ifdef AnyButton
 #undef AnyButton // this is ridiculous too
 #endif
+#ifdef Always
+#undef Always // also this
+#endif
 #include <kapusha/core.h>
 #include <kapusha/viewport.h>
 #include <kapusha/render/Context.h>

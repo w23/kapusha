@@ -67,7 +67,7 @@ template <typename T> quat<T>::quat(const mat4<T> &m) {
   }
 }
 
-template <typename T> quat<T> conjugate() { return quat<T>(-q.imag(), q.real()); }
+template <typename T> quat<T> conjugate(quat<T> q) { return quat<T>(-q.imag(), q.real()); }
 template <typename T> T norm(quat<T> q) { return length(q.q); }
 template <typename T> quat<T> normalize(quat<T> q) { return quat<T>(q.q *= recip(norm(q))); }
 template <typename T> mat4<T> mat4_rotation(quat<T> q) {

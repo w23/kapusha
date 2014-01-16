@@ -4,7 +4,7 @@
 namespace kapusha {
 namespace sys {
 
-class GLXContext : public Context {
+class GLXContext : public render::Context {
 public:
   /// Create a new context that renders to drawable
   GLXContext(::Display *display, ::GLXFBConfig fbconfig, ::GLXDrawable drawable);
