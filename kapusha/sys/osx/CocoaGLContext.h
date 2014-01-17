@@ -3,7 +3,7 @@
 #include <kapusha/render.h>
 
 namespace kapusha {
-  class CocoaGLContext : public Context {
+  class CocoaGLContext : public render::Context {
   public:
     CocoaGLContext(NSOpenGLContext *cocoaContext);
     virtual ~CocoaGLContext();

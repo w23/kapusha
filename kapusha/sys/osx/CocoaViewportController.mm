@@ -43,7 +43,7 @@ namespace kapusha {
   void CocoaViewportController::resize(vec2i size) {
     KP_ASSERT(viewport_);
     viewport_->resize(size);
-    pointers_.resize(size);
+    pointers_.resize(vec2f(size));
   }
   
   void CocoaViewportController::draw() {
