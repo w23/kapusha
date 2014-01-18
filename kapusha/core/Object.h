@@ -1,7 +1,8 @@
 #pragma once
 #include "extern.h"
+#include "types.h"
 
-/// \warning kapusha does not support multiple inheritance by design
+/// \warning kapusha objects do not support multiple inheritance by design
 
 namespace kapusha {
 namespace core {
@@ -36,7 +37,7 @@ private: // Object is noncopyable by default
   Object &operator=(const Object &&object);
 
 private:
-  std::atomic<int> retain_count_;
+  std::atomic<u32> retain_count_;
 };
 
 } // namespace core
