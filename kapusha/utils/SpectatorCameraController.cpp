@@ -4,7 +4,7 @@ namespace kapusha {
 SpectatorCameraController::SpectatorCameraController(ooo::camera_t &camera)
   : camera_(camera), key_forward_(Keys::KeyW), key_back_(Keys::KeyS)
   , key_strafe_left_(Keys::KeyA), key_strafe_right_(Keys::KeyD)
-  , key_speed_(Keys::KeyLeftShift), sensitivity_(1.f)
+  , key_speed_(Keys::KeyLeftShift), sensitivity_(2.f)
   , speed_(10.f), speed_factor_(5.f), orientation_(false)
 {
 }

@@ -11,7 +11,7 @@ camera_t::camera_t() {
 
 void camera_t::look_at(vec3f pos, vec3f at, vec3f up) {
   move_to(pos);
-  transform_.orient_at(vec4f(at), vec4f(up));
+  transform_.set_direction(vec4f(at - position()), vec4f(up));
   calc_matrix();
 }
 

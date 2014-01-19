@@ -25,11 +25,11 @@ struct camera_t {
     vec3f up = vec3f(0.f, 1.f, 0.f)) {
     transform_.set_direction(vec4f(forward), vec4f(up));
   }
-  inline void rotate_head(float radians) { transform_.rotate_head(radians); }
-  inline void rotate_pitch(float radians) { transform_.rotate_pitch(radians); }
-  inline void rotate_roll(float radians) { transform_.rotate_roll(radians); }
+  inline void rotate_head(float radians) { transform_.rotate_head(-radians); }
+  inline void rotate_pitch(float radians) { transform_.rotate_pitch(-radians); }
+  inline void rotate_roll(float radians) { transform_.rotate_roll(-radians); }
   inline void rotate_axis(vec3f axis, float radians) {
-    transform_.rotate_axis(radians, axis);
+    transform_.rotate_axis(-radians, axis);
   }
 
   void update_aspect(vec2i size);
