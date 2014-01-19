@@ -35,36 +35,51 @@ template <typename T> struct quat {
 }; // struct quat
 
 template <typename T> quat<T>::quat(const mat4<T> &m) {
-  const T tr = trace(m); // trace of mat4 should already have +1
+  T tr = m.m00() + m.m11() + m.m22();
   if (tr > T(0)) {
-    T r = sqrt(tr) * T(2);
-    q.w = r / T(4);
-    r = T(-1) / r;
-    q.x = r * (m.rows[1].z - m.rows[2].y);
-    q.y = r * (m.rows[2].x - m.rows[0].z);
-    q.z = r * (m.rows[0].y - m.rows[1].x);
-  } else if ((m.rows[0].x > m.rows[1].y) && (m.rows[0].x > m.rows[2].z)) {
-    T r = sqrt(T(1) + m.rows[0].x - m.rows[1].y - m.rows[2].z) * T(2);
-    q.x = r / T(4);
-    r = T(-1) / r;
-    q.z = r * (m.rows[1].z - m.rows[2].y);
-    q.x = r * (m.rows[2].x - m.rows[0].z);
-    q.w = r * (m.rows[0].y - m.rows[1].x);
-  } else if (m.rows[1].y > m.rows[2].z) {
-    T r = sqrt(T(1) + m.rows[1].y - m.rows[0].x - m.rows[2].z) * T(2);
-    q.y = r / T(4);
-    r = T(-1) / r;
-    q.z = r * (m.rows[1].z - m.rows[2].y);
-    q.w = r * (m.rows[2].x - m.rows[0].z);
-    q.x = r * (m.rows[0].y - m.rows[1].x);
-  } else {
-    T r = sqrt(T(1) + m.rows[2].z - m.rows[0].x - m.rows[1].y) * T(2);
-    q.z = r / T(4);
-    r = T(-1) / r;
-    q.y = r * (m.rows[1].z - m.rows[2].y);
-    q.x = r * (m.rows[2].x - m.rows[0].z);
-    q.w = r * (m.rows[0].y - m.rows[1].x);
+    const T root = sqrt(tr + T(1));
+    const T rcp = T(1) / (root * T(2));
+    q.x = rcp * (m.m12() - m.m21());
+    q.y = rcp * (m.m20() - m.m02());
+    q.z = rcp * (m.m01() - m.m10());
+    q.w = root / T(2);
+    return;
   }
+
+  tr = m.m00() - m.m11() - m.m22();
+  if (tr > T(0)) {
+    const T root = sqrt(tr + T(1));
+    const T rcp = T(1) / (root * T(2));
+    q.x = root / T(2);
+    q.y = rcp * (m.m10() + m.m01());
+    q.z = rcp * (m.m20() + m.m02());
+    q.w = rcp * (m.m12() - m.m21());
+    return;
+  }
+
+  tr = - m.m00() + m.m11() - m.m22();
+  if (tr > T(0)) {
+    const T root = sqrt(tr + T(1));
+    const T rcp = T(1) / (root * T(2));
+    q.x = rcp * (m.m10() + m.m01());
+    q.y = root / T(2);
+    q.z = rcp * (m.m21() + m.m12());
+    q.w = rcp * (m.m20() - m.m02());
+    return;
+  }
+
+  tr = - m.m00() - m.m11() + m.m22();
+  if (tr > T(0)) {
+    const T root = sqrt(tr + T(1));
+    const T rcp = T(1) / (root * T(2));
+    q.x = rcp * (m.m02() + m.m20());
+    q.y = rcp * (m.m21() + m.m12());
+    q.z = root / T(2);
+    q.w = rcp * (m.m02() - m.m10());
+    return;
+  }
+
+  //KP_ASSERT(!"Unsolvable matrix");
 }
 
 template <typename T> quat<T> conjugate(quat<T> q) { return quat<T>(-q.imag(), q.real()); }
@@ -76,9 +91,9 @@ template <typename T> mat4<T> mat4_rotation(quat<T> q) {
     xy = q->x * q->y, wz = q->w * q->z, xz = q->x * q->z,
     wy = q->w * q->y, yz = q->y * q->z, wx = q->w * q->x;
   return mat4<T>(
-    vec4<T>(1 - 2 * (y2 + z2), 2 * (xy - wz), 2 * (xz + wy), 0),
-    vec4<T>(2 * (xy + wz), 1 - 2 * (x2 + z2), 2 * (yz - wx), 0),
-    vec4<T>(2 * (xz - wy), 2 * (yz + wx), 1 - 2 * (x2 + y2), 0),
+    vec4<T>(T(1) - T(2) * (y2 + z2), T(2) * (xy - wz), T(2) * (xz + wy), 0),
+    vec4<T>(T(2) * (xy + wz), T(1) - T(2) * (x2 + z2), T(2) * (yz - wx), 0),
+    vec4<T>(T(2) * (xz - wy), T(2) * (yz + wx), T(1) - T(2) * (x2 + y2), 0),
     vec4<T>(0, 0, 0, 1));
 }
 
