@@ -107,10 +107,6 @@ struct transform_t {
     inline const mat4f &matrix() const { return matrix_; }
     inline operator const mat4f &() { return matrix_; }
 
-    /// \brief Get quaternion representation
-    /// \returns Quaternion representation
-    inline quatf quaternion() const { return q_; }
-
     /// \brief Get vector to the right
     /// \return X axis direction in transformed space
     inline vec4f right() const { return matrix_.rows[0]; }
@@ -122,11 +118,6 @@ struct transform_t {
     /// \brief Get transformed forward vector
     /// \return Z axis direction in transformed space
     inline vec4f forward() const { return -matrix_.rows[2]; }
-
-    /// \brief Set rotation to provided quaternion
-    /// \param q New rotation
-    /// \warning Does not check for \p q validity
-    void set(const quatf &q);
 
     /// \brief Set rotation by providing forward and up vectors
     ///
@@ -155,9 +146,7 @@ struct transform_t {
     void rotate_axis(float radians, vec3f axis);
 
   private:
-    quatf q_;
     mat4f matrix_;
-    void calc_matrix();
   }; // struct orientation_t;
 
 private:

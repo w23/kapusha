@@ -26,42 +26,30 @@ void transform_t::calc_matrix() {
   matrix_ = orientation_.matrix() * mat4_translation(translation_.xyz());
 }
 
-transform_t::orientation_t::orientation_t() : q_(0.f), matrix_(1.f) {}
-
-void transform_t::orientation_t::set(const quatf &q) {
-  q_ = q;
-  calc_matrix();
-}
+transform_t::orientation_t::orientation_t() : matrix_(1.f) {}
 
 void transform_t::orientation_t::set_direction(vec4f forward, vec4f up) {
-  vec4f right = cross(normalize(up), normalize(forward));
-  up = cross(forward, right);
-  matrix_ = mat4f(right, up, forward);
-  q_ = quatf(matrix_);
+  forward = normalize(forward);
+  const vec4f right = cross(forward, normalize(up));
+  up = normalize(cross(right, forward));
+  matrix_ = mat4f(right, up, -forward);
 }
 
 void transform_t::orientation_t::rotate_head(float radians) {
-  q_ = normalize(q_ * quatf(radians, up().xyz()));
-  calc_matrix();
+  set_direction(mat4_rotation(up().xyz(), radians) * forward(), up());
 }
 
 void transform_t::orientation_t::rotate_pitch(float radians) {
-  q_ = normalize(q_ * quatf(radians, right().xyz()));
-  calc_matrix();
+  set_direction(mat4_rotation(right().xyz(), radians) * forward(), up());
 }
 
 void transform_t::orientation_t::rotate_roll(float radians) {
-  q_ = normalize(quatf(radians, forward().xyz()) * q_);
-  calc_matrix();
+  set_direction(forward(), mat4_rotation(forward().xyz(), radians) * up());
 }
 
 void transform_t::orientation_t::rotate_axis(float radians, vec3f axis) {
-  q_ = normalize(q_ * quatf(radians, axis));
-  calc_matrix();
-}
-
-void transform_t::orientation_t::calc_matrix() {
-  matrix_ = mat4_rotation(q_);
+  const mat4f M(mat4_rotation(axis.xyz(), radians));
+  set_direction(M * forward(), M * up());
 }
 
 } // namespace ooo
