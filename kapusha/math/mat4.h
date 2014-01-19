@@ -31,20 +31,20 @@ template <typename T> struct mat4 {
   }
   const T *tptr() const { return rows[0].tptr(); }
 
-#define M4MCR(C,R,r,c) \
-  inline T m ## R ## C() const { return rows[r].c; } \
-  inline T &m ## R ## C() { return rows[r].c; }
-  M4MCR(1,1,0,x) M4MCR(2,1,0,y) M4MCR(3,1,0,z) M4MCR(4,1,0,w)
-  M4MCR(1,2,1,x) M4MCR(2,2,1,y) M4MCR(3,2,1,z) M4MCR(4,2,1,w)
-  M4MCR(1,3,2,x) M4MCR(2,3,2,y) M4MCR(3,3,2,z) M4MCR(4,3,2,w)
-  M4MCR(1,4,3,x) M4MCR(2,4,3,y) M4MCR(3,4,3,z) M4MCR(4,4,3,w)
+#define M4MCR(C,R,c) \
+  inline T m ## R ## C() const { return rows[R].c; } \
+  inline T &m ## R ## C() { return rows[R].c; }
+  M4MCR(0,0,x) M4MCR(1,0,y) M4MCR(2,0,z) M4MCR(3,0,w)
+  M4MCR(0,1,x) M4MCR(1,1,y) M4MCR(2,1,z) M4MCR(3,1,w)
+  M4MCR(0,2,x) M4MCR(1,2,y) M4MCR(2,2,z) M4MCR(3,2,w)
+  M4MCR(0,3,x) M4MCR(1,3,y) M4MCR(2,3,z) M4MCR(3,3,w)
 #undef M4MCR
 
   mat4 operator*(T r) const {
     return mat4(rows[0]*r, rows[1]*r, rows[2]*r, rows[3]*r);
   }
   vec4<T> operator*(const vec4<T>& r) const {
-    return vec4<T>(rows[0].dot(r), rows[1].dot(r), rows[2].dot(r), rows[3].dot(r));
+    return vec4<T>(dot(rows[0], r), dot(rows[1], r), dot(rows[2], r), dot(rows[3], r));
   }
   vec3<T> operator*(const vec3<T>& r) const { return (*this * vec4<T>(r)).xyz(); }
   mat4 operator*(const mat4& r) const {
@@ -87,17 +87,17 @@ template <typename T> mat4<T> mat4_translation(vec3<T> translation) {
     vec4<T>(0, 0, 1, translation.z),
     vec4<T>(0, 0, 0, 1));
 }
-template <typename T> mat4<T> mat4_rotation(vec3<T> axis, T angle) {
-  const T s = sin(angle), c = cos(angle), c1 = T(1) - c;
+template <typename T> mat4<T> mat4_rotation(vec3<T> axis, T radians) {
+  const T s = sin(radians), c = cos(radians), c1 = T(1) - c;
   const vec3<T> a2 = axis * axis;
   const T xy = axis.x * axis.y;
   const T xz = axis.x * axis.z;
   const T yz = axis.y * axis.z;
   return mat4<T>(
     vec4<T>(c1*a2.x + c, c1*xy - s*axis.z, c1*xz + s*axis.y, 0),
-    vec4<T>(c1*xy + s*axis.z, c1 * a2.y+c, c1*yz - s*axis.x, 0),
+    vec4<T>(c1*xy + s*axis.z, c1*a2.y + c, c1*yz - s*axis.x, 0),
     vec4<T>(c1*xz - s*axis.y, c1*yz + s*axis.x, c1*a2.z + c, 0),
-    vec4<T>( 0, 0, 0, 1));
+    vec4<T>(0, 0, 0, 1));
 }
 
 } // namespace math
