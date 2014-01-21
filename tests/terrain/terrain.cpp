@@ -30,8 +30,10 @@ public:
     vbuffer->load(vtx, sizeof(vertex) * vertices);
     Buffer *ibuffer = new Buffer(Buffer::Binding::Index);
     ibuffer->load(idx, sizeof(u32) * indices);
-    
-    Program *prog = new Program(g_shaderVertex, g_shaderFragment);
+
+    shader_t vertex_shader(g_shaderVertex, shader_t::type_e::vertex),
+      fragment_shader(g_shaderFragment, shader_t::type_e::fragment);
+    Program *prog = new Program(vertex_shader, fragment_shader);
     Material *mat = new Material(prog);
     mat->cull().mode = cull_t::Enabled;
     mat->depth().mode = depth_t::Enabled;

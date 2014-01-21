@@ -4,6 +4,7 @@
 #include "limits.h"
 #include "Sampler.h"
 #include "Context.h"
+#include "Shader.h"
 
 namespace kapusha {
 namespace render {
@@ -70,32 +71,24 @@ public:
 public:
   typedef core::shared<Program> shared;
 
-  enum Validity {
-    AssertValid,
-    TolerateInvalid
-  };
-  
-  //! Constructor compiles shaders and links program
-  //! \fixme separate shader objects (for sharing and shit)
-  Program(const char* vertex, const char* fragment, Validity v = AssertValid);
+  Program(const shader_t &vertex_shader, const shader_t &fragment_shader);
   ~Program();
-  bool valid() const { return name_ && shader_vertex_ && shader_fragment_; }
+
   // \todo relink void bind_attrib_location(const char* name, int location);
+  bool relink();
   int attrib_location(const char* name) const;
   int uniform_location(const char* name) const;
 
-private: // noncopyable
-  Program& operator=(const Program& other) { return *this; }
-  Program(const Program& other) {}
-  static unsigned compile_shader(unsigned name, const char* source);
-  unsigned name_;
-  unsigned shader_vertex_;
-  unsigned shader_fragment_;
-  Validity validity_;
-  //! \todo UniformState current_state_;
+  inline operator bool() const { return linked_ == GL_TRUE; }
+  core::String *info_log() const;
+
+private:
+  GLuint name_;
+  GLint linked_;
+
 protected:
   friend class Context;
-  inline unsigned name() const { return name_; }
+  inline GLuint name() const { return name_; }
 }; // class Program
 
 } // namespace render

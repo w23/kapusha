@@ -57,6 +57,7 @@
     <ClInclude Include="kapusha\core\shared.h" />
     <ClInclude Include="kapusha\core\Object.h" />
     <ClInclude Include="kapusha\render\Sampler.h" />
+    <ClInclude Include="kapusha\render\Shader.h" />
     <ClInclude Include="kapusha\render\State.h" />
     <ClInclude Include="kapusha\sys.h" />
     <ClInclude Include="kapusha\sys\sys.h" />
@@ -104,6 +105,7 @@
     <ClCompile Include="kapusha\render\Program.cpp" />
     <ClCompile Include="kapusha\math\math.cpp" />
     <ClCompile Include="kapusha\render\Sampler.cpp" />
+    <ClCompile Include="kapusha\render\Shader.cpp" />
     <ClCompile Include="kapusha\sys\win\main.cpp" />
     <ClCompile Include="kapusha\sys\win\WGLContext.cpp" />
     <ClCompile Include="kapusha\sys\win\WindowsKeys.cpp" />

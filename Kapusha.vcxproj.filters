@@ -103,6 +103,9 @@
     <ClCompile Include="kapusha\ooo\Material.cpp">
       <Filter>ooo</Filter>
     </ClCompile>
+    <ClCompile Include="kapusha\render\Shader.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kapusha\core.h" />
@@ -291,6 +294,9 @@
     </ClInclude>
     <ClInclude Include="kapusha\ooo\tagged_array.h">
       <Filter>ooo</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\render\Shader.h">
+      <Filter>render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

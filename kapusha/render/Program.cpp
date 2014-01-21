@@ -7,109 +7,31 @@
 namespace kapusha {
 namespace render {
 
-struct _ShaderInfoLogHelper {
-  static int length(unsigned object) {
-    int result;
-    glGetShaderiv(object, GL_INFO_LOG_LENGTH, &result);
-    return result;
-  }
-  static void get(unsigned object, int length, char* out) {
-    glGetShaderInfoLog(object, length, 0, out);
-  }
-};
-struct _ProgramInfoLogHelper {
-  static int length(unsigned object) {
-    int result;
-    glGetProgramiv(object, GL_INFO_LOG_LENGTH, &result);
-    return result;
-  }
-  static void get(unsigned object, int length, char* out) {
-    glGetProgramInfoLog(object, length, 0, out);
-  }
-};
-template <typename H>
-void printInfoLog(unsigned name) {
-  int length = H::length(name);
-  //! \todo Scrap from mapusha
-  char *info_log = new char[length+1];
-  H::get(name, length, info_log);
-  info_log[length] = 0;
-  L("there were errors:\n%s\n", info_log);
-  delete info_log;
-}
-void printShaderInfoLog(unsigned shader) {
-  printInfoLog<_ShaderInfoLogHelper>(shader);
-}
-void printProgramInfoLog(unsigned program) {
-  printInfoLog<_ProgramInfoLogHelper>(program);
+Program::Program(const shader_t &vertex_shader, const shader_t &fragment_shader)
+  : name_(glCreateProgram()) {
+  KP_ASSERT(!!vertex_shader);
+  KP_ASSERT(!!fragment_shader);
+
+  glAttachShader(name_, vertex_shader.name());
+  glAttachShader(name_, fragment_shader.name());
+  relink();
 }
 
-Program::Program(const char* vertex, const char* fragment, Validity val)
-  : name_(0), shader_vertex_(0), shader_fragment_(0), validity_(val) {
-  GL_ASSERT
-  shader_vertex_ = compile_shader(GL_VERTEX_SHADER, vertex);
-  if (!shader_vertex_) return;
-  shader_fragment_ = compile_shader(GL_FRAGMENT_SHADER, fragment);
-  if (!shader_fragment_) {
-    glDeleteShader(shader_vertex_);
-    shader_vertex_ = 0;
-    return;
-  }
-  name_ = glCreateProgram();
-  glAttachShader(name_, shader_vertex_);
-  glAttachShader(name_, shader_fragment_);
+Program::~Program() { glDeleteProgram(name_); }
+
+bool Program::relink() {
   glLinkProgram(name_);
-  {
-    int param;
-    glGetProgramiv(name_, GL_LINK_STATUS, &param);
-    if (param != GL_TRUE) {
-      printProgramInfoLog(name_);
-      glDeleteProgram(name_);
-      glDeleteShader(shader_fragment_);
-      glDeleteShader(shader_vertex_);
-      shader_fragment_ = shader_vertex_ = name_ = 0;
-    }
-  }
-  if (val == AssertValid) {
-    GL_ASSERT
-  } else {
-    glGetError();
-  }
-} // Program::Program
-
-Program::~Program(){
-  if (name_) glDeleteProgram(name_);
-  if (shader_fragment_) glDeleteShader(shader_fragment_);
-  if (shader_vertex_) glDeleteShader(shader_vertex_);
+  glGetProgramiv(name_, GL_LINK_STATUS, &linked_);
+  return linked_ == GL_TRUE;
 }
 
-unsigned Program::compile_shader(unsigned type, const char* source) {
-  unsigned shader = glCreateShader(type);
-  glShaderSource(shader, 1, &source, 0);
-  glCompileShader(shader);
-  int result;
-  glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
-  if (result != GL_TRUE) {
-    L("for shader [");
-    char* buffer = new char[strlen(source)+1];
-    strcpy(buffer, source);
-    char* s = buffer;
-    for (int line = 1;; ++line) {
-      char* next = strchr(s, '\n');
-      if (next != NULL) *next = 0;
-      L("%d: %s", line, s);
-      if (next == NULL) break;
-      s = next + 1;
-    }
-    L("]");
-    delete buffer;
-    printShaderInfoLog(shader);
-    glDeleteShader(shader);
-    return 0;
-  }
-  GL_ASSERT
-  return shader;
-} // Program::compileShader
+core::String *Program::info_log() const {
+  GLint length;
+  glGetProgramiv(name_, GL_INFO_LOG_LENGTH, &length);
+  core::buffer_t buffer(length);
+  glGetProgramInfoLog(name_, length, 0, buffer.data());
+  return new core::String(std::move(buffer));
+}
 
 /*void Program::bind_attrib_location(const char *name, int location) {
   KP_ASSERT(!"this is currently broken, as relinking program is required");
@@ -118,15 +40,13 @@ unsigned Program::compile_shader(unsigned type, const char* source) {
 }*/
 
 int Program::attrib_location(const char *name) const {
-  KP_ASSERT(name_);
+  KP_ASSERT(!!(*this));
   int loc = glGetAttribLocation(name_, name); GL_ASSERT
-  if (validity_ == AssertValid) KP_ASSERT(loc != -1);
   return loc;
 }
 int Program::uniform_location(const char *name) const {
-  KP_ASSERT(name_);
+  KP_ASSERT(!!(*this));
   int loc = glGetUniformLocation(name_, name); GL_ASSERT
-  if (validity_ == AssertValid) KP_ASSERT(loc != -1);
   return loc;
 }
 

@@ -23,7 +23,7 @@ private:
 
 Viewport::Viewport(IViewportController* ctrl)
 : ctrl_(ctrl), camctl_(camera_) {
-  camera_.look_at(vec3f(10.f), vec3f(0.f));
+  camera_.look_at(vec3f(10.f), vec3f(0.f, 5.f, 0.f));
   glClearColor(.7f, .9f, 1.f, 1.f);
   camctl_.set_speed(5.f);
 
@@ -106,7 +106,9 @@ Viewport::Viewport(IViewportController* ctrl)
       "gl_FragColor = vec4((vv3_normal + abs(vv3_normal))*.5, 1.);\n"
     "}\n";
 
-  render::Program *program = new render::Program(shader_vtx, shader_frg);
+  render::shader_t vertex_shader(shader_vtx, render::shader_t::type_e::vertex),
+    fragment_shader(shader_frg, render::shader_t::type_e::fragment);
+  render::Program *program = new render::Program(vertex_shader, fragment_shader);
   render::Material *rmaterial = new render::Material(program);
   rmaterial->depth().mode = render::depth_t::Enabled;
   rmaterial->cull().mode = render::cull_t::Enabled;
@@ -125,6 +127,9 @@ void Viewport::resize(vec2i size) {
 
 void Viewport::draw(int ms, float dt) {
   camctl_.frame(dt, ctrl_);
+  //camera_.rotate_head(dt);
+  //camera_.rotate_pitch(dt);
+  //camera_.rotate_roll(dt);
   camera_.calc_matrix();
 
   GL_ASSERT

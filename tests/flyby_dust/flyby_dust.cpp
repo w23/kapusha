@@ -75,7 +75,10 @@ Ground::Ground(float size) {
   static u32 tex[4] = { 0xffffffff, 0, 0, 0xffffffff };
   Sampler *sampler = new Sampler(Sampler::Nearest, Sampler::Nearest);
   sampler->upload(core::Surface::Meta(vec2i(2, 2), core::Surface::Meta::RGBA8888), tex);
-  Program *prog = new Program(svtx, sfrg);
+
+  render::shader_t vertex_shader(svtx, render::shader_t::type_e::vertex),
+    fragment_shader(sfrg, render::shader_t::type_e::fragment);
+  Program *prog = new Program(vertex_shader, fragment_shader);
   Material *mat = new Material(prog);
   mat->set_uniform("us2_floor", sampler);
   Batch* batch = new Batch();
@@ -118,7 +121,10 @@ Dust::Dust(int count, float size, float radius) {
     "gl_FragColor = vec4(1.) * light;\n"
   "}"
   ;
-  Program *prog = new Program(svtx, sfrg);
+
+  render::shader_t vertex_shader(svtx, render::shader_t::type_e::vertex),
+    fragment_shader(sfrg, render::shader_t::type_e::fragment);
+  Program *prog = new Program(vertex_shader, fragment_shader);
   Batch* batch = new Batch();
   batch->set_material(new Material(prog));
   vec3f *vertices = new vec3f[count], *p = vertices;
