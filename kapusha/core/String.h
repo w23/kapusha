@@ -7,11 +7,40 @@
 namespace kapusha {
 namespace core {
 
+/// \brief Immutable temporary string descriptor, may be not zero-terminated
+///
+/// \warning Does not manage string buffer, temp/volatile usage only
+struct string_desc_t {
+  string_desc_t() = default;
+  string_desc_t(const char *string) : begin_(string) {
+    KP_ASSERT(string);
+    end_ = begin_ + strlen(string);
+  }
+  inline string_desc_t(const char *begin, const char *end,
+    bool zero_terminated = false)
+    : begin_(begin), end_(end), zero_terminated_(zero_terminated) {}
+  inline string_desc_t(const char *begin, size_t length,
+    bool zero_terminated = false)
+    : string_desc_t(begin, begin+length, zero_terminated) {}
+
+  inline size_t length() const { return end_ - begin_; }
+  inline operator bool() const { return !!begin_; }
+  inline const char *begin() const { return begin_; }
+  inline const char *end() const { return end_; }
+
+  inline bool is_zero_terminated() const { return zero_terminated_; }
+private:
+  const char *begin_, *end_;
+  bool zero_terminated_;
+};
+
 /// \brief LOL Immutable string
 class String : public Object {
 public:
   typedef core::shared<String> shared;
   explicit String(const char *string = nullptr, int length = -1);
+  explicit inline String(const string_desc_t &desc)
+    : String(desc.begin(), desc.length()) {}
   explicit String(const String &string);
 
   /// \warning valid non-zero length and zero-terminated buffer expected
@@ -33,6 +62,9 @@ public:
   inline operator const char*() const { return str(); }
   inline operator const buffer_t&() const { return buffer_; }
   inline operator const buffer_t*() const { return &buffer_; }
+  inline operator const string_desc_t() const {
+    return string_desc_t(buffer_.data_as<char>(), length_, true);
+  }
 
   bool operator==(const String &other) const;
   bool operator==(const char *other) const;
