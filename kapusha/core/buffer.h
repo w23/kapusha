@@ -17,10 +17,10 @@ struct buffer_t {
   inline char *data() { return data_; }
 
   template <typename T> inline const T *data_as() const {
-    return static_cast<const T*>(data_);
+    return reinterpret_cast<const T*>(data_);
   }
   template <typename T> inline T *data_as() {
-    return static_cast<T*>(data_);
+    return reinterpret_cast<T*>(data_);
   }
 
   buffer_t &operator=(const buffer_t &other);

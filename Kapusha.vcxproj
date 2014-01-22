@@ -22,6 +22,7 @@
     <ClInclude Include="kapusha\core\String.h" />
     <ClInclude Include="kapusha\core\Surface.h" />
     <ClInclude Include="kapusha\core\types.h" />
+    <ClInclude Include="kapusha\core\wstring.h" />
     <ClInclude Include="kapusha\io\Socket.h" />
     <ClInclude Include="kapusha\kapusha.h" />
     <ClInclude Include="kapusha\math.h" />
@@ -67,7 +68,6 @@
     <ClInclude Include="kapusha\sys\win\WindowsKeys.h" />
     <ClInclude Include="kapusha\sys\win\WindowsPointers.h" />
     <ClInclude Include="kapusha\sys\win\windows_inc.h" />
-    <ClInclude Include="kapusha\sys\win\WString.h" />
     <ClInclude Include="kapusha\utils\geometry.h" />
     <ClInclude Include="kapusha\utils\noise.h" />
     <ClInclude Include="kapusha\utils\SpectatorCameraController.h" />
@@ -89,6 +89,7 @@
     <ClCompile Include="kapusha\core\Surface.cpp" />
     <ClCompile Include="kapusha\core\shared.cpp" />
     <ClCompile Include="kapusha\core\Object.cpp" />
+    <ClCompile Include="kapusha\core\wstring.cpp" />
     <ClCompile Include="kapusha\io\Socket_win.cpp" />
     <ClCompile Include="kapusha\ooo\Camera.cpp" />
     <ClCompile Include="kapusha\ooo\Material.cpp" />
@@ -110,7 +111,6 @@
     <ClCompile Include="kapusha\sys\win\WGLContext.cpp" />
     <ClCompile Include="kapusha\sys\win\WindowsKeys.cpp" />
     <ClCompile Include="kapusha\sys\win\WindowsPointers.cpp" />
-    <ClCompile Include="kapusha\sys\win\WString.cpp" />
     <ClCompile Include="kapusha\utils\geometry.cpp" />
     <ClCompile Include="kapusha\utils\noise.cpp" />
     <ClCompile Include="kapusha\utils\SpectatorCameraController.cpp" />

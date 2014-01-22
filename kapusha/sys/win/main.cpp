@@ -1,11 +1,10 @@
 #include <kapusha/core/log.h>
+#include <kapusha/core/wstring.h>
 #include <kapusha/sys/sys.h>
 #include "WindowController.h"
-#include "WString.h"
 #include <shellapi.h> // CommandLineToArgvW
 
 using kapusha::core::StringArray;
-using kapusha::sys::windows::WString;
 
 /// \todo move to sys::windows
 using kapusha::WindowController;
@@ -27,7 +26,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
   if (wargc > 0) {
     args->reserve(wargc);
     for (int i = 0; i < wargc; ++i)
-      args->push_back(WString::toString(wargv[i]));
+      args->push_back(kapusha::core::windows::wstring_t::create_string_from_wchar(wargv[i]));
   }
 
   LocalFree(wargv);

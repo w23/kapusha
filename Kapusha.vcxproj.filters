@@ -79,9 +79,6 @@
     <ClCompile Include="kapusha\core\String.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="kapusha\sys\win\WString.cpp">
-      <Filter>sys</Filter>
-    </ClCompile>
     <ClCompile Include="kapusha\core\ObjectArray.cpp">
       <Filter>core</Filter>
     </ClCompile>
@@ -105,6 +102,9 @@
     </ClCompile>
     <ClCompile Include="kapusha\render\Shader.cpp">
       <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\core\wstring.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -261,9 +261,6 @@
     <ClInclude Include="kapusha\core\String.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="kapusha\sys\win\WString.h">
-      <Filter>sys</Filter>
-    </ClInclude>
     <ClInclude Include="kapusha\core\ObjectArray.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -297,6 +294,9 @@
     </ClInclude>
     <ClInclude Include="kapusha\render\Shader.h">
       <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\core\wstring.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

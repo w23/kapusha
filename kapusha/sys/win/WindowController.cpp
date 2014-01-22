@@ -1,10 +1,9 @@
 #include "windows_inc.h"
 #include <kapusha/core.h>
+#include <kapusha/core/wstring.h>
 #include "WindowController.h"
-#include "wstring.h"
 
 namespace kapusha {
-using sys::windows::WString;
 
 WindowController::WindowController(HINSTANCE hInst, const IViewportFactory *factory)
   : viewport_(nullptr), need_redraw_(true) {
@@ -26,7 +25,8 @@ WindowController::WindowController(HINSTANCE hInst, const IViewportFactory *fact
   AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
 
   window_ = CreateWindowEx(WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,
-                           wndclass.lpszClassName, WString(prefs.window_title),
+                           wndclass.lpszClassName,
+                           core::windows::wstring_t(prefs.window_title),
                            WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_OVERLAPPEDWINDOW,
                            // | WS_VISIBLE, -- makes aero go awaY (?!?!)
                            CW_USEDEFAULT, CW_USEDEFAULT,
