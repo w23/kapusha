@@ -23,6 +23,7 @@
     <ClInclude Include="kapusha\core\Surface.h" />
     <ClInclude Include="kapusha\core\types.h" />
     <ClInclude Include="kapusha\core\wstring.h" />
+    <ClInclude Include="kapusha\io\pipe.h" />
     <ClInclude Include="kapusha\io\Socket.h" />
     <ClInclude Include="kapusha\kapusha.h" />
     <ClInclude Include="kapusha\math.h" />
@@ -90,6 +91,7 @@
     <ClCompile Include="kapusha\core\shared.cpp" />
     <ClCompile Include="kapusha\core\Object.cpp" />
     <ClCompile Include="kapusha\core\wstring.cpp" />
+    <ClCompile Include="kapusha\io\pipe.cpp" />
     <ClCompile Include="kapusha\io\Socket_win.cpp" />
     <ClCompile Include="kapusha\ooo\Camera.cpp" />
     <ClCompile Include="kapusha\ooo\Material.cpp" />

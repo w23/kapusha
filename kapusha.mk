@@ -21,6 +21,9 @@ SOURCES += \
 	$(KAPUSHA_SRC)/math/math.cpp
 
 SOURCES += \
+	$(KAPUSHA_SRC)/io/pipe.cpp
+
+SOURCES += \
 	$(KAPUSHA_SRC)/render/Program.cpp \
 	$(KAPUSHA_SRC)/render/Material.cpp \
 	$(KAPUSHA_SRC)/render/Batch.cpp \
