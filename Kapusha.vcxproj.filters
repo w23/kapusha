@@ -103,10 +103,16 @@
     <ClCompile Include="kapusha\render\Shader.cpp">
       <Filter>render</Filter>
     </ClCompile>
+    <ClCompile Include="kapusha\io\File_win.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
     <ClCompile Include="kapusha\core\wstring.cpp">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="kapusha\io\pipe.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="kapusha\io\Filesystem_win.cpp">
       <Filter>io</Filter>
     </ClCompile>
   </ItemGroup>
@@ -298,11 +304,23 @@
     <ClInclude Include="kapusha\render\Shader.h">
       <Filter>render</Filter>
     </ClInclude>
+    <ClInclude Include="kapusha\io\IFile.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\io\IFilesystem.h">
+      <Filter>io</Filter>
+    </ClInclude>
     <ClInclude Include="kapusha\io\pipe.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\io\File_win.h">
       <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="kapusha\core\wstring.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\io\Filesystem_win.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
