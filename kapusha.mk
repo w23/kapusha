@@ -80,6 +80,8 @@ endif
 
 ifeq ($(OS_POSIX), 1)
 SOURCES += \
+	$(KAPUSHA_SRC)/io/File_posix.cpp \
+	$(KAPUSHA_SRC)/io/Filesystem_posix.cpp \
 	$(KAPUSHA_SRC)/io/Socket_nix.cpp
 endif
 
