@@ -59,7 +59,7 @@ struct pipe_t {
 /// \param data All your valuables
 /// \param bytes How many
 /// \returns How many bytes were accepted
-size_t pipe_memory(pipe_t *pipe, const void *data, size_t bytes);
+pipe_t::response_t pipe_memory(pipe_t *pipe, const void *data, size_t bytes);
 
 } // namespace io
 } // namespace kapusha
