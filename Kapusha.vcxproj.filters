@@ -109,10 +109,10 @@
     <ClCompile Include="kapusha\core\wstring.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="kapusha\io\pipe.cpp">
+    <ClCompile Include="kapusha\io\Filesystem_win.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="kapusha\io\Filesystem_win.cpp">
+    <ClCompile Include="kapusha\io\buffered_stream.cpp">
       <Filter>io</Filter>
     </ClCompile>
   </ItemGroup>
@@ -310,9 +310,6 @@
     <ClInclude Include="kapusha\io\IFilesystem.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="kapusha\io\pipe.h">
-      <Filter>io</Filter>
-    </ClInclude>
     <ClInclude Include="kapusha\io\File_win.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -320,6 +317,9 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="kapusha\io\Filesystem_win.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="kapusha\io\buffered_stream.h">
       <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>

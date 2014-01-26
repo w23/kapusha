@@ -11,7 +11,8 @@ class File_win : public IFile {
 public:
   File_win(const char *filename);
   ~File_win();
-  virtual size_t pipe(pipe_t *pipe, size_t offset, size_t size) override;
+  virtual buffered_stream_t::status_e stream_chunk(
+    buffered_stream_t &stream, size_t offset, size_t size) override;
 
 private:
   HANDLE file_;
