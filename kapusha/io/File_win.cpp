@@ -22,7 +22,7 @@ File_win::File_win(const char *filename) : file_(INVALID_HANDLE_VALUE)
     return;
   }
 
-  info_.size = GetFileSize(file_, NULL);
+  info_.size = ::GetFileSize(file_, NULL);
   valid_ = true;
 }
 

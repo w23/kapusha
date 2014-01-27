@@ -1,5 +1,5 @@
 #pragma once
-#include <kapusha/core/Object.h>
+#include <kapusha/core/shared.h>
 #include "buffered_stream.h"
 
 namespace kapusha {
@@ -10,6 +10,8 @@ namespace io {
 /// Acquired using IFilesystem object
 class IFile : public core::Object {
 public:
+  typedef core::shared<IFile> shared;
+
   /// \brief Metainformation
   struct info_t {
     /// \brief File size in bytes

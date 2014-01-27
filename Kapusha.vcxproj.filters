@@ -115,6 +115,9 @@
     <ClCompile Include="kapusha\io\buffered_stream.cpp">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="kapusha\io\IFilesystem.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kapusha\core.h" />
