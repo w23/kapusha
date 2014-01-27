@@ -34,6 +34,25 @@ private:
   bool zero_terminated_;
 };
 
+struct string_t {
+  string_t(const string_desc_t desc);
+  string_t(string_t &&string);
+  string_t(const buffer_t &buffer);
+  string_t(buffer_t &&buffer);
+
+  inline const char *str() const { return buf_.data_as<char>(); }
+  inline size_t length() const { return buf_.size() - 1; }
+
+  inline operator const char*() const { return str(); }
+  inline operator string_desc_t() const {
+    return string_desc_t(str(), length());
+  }
+
+  string_t operator+(const string_desc_t other) const;
+private:
+  buffer_t buf_;
+};
+
 /// \brief LOL Immutable string
 class String : public Object {
 public:

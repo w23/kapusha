@@ -1,5 +1,7 @@
 #pragma once
+#include <cstring> // memcpy
 #include "types.h"
+#include "assert.h"
 
 namespace kapusha {
 namespace core {
@@ -29,6 +31,17 @@ struct buffer_t {
 
   /// \warning invalidates all previously given pointers
   void resize(size_t new_size);
+
+  inline void copy(size_t offset, const void *src, size_t size) {
+    KP_ASSERT(offset + size < size_);
+    copy(data_ + offset, src, size);
+  }
+  
+  /// \todo safe_copy that does resize() if needed
+
+  static inline void copy(void *dest, const void *src, size_t size) {
+    ::memcpy(dest, src, size);
+  }
 
 private:
   size_t size_;
