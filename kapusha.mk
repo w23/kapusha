@@ -21,7 +21,7 @@ SOURCES += \
 	$(KAPUSHA_SRC)/math/math.cpp
 
 SOURCES += \
-	$(KAPUSHA_SRC)/io/pipe.cpp
+	$(KAPUSHA_SRC)/io/buffered_stream.cpp
 
 SOURCES += \
 	$(KAPUSHA_SRC)/render/Program.cpp \
