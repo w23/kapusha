@@ -24,6 +24,7 @@ SOURCES += \
 	$(KAPUSHA_SRC)/io/buffered_stream.cpp
 
 SOURCES += \
+	$(KAPUSHA_SRC)/render/Shader.cpp \
 	$(KAPUSHA_SRC)/render/Program.cpp \
 	$(KAPUSHA_SRC)/render/Material.cpp \
 	$(KAPUSHA_SRC)/render/Batch.cpp \
