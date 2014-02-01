@@ -22,7 +22,7 @@ public:
   virtual ~Object() {}
 
   /// Retain an object for further use by incrementing retain count
-  inline void retain() { ++retain_count_; }
+  inline Object *retain() { ++retain_count_; return this; }
 
   /// Release an object by decrementing retain count.
   /// If retain count reaches zero the object is deleted
