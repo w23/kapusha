@@ -75,6 +75,8 @@ public:
     return reinterpret_cast<T*>(operator[](index));
   }
 
+  inline operator const buffer_t &() const { return buffer_; }
+
 private:
   u32 item_size_;
   u32 size_, reserved_;
