@@ -21,6 +21,7 @@ SOURCES += \
 	$(KAPUSHA_SRC)/math/math.cpp
 
 SOURCES += \
+	$(KAPUSHA_SRC)/io/json_parse.cpp \
 	$(KAPUSHA_SRC)/io/buffered_stream.cpp
 
 SOURCES += \

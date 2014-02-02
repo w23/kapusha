@@ -8,3 +8,4 @@
 #include <cstdarg> // va_list
 #include <cstdlib> // abort()
 #include <cstdio> // printf()
+#include <ctype.h> // isspace()
