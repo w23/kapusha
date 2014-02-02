@@ -6,6 +6,28 @@
 namespace kapusha {
 namespace core {
 
+struct const_mem_t {
+  inline const_mem_t(const void *data, size_t size)
+    : data_(data), size_(size) {}
+
+  inline const void *data() const { return data_; }
+  inline size_t size() const { return size_; }
+private:
+  const void *data_;
+  size_t size_;
+};
+
+struct mem_t {
+  inline mem_t(void *data, size_t size) : data_(data), size_(size) {}
+
+  inline const void *data() const { return data_; }
+  inline void *data() { return data_; }
+  inline size_t size() const { return size_; }
+private:
+  void *data_;
+  size_t size_;
+};
+
 /// \brief simple buffer for \a stuff
 struct buffer_t {
   explicit buffer_t(size_t size = 0, const void *data = nullptr);

@@ -47,6 +47,12 @@ void buffered_stream_t::signal_end_and_produce_zeroes(
   produce_zeroes(stream);
 }
 
+void buffered_stream_t::signal_error_and_produce_zeroes(
+  buffered_stream_t *stream) {
+  stream->status_ = status_e::error;
+  produce_zeroes(stream);
+}
+
 memory_stream_t::memory_stream_t(const void *source, size_t size) {
   cursor_ = reinterpret_cast<const char*>(source);
   end_ = cursor_ + size;

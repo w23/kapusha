@@ -17,8 +17,9 @@ namespace io {
 struct buffered_stream_t {
   enum class status_e { ok, end, error };
   
-  inline size_t left() const { return end_ - cursor_; }
   inline const char *cursor() const { return cursor_; }
+  inline const char *end() const { return end_; }
+  inline size_t left() const { return end_ - cursor_; }
   inline status_e status() const { return status_; }
 
   /// \brief read next byte but don't move cursor
@@ -49,6 +50,9 @@ struct buffered_stream_t {
 
   /// \brief (producer only) Produce stream of zeroes and set status_ to 'end'
   static void signal_end_and_produce_zeroes(buffered_stream_t *stream);
+
+  /// \brief (producer only) Produce stream of zeroes and set status_ to 'error'
+  static void signal_error_and_produce_zeroes(buffered_stream_t *stream);
 }; // struct buffered_stream_t
 
 /// \brief A way to stream memory region
