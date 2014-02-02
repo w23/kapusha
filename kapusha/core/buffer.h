@@ -32,11 +32,13 @@ struct buffer_t {
   /// \warning invalidates all previously given pointers
   void resize(size_t new_size);
 
+  void append(const void *data, size_t size);
+
   inline void copy(size_t offset, const void *src, size_t size) {
-    KP_ASSERT(offset + size < size_);
+    KP_ASSERT(offset + size <= size_);
     copy(data_ + offset, src, size);
   }
-  
+
   /// \todo safe_copy that does resize() if needed
 
   static inline void copy(void *dest, const void *src, size_t size) {

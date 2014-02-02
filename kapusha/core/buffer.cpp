@@ -65,5 +65,11 @@ void buffer_t::resize(size_t new_size) {
   size_ = new_size;
 }
 
+void buffer_t::append(const void *data, size_t size) {
+  size_t prev_size = size_;
+  resize(size_ + size);
+  copy(prev_size, data, size);
+}
+
 } // namespace core
 } // namespace kapusha
