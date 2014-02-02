@@ -4,9 +4,9 @@
 namespace kapusha {
 namespace io {
 
-u8 buffered_stream_t::read() {
+char buffered_stream_t::read() {
   // enter in readable state
-  const u8 ret = peek();
+  const char ret = peek();
   ++cursor_;
   // leave in readable state
   if (!left()) produce();
@@ -23,7 +23,7 @@ buffered_stream_t::status_e buffered_stream_t::advance(size_t bytes) {
 }
 
 buffered_stream_t::status_e buffered_stream_t::read(void *dst, size_t bytes) {
-  u8 *d = reinterpret_cast<u8*>(dst);
+  char *d = reinterpret_cast<char*>(dst);
   for (; bytes > 0;) {
     const size_t readable = (bytes <= left()) ? bytes : left();
     memcpy(d, cursor(), readable);
@@ -35,7 +35,7 @@ buffered_stream_t::status_e buffered_stream_t::read(void *dst, size_t bytes) {
 }
 
 void buffered_stream_t::produce_zeroes(buffered_stream_t *stream) {
-  static const u8 zero_buffer[256] = { 0 };
+  static const char zero_buffer[256] = { 0 };
   stream->cursor_ = zero_buffer;
   stream->end_ = zero_buffer + sizeof(zero_buffer);
   stream->produce_ = produce_zeroes;
@@ -48,7 +48,7 @@ void buffered_stream_t::signal_end_and_produce_zeroes(
 }
 
 memory_stream_t::memory_stream_t(const void *source, size_t size) {
-  cursor_ = reinterpret_cast<const u8*>(source);
+  cursor_ = reinterpret_cast<const char*>(source);
   end_ = cursor_ + size;
   produce_ = signal_end_and_produce_zeroes;
   status_ = status_e::ok;

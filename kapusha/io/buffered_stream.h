@@ -18,14 +18,14 @@ struct buffered_stream_t {
   enum class status_e { ok, end, error };
   
   inline size_t left() const { return end_ - cursor_; }
-  inline const u8 *cursor() const { return cursor_; }
+  inline const char *cursor() const { return cursor_; }
   inline status_e status() const { return status_; }
 
   /// \brief read next byte but don't move cursor
-  inline u8 peek() const { return *cursor_; }
+  inline char peek() const { return *cursor_; }
 
   /// \brief read next byte and advance cursor
-  u8 read();
+  char read();
 
   /// \brief advance cursor
   status_e advance(size_t bytes);
@@ -40,7 +40,7 @@ struct buffered_stream_t {
 
   typedef void (*produce_f)(buffered_stream_t *stream);
 
-  const u8 *cursor_, *end_;
+  const char *cursor_, *end_;
   produce_f produce_;
   status_e status_;
 
