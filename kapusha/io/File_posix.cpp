@@ -36,6 +36,7 @@ File_posix::~File_posix() {
 buffered_stream_t::status_e File_posix::stream_chunk(
     buffered_stream_t &stream, size_t offset, size_t size) {
   const u8 *bytes = reinterpret_cast<const u8*>(mapping_);
+  if (!size) size = info_.size - offset;
   if (offset > info_.size) {
     buffered_stream_t::signal_end_and_produce_zeroes(&stream);
   } else {

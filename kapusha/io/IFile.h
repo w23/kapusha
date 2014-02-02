@@ -26,7 +26,7 @@ public:
   inline operator bool() const { return valid_; }
 
   virtual buffered_stream_t::status_e stream_chunk(
-    buffered_stream_t &stream, size_t offset, size_t size) = 0;
+    buffered_stream_t &stream, size_t offset, size_t size = 0) = 0;
 
 protected:
   inline IFile() : valid_(false) {}

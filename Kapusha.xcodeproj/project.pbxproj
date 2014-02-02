@@ -15,8 +15,6 @@
 		E100D855188AE91700D73F32 /* File_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E100D853188AE91700D73F32 /* File_posix.cpp */; };
 		E100D856188AE91700D73F32 /* File_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E100D853188AE91700D73F32 /* File_posix.cpp */; };
 		E100D857188AE91700D73F32 /* File_posix.h in Headers */ = {isa = PBXBuildFile; fileRef = E100D854188AE91700D73F32 /* File_posix.h */; };
-		E100D859188BAB6800D73F32 /* IFilesystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E100D858188BAB6800D73F32 /* IFilesystem.cpp */; };
-		E100D85A188BAB6800D73F32 /* IFilesystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E100D858188BAB6800D73F32 /* IFilesystem.cpp */; };
 		E10A64A417BE888C004B68C4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E184ECF117848671007CDEF3 /* CoreText.framework */; };
 		E10A64A517BE888C004B68C4 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E18DE007163D8F5400869CF5 /* OpenGL.framework */; };
 		E10A64A617BE888C004B68C4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E131D5031662033F00B0320A /* Cocoa.framework */; };
@@ -182,7 +180,6 @@
 		E100D84F188AE25600D73F32 /* Filesystem_posix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filesystem_posix.h; sourceTree = "<group>"; };
 		E100D853188AE91700D73F32 /* File_posix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = File_posix.cpp; sourceTree = "<group>"; };
 		E100D854188AE91700D73F32 /* File_posix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = File_posix.h; sourceTree = "<group>"; };
-		E100D858188BAB6800D73F32 /* IFilesystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IFilesystem.cpp; sourceTree = "<group>"; };
 		E10A64B317BE888C004B68C4 /* libkapusha_main.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libkapusha_main.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E10A64B517BE8972004B68C4 /* KPAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPAppDelegate.h; path = main/KPAppDelegate.h; sourceTree = "<group>"; };
 		E10A64B617BE8972004B68C4 /* KPAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = KPAppDelegate.mm; path = main/KPAppDelegate.mm; sourceTree = "<group>"; };
@@ -535,7 +532,6 @@
 				E100D84F188AE25600D73F32 /* Filesystem_posix.h */,
 				E100D853188AE91700D73F32 /* File_posix.cpp */,
 				E100D854188AE91700D73F32 /* File_posix.h */,
-				E100D858188BAB6800D73F32 /* IFilesystem.cpp */,
 			);
 			name = io;
 			path = kapusha/io;
@@ -1049,7 +1045,6 @@
 			files = (
 				E1C5825E18892E4E000EF6D2 /* Transform.cpp in Sources */,
 				E131D5131662036F00B0320A /* KPView.mm in Sources */,
-				E100D85A188BAB6800D73F32 /* IFilesystem.cpp in Sources */,
 				E131D5061662036500B0320A /* log.cpp in Sources */,
 				E15461F31871D49300E0F475 /* shared.cpp in Sources */,
 				E1C5826C18892E70000EF6D2 /* ObjectIntrusiveList.cpp in Sources */,
@@ -1138,7 +1133,6 @@
 				E1C5826018892E4E000EF6D2 /* Visual.cpp in Sources */,
 				E19DA35F1732325F005B1F74 /* Sampler.cpp in Sources */,
 				E100D84B188AE1A200D73F32 /* buffered_stream.cpp in Sources */,
-				E100D859188BAB6800D73F32 /* IFilesystem.cpp in Sources */,
 				E1BE3871173395610029FD4A /* SpectatorCameraController.cpp in Sources */,
 				E15461F51871D49300E0F475 /* String.cpp in Sources */,
 				E1BE387D17362A4F0029FD4A /* geometry.cpp in Sources */,
