@@ -39,6 +39,12 @@ struct buffer_t {
   inline size_t size() const { return size_; }
   inline const char *data() const { return data_; }
   inline char *data() { return data_; }
+  inline const char *data(size_t offset) const {
+    return reinterpret_cast<const char*>(data_) + offset;
+  }
+  inline char *data(size_t offset) {
+    return reinterpret_cast<char*>(data_) + offset;
+  }
 
   template <typename T> inline const T *data_as() const {
     return reinterpret_cast<const T*>(data_);
