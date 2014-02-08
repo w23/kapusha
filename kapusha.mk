@@ -18,6 +18,7 @@ SOURCES += \
 	$(KAPUSHA_SRC)/core/ObjectIntrusiveList.cpp
 
 SOURCES += \
+	$(KAPUSHA_SRC)/math/rand_lcg.cpp \
 	$(KAPUSHA_SRC)/math/math.cpp
 
 SOURCES += \
