@@ -37,6 +37,7 @@ public:
   inline shader_t::type_e type() const { return shader_.type(); }
   inline operator bool() const { return !!shader_; }
   inline core::String *info_log() const { return shader_.info_log(); }
+  inline operator shader_t&() { return shader_; }
 
 private:
   shader_t shader_;

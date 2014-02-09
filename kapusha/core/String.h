@@ -42,6 +42,7 @@ struct string_t {
 
   inline const char *str() const { return buf_.data_as<char>(); }
   inline size_t length() const { return buf_.size() - 1; }
+  inline bool empty() const { return length() == 0; }
 
   inline operator const char*() const { return str(); }
   inline operator string_desc_t() const {
