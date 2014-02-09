@@ -2,7 +2,7 @@
 CFLAGS ?=
 METADEPS = Makefile $(KAPUSHA_ROOT)/kapusha.mk $(KAPUSHA_ROOT)/common.mk
 CXXFLAGS += $(CFLAGS) -std=c++11 -Wall -Werror -fno-exceptions -fno-rtti -I$(KAPUSHA_ROOT)
-LDFLAGS += -lm
+LDFLAGS += -lm -pthread
 
 RELEASE ?= 0
 OS ?= Linux
