@@ -40,6 +40,12 @@
 		E131D5111662036500B0320A /* Program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E18DDFDA163D8EED00869CF5 /* Program.cpp */; };
 		E131D5131662036F00B0320A /* KPView.mm in Sources */ = {isa = PBXBuildFile; fileRef = E14B5357165D59F300B55FEC /* KPView.mm */; };
 		E131D514166204C500B0320A /* libkapusha.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E131D4FF166201F400B0320A /* libkapusha.a */; };
+		E1514D8818E68C6D00416311 /* json_parse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1514D8618E68C6D00416311 /* json_parse.cpp */; };
+		E1514D8B18E68C9C00416311 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1514D8918E68C9C00416311 /* Shader.cpp */; };
+		E1514D8E18E68CC000416311 /* rand_lcg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1514D8C18E68CBF00416311 /* rand_lcg.cpp */; };
+		E1514D8F18E68CC000416311 /* rand_lcg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1514D8C18E68CBF00416311 /* rand_lcg.cpp */; };
+		E1514D9018E68CC000416311 /* rand_lcg.h in Headers */ = {isa = PBXBuildFile; fileRef = E1514D8D18E68CC000416311 /* rand_lcg.h */; };
+		E1514D9118E68CE200416311 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1514D8918E68C9C00416311 /* Shader.cpp */; };
 		E15461E01871D49300E0F475 /* buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E15461D61871D49300E0F475 /* buffer.cpp */; };
 		E15461E11871D49300E0F475 /* buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E15461D61871D49300E0F475 /* buffer.cpp */; };
 		E15461E21871D49300E0F475 /* buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E15461D61871D49300E0F475 /* buffer.cpp */; };
@@ -190,6 +196,12 @@
 		E131D5031662033F00B0320A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		E14B5356165D59F300B55FEC /* KPView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPView.h; sourceTree = "<group>"; };
 		E14B5357165D59F300B55FEC /* KPView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KPView.mm; sourceTree = "<group>"; };
+		E1514D8618E68C6D00416311 /* json_parse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_parse.cpp; sourceTree = "<group>"; };
+		E1514D8718E68C6D00416311 /* json_parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_parse.h; sourceTree = "<group>"; };
+		E1514D8918E68C9C00416311 /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
+		E1514D8A18E68C9C00416311 /* Shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shader.h; sourceTree = "<group>"; };
+		E1514D8C18E68CBF00416311 /* rand_lcg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rand_lcg.cpp; sourceTree = "<group>"; };
+		E1514D8D18E68CC000416311 /* rand_lcg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rand_lcg.h; sourceTree = "<group>"; };
 		E15461D61871D49300E0F475 /* buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = buffer.cpp; sourceTree = "<group>"; };
 		E15461D71871D49300E0F475 /* buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = buffer.h; sourceTree = "<group>"; };
 		E15461D81871D49300E0F475 /* list.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = list.cpp; sourceTree = "<group>"; };
@@ -238,8 +250,6 @@
 		E18DDFD9163D8EED00869CF5 /* OpenGL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGL.h; sourceTree = "<group>"; };
 		E18DDFDA163D8EED00869CF5 /* Program.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Program.cpp; sourceTree = "<group>"; };
 		E18DDFDB163D8EED00869CF5 /* Program.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Program.h; sourceTree = "<group>"; };
-		E18DDFE1163D8EED00869CF5 /* StreamFile_win.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamFile_win.cpp; sourceTree = "<group>"; };
-		E18DDFE2163D8EED00869CF5 /* StreamFile_win.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamFile_win.h; sourceTree = "<group>"; };
 		E18DDFE4163D8EED00869CF5 /* mat2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mat2.h; sourceTree = "<group>"; };
 		E18DDFE5163D8EED00869CF5 /* mat4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mat4.h; sourceTree = "<group>"; };
 		E18DDFE6163D8EED00869CF5 /* math.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = math.cpp; sourceTree = "<group>"; };
@@ -257,9 +267,6 @@
 		E18DDFFD163D8F3B00869CF5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E18DE007163D8F5400869CF5 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = DEVELOPER_DIR; };
 		E18DE042163D925600869CF5 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/GLUT.framework; sourceTree = DEVELOPER_DIR; };
-		E18DE044163D9BE500869CF5 /* StreamFile_posix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamFile_posix.h; sourceTree = "<group>"; };
-		E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamFile_posix.cpp; sourceTree = "<group>"; };
-		E18DE05C163D9E4600869CF5 /* StreamFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamFile.h; sourceTree = "<group>"; };
 		E1993173164E141500E8D9CB /* samples-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "samples-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1993175164E141500E8D9CB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		E1993177164E141500E8D9CB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -491,6 +498,8 @@
 		E18DDFD3163D8EED00869CF5 /* render */ = {
 			isa = PBXGroup;
 			children = (
+				E1514D8918E68C9C00416311 /* Shader.cpp */,
+				E1514D8A18E68C9C00416311 /* Shader.h */,
 				E19DA35B1732325F005B1F74 /* Sampler.cpp */,
 				E19DA35C1732325F005B1F74 /* Sampler.h */,
 				E19DA35E1732325F005B1F74 /* State.h */,
@@ -517,15 +526,12 @@
 		E18DDFDE163D8EED00869CF5 /* io */ = {
 			isa = PBXGroup;
 			children = (
+				E1514D8618E68C6D00416311 /* json_parse.cpp */,
+				E1514D8718E68C6D00416311 /* json_parse.h */,
 				E100D849188AE19E00D73F32 /* buffered_stream.cpp */,
 				E100D84A188AE19E00D73F32 /* buffered_stream.h */,
 				E1F5898417FB325300548AB8 /* Socket.h */,
 				E1F5898317FB325300548AB8 /* Socket_nix.cpp */,
-				E18DE05C163D9E4600869CF5 /* StreamFile.h */,
-				E18DE05A163D9C9A00869CF5 /* StreamFile_posix.cpp */,
-				E18DE044163D9BE500869CF5 /* StreamFile_posix.h */,
-				E18DDFE1163D8EED00869CF5 /* StreamFile_win.cpp */,
-				E18DDFE2163D8EED00869CF5 /* StreamFile_win.h */,
 				E100D847188ADA7A00D73F32 /* IFilesystem.h */,
 				E100D848188ADC3700D73F32 /* IFile.h */,
 				E100D84E188AE25600D73F32 /* Filesystem_posix.cpp */,
@@ -540,6 +546,8 @@
 		E18DDFE3163D8EED00869CF5 /* math */ = {
 			isa = PBXGroup;
 			children = (
+				E1514D8C18E68CBF00416311 /* rand_lcg.cpp */,
+				E1514D8D18E68CC000416311 /* rand_lcg.h */,
 				E1C5826318892E5A000EF6D2 /* f32.h */,
 				E1C5826418892E5A000EF6D2 /* quat.h */,
 				E1BE388C173F7F850029FD4A /* math.h */,
@@ -795,6 +803,7 @@
 				E1BE389D174400860029FD4A /* Framebuffer.h in Headers */,
 				E167AACC1789E1890047DF38 /* CocoaGLContext.h in Headers */,
 				E167AAD01789E22C0047DF38 /* CocoaKeys.h in Headers */,
+				E1514D9018E68CC000416311 /* rand_lcg.h in Headers */,
 				E1C5825918892E4E000EF6D2 /* Tag.h in Headers */,
 				E1C5826618892E5A000EF6D2 /* quat.h in Headers */,
 				E1C5825518892E4E000EF6D2 /* Material.h in Headers */,
@@ -1056,6 +1065,7 @@
 				E15461E61871D49300E0F475 /* list.cpp in Sources */,
 				E131D5101662036500B0320A /* OpenGL.cpp in Sources */,
 				E100D856188AE91700D73F32 /* File_posix.cpp in Sources */,
+				E1514D9118E68CE200416311 /* Shader.cpp in Sources */,
 				E131D5111662036500B0320A /* Program.cpp in Sources */,
 				E100D84C188AE1A300D73F32 /* buffered_stream.cpp in Sources */,
 				E1C5825418892E4E000EF6D2 /* Material.cpp in Sources */,
@@ -1076,6 +1086,7 @@
 				E184ED001785E9E4007CDEF3 /* array.cpp in Sources */,
 				E15461F61871D49300E0F475 /* String.cpp in Sources */,
 				E167AACF1789E22C0047DF38 /* CocoaKeys.mm in Sources */,
+				E1514D8F18E68CC000416311 /* rand_lcg.cpp in Sources */,
 				E15461E11871D49300E0F475 /* buffer.cpp in Sources */,
 				E1EB518B17A9608700A76D62 /* CocoaViewportController.mm in Sources */,
 				E15461EE1871D49300E0F475 /* ObjectArray.cpp in Sources */,
@@ -1117,6 +1128,7 @@
 				E19931C7164E4ED900E8D9CB /* log.cpp in Sources */,
 				E100D850188AE25600D73F32 /* Filesystem_posix.cpp in Sources */,
 				E19931BB164E4EB800E8D9CB /* Batch.cpp in Sources */,
+				E1514D8B18E68C9C00416311 /* Shader.cpp in Sources */,
 				E19931BC164E4EC000E8D9CB /* Buffer.cpp in Sources */,
 				E19931BD164E4EC000E8D9CB /* Camera.cpp in Sources */,
 				E19931BE164E4EC000E8D9CB /* Material.cpp in Sources */,
@@ -1135,6 +1147,7 @@
 				E100D84B188AE1A200D73F32 /* buffered_stream.cpp in Sources */,
 				E1BE3871173395610029FD4A /* SpectatorCameraController.cpp in Sources */,
 				E15461F51871D49300E0F475 /* String.cpp in Sources */,
+				E1514D8E18E68CC000416311 /* rand_lcg.cpp in Sources */,
 				E1BE387D17362A4F0029FD4A /* geometry.cpp in Sources */,
 				E1C5825A18892E4E000EF6D2 /* tagged_array.cpp in Sources */,
 				E1BE3885173F7AAA0029FD4A /* noise.cpp in Sources */,
@@ -1144,6 +1157,7 @@
 				E1BE389A174400860029FD4A /* Framebuffer.cpp in Sources */,
 				E15461E51871D49300E0F475 /* list.cpp in Sources */,
 				E184ECE817847224007CDEF3 /* Surface.cpp in Sources */,
+				E1514D8818E68C6D00416311 /* json_parse.cpp in Sources */,
 				E1C5825618892E4E000EF6D2 /* Mesh.cpp in Sources */,
 				E184ECFF1785E9E4007CDEF3 /* array.cpp in Sources */,
 			);

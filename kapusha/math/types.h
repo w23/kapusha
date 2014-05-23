@@ -15,6 +15,7 @@
 namespace kapusha {
 namespace math {
 
+// \todo int vectors should be specialcased
 typedef vec2<int> vec2i;
 typedef vec2<f32> vec2f;
 typedef vec3<f32> vec3f;

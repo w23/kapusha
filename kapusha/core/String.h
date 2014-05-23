@@ -60,7 +60,7 @@ public:
   typedef core::shared<String> shared;
   explicit String(const char *string = nullptr, int length = -1);
   explicit inline String(const string_desc_t &desc)
-    : String(desc.begin(), desc.length()) {}
+    : String(desc.begin(), static_cast<int>(desc.length())) {}
   explicit String(const String &string);
 
   /// \warning valid non-zero length and zero-terminated buffer expected
