@@ -1,16 +1,16 @@
 #pragma once
 
-#include "kapusha/app/event.h"
+#include "sys.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void simpleton_init(int argc, char *argv[]);
+void simpleton_init(int argc, const char *argv[]);
 
 void simpleton_size(int width, int height);
 
-void simpleton_draw(KP_time_ms time, KP_time_ms next_present);
+void simpleton_draw(KPtime_ms pts);
 
 #ifdef __cplusplus
 } /* extern "C" */

@@ -1,3 +1,13 @@
 #pragma once
-#include "kapusha/core/types.h"
-#include "kapusha/core/log.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void kpLogWrite(const char *format, ...);
+
+#define KP_L(...) kpLogWrite(__VA_ARGS__)
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
