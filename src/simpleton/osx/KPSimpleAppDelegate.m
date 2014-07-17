@@ -19,7 +19,10 @@
   return self;
 }
 
-- (void)dealloc { [super dealloc]; }
+- (void)dealloc {
+  [window_ release];
+  [super dealloc];
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
   NSRect rect = NSMakeRect(0, 0, 1280, 720);
@@ -32,7 +35,7 @@
   window_.delegate = self;
   
   NSRect bounds = NSMakeRect(0, 0, window_.frame.size.width, window_.frame.size.height);
-  window_.contentView = [[KPSimpleView alloc] initWithFrame:bounds];
+  window_.contentView = [[KPSimpleView alloc] initWithFrame:bounds argc:argc_ argv:argv_];
   
   [window_ makeKeyAndOrderFront:self];
   window_.acceptsMouseMovedEvents = YES;

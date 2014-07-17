@@ -45,7 +45,7 @@
 
   simpleton_init(argc_, argv_);
   
-  timer_ = [NSTimer timerWithTimeInterval:0.001
+  timer_ = [NSTimer timerWithTimeInterval:0.01
                                    target:self
                                  selector:@selector(timerDraw)
                                  userInfo:nil
@@ -54,7 +54,6 @@
                                forMode:NSDefaultRunLoopMode];
   [[NSRunLoop currentRunLoop] addTimer:timer_
                                forMode:NSEventTrackingRunLoopMode];
-  [[self window] setAcceptsMouseMovedEvents:YES];
 }
 
 - (void) reshape {

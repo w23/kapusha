@@ -4,9 +4,9 @@
 extern "C" {
 #endif
 
-void kpLogWrite(const char *format, ...);
+void kpLog(const char *format, ...);
 
-#define KP_L(...) kpLogWrite(__VA_ARGS__)
+#define KP_L(...) kpLog(__VA_ARGS__)
 
 #ifdef __cplusplus
 } // extern "C"
