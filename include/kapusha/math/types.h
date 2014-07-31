@@ -7,8 +7,11 @@ extern "C" {
 typedef float KPscalarf;
 
 typedef struct { int x, y; } KPvec2i;
+typedef struct { float x, y; } KPvec2f;
 typedef struct { float x, y, z; } KPvec3f;
 typedef struct { float x, y, z, w; } KPvec4f;
+
+typedef struct { KPvec4f rows[4]; } KPmat4f;
 
 typedef struct { KPvec2i bl, tr; } KPrect2i;
 
