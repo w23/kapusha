@@ -19,32 +19,18 @@ typedef struct {
 } KPrender_tag_t;
 
 inline static KPrender_tag_t kpRenderTag(const char *name) {
+  KP_ASSERT(name);
+  KP_ASSERT(name[0] != 0);
+  KP_ASSERT(name[1] != 0);
+  KP_ASSERT(name[2] != 0);
+  KP_ASSERT(name[3] != 0);
   KPrender_tag_t tag;
-  tag.tag.name[0] = name[0] ? *(name++) : 0;
-  tag.tag.name[1] = name[0] ? *(name++) : 0;
-  tag.tag.name[2] = name[0] ? *(name++) : 0;
-  tag.tag.name[3] = name[0] ? *(name++) : 0;
+  tag.tag.name[0] = name[0];
+  tag.tag.name[1] = name[1];
+  tag.tag.name[2] = name[2];
+  tag.tag.name[3] = name[3];
   return tag;
 }
-
-typedef enum {
-  KPRenderProgramValueScalarf,
-  KPRenderProgramValueVec2f,
-  KPRenderProgramValueVec3f,
-  KPRenderProgramValueVec4f,
-  KPRenderProgramValueMat2f,
-  KPRenderProgramValueMat3f,
-  KPRenderProgramValueMat4f,
-  KPRenderProgramValueSampler
-} KPRenderProgramValueType;
-
-typedef struct {
-  KPRenderProgramValueType type;
-  union {
-    KPrender_sampler_o sampler;
-    KPscalarf f[16];
-  } value;
-} KPrender_program_value_t;
 
 /******************************************************************************/
 /* buffer */
@@ -57,9 +43,13 @@ typedef enum {
 } KPRenderBufferFlags;
 
 KPrender_buffer_o kpRenderBufferCreate();
+
 void kpRenderBuffer(KPrender_buffer_o buffer);
-void kpRenderBufferUpload(KPrender_buffer_o buffer,
-  KPblob_desc_t data, KPu32 flags);
+
+void kpRenderBufferUpload(
+  KPrender_buffer_o buffer,
+  KPu32 flags,
+  KPblob_desc_t data);
 
 /******************************************************************************/
 /* program */
@@ -71,14 +61,22 @@ typedef enum {
 } KPRenderProgramModuleType;
 
 KPrender_program_o kpRenderProgramCreate();
-int kpRenderProgramModuleSet(KPrender_program_o program,
-  KPRenderProgramModuleType module, KPblob_desc_t data);
-void kpRenderProgramArgumentSet(KPrender_program_o program,
-  KPrender_tag_t tag, const char *name,
-  KPrender_program_value_t value);
-void kpRenderProgramAttributeSet(KPrender_program_o program,
-  KPrender_tag_t tag, const char *name);
-  
+
+int kpRenderProgramModuleSet(
+  KPrender_program_o program,
+  KPRenderProgramModuleType module,
+  KPblob_desc_t data);
+
+int kpRenderProgramArgumentTag(
+  KPrender_program_o program,
+  const char *name,
+  KPrender_tag_t tag);
+
+int kpRenderProgramAttributeTag(
+  KPrender_program_o program,
+  const char *name,
+  KPrender_tag_t tag);
+
 /******************************************************************************/
 /* sampler */
 
@@ -88,22 +86,30 @@ void kpRenderProgramAttributeSet(KPrender_program_o program,
   KPRenderSampler3D
 } KPRenderSamplerType;
 KPrender_sampler_o kpRenderSamplerCreate();
-void kpRenderSamplerLoad();
+void kpRenderSamplerUpload();
 */
 
 /******************************************************************************/
 /* program environment */
 
-typedef struct {
-  struct {
-    KPrender_tag_t tag;
-    KPrender_program_value_t value;
-  } value[KP_MAX_PROGRAM_ENV_VALUES];
-} KPrender_program_env_t;
+typedef void* KPrender_program_env_o;
 
-void kpRenderProgramEnvClear(KPrender_program_env_t *env);
-void kpRenderProgramEnvSet(KPrender_program_env_t *env, KPrender_tag_t tag,
-  KPrender_program_value_t *value);
+KPrender_program_env_o kpRenderProgramEnvCreate();
+
+int kpRenderProgramEnvSetScalarf(
+  KPrender_program_env_o env,
+  KPrender_tag_t tag,
+  KPscalarf value);
+
+int kpRenderProgramEnvSetVec4f(
+  KPrender_program_env_o env,
+  KPrender_tag_t tag,
+  KPvec4f *value);
+
+int kpRenderProgramEnvSetMat4f(
+  KPrender_program_env_o env,
+  KPrender_tag_t tag,
+  KPmat4f *value);
 
 /******************************************************************************/
 /* raster batch */
@@ -112,14 +118,15 @@ typedef void* KPrender_batch_o;
 
 typedef enum {
   KPRenderVertexAttribF32,
-  KPRenderVertexAttribU8
+  KPRenderVertexAttribU8,
+  KPRenderVertexAttrib_Max
 } KPRenderVertexAttribType;
 
 typedef struct {
   KPrender_buffer_o buffer;
   KPu32 components;
   KPRenderVertexAttribType type;
-  KPu32 offset;
+  KPuptr offset;
   KPu32 stride;
 } KPrender_vertex_attrib_t;
 
@@ -127,24 +134,31 @@ typedef enum {
   KPRenderDrawPrimitivePoint,
   KPRenderDrawPrimitiveLine,
   KPRenderDrawPrimitiveTriangleList,
-  KPRenderDrawPrimitiveTriangleStrip
+  KPRenderDrawPrimitiveTriangleStrip,
+  KPRenderDrawPrimitive_Max
 } KPRenderDrawPrimitiveType;
+
+typedef enum {
+  KPRenderDrawIndexU16,
+  KPRenderDrawIndexU32,
+  KPRenderDrawIndex_Max,
+} KPRenderDrawIndexType;
 
 typedef struct {
   KPRenderDrawPrimitiveType primitive;
+  KPRenderDrawIndexType index_type;
   KPrender_buffer_o buffer;
-  void *data;
-  KPu32 offset;
+  KPuptr offset;
   KPu32 count;
 } KPrender_draw_params_t;
 
 KPrender_batch_o kpRenderBatchCreate();
-void kpRenderBatchAttribSet(KPrender_batch_o,
+int kpRenderBatchAttribSet(KPrender_batch_o,
   KPrender_tag_t tag,
   const KPrender_vertex_attrib_t*);
 void kpRenderBatchDrawSet(KPrender_batch_o,
   const KPrender_draw_params_t*);
-  
+
 /******************************************************************************/
 /* destination */
 
@@ -158,7 +172,7 @@ typedef struct {
   KPrect2i viewport;
 } KPrender_destination_t;
 
-static void kpRenderDestinationDefaults(KPrender_destination_t *dest) {
+static inline void kpRenderDestinationDefaults(KPrender_destination_t *dest) {
   dest->viewport.bl.x = dest->viewport.bl.y =
   dest->viewport.tr.x = dest->viewport.tr.y = 0;
 }
@@ -190,7 +204,7 @@ typedef struct {
   KPrender_cmd_header_t header;
   KPrender_batch_o batch;
   KPrender_program_o program;
-  KPrender_program_env_t *env;
+  KPrender_program_env_o *env;
   KPu32 env_count;
 } KPrender_cmd_rasterize_t;
 

@@ -1,13 +1,12 @@
 KAPUSHA_ROOT := $(dir $(lastword $(MAKEFILE_LIST)))
 include $(KAPUSHA_ROOT)common.mk
-OBJDIR ?= obj
+OBJDIR ?= .obj
 
 KAPUSHA_SRC = $(KAPUSHA_ROOT)src
 
 # core
 SOURCES += \
-	$(KAPUSHA_SRC)/core/assert.c \
-	$(KAPUSHA_SRC)/core/log.c
+	$(KAPUSHA_SRC)/core/core.c
 
 # math
 SOURCES += \
@@ -32,11 +31,16 @@ SOURCES += \
 	$(KAPUSHA_SRC)/sys/x11_main.c
 endif
 
-ifeq ($(WITH_SIMPLE_X11),1)
+ifeq ($(WITH_GL),1)
 SOURCES += \
-	$(KAPUSHA_SRC)/sys/x11_systems.c \
-	$(KAPUSHA_SRC)/sys/x11_main.c
+	$(KAPUSHA_SRC)/render/gl.c
 endif
+
+#ifeq ($(WITH_SIMPLE_X11),1)
+#SOURCES += \
+#	$(KAPUSHA_SRC)/sys/x11_systems.c \
+#	$(KAPUSHA_SRC)/sys/x11_main.c
+#endif
 
 ifeq ($(WITH_WIN32), 1)
 SOURCES += \

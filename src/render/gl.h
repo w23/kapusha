@@ -9,7 +9,7 @@
 #endif
 #include <windows.h>
 #include <GL/gl.h>
-#include <3p/gl/glext.h>
+#include "3p/gl/glext.h"
 #include <kapusha/sys/win/gl_proc.h>
 #elif defined(__APPLE__)
 #include "TargetConditionals.h"
@@ -33,13 +33,21 @@
 #error please include opengl in platform-specific way
 #endif
 
+#ifdef DEBUG
+void kp__GlAssert(const char *file, int line);
+#define KP__GLASSERT kp__GlAssert(__FILE__, __LINE__);
+#else
 #define KP__GLASSERT
+#endif
 
 #include "kapusha/render.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/******************************************************************************/
+/* GL buffer */
 
 typedef enum {
   KP__RenderBufferTargetArray,
@@ -50,6 +58,9 @@ typedef enum {
 typedef struct { KP_O;
   GLuint name;
 } KP__render_buffer_t;
+
+/******************************************************************************/
+/* GL program */
 
 enum {
   KP__RenderProgramHaveVertex = 0x01,
@@ -70,19 +81,42 @@ typedef struct { KP_O;
   GLuint name;
   KPu32 flags;
   GLuint shaders[KP__RenderProgramShader_MAX];
-  
+
   struct {
     KPrender_tag_t tag;
     int location;
-    KPrender_program_value_t value;
   } args[KP__RENDER_PROGRAM_MAX_ARGS];
-  
+
   struct {
     KPrender_tag_t tag;
     int location;
-    KPrender_program_value_t value;
   } attribs[KP__RENDER_BATCH_MAX_ATTRIBS];
 } KP__render_program_t;
+
+/******************************************************************************/
+/* GL program environment */
+
+typedef enum {
+  KP__RenderProgramEnvValueNone,
+  KP__RenderProgramEnvValueScalarf,
+  KP__RenderProgramEnvValueVec4f,
+  KP__RenderProgramEnvValueMat4f,
+} KP__RenderProgramEnvValueType;
+
+#define KP__RENDER_PROGRAM_ENV_MAX_VALUES 8
+
+typedef struct { KP_O;
+  struct KP__render_program_env_value_t {
+    KPrender_tag_t tag;
+    KP__RenderProgramEnvValueType type;
+    union {
+      KPscalarf f[16];
+    } v;
+  } values[KP__RENDER_PROGRAM_ENV_MAX_VALUES];
+} KP__render_program_env_t;
+
+/******************************************************************************/
+/* GL batch */
 
 typedef struct { KP_O;
   struct {
@@ -93,9 +127,12 @@ typedef struct { KP_O;
     KP__render_buffer_t *buffer;
     KPu32 primitive, type;
     KPu32 count;
-    KPu32 offset;
+    KPuptr offset;
   } index;
 } KP__render_batch_t;
+
+/******************************************************************************/
+/* GL render state */
 
 typedef struct {
   /* are not retained */

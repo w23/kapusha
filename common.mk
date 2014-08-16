@@ -2,8 +2,8 @@
 
 METADEPS = Makefile $(KAPUSHA_ROOT)kapusha.mk $(KAPUSHA_ROOT)common.mk
 
-CFLAGS = -Wall -Werror -I$(KAPUSHA_ROOT)include
-LDFLAGS = -lm -pthread
+CFLAGS += -std=c99 -Wall -Werror -I$(KAPUSHA_ROOT)include
+LDFLAGS += -lm -pthread
 
 ifeq ($(DEBUG),1)
 	CFLAGS += -O0 -g -DDEBUG=1
@@ -26,12 +26,14 @@ endif
 
 # assign per-platform settings
 ifeq ($(PLATFORM),LinuxDesktop)
-	WITH_X11 := 1
-	SYSTEM := sys_x11.c
+	WITH_POSIX := 1
+	WITH_GL := 1
+	WITH_LINUX := 1
+	CFLAGS += -DKP_GCC_ATOMICS
 else ifeq ($(PLATFORM),LinuxRaspberry)
 # On Raspberry Pi there are some specifics
-	CCFLAGS += -DKP_RASPBERRY=1 -I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads
-	CCFLAGS += -I/opt/vc/include/interface/vmcs_host/linux
+	CFLAGS += -DKP_RASPBERRY=1 -I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads
+	CFLAGS += -I/opt/vc/include/interface/vmcs_host/linux
 	LDFLAGS += -lGLESv2 -lEGL -lbcm_host -L/opt/vc/lib
 # Only EGL is supported
 	WITH_LINUX := 1
@@ -52,7 +54,11 @@ else ifeq ($(PLATFORM),Windows)
 endif
 
 ifeq ($(WITH_X11),1)
-	LDFLAGS += -lGL -lX11 -lrt
+	LDFLAGS += -lX11 -lrt
+endif
+
+ifeq ($(WITH_GL),1)
+	LDFLAGS += -lGL
 endif
 
 ifeq ($(DO_STRIP), 1)
@@ -62,7 +68,7 @@ endif
 # TODO proceed with harftype
 WITH_HARFTYPE := 0
 ifeq ($(WITH_HARFTYPE),1)
-	CCFLAGS += `pkg-config --cflags freetype2 harfbuzz`
+	CFLAGS += `pkg-config --cflags freetype2 harfbuzz`
 	LDFLAGS += `pkg-config --libs freetype2 harfbuzz`
 endif
 

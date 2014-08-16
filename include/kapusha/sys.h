@@ -7,7 +7,6 @@ extern "C" {
 #endif
 
 /* types */
-
 typedef unsigned char KPu8;
 typedef signed char KPs8;
 typedef unsigned short KPu16;
@@ -19,6 +18,7 @@ typedef signed long long KPs64;
 typedef float KPf32;
 typedef double KPf64;
 
+typedef uintptr_t KPuptr;
 typedef KPu64 KPsize;
 
 typedef KPu64 KPtime_ns;
@@ -32,6 +32,14 @@ typedef volatile int32_t KPs32_atomic;
 inline static KPs32 kpS32AtomicRead(KPs32_atomic* v) { return *v; }
 inline static KPs32 kpS32AtomicInc(KPs32_atomic* v) { return OSAtomicIncrement32(v); }
 inline static KPs32 kpS32AtomicDec(KPs32_atomic* v) { return OSAtomicDecrement32(v); }
+#elif defined(KP_GCC_ATOMICS)
+typedef volatile int KPs32_atomic;
+inline static KPs32 kpS32AtomicRead(KPs32_atomic* v) {
+  return __sync_fetch_and_add(v, 0); }
+inline static KPs32 kpS32AtomicInc(KPs32_atomic* v) {
+  return __sync_fetch_and_add(v, 1); }
+inline static KPs32 kpS32AtomicDec(KPs32_atomic* v) {
+  return __sync_fetch_and_sub(v, 1); }
 #else
 #error define os/compiler-specifics for atomic ops
 #endif
@@ -45,11 +53,18 @@ inline static KPs32 kpS32AtomicDec(KPs32_atomic* v) { return OSAtomicDecrement32
     kpSysExit(-1); \
   }
 
+#define KP_FAIL(...)
+
+#define KP_UNUSED(v) (void)(v);
+
 /* Kill current process */
 void kpSysExit(int code);
 
 /* Get current precise monotonic system time in nanoseconds */
 KPtime_ns kpSysTimeNs();
+
+/* System-specific way to output debug log messages */
+void kp__LogOutput(const char *output);
 
 #ifdef __cplusplus
 } // extern "C"
