@@ -7,11 +7,13 @@ void kp__GlAssert(const char *file, int line) {
   if (err == 0) return;
   const char *errname;
   switch (err) {
+    case GL_INVALID_ENUM: errname = "GL_INVALID_ENUM"; break;
     case GL_INVALID_VALUE: errname = "GL_INVALID_VALUE"; break;
     case GL_INVALID_OPERATION: errname = "GL_INVALID_OPERATION"; break;
+    case GL_OUT_OF_MEMORY: errname = "GL_OUT_OF_MEMORY"; break;
     default: errname = "UNKNOWN";
   }
-  KP__L("error %s[%d] @ %s:%d", errname, err, file, line);
+  KP__L("error %s[%d] @ %const s:%d", errname, err, file, line);
   kpSysExit(-1);
 }
 
@@ -107,7 +109,7 @@ int kp__RenderProgramEnvSetNScalar(
   KP__render_program_env_t *this,
   KPrender_tag_t tag,
   KP__RenderProgramEnvValueType type,
-  KPscalarf *value,
+  const KPf32 *value,
   int n)
 {
   KP_ASSERT(n > 0);
@@ -118,7 +120,7 @@ int kp__RenderProgramEnvSetNScalar(
         || this->values[i].tag.tag.value == tag.tag.value) {
       this->values[i].tag = tag;
       this->values[i].type = type;
-      kpMemcpy(&this->values[i].v.f, value, sizeof(KPscalarf) * n);
+      kpMemcpy(&this->values[i].v.f, value, sizeof(KPf32) * n);
       return 1;
     }
   return 0;
@@ -127,7 +129,7 @@ int kp__RenderProgramEnvSetNScalar(
 int kpRenderProgramEnvSetScalarf(
   KPrender_program_env_o env,
   KPrender_tag_t tag,
-  KPscalarf value)
+  KPf32 value)
 {
   KP_THIS(KP__render_program_env_t, env);
   KP__L("%p set %c%c%c%c = %f", this,
@@ -139,7 +141,7 @@ int kpRenderProgramEnvSetScalarf(
 int kpRenderProgramEnvSetVec4f(
   KPrender_program_env_o env,
   KPrender_tag_t tag,
-  KPvec4f *value)
+  const KPvec4f *value)
 {
   KP_THIS(KP__render_program_env_t, env);
   return kp__RenderProgramEnvSetNScalar(this, tag,
@@ -149,11 +151,13 @@ int kpRenderProgramEnvSetVec4f(
 int kpRenderProgramEnvSetMat4f(
   KPrender_program_env_o env,
   KPrender_tag_t tag,
-  KPmat4f *value)
+  const KPmat4f *value)
 {
   KP_THIS(KP__render_program_env_t, env);
+  KPmat4f tr = *value;
+  kpMat4fTranspose(&tr);
   return kp__RenderProgramEnvSetNScalar(this, tag,
-    KP__RenderProgramEnvValueMat4f, &value->rows[0].x, 16);
+    KP__RenderProgramEnvValueMat4f, &tr.r[0].x, 16);
 }
 
 static void kp__RenderProgramEnvApply(

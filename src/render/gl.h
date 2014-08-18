@@ -110,7 +110,7 @@ typedef struct { KP_O;
     KPrender_tag_t tag;
     KP__RenderProgramEnvValueType type;
     union {
-      KPscalarf f[16];
+      KPf32 f[16];
     } v;
   } values[KP__RENDER_PROGRAM_ENV_MAX_VALUES];
 } KP__render_program_env_t;

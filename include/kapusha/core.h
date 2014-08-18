@@ -7,10 +7,16 @@
 extern "C" {
 #endif
 
+/******************************************************************************/
+/* Debug log */
+
 void kpLog(const char *prefix, const char *format, ...);
 
 #define KP_L(...) kpLog("APP", __VA_ARGS__)
 #define KP__L(...) kpLog(KP__SYS, __VA_ARGS__)
+
+/******************************************************************************/
+/* Heaps and allocation */
 
 typedef struct KPheap_header_t {
   void *(*alloc)(struct KPheap_header_t *heap, KPsize size);
@@ -18,6 +24,24 @@ typedef struct KPheap_header_t {
 } KPheap_header_t;
 
 typedef KPheap_header_t* KPheap_p;
+
+extern KPheap_p kp__heap_default;
+
+inline static void *kpHeapAlloc(KPheap_p heap, KPsize size) {
+  if (heap == 0) heap = kp__heap_default;
+  return heap->alloc(heap, size);
+}
+
+inline static void kpHeapFree(KPheap_p heap, void* ptr) {
+  if (heap == 0) heap = kp__heap_default;
+  return heap->free(heap, ptr);
+}
+
+inline static void *kpAlloc(KPsize size) { return kpHeapAlloc(0, size); }
+inline static void kpFree(void *ptr) { kpHeapFree(0, ptr); }
+
+/******************************************************************************/
+/* Base building block refcounted object */
 
 typedef struct {
   KPs32_atomic refcount;
@@ -37,31 +61,17 @@ inline static void *kpRetain(void *obj) {
 
 void kpRelease(void *obj);
 
+void *kpNew(KPheap_p heap, KPsize size);
+
+#define KP_NEW(name,heap) (name*)kpNew(heap, sizeof(name));
+
+/******************************************************************************/
+/* Misc memory stuff */
+
 typedef struct {
   KPsize size;
   const void *data;
 } KPblob_desc_t;
-
-/* generic heap allocation */
-
-extern KPheap_p kp__heap_default;
-
-inline static void *kpHeapAlloc(KPheap_p heap, KPsize size) {
-  if (heap == 0) heap = kp__heap_default;
-  return heap->alloc(heap, size);
-}
-
-inline static void kpHeapFree(KPheap_p heap, void* ptr) {
-  if (heap == 0) heap = kp__heap_default;
-  return heap->free(heap, ptr);
-}
-
-inline static void *kpAlloc(KPsize size) { return kpHeapAlloc(0, size); }
-inline static void kpFree(void *ptr) { kpHeapFree(0, ptr); }
-
-void *kpNew(KPheap_p heap, KPsize size);
-
-#define KP_NEW(name,heap) (name*)kpNew(heap, sizeof(name));
 
 static inline void kpMemcpy(void *dst, const void *src, KPsize size) {
   for (KPsize i = 0; i < size; ++i)

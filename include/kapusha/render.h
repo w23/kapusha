@@ -99,17 +99,17 @@ KPrender_program_env_o kpRenderProgramEnvCreate();
 int kpRenderProgramEnvSetScalarf(
   KPrender_program_env_o env,
   KPrender_tag_t tag,
-  KPscalarf value);
+  KPf32 value);
 
 int kpRenderProgramEnvSetVec4f(
   KPrender_program_env_o env,
   KPrender_tag_t tag,
-  KPvec4f *value);
+  const KPvec4f *value);
 
 int kpRenderProgramEnvSetMat4f(
   KPrender_program_env_o env,
   KPrender_tag_t tag,
-  KPmat4f *value);
+  const KPmat4f *value);
 
 /******************************************************************************/
 /* raster batch */
@@ -196,7 +196,7 @@ typedef struct {
   KPrender_cmd_header_t header;
   KPvec4f color;
   /*! \todo flags */
-  /*! \todo KPscalarf depth; */
+  /*! \todo KPf32 depth; */
   /*! \todo KPu32 stencil; */
 } KPrender_cmd_fill_t;
 

@@ -6,6 +6,7 @@
 extern "C" {
 #endif
 
+/******************************************************************************/
 /* types */
 typedef unsigned char KPu8;
 typedef signed char KPs8;
@@ -24,14 +25,17 @@ typedef KPu64 KPsize;
 typedef KPu64 KPtime_ns;
 typedef KPu32 KPtime_ms;
 
+/******************************************************************************/
 /* threading and sync */
 
 #ifdef KP_OS_MACH
 #include <libkern/OSAtomic.h>
 typedef volatile int32_t KPs32_atomic;
 inline static KPs32 kpS32AtomicRead(KPs32_atomic* v) { return *v; }
-inline static KPs32 kpS32AtomicInc(KPs32_atomic* v) { return OSAtomicIncrement32(v); }
-inline static KPs32 kpS32AtomicDec(KPs32_atomic* v) { return OSAtomicDecrement32(v); }
+inline static KPs32 kpS32AtomicInc(KPs32_atomic* v) {
+  return OSAtomicIncrement32(v); }
+inline static KPs32 kpS32AtomicDec(KPs32_atomic* v) {
+  return OSAtomicDecrement32(v); }
 #elif defined(KP_GCC_ATOMICS)
 typedef volatile int KPs32_atomic;
 inline static KPs32 kpS32AtomicRead(KPs32_atomic* v) {
@@ -44,6 +48,7 @@ inline static KPs32 kpS32AtomicDec(KPs32_atomic* v) {
 #error define os/compiler-specifics for atomic ops
 #endif
 
+/******************************************************************************/
 /* assert */
 
 #define KP_ASSERT(v)
