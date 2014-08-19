@@ -129,10 +129,56 @@ static inline KPmat4f kpMat4f(KPvec4f r0, KPvec4f r1, KPvec4f r2, KPvec4f r3) {
   return ret;
 }
 
-void kpMat4fTranspose(KPmat4f *m);
-KPvec4f kpMat4fMulv4(const KPmat4f *m, KPvec4f v);
-KPmat4f kpMat4fMulm4(const KPmat4f *a, const KPmat4f *b);
+void kpMat4fTranspose(KPmat4f m);
+KPvec4f kpMat4fMulv4(const KPmat4f m, KPvec4f v);
+KPmat4f kpMat4fMulm4(const KPmat4f a, const KPmat4f b);
 
+/******************************************************************************/
+/* Quaternion operations */
+
+typedef struct { KPvec4f v; } KPquatf;
+
+static inline KPquatf kpQuatfv4(KPvec4f v) {
+  const KPquatf q = {v};
+  return q;
+}
+
+static inline KPquatf kpQuatfIdentity() {
+  return kpQuatfv4(kpVec4f(0.f,0.f,0.f,1.f));
+}
+
+KPquatf kpQuatfRotaion(KPvec3f v, KPf32 a);
+
+static inline KPquatf kpQuatfMulf(KPquatf q, KPf32 f) {
+  return kpQuatfv4(kpVec4fMulf(q.v, f));
+}
+
+static inline KPquatf kpQuatfAddq(KPquatf a, KPquatf b) {
+  return kpQuatfv4(kpVec4fAddv4(a.v, b.v));
+}
+
+KPquatf kpQuatfMulq(KPquatf a, KPquatf b);
+
+static inline KPquatf kpQuatfConjugate(KPquatf q) {
+  return kpQuatfv4(kpVec4f(-q.v.x, -q.v.y, -q.v.z, q.v.w));
+}
+
+static inline KPf32 kpQuatfMagnitude(KPquatf q) {
+  return kpVec4fLength(q.v);
+}
+
+KPquatf kpQuatfNormalize(KPquatf q);
+
+/******************************************************************************/
+/* Dual quaternion operations */
+
+typedef struct { KPquatf r, d; } KPdquatf;
+
+KPdquatf kpDquatRotationTranslation(KPvec3f axis, KPf32 angle, KPvec3f transl);
+
+KPvec3f kpDquatGetTranslation(KPdquatf dq);
+
+KPmat4f kpMat4fdq(KPdquatf dq);
 
 #ifdef __cplusplus
 } // extern "C"
