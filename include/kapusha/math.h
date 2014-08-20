@@ -22,12 +22,12 @@ typedef struct {KPvec4f r[4];} KPmat4f;
 
 typedef struct {KPvec2i bl, tr;} KPrect2i;
 
-#define KPf32_pi (3.14159265358979323844f)
-#define KPf32_2pi (KPf32_pi * 2.f)
-#define KPf32_pi2 (KPf32_pi * .5f)
-#define KPf32_pi4 (KPf32_pi * .25f)
-#define KPf32_kdeg2rad (KPf32_pi / 180.f)
-#define KPf32_krad2deg (180.f / KPf32_pi)
+#define KPF32_PI (3.14159265358979323844F)
+#define KPF32_2PI (KPF32_PI * 2.F)
+#define KPF32_PI2 (KPF32_PI * .5F)
+#define KPF32_PI4 (KPF32_PI * .25F)
+#define KPF32_KDEG2RAD (KPF32_PI / 180.F)
+#define KPF32_KRAD2DEG (180.F / KPF32_PI)
 
 static inline KPvec2i kpVec2i(int x, int y) {
   KPvec2i v = {x, y};

@@ -72,7 +72,7 @@ KPmat4f kpMat4fMulm4(const KPmat4f a, const KPmat4f b) {
 KPquatf kpQuatfRotaion(KPvec3f v, KPf32 a) {
   a *= .5f;
   KPf32 c = kpCosf(a), s = kpSinf(a);
-  return kpQuatfv4(kpVec4f(v.x*s,v.y*s,v.z*s,c));
+  return kpQuatfv4(kpVec4f(v.x * s, v.y * s, v.z * s, c));
 }
 
 KPquatf kpQuatfMulq(KPquatf a, KPquatf b) {
@@ -109,14 +109,14 @@ KPmat4f kpMat4fdq(KPdquatf dq) {
   KPmat4f m;
   KPvec3f t = kpDquatGetTranslation(dq);
   m.r[0].x = 1.f - 2.f * (dq.r.v.y * dq.r.v.y + dq.r.v.z * dq.r.v.z);
-  m.r[0].y =       2.f * (dq.r.v.x * dq.r.v.y + dq.r.v.z * dq.r.v.w);
+  m.r[0].y =       2.f * (dq.r.v.x * dq.r.v.y - dq.r.v.z * dq.r.v.w);
   m.r[0].z =       2.f * (dq.r.v.x * dq.r.v.z + dq.r.v.y * dq.r.v.w);
   m.r[0].w = t.x;
   m.r[1].x =       2.f * (dq.r.v.x * dq.r.v.y + dq.r.v.z * dq.r.v.w);
   m.r[1].y = 1.f - 2.f * (dq.r.v.x * dq.r.v.x + dq.r.v.z * dq.r.v.z);
-  m.r[1].z =       2.f * (dq.r.v.y * dq.r.v.z + dq.r.v.x * dq.r.v.w);
+  m.r[1].z =       2.f * (dq.r.v.y * dq.r.v.z - dq.r.v.x * dq.r.v.w);
   m.r[1].w = t.y;
-  m.r[2].x =       2.f * (dq.r.v.x * dq.r.v.y + dq.r.v.y * dq.r.v.w);
+  m.r[2].x =       2.f * (dq.r.v.x * dq.r.v.z - dq.r.v.y * dq.r.v.w);
   m.r[2].y =       2.f * (dq.r.v.y * dq.r.v.z + dq.r.v.x * dq.r.v.w);
   m.r[2].z = 1.f - 2.f * (dq.r.v.x * dq.r.v.x + dq.r.v.y * dq.r.v.y);
   m.r[2].w = t.z;
