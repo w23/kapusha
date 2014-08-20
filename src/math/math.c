@@ -69,7 +69,17 @@ KPmat4f kpMat4fMulm4(const KPmat4f a, const KPmat4f b) {
       kpVec4fDot(a.r[3], b.r[3])));
 }
 
-KPquatf kpQuatfRotaion(KPvec3f v, KPf32 a) {
+KPmat4f kpMat4fProjPerspective(KPf32 near, KPf32 far, KPf32 aspect, KPf32 fov) {
+  KPmat4f m;
+  KPf32 fn = near - far;
+  m.r[0] = kpVec4f(2.f * near / aspect, 0, 0, 0);
+  m.r[1] = kpVec4f(0, 2.f * near, 0, 0);
+  m.r[2] = kpVec4f(0, 0, (far + near) / fn, 2.f * far * near / fn);
+  m.r[3] = kpVec4f(0, 0, -1, 0);
+  return m;
+}
+
+KPquatf kpQuatfRotation(KPvec3f v, KPf32 a) {
   a *= .5f;
   KPf32 c = kpCosf(a), s = kpSinf(a);
   return kpQuatfv4(kpVec4f(v.x * s, v.y * s, v.z * s, c));
@@ -94,10 +104,47 @@ KPquatf kpQuatfNormalize(KPquatf q) {
 
 KPdquatf kpDquatfRotationTranslation(KPvec3f axis, KPf32 angle, KPvec3f t) {
   KPdquatf dq;
-  dq.r = kpQuatfRotaion(axis, angle);
+  dq.r = kpQuatfRotation(axis, angle);
   dq.d = kpQuatfMulq(kpQuatfv4(
     kpVec4f(t.x * .5f, t.y * .5f, t.z * .5f, 0.f)), dq.r);
   return dq;
+}
+
+KPdquatf kpDquatfMatrix(KPmat4f m) {
+  KPdquatf dq;
+
+  const KPf32 tr = m.r[0].x + m.r[1].y + m.r[2].z;
+
+  if (tr > 0.f) { /* w is fine */
+    dq.r.v.w = kpSqrtf(tr + 1.f) * .5f;
+    const KPf32 wwww = dq.r.v.w * 4.f;
+    dq.r.v.x = (m.r[2].y - m.r[1].z) / wwww;
+    dq.r.v.y = (m.r[0].z - m.r[2].x) / wwww;
+    dq.r.v.z = (m.r[1].x - m.r[0].y) / wwww;
+  } else if (m.r[0].x > m.r[1].y && m.r[0].x > m.r[2].z) { /* x is the largest */
+    dq.r.v.x = kpSqrtf(1.f + m.r[0].x - m.r[1].y - m.r[2].z) * .5f;
+    const KPf32 xxxx = dq.r.v.x * 4.f;
+    dq.r.v.y = (m.r[0].y + m.r[1].x) / xxxx;
+    dq.r.v.z = (m.r[0].z + m.r[2].x) / xxxx;
+    dq.r.v.w = (m.r[2].y - m.r[1].z) / xxxx;
+  } else if (m.r[1].y > m.r[2].z) { /* y is the largest */
+    dq.r.v.y = kpSqrtf(1.f - m.r[0].x + m.r[1].y - m.r[2].z) * .5f;
+    const KPf32 yyyy = dq.r.v.y * 4.f;
+    dq.r.v.x = (m.r[0].y + m.r[1].x) / yyyy;
+    dq.r.v.z = (m.r[1].z + m.r[2].y) / yyyy;
+    dq.r.v.w = (m.r[0].z - m.r[2].x) / yyyy;
+  } else { /* nokori wa z */
+    dq.r.v.z = kpSqrtf(1.f - m.r[0].x - m.r[1].y + m.r[2].z) * .5f;
+    const KPf32 zzzz = dq.r.v.z * 4.f;
+    dq.r.v.x = (m.r[0].z + m.r[2].x) / zzzz;
+    dq.r.v.y = (m.r[1].z + m.r[2].y) / zzzz;
+    dq.r.v.w = (m.r[1].x - m.r[0].y) / zzzz;
+  }
+
+  /* restore translation */
+  dq.d = kpQuatfMulq(kpQuatfv4(
+    kpVec4f(m.r[0].w * .5f, m.r[1].w * .5f, m.r[2].w * .5f, 0.f)), dq.r);
+  return kpDquatfNormalize(dq);
 }
 
 KPvec3f kpDquatfGetTranslation(KPdquatf dq) {

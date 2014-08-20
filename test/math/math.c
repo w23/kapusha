@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <kapusha/math.h>
 
-#define TOLERANCE 1e-6
+#define TOLERANCE 1e-5
 #define FEQ(a,b) (kpDistancef(a,b) < TOLERANCE)
 #define V3EQ(a,b) (FEQ(a.x,b.x) && FEQ(a.y,b.y) && FEQ(a.z,b.z))
 #define V4EQ(a,b) (FEQ(a.x,b.x) && FEQ(a.y,b.y) && FEQ(a.z,b.z) && FEQ(a.w,b.w))
@@ -173,6 +173,44 @@ int main(int argc, char *argv[]) {
         kpDquatfRotationTranslation(kpVec3f(0,1,0),KPF32_PI2,kpVec3f(3,0,0))
         ))),
       kpVec4f(1.f,2.f,3.f,1.f)));
+
+  /* test quaternion to matrix to quaternion */
+  KP_TEST_V4EQ(kpVec4f(6.f,3.f,4.f,1.f),
+    kpMat4fMulv4(
+      kpMat4fdq(kpDquatfMatrix(kpMat4fdq(kpDquatfNormalize(kpDquatfMuldq(
+        kpDquatfRotationTranslation(kpVec3f(0,0,0),0,kpVec3f(0,1,5)),
+        kpDquatfRotationTranslation(kpVec3f(0,1,0),KPF32_PI2,kpVec3f(3,0,0))
+        ))))),
+      kpVec4f(1.f,2.f,3.f,1.f)));
+
+  int i;
+  for (i = 0; i < 16; ++i) {
+    KPf32 a = (KPf32)i * KPF32_2PI / 16.f;
+    KP_TEST_V3EQ(kpVec3f(3,0,0),
+      kpDquatfGetTranslation(kpDquatfMatrix(kpMat4fdq(kpDquatfMatrix(kpMat4fdq(
+        kpDquatfRotationTranslation(kpVec3f(0,1,0),a,kpVec3f(3,0,0)))))
+      )));
+    KP_TEST_V3EQ(kpVec3f(0,7,16),
+      kpDquatfGetTranslation(kpDquatfMatrix(kpMat4fdq(kpDquatfMatrix(kpMat4fdq(
+        kpDquatfRotationTranslation(kpVec3f(0,1,0),a,kpVec3f(0,7,16)))))
+      )));
+    KP_TEST_V3EQ(kpVec3f(0,7,16),
+      kpDquatfGetTranslation(kpDquatfMatrix(kpMat4fdq(kpDquatfMatrix(kpMat4fdq(
+        kpDquatfRotationTranslation(kpVec3f(1,0,0),a,kpVec3f(0,7,16)))))
+      )));
+    KP_TEST_V4EQ(kpQuatfRotation(kpVec3f(1,0,0),a).v,
+      kpDquatfMatrix(kpMat4fdq(kpDquatfMatrix(kpMat4fdq(
+        kpDquatfRotationTranslation(kpVec3f(1,0,0),a,kpVec3f(1,11,0)))))
+      ).r.v);
+    KP_TEST_V4EQ(kpQuatfRotation(kpVec3f(0,1,0),a).v,
+      kpDquatfMatrix(kpMat4fdq(kpDquatfMatrix(kpMat4fdq(
+        kpDquatfRotationTranslation(kpVec3f(0,1,0),a,kpVec3f(1,11,0)))))
+      ).r.v);
+    KP_TEST_V4EQ(kpQuatfRotation(kpVec3f(0,0,1),a).v,
+      kpDquatfMatrix(kpMat4fdq(kpDquatfMatrix(kpMat4fdq(
+        kpDquatfRotationTranslation(kpVec3f(0,0,1),a,kpVec3f(1,11,0)))))
+      ).r.v);
+  }
 
   return 0;
 }

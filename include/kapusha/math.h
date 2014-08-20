@@ -133,6 +133,8 @@ void kpMat4fTranspose(KPmat4f m);
 KPvec4f kpMat4fMulv4(const KPmat4f m, KPvec4f v);
 KPmat4f kpMat4fMulm4(const KPmat4f a, const KPmat4f b);
 
+KPmat4f kpMat4fProjPerspective(KPf32 near, KPf32 far, KPf32 aspect, KPf32 fov);
+
 /******************************************************************************/
 /* Quaternion operations */
 
@@ -147,7 +149,7 @@ static inline KPquatf kpQuatfIdentity() {
   return kpQuatfv4(kpVec4f(0.f,0.f,0.f,1.f));
 }
 
-KPquatf kpQuatfRotaion(KPvec3f v, KPf32 a);
+KPquatf kpQuatfRotation(KPvec3f v, KPf32 a);
 
 static inline KPquatf kpQuatfMulf(KPquatf q, KPf32 f) {
   return kpQuatfv4(kpVec4fMulf(q.v, f));
@@ -175,6 +177,7 @@ KPquatf kpQuatfNormalize(KPquatf q);
 typedef struct { KPquatf r, d; } KPdquatf;
 
 KPdquatf kpDquatfRotationTranslation(KPvec3f axis, KPf32 angle, KPvec3f transl);
+KPdquatf kpDquatfMatrix(KPmat4f m);
 
 KPvec3f kpDquatfGetTranslation(KPdquatf dq);
 
