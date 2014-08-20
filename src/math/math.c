@@ -92,7 +92,7 @@ KPquatf kpQuatfNormalize(KPquatf q) {
   return kpQuatfv4(kpVec4fMulf(q.v,kpRSqrtf(kpVec4fDot(q.v,q.v))));
 }
 
-KPdquatf kpDquatRotationTranslation(KPvec3f axis, KPf32 angle, KPvec3f t) {
+KPdquatf kpDquatfRotationTranslation(KPvec3f axis, KPf32 angle, KPvec3f t) {
   KPdquatf dq;
   dq.r = kpQuatfRotaion(axis, angle);
   dq.d = kpQuatfMulq(kpQuatfv4(
@@ -100,14 +100,14 @@ KPdquatf kpDquatRotationTranslation(KPvec3f axis, KPf32 angle, KPvec3f t) {
   return dq;
 }
 
-KPvec3f kpDquatGetTranslation(KPdquatf dq) {
+KPvec3f kpDquatfGetTranslation(KPdquatf dq) {
   KPvec4f t = kpVec4fMulf(kpQuatfMulq(dq.d, kpQuatfConjugate(dq.r)).v, 2.f);
   return kpVec3f(t.x, t.y, t.z);
 }
 
 KPmat4f kpMat4fdq(KPdquatf dq) {
   KPmat4f m;
-  KPvec3f t = kpDquatGetTranslation(dq);
+  KPvec3f t = kpDquatfGetTranslation(dq);
   m.r[0].x = 1.f - 2.f * (dq.r.v.y * dq.r.v.y + dq.r.v.z * dq.r.v.z);
   m.r[0].y =       2.f * (dq.r.v.x * dq.r.v.y - dq.r.v.z * dq.r.v.w);
   m.r[0].z =       2.f * (dq.r.v.x * dq.r.v.z + dq.r.v.y * dq.r.v.w);
@@ -123,4 +123,18 @@ KPmat4f kpMat4fdq(KPdquatf dq) {
   m.r[3].x = m.r[3].y = m.r[3].z = 0.f;
   m.r[3].w = 1.f;
   return m;
+}
+
+KPdquatf kpDquatfMuldq(KPdquatf a, KPdquatf b) {
+  KPdquatf dq;
+  dq.r = kpQuatfMulq(a.r, b.r);
+  dq.d = kpQuatfAddq(kpQuatfMulq(a.r,b.d),kpQuatfMulq(a.d,b.r));
+  return dq;
+}
+
+KPdquatf kpDquatfNormalize(KPdquatf dq) {
+  KPf32 scale = kpRSqrtf(kpVec4fDot(dq.r.v, dq.r.v));
+  dq.r.v = kpVec4fMulf(dq.r.v, scale);
+  dq.d.v = kpVec4fMulf(dq.d.v, scale);
+  return dq;
 }

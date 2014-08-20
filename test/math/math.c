@@ -59,91 +59,119 @@ int main(int argc, char *argv[]) {
   /* test x translation */
   KP_TEST_V4EQ(kpVec4f(2.f,2.f,3.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(1,0,0),0,kpVec3f(1,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(1,0,0),0,kpVec3f(1,0,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
 
   /* test y translation */
   KP_TEST_V4EQ(kpVec4f(1.f,3.f,3.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(1,0,0),0,kpVec3f(0,1,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(1,0,0),0,kpVec3f(0,1,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
 
   /* test z translation */
   KP_TEST_V4EQ(kpVec4f(1.f,2.f,4.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(1,0,0),0,kpVec3f(0,0,1))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(1,0,0),0,kpVec3f(0,0,1))),
       kpVec4f(1.f,2.f,3.f,1.f)));
 
   /* test combined translations */
   KP_TEST_V4EQ(kpVec4f(-2.f,10.f,10.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(1,0,0),0,kpVec3f(-3,8,7))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(1,0,0),0,kpVec3f(-3,8,7))),
       kpVec4f(1.f,2.f,3.f,1.f)));
 
   /* test rotation around x */
   KP_TEST_V4EQ(kpVec4f(1.f,-3.f,2.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(1,0,0),KPF32_PI2,kpVec3f(0,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(1,0,0),KPF32_PI2,kpVec3f(0,0,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
   KP_TEST_V4EQ(kpVec4f(1.f,3.f,-2.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(1,0,0),-KPF32_PI2,kpVec3f(0,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(1,0,0),-KPF32_PI2,kpVec3f(0,0,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
   KP_TEST_V4EQ(kpVec4f(1.f,-2.f,-3.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(1,0,0),KPF32_PI,kpVec3f(0,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(1,0,0),KPF32_PI,kpVec3f(0,0,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
   KP_TEST_V4EQ(kpVec4f(1.f,-2.f,-3.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(1,0,0),-KPF32_PI,kpVec3f(0,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(1,0,0),-KPF32_PI,kpVec3f(0,0,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
   KP_TEST_V4EQ(kpVec4f(1.f,2.f,3.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(1,0,0),KPF32_2PI,kpVec3f(0,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(1,0,0),KPF32_2PI,kpVec3f(0,0,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
 
   /* test rotation around y */
   KP_TEST_V4EQ(kpVec4f(3.f,2.f,-1.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(0,1,0),KPF32_PI2,kpVec3f(0,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(0,1,0),KPF32_PI2,kpVec3f(0,0,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
   KP_TEST_V4EQ(kpVec4f(-3.f,2.f,1.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(0,-1,0),KPF32_PI2,kpVec3f(0,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(0,-1,0),KPF32_PI2,kpVec3f(0,0,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
   KP_TEST_V4EQ(kpVec4f(-1.f,2.f,-3.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(0,1,0),KPF32_PI,kpVec3f(0,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(0,1,0),KPF32_PI,kpVec3f(0,0,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
   KP_TEST_V4EQ(kpVec4f(-1.f,2.f,-3.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(0,1,0),-KPF32_PI,kpVec3f(0,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(0,1,0),-KPF32_PI,kpVec3f(0,0,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
   KP_TEST_V4EQ(kpVec4f(1.f,2.f,3.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(0,1,0),KPF32_2PI,kpVec3f(0,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(0,1,0),KPF32_2PI,kpVec3f(0,0,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
 
   /* test rotation around z */
   KP_TEST_V4EQ(kpVec4f(-2.f,1.f,3.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(0,0,1),KPF32_PI2,kpVec3f(0,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(0,0,1),KPF32_PI2,kpVec3f(0,0,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
   KP_TEST_V4EQ(kpVec4f(2.f,-1.f,3.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(0,0,-1),KPF32_PI2,kpVec3f(0,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(0,0,-1),KPF32_PI2,kpVec3f(0,0,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
   KP_TEST_V4EQ(kpVec4f(-1.f,-2.f,3.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(0,0,1),KPF32_PI,kpVec3f(0,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(0,0,1),KPF32_PI,kpVec3f(0,0,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
   KP_TEST_V4EQ(kpVec4f(-1.f,-2.f,3.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(0,0,1),-KPF32_PI,kpVec3f(0,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(0,0,1),-KPF32_PI,kpVec3f(0,0,0))),
       kpVec4f(1.f,2.f,3.f,1.f)));
   KP_TEST_V4EQ(kpVec4f(1.f,2.f,3.f,1.f),
     kpMat4fMulv4(
-      kpMat4fdq(kpDquatRotationTranslation(kpVec3f(0,0,1),KPF32_2PI,kpVec3f(0,0,0))),
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(0,0,1),KPF32_2PI,kpVec3f(0,0,0))),
+      kpVec4f(1.f,2.f,3.f,1.f)));
+
+  /* test combined transform */
+  KP_TEST_V4EQ(kpVec4f(-2.f,6.f,3.f,1.f),
+    kpMat4fMulv4(
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(0,0,1),KPF32_PI2,kpVec3f(0,5,0))),
+      kpVec4f(1.f,2.f,3.f,1.f)));
+  KP_TEST_V4EQ(kpVec4f(-2.f,1.f,8.f,1.f),
+    kpMat4fMulv4(
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(0,0,1),KPF32_PI2,kpVec3f(0,0,5))),
+      kpVec4f(1.f,2.f,3.f,1.f)));
+  KP_TEST_V4EQ(kpVec4f(3.f,1.f,3.f,1.f),
+    kpMat4fMulv4(
+      kpMat4fdq(kpDquatfRotationTranslation(kpVec3f(0,0,1),KPF32_PI2,kpVec3f(5,0,0))),
+      kpVec4f(1.f,2.f,3.f,1.f)));
+  KP_TEST_V4EQ(kpVec4f(3.f,1.f,3.f,1.f),
+    kpMat4fMulv4(
+      kpMat4fdq(kpDquatfMuldq(
+        kpDquatfRotationTranslation(kpVec3f(0,0,0),0,kpVec3f(5,0,0)),
+        kpDquatfRotationTranslation(kpVec3f(0,0,1),KPF32_PI2,kpVec3f(0,0,0))
+        )),
+      kpVec4f(1.f,2.f,3.f,1.f)));
+  KP_TEST_V4EQ(kpVec4f(6.f,3.f,4.f,1.f),
+    kpMat4fMulv4(
+      kpMat4fdq(kpDquatfNormalize(kpDquatfMuldq(
+        kpDquatfRotationTranslation(kpVec3f(0,0,0),0,kpVec3f(0,1,5)),
+        kpDquatfRotationTranslation(kpVec3f(0,1,0),KPF32_PI2,kpVec3f(3,0,0))
+        ))),
       kpVec4f(1.f,2.f,3.f,1.f)));
 
   return 0;

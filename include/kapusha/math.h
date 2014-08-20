@@ -174,11 +174,15 @@ KPquatf kpQuatfNormalize(KPquatf q);
 
 typedef struct { KPquatf r, d; } KPdquatf;
 
-KPdquatf kpDquatRotationTranslation(KPvec3f axis, KPf32 angle, KPvec3f transl);
+KPdquatf kpDquatfRotationTranslation(KPvec3f axis, KPf32 angle, KPvec3f transl);
 
-KPvec3f kpDquatGetTranslation(KPdquatf dq);
+KPvec3f kpDquatfGetTranslation(KPdquatf dq);
 
 KPmat4f kpMat4fdq(KPdquatf dq);
+
+KPdquatf kpDquatfMuldq(KPdquatf a, KPdquatf b);
+
+KPdquatf kpDquatfNormalize(KPdquatf dq);
 
 #ifdef __cplusplus
 } // extern "C"
