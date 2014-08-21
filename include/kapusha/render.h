@@ -44,8 +44,6 @@ typedef enum {
 
 KPrender_buffer_o kpRenderBufferCreate();
 
-void kpRenderBuffer(KPrender_buffer_o buffer);
-
 void kpRenderBufferUpload(
   KPrender_buffer_o buffer,
   KPu32 flags,

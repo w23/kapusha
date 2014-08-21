@@ -42,6 +42,17 @@
       __FILE__, __LINE__, #a, A.x, A.y, A.z, A.w, B.x, B.y, B.z, B.w, #b); \
   }}
 
+#define KP_TEST_M4EQS(a,b) { \
+  const KPmat4f A = (a), B = (b); \
+  if (memcmp(&A, &B, sizeof(A)) != 0) { \
+    fprintf(stderr, "FAIL: %s:%d: test (%s) != (%s) !!!\n", \
+      __FILE__, __LINE__, #a, #b); \
+    abort(); \
+  } else { \
+    fprintf(stderr, "OK: %s:%d: test (%s) == (%s)\n", \
+      __FILE__, __LINE__, #a, #b); \
+  }}
+
 int main(int argc, char *argv[]) {
 
   KP_TEST_FEQ(kpVec3fLength(kpVec3ff(5)),8.66025403784438646763f);
@@ -211,6 +222,28 @@ int main(int argc, char *argv[]) {
         kpDquatfRotationTranslation(kpVec3f(0,0,1),a,kpVec3f(1,11,0)))))
       ).r.v);
   }
+
+  KP_TEST_M4EQS(
+    kpMat4f(kpVec4f(1,2,3,4),kpVec4f(5,6,7,8),kpVec4f(9,10,11,12),kpVec4f(13,14,15,16)),
+    kpMat4fMulm4(
+      kpMat4f(kpVec4f(1,0,0,0),kpVec4f(0,1,0,0),kpVec4f(0,0,1,0),kpVec4f(0,0,0,1)),
+      kpMat4f(kpVec4f(1,2,3,4),kpVec4f(5,6,7,8),kpVec4f(9,10,11,12),kpVec4f(13,14,15,16))
+      ));
+
+  KP_TEST_M4EQS(
+    kpMat4f(kpVec4f(1,2,3,4),kpVec4f(5,6,7,8),kpVec4f(9,10,11,12),kpVec4f(13,14,15,16)),
+    kpMat4fMulm4(
+      kpMat4f(kpVec4f(1,2,3,4),kpVec4f(5,6,7,8),kpVec4f(9,10,11,12),kpVec4f(13,14,15,16)),
+      kpMat4f(kpVec4f(1,0,0,0),kpVec4f(0,1,0,0),kpVec4f(0,0,1,0),kpVec4f(0,0,0,1))
+      ));
+
+  KP_TEST_M4EQS(
+    kpMat4f(kpVec4f(1,5,9,13),kpVec4f(2,6,10,14),kpVec4f(3,7,11,15),kpVec4f(4,8,12,16)),
+    kpMat4fTranspose(kpMat4f(kpVec4f(1,2,3,4),kpVec4f(5,6,7,8),kpVec4f(9,10,11,12),kpVec4f(13,14,15,16))));
+
+  KP_TEST_M4EQS(
+    kpMat4f(kpVec4f(1,2,3,4),kpVec4f(5,6,7,8),kpVec4f(9,10,11,12),kpVec4f(13,14,15,16)),
+    kpMat4fTranspose(kpMat4fTranspose(kpMat4f(kpVec4f(1,2,3,4),kpVec4f(5,6,7,8),kpVec4f(9,10,11,12),kpVec4f(13,14,15,16)))));
 
   return 0;
 }

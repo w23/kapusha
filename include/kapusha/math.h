@@ -14,6 +14,9 @@ extern "C" {
 /* \todo devise accel vs non-accel strategy */
 
 typedef struct {int x, y;} KPvec2i;
+typedef struct {KPu8 x, y, z;} KPvec3b;
+typedef struct {KPu8 x, y, z, w;} KPvec4b;
+
 typedef struct {KPf32 x, y;} KPvec2f;
 typedef struct {KPf32 x, y, z;} KPvec3f;
 typedef struct {KPf32 x, y, z, w;} KPvec4f;
@@ -31,6 +34,11 @@ typedef struct {KPvec2i bl, tr;} KPrect2i;
 
 static inline KPvec2i kpVec2i(int x, int y) {
   KPvec2i v = {x, y};
+  return v;
+}
+
+static inline KPvec3b kpVec3b(KPu8 x, KPu8 y, KPu8 z) {
+  KPvec3b v = {x, y, z};
   return v;
 }
 
@@ -129,7 +137,7 @@ static inline KPmat4f kpMat4f(KPvec4f r0, KPvec4f r1, KPvec4f r2, KPvec4f r3) {
   return ret;
 }
 
-void kpMat4fTranspose(KPmat4f m);
+KPmat4f kpMat4fTranspose(KPmat4f m);
 KPvec4f kpMat4fMulv4(const KPmat4f m, KPvec4f v);
 KPmat4f kpMat4fMulm4(const KPmat4f a, const KPmat4f b);
 

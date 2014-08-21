@@ -13,8 +13,8 @@ void kp__GlAssert(const char *file, int line) {
     case GL_OUT_OF_MEMORY: errname = "GL_OUT_OF_MEMORY"; break;
     default: errname = "UNKNOWN";
   }
-  KP__L("error %s[%d] @ %const s:%d", errname, err, file, line);
-  kpSysExit(-1);
+  KP__L("error %s[%d] @ %s:%d", errname, err, file, line);
+  //kpSysExit(-1);
 }
 
 inline static KP__render_state_t *kp__RenderState() {
@@ -38,7 +38,8 @@ static GLenum KP__render_buffer_target_gl[KP__RenderBufferTarget_MAX] = {
   KP__render_state_t *state = kp__RenderState(); KP_ASSERT(state)
 
 static void kp__RenderBufferBind(
-    KP__render_buffer_t *this, KP__RenderBufferTarget target) {
+  KP__render_buffer_t *this, KP__RenderBufferTarget target)
+{
   KP_ASSERT(this->name != 0);
   KP_ASSERT(target < KP__RenderBufferTarget_MAX);
   KP__render_state_t *state = kp__RenderState(); KP_ASSERT(state);
@@ -154,8 +155,7 @@ int kpRenderProgramEnvSetMat4f(
   const KPmat4f *value)
 {
   KP_THIS(KP__render_program_env_t, env);
-  KPmat4f tr = *value;
-  kpMat4fTranspose(&tr);
+  KPmat4f tr = kpMat4fTranspose(*value);
   return kp__RenderProgramEnvSetNScalar(this, tag,
     KP__RenderProgramEnvValueMat4f, &tr.r[0].x, 16);
 }
@@ -253,8 +253,22 @@ int kpRenderProgramModuleSet(
   KP__L("%p glShaderSource(%d, 1, %p, %d)", this, shader, data.data, length);
   glShaderSource(shader, 1, (const GLchar**)&(data.data), &length); KP__GLASSERT
   glCompileShader(shader); KP__GLASSERT
+
+  {
+    GLint val;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &val);
+    if (val != GL_TRUE) {
+      glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &val);
+      char *buffer = kpAlloc(val + 1);
+      glGetShaderInfoLog(shader, val + 1, NULL, buffer);
+      KP__L("%p: %s", this, buffer);
+      kpFree(buffer);
+      glDeleteShader(shader);
+      return 0;
+    }
+  }
+
   glAttachShader(this->name, shader); KP__GLASSERT
-  /* \todo errcheck */
   this->flags |= flag;
   if ((this->flags & KP__RenderProgramReady) == KP__RenderProgramReady) {
     glLinkProgram(this->name); KP__GLASSERT
@@ -271,7 +285,7 @@ int kpRenderProgramArgumentTag(
   KP_THIS(KP__render_program_t, program);
   int location = glGetUniformLocation(this->name, name);
   if (location == -1) {
-    /* \todo KP_LOG_ERR(); */
+    KP__L("%p cannot find location for uniform \"%s\"", this, name);
     return 0;
   }
 
@@ -285,7 +299,7 @@ int kpRenderProgramArgumentTag(
       return 0;
     }
 
-  /* \todo KP_LOG_ERR(); */
+  KP__L("%p cannot find free tag slot for uniform \"%s\"", this, name);
   return 0;
 }
 
@@ -297,7 +311,7 @@ int kpRenderProgramAttributeTag(
   KP_THIS(KP__render_program_t, program);
   int location = glGetAttribLocation(this->name, name);
   if (location == -1) {
-    /* \todo KP_LOG_ERR(); */
+    KP__L("%p cannot find location for attrib \"%s\"", this, name);
     return 0;
   }
 
@@ -311,7 +325,7 @@ int kpRenderProgramAttributeTag(
       return 0;
     }
 
-  /* \todo KP_LOG_ERR(); */
+  KP__L("%p cannot find free tag slot for attrib \"%s\"", this, name);
   return 0;
 }
 
@@ -384,8 +398,9 @@ void kpRenderBatchDrawSet(KPrender_batch_o batch,
   const KPrender_draw_params_t* param)
 {
   KP_THIS(KP__render_batch_t, batch);
+  kpRetain(param->buffer);
   kpRelease(this->index.buffer);
-  this->index.buffer = kpRetain(param->buffer);
+  this->index.buffer = param->buffer;
   this->index.primitive = KP__render_draw_primitive_type[param->primitive];
   this->index.offset = param->offset;
   if (param->buffer)
@@ -407,6 +422,7 @@ void kpRenderSetDestination(const KPrender_destination_t *dest) {
     dest->viewport.bl.x, dest->viewport.bl.y,
     dest->viewport.tr.x - dest->viewport.bl.x,
     dest->viewport.tr.y - dest->viewport.bl.y);
+  glEnable(GL_DEPTH_TEST);
 }
 
 static void kp__RenderCommandFill(KPrender_cmd_fill_t *cmd) {
@@ -455,11 +471,11 @@ static void kp__RenderCommandRasterize(KPrender_cmd_rasterize_t *cmd) {
       if (program->attribs[i].tag.tag.value == batch->attribs[j].tag.tag.value) {
         KPrender_vertex_attrib_t *a = &batch->attribs[j].attrib;
         kp__RenderBufferBind(a->buffer, KP__RenderBufferTargetArray);
-        KP__L("glVertexAttribPointer(%d, %d, %d, %d, %p)",
+        /*KP__L("glVertexAttribPointer(%d, %d, %d, %d, %p)",
           program->attribs[i].location,
-          a->components, a->type, a->stride, (void*)a->offset);
+          a->components, a->type, a->stride, (void*)a->offset);*/
         glVertexAttribPointer(program->attribs[i].location,
-          a->components, a->type, GL_FALSE, a->stride, (void*)a->offset); KP__GLASSERT
+          a->components, a->type, GL_TRUE, a->stride, (void*)a->offset); KP__GLASSERT
         glEnableVertexAttribArray(program->attribs[i].location); KP__GLASSERT
         break;
       } /* for matching batch attrib */
@@ -469,11 +485,13 @@ static void kp__RenderCommandRasterize(KPrender_cmd_rasterize_t *cmd) {
   /* draw */
   if (batch->index.buffer != 0) {
     kp__RenderBufferBind(batch->index.buffer, KP__RenderBufferTargetElementArray);
-      glDrawElements(batch->index.primitive, batch->index.count,
-        batch->index.type, (void*)batch->index.offset); KP__GLASSERT
+    /*KP__L("glDrawElements(%d, %d, %d, %p)", batch->index.primitive,
+      batch->index.count, batch->index.type, (void*)batch->index.offset);*/
+    glDrawElements(batch->index.primitive, batch->index.count,
+      batch->index.type, (void*)batch->index.offset); KP__GLASSERT
   } else {
-    KP__L("glDrawArrays(%d, %d, %d)", batch->index.primitive,
-      batch->index.offset, batch->index.count);
+    /*KP__L("glDrawArrays(%d, %d, %d)", batch->index.primitive,
+      batch->index.offset, batch->index.count);*/
     glDrawArrays(batch->index.primitive,
       batch->index.offset, batch->index.count); KP__GLASSERT
   }

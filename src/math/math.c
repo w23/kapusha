@@ -24,14 +24,12 @@ KPvec4f kpVec4fNormalize(KPvec4f v) {
   return kpVec4fMulf(v, kpRSqrtf(kpVec4fDot(v,v)));
 }
 
-void kpMat4fTranspose(KPmat4f m) {
-  KPf32 t;
-  t = m.r[0].y; m.r[0].y = m.r[1].x; m.r[1].x = t;
-  t = m.r[0].z; m.r[0].z = m.r[2].x; m.r[2].x = t;
-  t = m.r[0].w; m.r[0].w = m.r[3].x; m.r[3].x = t;
-  t = m.r[1].z; m.r[1].z = m.r[2].y; m.r[2].y = t;
-  t = m.r[1].w; m.r[1].w = m.r[3].y; m.r[3].y = t;
-  t = m.r[2].w; m.r[2].w = m.r[3].z; m.r[3].z = t;
+KPmat4f kpMat4fTranspose(KPmat4f m) {
+  return kpMat4f(
+    kpVec4f(m.r[0].x, m.r[1].x, m.r[2].x, m.r[3].x),
+    kpVec4f(m.r[0].y, m.r[1].y, m.r[2].y, m.r[3].y),
+    kpVec4f(m.r[0].z, m.r[1].z, m.r[2].z, m.r[3].z),
+    kpVec4f(m.r[0].w, m.r[1].w, m.r[2].w, m.r[3].w));
 }
 
 KPvec4f kpMat4fMulv4(const KPmat4f m, KPvec4f v) {
@@ -44,29 +42,28 @@ KPvec4f kpMat4fMulv4(const KPmat4f m, KPvec4f v) {
 }
 
 KPmat4f kpMat4fMulm4(const KPmat4f a, const KPmat4f b) {
-  KPmat4f tb = b;
-  kpMat4fTranspose(tb);
+  KPmat4f tb = kpMat4fTranspose(b);
   return kpMat4f(
     kpVec4f(
-      kpVec4fDot(a.r[0], b.r[0]),
-      kpVec4fDot(a.r[0], b.r[1]),
-      kpVec4fDot(a.r[0], b.r[2]),
-      kpVec4fDot(a.r[0], b.r[3])),
+      kpVec4fDot(a.r[0], tb.r[0]),
+      kpVec4fDot(a.r[0], tb.r[1]),
+      kpVec4fDot(a.r[0], tb.r[2]),
+      kpVec4fDot(a.r[0], tb.r[3])),
     kpVec4f(
-      kpVec4fDot(a.r[1], b.r[0]),
-      kpVec4fDot(a.r[1], b.r[1]),
-      kpVec4fDot(a.r[1], b.r[2]),
-      kpVec4fDot(a.r[1], b.r[3])),
+      kpVec4fDot(a.r[1], tb.r[0]),
+      kpVec4fDot(a.r[1], tb.r[1]),
+      kpVec4fDot(a.r[1], tb.r[2]),
+      kpVec4fDot(a.r[1], tb.r[3])),
     kpVec4f(
-      kpVec4fDot(a.r[2], b.r[0]),
-      kpVec4fDot(a.r[2], b.r[1]),
-      kpVec4fDot(a.r[2], b.r[2]),
-      kpVec4fDot(a.r[2], b.r[3])),
+      kpVec4fDot(a.r[2], tb.r[0]),
+      kpVec4fDot(a.r[2], tb.r[1]),
+      kpVec4fDot(a.r[2], tb.r[2]),
+      kpVec4fDot(a.r[2], tb.r[3])),
     kpVec4f(
-      kpVec4fDot(a.r[3], b.r[0]),
-      kpVec4fDot(a.r[3], b.r[1]),
-      kpVec4fDot(a.r[3], b.r[2]),
-      kpVec4fDot(a.r[3], b.r[3])));
+      kpVec4fDot(a.r[3], tb.r[0]),
+      kpVec4fDot(a.r[3], tb.r[1]),
+      kpVec4fDot(a.r[3], tb.r[2]),
+      kpVec4fDot(a.r[3], tb.r[3])));
 }
 
 KPmat4f kpMat4fProjPerspective(KPf32 near, KPf32 far, KPf32 aspect, KPf32 fov) {
