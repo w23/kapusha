@@ -78,14 +78,11 @@ int kpRenderProgramAttributeTag(
 /******************************************************************************/
 /* sampler */
 
-/* \todo typedef enum {
-  KPRenderSampler1D,
-  KPRenderSampler2D,
-  KPRenderSampler3D
-} KPRenderSamplerType;
+typedef void *KPrender_sampler_o;
+
 KPrender_sampler_o kpRenderSamplerCreate();
-void kpRenderSamplerUpload();
-*/
+
+int kpRenderSamplerUpload(KPrender_sampler_o s, KPsurface_o);
 
 /******************************************************************************/
 /* program environment */
@@ -108,6 +105,11 @@ int kpRenderProgramEnvSetMat4f(
   KPrender_program_env_o env,
   KPrender_tag_t tag,
   const KPmat4f *value);
+
+int kpRenderProgramEnvSetSampler(
+  KPrender_program_env_o env,
+  KPrender_tag_t tag,
+  KPrender_sampler_o sampler);
 
 /******************************************************************************/
 /* raster batch */

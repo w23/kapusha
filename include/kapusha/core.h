@@ -86,6 +86,36 @@ static inline void kpMemset(void *dst, int value, KPsize size) {
 int kpVsnprintf(char *buffer, KPsize size, const char *format, va_list argp);
 int kpSnprintf(char *buffer, KPsize size, const char *format, ...);
 
+/******************************************************************************/
+/* String */
+
+/* \todo */
+
+/******************************************************************************/
+/* Surface */
+
+typedef enum {
+  KPSurfaceFormatU8R,
+  KPSurfaceFormatU8RG,
+  KPSurfaceFormatU8RGB,
+  KPSurfaceFormatU8RGBA,
+  KPSurfaceFormatR5G6B5,
+  KPSurfaceFormatF32RGBA,
+  KPSurfaceFormat_Max
+} KPSurfaceFormat;
+
+typedef struct { KP_O;
+  KPu32 width, height;
+  KPSurfaceFormat format;
+  KPu32 bytes_per_pixel;
+  KPu32 stride, buffer_size;
+  void *buffer;
+} KPsurface_t;
+
+typedef KPsurface_t *KPsurface_o;
+
+KPsurface_o kpSurfaceCreate(KPu32 width, KPu32 height, KPSurfaceFormat fmt);
+
 #ifdef __cplusplus
 } // extern "C"
 #endif

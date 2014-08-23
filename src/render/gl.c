@@ -17,11 +17,33 @@ void kp__GlAssert(const char *file, int line) {
   //kpSysExit(-1);
 }
 
-inline static KP__render_state_t *kp__RenderState() {
+/******************************************************************************/
+/* state */
+
+#undef KP__SYS
+#define KP__SYS "GL::state"
+
+#define DECLARE_STATE \
+  KP__render_state_t *state = kp__CurrentRenderState(); KP_ASSERT(state)
+
+inline static KP__render_state_t *kp__CurrentRenderState() {
   /* \todo multithreading */
   static KP__render_state_t state;
   return &state;
 }
+
+/*
+static void kp__RenderStateInit(KP__render_state_t *state) {
+  int i = 0;
+  for (i = 0; i < KP__RenderBufferTarget_MAX; ++i)
+    state->buffer_targets[i] = 0;
+  for (i = 0; i < KP__RenderSamplers_MAX; ++i)
+    state->sampler_units[i] = 0;
+  state->sampler_unit_active = 0;
+  state->sampler_group_unit = 0;
+  state->program = 0;
+}
+*/
 
 /******************************************************************************/
 /* buffer */
@@ -34,34 +56,34 @@ static GLenum KP__render_buffer_target_gl[KP__RenderBufferTarget_MAX] = {
   GL_ELEMENT_ARRAY_BUFFER
 };
 
-#define DECLARE_STATE \
-  KP__render_state_t *state = kp__RenderState(); KP_ASSERT(state)
-
-static void kp__RenderBufferBind(
+static void kp__RenderStateBufferBind(
+  KP__render_state_t *state,
   KP__render_buffer_t *this, KP__RenderBufferTarget target)
 {
-  KP_ASSERT(this->name != 0);
   KP_ASSERT(target < KP__RenderBufferTarget_MAX);
-  KP__render_state_t *state = kp__RenderState(); KP_ASSERT(state);
-  if (state->buffer_targets_[target] != this) {
-    glBindBuffer(KP__render_buffer_target_gl[target], this->name); KP__GLASSERT
+  if (state->buffer_targets[target] != this) {
+    glBindBuffer(KP__render_buffer_target_gl[target], this?this->name:0); KP__GLASSERT
   }
-  state->buffer_targets_[target] = this;
+  state->buffer_targets[target] = this;
 }
 
-static void kp__RenderBufferUnbind(KP__render_buffer_t *this) {
-  KP__render_state_t *state = kp__RenderState(); KP_ASSERT(state);
+static void kp__RenderStateBufferUnbind(
+  KP__render_state_t *state,
+  KP__render_buffer_t *this)
+{
+  KP_ASSERT(this);
   int i;
   for (i = 0; i < KP__RenderBufferTarget_MAX; ++i)
-    if (this == state->buffer_targets_[i]) {
+    if (this == state->buffer_targets[i]) {
       glBindBuffer(KP__render_buffer_target_gl[i], 0); KP__GLASSERT
-      state->buffer_targets_[i] = 0;
+      state->buffer_targets[i] = 0;
     }
 }
 
 static void kp__RenderBufferDtor(void *buffer) {
+  DECLARE_STATE;
   KP_THIS(KP__render_buffer_t, buffer);
-  kp__RenderBufferUnbind(this);
+  kp__RenderStateBufferUnbind(state, this);
   KP__L("%p: delete %d", this, this->name);
   glDeleteBuffers(1, &this->name); KP__GLASSERT
 }
@@ -80,10 +102,11 @@ void kpRenderBufferUpload(KPrender_buffer_o buffer,
   KPu32 flags,
   KPblob_desc_t data)
 {
+  DECLARE_STATE;
   KP_THIS(KP__render_buffer_t, buffer);
   KP__RenderBufferTarget target = (flags & KPRenderBufferFlagElement) ?
     KP__RenderBufferTargetElementArray : KP__RenderBufferTargetArray;
-  kp__RenderBufferBind(this, target);
+  kp__RenderStateBufferBind(state, this, target);
   KP__L("%p: upload %d", this, (int)data.size);
   glBufferData(KP__render_buffer_target_gl[target], data.size, data.data,
     (flags & KPRenderBufferFlagDynamic) ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
@@ -92,18 +115,150 @@ void kpRenderBufferUpload(KPrender_buffer_o buffer,
 }
 
 /******************************************************************************/
+/* sampler */
+
+#undef KP__SYS
+#define KP__SYS "GL::sampler"
+
+static void kp__RenderStateSamplerGroupBegin(KP__render_state_t *state) {
+  KP_ASSERT(state->sampler_group_unit == 0);
+  state->sampler_group_unit = 1;
+}
+
+static void kp__RenderStateSamplerGroupEnd(KP__render_state_t *state) {
+  KP_ASSERT(state->sampler_group_unit > 0);
+  state->sampler_group_unit = 0;
+}
+
+static int kp__RenderStateSamplerBind(KP__render_state_t *state,
+  KP__render_sampler_t *this)
+{
+  int unit;
+  if (state->sampler_group_unit > 0) {
+    unit = state->sampler_group_unit - 1;
+    if (unit == KP__RenderSamplers_MAX)
+      return -1;
+
+    if (unit != state->sampler_unit_active) {
+      glActiveTexture(GL_TEXTURE0 + unit); KP__GLASSERT
+      state->sampler_unit_active = unit;
+    }
+
+    ++state->sampler_group_unit;
+  } else
+    unit = state->sampler_unit_active;
+
+  if (state->sampler_units[unit] == this)
+    return unit;
+
+  glBindTexture(GL_TEXTURE_2D, this->name); KP__GLASSERT
+  state->sampler_units[unit] = this;
+  return unit;
+}
+
+void kp__RenderStateSamplerUnbind(KP__render_state_t *state,
+  KP__render_sampler_t *sampler)
+{
+  int i;
+  for (i = 0; i < KP__RenderSamplers_MAX; ++i) {
+    if (state->sampler_units[i] == sampler) {
+      if (state->sampler_unit_active != i) {
+        glActiveTexture(GL_TEXTURE0 + i); KP__GLASSERT
+        state->sampler_unit_active = i;
+      }
+      glBindTexture(GL_TEXTURE_2D, 0); KP__GLASSERT
+      state->sampler_units[i] = 0;
+    }
+  }
+}
+
+KPrender_sampler_o kpRenderSamplerCreate() {
+  DECLARE_STATE;
+  KP__render_sampler_t *this = KP_NEW(KP__render_sampler_t, state->heap);
+  this->name = 0;
+  glGenTextures(1, &this->name); KP__GLASSERT
+  KP__L("%p: create texture %d", this, this->name);
+  this->O.dtor = kp__RenderSamplerDtor;
+  return this;
+}
+
+static void kp__RenderSamplerDtor(void *s) {
+  DECLARE_STATE;
+  KP_THIS(KP__render_sampler_t, s);
+  kp__RenderStateSamplerUnbind(state, this);
+  glDeleteTextures(1, &this->name);
+}
+
+int kpRenderSamplerUpload(KPrender_sampler_o sampler, KPsurface_o surface) {
+  DECLARE_STATE;
+  KP_THIS(KP__render_sampler_t, sampler);
+  GLuint fmt_internal, fmt, type;
+  switch (surface->format) {
+    case KPSurfaceFormatU8R:
+      type = GL_UNSIGNED_BYTE; fmt_internal = GL_ALPHA; fmt = GL_ALPHA; break;
+    case KPSurfaceFormatU8RG:
+      type = GL_UNSIGNED_BYTE;
+      fmt_internal = GL_LUMINANCE_ALPHA; fmt = GL_LUMINANCE_ALPHA; break;
+    case KPSurfaceFormatU8RGB:
+      type = GL_UNSIGNED_BYTE; fmt_internal = GL_RGB; fmt = GL_RGB; break;
+    case KPSurfaceFormatU8RGBA:
+      type = GL_UNSIGNED_BYTE; fmt_internal = GL_RGBA; fmt = GL_RGBA; break;
+    case KPSurfaceFormatR5G6B5:
+      type = GL_UNSIGNED_SHORT_5_6_5; fmt_internal = GL_RGB; fmt = GL_RGB;
+      break;
+    case KPSurfaceFormatF32RGBA:
+      type = GL_FLOAT; fmt_internal = GL_RGBA32F; fmt = GL_RGBA; break;
+    default:
+      KP_FAIL("Invalid surface format %d", surface->format);
+      return 0;
+  }
+  kp__RenderStateSamplerBind(state, this);
+  glTexImage2D(GL_TEXTURE_2D, 0, fmt_internal,
+    surface->width, surface->height, 0, fmt, type, surface->buffer);
+  KP__GLASSERT
+
+  /* \todo this should be program-specific */
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  KP__GLASSERT
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  KP__GLASSERT
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); KP__GLASSERT
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); KP__GLASSERT
+  return 1;
+}
+
+/******************************************************************************/
 /* program environment */
 
 #undef KP__SYS
 #define KP__SYS "GL::env"
 
+void kp__RenderProgramEnvDtor(void *env) {
+  KP_THIS(KP__render_program_env_t, env);
+  int i;
+  for (i = 0; i < KP__RENDER_PROGRAM_ENV_MAX_VALUES; ++i)
+    if (this->values[i].type == KP__RenderProgramEnvValueSampler)
+      kpRelease(this->values[i].v.sampler);
+}
+
 KPrender_program_env_o kpRenderProgramEnvCreate() {
   DECLARE_STATE;
   KP__render_program_env_t *this = KP_NEW(KP__render_program_env_t, state->heap);
+  this->O.dtor = kp__RenderProgramEnvDtor;
+  kpMemset(this->values, 0, sizeof(this->values));
+  return this;
+}
+
+int kp__RenderProgramEnvFindSlot(
+  KP__render_program_env_t *this,
+  KPrender_tag_t tag)
+{
   int i;
   for (i = 0; i < KP__RENDER_PROGRAM_ENV_MAX_VALUES; ++i)
-    this->values[i].tag.tag.value = 0;
-  return this;
+    if (this->values[i].tag.tag.value == 0
+        || this->values[i].tag.tag.value == tag.tag.value)
+      return i;
+  return -1;
 }
 
 int kp__RenderProgramEnvSetNScalar(
@@ -115,16 +270,12 @@ int kp__RenderProgramEnvSetNScalar(
 {
   KP_ASSERT(n > 0);
   KP_ASSERT(n <= 16);
-  int i;
-  for (i = 0; i < KP__RENDER_PROGRAM_ENV_MAX_VALUES; ++i)
-    if (this->values[i].tag.tag.value == 0
-        || this->values[i].tag.tag.value == tag.tag.value) {
-      this->values[i].tag = tag;
-      this->values[i].type = type;
-      kpMemcpy(&this->values[i].v.f, value, sizeof(KPf32) * n);
-      return 1;
-    }
-  return 0;
+  int slot = kp__RenderProgramEnvFindSlot(this, tag);
+  if (slot < 0) return 0;
+  this->values[slot].tag = tag;
+  this->values[slot].type = type;
+  kpMemcpy(&this->values[slot].v.f, value, sizeof(KPf32) * n);
+  return 1;
 }
 
 int kpRenderProgramEnvSetScalarf(
@@ -160,7 +311,25 @@ int kpRenderProgramEnvSetMat4f(
     KP__RenderProgramEnvValueMat4f, &tr.r[0].x, 16);
 }
 
+int kpRenderProgramEnvSetSampler(
+  KPrender_program_env_o env,
+  KPrender_tag_t tag,
+  KPrender_sampler_o sampler)
+{
+  KP_THIS(KP__render_program_env_t, env);
+  int slot = kp__RenderProgramEnvFindSlot(this, tag);
+  if (slot < 0) return 0;
+  this->values[slot].tag = tag;
+  if (this->values[slot].type == KP__RenderProgramEnvValueSampler)
+    kpRelease(this->values[slot].v.sampler);
+  this->values[slot].type = KP__RenderProgramEnvValueSampler;
+  kpRetain(sampler);
+  this->values[slot].v.sampler = sampler;
+  return 1;
+}
+
 static void kp__RenderProgramEnvApply(
+  KP__render_state_t *state,
   KP__render_program_env_t *this,
   int index,
   int location)
@@ -183,6 +352,13 @@ static void kp__RenderProgramEnvApply(
       break;
     case KP__RenderProgramEnvValueMat4f:
       glUniformMatrix4fv(location, 1, GL_FALSE, value->v.f); KP__GLASSERT
+      break;
+    case KP__RenderProgramEnvValueSampler:
+      {
+        int unit = kp__RenderStateSamplerBind(state, value->v.sampler);
+        KP_ASSERT(unit >= 0);
+        glUniform1i(location, unit);
+      }
       break;
     default:
       KP_FAIL(!"Impossible KP__RenderProgramEnvValueType %d", value->type);
@@ -436,12 +612,13 @@ static void kp__RenderCommandRasterize(KPrender_cmd_rasterize_t *cmd) {
   KP__render_batch_t *batch = (KP__render_batch_t*)cmd->batch;
 
   /* setup program */
-  if (state->program_ != program) {
-    state->program_ = program;
+  if (state->program != program) {
+    state->program = program;
     glUseProgram(program->name);
   }
 
   /* setup program arguments */
+  kp__RenderStateSamplerGroupBegin(state);
   int i;
   for (i = 0; i < KP__RENDER_PROGRAM_MAX_ARGS; ++i) {
     if (program->args[i].location == -1)
@@ -452,7 +629,7 @@ static void kp__RenderCommandRasterize(KPrender_cmd_rasterize_t *cmd) {
       for (; k < KP__RENDER_PROGRAM_ENV_MAX_VALUES; ++k) {
         KP__render_program_env_t *env = (KP__render_program_env_t*)&cmd->env[j];
         if (env->values[k].tag.tag.value == program->args[i].tag.tag.value) {
-          kp__RenderProgramEnvApply(env, k, program->args[i].location);
+          kp__RenderProgramEnvApply(state, env, k, program->args[i].location);
 
           /* skip all further environments */
           j = cmd->env_count;
@@ -470,7 +647,7 @@ static void kp__RenderCommandRasterize(KPrender_cmd_rasterize_t *cmd) {
     for (j = 0; j < KP__RENDER_BATCH_MAX_ATTRIBS; ++j) {
       if (program->attribs[i].tag.tag.value == batch->attribs[j].tag.tag.value) {
         KPrender_vertex_attrib_t *a = &batch->attribs[j].attrib;
-        kp__RenderBufferBind(a->buffer, KP__RenderBufferTargetArray);
+        kp__RenderStateBufferBind(state, a->buffer, KP__RenderBufferTargetArray);
         /*KP__L("glVertexAttribPointer(%d, %d, %d, %d, %p)",
           program->attribs[i].location,
           a->components, a->type, a->stride, (void*)a->offset);*/
@@ -484,12 +661,13 @@ static void kp__RenderCommandRasterize(KPrender_cmd_rasterize_t *cmd) {
 
   /* draw */
   if (batch->index.buffer != 0) {
-    kp__RenderBufferBind(batch->index.buffer, KP__RenderBufferTargetElementArray);
+    kp__RenderStateBufferBind(state, batch->index.buffer, KP__RenderBufferTargetElementArray);
     /*KP__L("glDrawElements(%d, %d, %d, %p)", batch->index.primitive,
       batch->index.count, batch->index.type, (void*)batch->index.offset);*/
     glDrawElements(batch->index.primitive, batch->index.count,
       batch->index.type, (void*)batch->index.offset); KP__GLASSERT
   } else {
+    kp__RenderStateBufferBind(state, 0, KP__RenderBufferTargetElementArray);
     /*KP__L("glDrawArrays(%d, %d, %d)", batch->index.primitive,
       batch->index.offset, batch->index.count);*/
     glDrawArrays(batch->index.primitive,
@@ -501,6 +679,7 @@ static void kp__RenderCommandRasterize(KPrender_cmd_rasterize_t *cmd) {
     if (program->attribs[i].tag.tag.value != 0) {
       glDisableVertexAttribArray(program->attribs[i].location); KP__GLASSERT
     }
+  kp__RenderStateSamplerGroupEnd(state);
 }
 
 void kpRenderExecuteCommand(const KPrender_cmd_header_t *command) {

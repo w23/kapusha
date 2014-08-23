@@ -76,3 +76,40 @@ void kpLog(const char *prefix, const char *format, ...) {
   }
   kp__LogOutput(buffer);
 }
+
+/******************************************************************************/
+/* Surface */
+
+static KPu32 KP__bytes_per_pixel[KPSurfaceFormat_Max] = {
+  1 /*KPSurfaceFormatU8R*/,
+  2 /*KPSurfaceFormatU8RG*/,
+  3 /*KPSurfaceFormatU8RGB*/,
+  4 /*KPSurfaceFormatU8RGBA*/,
+  2 /*KPSurfaceFormatR5G6B5*/,
+  16 /*KPSurfaceFormatF32RGBA*/
+};
+
+KPsurface_o kpSurfaceCreate(KPu32 width, KPu32 height, KPSurfaceFormat fmt) {
+  KP_ASSERT(fmt >= KPSurfaceFormatU8R);
+  KP_ASSERT(fmt < KPSurfaceFormat_Max);
+
+  const KPu32 bytes_per_pixel = KP__bytes_per_pixel[fmt];
+
+  /* 4-byte scanline alignment */
+  const KPu32 stride = (((bytes_per_pixel * width) + 3) / 4) * 4;
+
+  /* 16-byte start address alignment */
+  const KPsize header_size = ((sizeof(KPsurface_t) + 15) / 16) * 16;
+  const KPu32 total_size = header_size + stride * height;
+
+  KPsurface_t *this = kpNew(0, total_size);
+  this->width = width;
+  this->height = height;
+  this->format = fmt;
+  this->bytes_per_pixel = bytes_per_pixel;
+  this->stride = stride;
+  this->buffer_size = stride * height;
+  this->buffer = (KPu8*)this + header_size;
+  return this;
+}
+

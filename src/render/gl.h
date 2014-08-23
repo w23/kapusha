@@ -60,6 +60,19 @@ typedef struct { KP_O;
 } KP__render_buffer_t;
 
 /******************************************************************************/
+/* GL sampler */
+
+enum {
+  KP__RenderSamplers_MAX = 8
+};
+
+typedef struct { KP_O;
+  GLuint name;
+} KP__render_sampler_t;
+
+static void kp__RenderSamplerDtor(void *s);
+
+/******************************************************************************/
 /* GL program */
 
 enum {
@@ -101,6 +114,7 @@ typedef enum {
   KP__RenderProgramEnvValueScalarf,
   KP__RenderProgramEnvValueVec4f,
   KP__RenderProgramEnvValueMat4f,
+  KP__RenderProgramEnvValueSampler,
 } KP__RenderProgramEnvValueType;
 
 #define KP__RENDER_PROGRAM_ENV_MAX_VALUES 8
@@ -111,6 +125,7 @@ typedef struct { KP_O;
     KP__RenderProgramEnvValueType type;
     union {
       KPf32 f[16];
+      KP__render_sampler_t *sampler;
     } v;
   } values[KP__RENDER_PROGRAM_ENV_MAX_VALUES];
 } KP__render_program_env_t;
@@ -137,9 +152,34 @@ typedef struct { KP_O;
 typedef struct {
   /* are not retained */
   KPheap_p heap;
-  KP__render_buffer_t *buffer_targets_[KP__RenderBufferTarget_MAX];
-  KP__render_program_t *program_;
+  KP__render_buffer_t *buffer_targets[KP__RenderBufferTarget_MAX];
+
+  KP__render_sampler_t *sampler_units[KP__RenderSamplers_MAX];
+  int sampler_unit_active, sampler_group_unit;
+  
+  KP__render_program_t *program;
 } KP__render_state_t;
+
+inline static KP__render_state_t *kp__CurrentRenderState();
+
+//static void kp__RenderStateInit(KP__render_state_t *state);
+
+static void kp__RenderStateBufferBind(
+  KP__render_state_t*,
+  KP__render_buffer_t*,
+  KP__RenderBufferTarget);
+static void kp__RenderStateBufferUnbind(
+  KP__render_state_t*,
+  KP__render_buffer_t*);
+
+static void kp__RenderStateSamplerGroupBegin(KP__render_state_t *state);
+static void kp__RenderStateSamplerGroupEnd(KP__render_state_t *state);
+static int kp__RenderStateSamplerBind(KP__render_state_t *state,
+  KP__render_sampler_t *sampler);
+static void kp__RenderStateSamplerUnbind(KP__render_state_t *state,
+  KP__render_sampler_t *sampler);
+
+
 
 #ifdef __cplusplus
 } // extern "C"
