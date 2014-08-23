@@ -151,6 +151,7 @@ static int kp__RenderStateSamplerBind(KP__render_state_t *state,
   if (state->sampler_units[unit] == this)
     return unit;
 
+  KP__L("%p: bind %d to unit %d", this, this->name, unit);
   glBindTexture(GL_TEXTURE_2D, this->name); KP__GLASSERT
   state->sampler_units[unit] = this;
   return unit;
@@ -185,6 +186,7 @@ KPrender_sampler_o kpRenderSamplerCreate() {
 static void kp__RenderSamplerDtor(void *s) {
   DECLARE_STATE;
   KP_THIS(KP__render_sampler_t, s);
+  KP__L("%p: destroy texture %d", this, this->name);
   kp__RenderStateSamplerUnbind(state, this);
   glDeleteTextures(1, &this->name);
 }
@@ -244,6 +246,7 @@ void kp__RenderProgramEnvDtor(void *env) {
 KPrender_program_env_o kpRenderProgramEnvCreate() {
   DECLARE_STATE;
   KP__render_program_env_t *this = KP_NEW(KP__render_program_env_t, state->heap);
+  KP__L("%p created");
   this->O.dtor = kp__RenderProgramEnvDtor;
   kpMemset(this->values, 0, sizeof(this->values));
   return this;
@@ -254,10 +257,14 @@ int kp__RenderProgramEnvFindSlot(
   KPrender_tag_t tag)
 {
   int i;
-  for (i = 0; i < KP__RENDER_PROGRAM_ENV_MAX_VALUES; ++i)
+  for (i = 0; i < KP__RENDER_PROGRAM_ENV_MAX_VALUES; ++i) {
+    /*KP__L("%p set %c%c%c%c(%d)", this,
+      this->values[i].tag.tag.name[0],this->values[i].tag.tag.name[1],this->values[i].tag.tag.name[2],this->values[i].tag.tag.name[3],
+      i);*/
     if (this->values[i].tag.tag.value == 0
         || this->values[i].tag.tag.value == tag.tag.value)
       return i;
+  }
   return -1;
 }
 
@@ -271,6 +278,9 @@ int kp__RenderProgramEnvSetNScalar(
   KP_ASSERT(n > 0);
   KP_ASSERT(n <= 16);
   int slot = kp__RenderProgramEnvFindSlot(this, tag);
+  /*KP__L("%p set %c%c%c%c(%d)", this,
+    tag.tag.name[0],tag.tag.name[1],tag.tag.name[2],tag.tag.name[3],
+    slot);*/
   if (slot < 0) return 0;
   this->values[slot].tag = tag;
   this->values[slot].type = type;
@@ -284,8 +294,8 @@ int kpRenderProgramEnvSetScalarf(
   KPf32 value)
 {
   KP_THIS(KP__render_program_env_t, env);
-  KP__L("%p set %c%c%c%c = %f", this,
-    tag.tag.name[0],tag.tag.name[1],tag.tag.name[2],tag.tag.name[3], value);
+  /*KP__L("%p set %c%c%c%c(%d) = %f", this,
+    tag.tag.name[0],tag.tag.name[1],tag.tag.name[2],tag.tag.name[3], value);*/
   return kp__RenderProgramEnvSetNScalar(this, tag,
     KP__RenderProgramEnvValueScalarf, &value, 1);
 }
@@ -319,6 +329,10 @@ int kpRenderProgramEnvSetSampler(
   KP_THIS(KP__render_program_env_t, env);
   int slot = kp__RenderProgramEnvFindSlot(this, tag);
   if (slot < 0) return 0;
+  KP__L("%p set %c%c%c%c(%d) = %p", this,
+    tag.tag.name[0],tag.tag.name[1],tag.tag.name[2],tag.tag.name[3],
+    slot,
+    sampler);
   this->values[slot].tag = tag;
   if (this->values[slot].type == KP__RenderProgramEnvValueSampler)
     kpRelease(this->values[slot].v.sampler);
@@ -356,6 +370,7 @@ static void kp__RenderProgramEnvApply(
     case KP__RenderProgramEnvValueSampler:
       {
         int unit = kp__RenderStateSamplerBind(state, value->v.sampler);
+        /*KP__L("%p: bind texture %p to %d", this, value->v.sampler, unit);*/
         KP_ASSERT(unit >= 0);
         glUniform1i(location, unit);
       }
@@ -621,13 +636,23 @@ static void kp__RenderCommandRasterize(KPrender_cmd_rasterize_t *cmd) {
   kp__RenderStateSamplerGroupBegin(state);
   int i;
   for (i = 0; i < KP__RENDER_PROGRAM_MAX_ARGS; ++i) {
-    if (program->args[i].location == -1)
+      /*KP__L("i%d: %c%c%c%c", i,
+        program->args[i].tag.tag.name[0],
+        program->args[i].tag.tag.name[1],
+        program->args[i].tag.tag.name[2],
+        program->args[i].tag.tag.name[3]);*/
+    if (program->args[i].tag.tag.value == 0)
       break;
     KPu32 j = 0;
     for (; j < cmd->env_count; ++j) {
+      KP__render_program_env_t *env = (KP__render_program_env_t*)cmd->env[j];
       int k = 0;
       for (; k < KP__RENDER_PROGRAM_ENV_MAX_VALUES; ++k) {
-        KP__render_program_env_t *env = (KP__render_program_env_t*)&cmd->env[j];
+        /*KP__L("i%d j%d k%d: %p %c%c%c%c", i, j, k, env,
+          env->values[k].tag.tag.name[0],
+          env->values[k].tag.tag.name[1],
+          env->values[k].tag.tag.name[2],
+          env->values[k].tag.tag.name[3]);*/
         if (env->values[k].tag.tag.value == program->args[i].tag.tag.value) {
           kp__RenderProgramEnvApply(state, env, k, program->args[i].location);
 
