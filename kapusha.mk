@@ -12,6 +12,10 @@ SOURCES += \
 SOURCES += \
 	$(KAPUSHA_SRC)/math/math.c
 
+# ooo
+SOURCES += \
+	$(KAPUSHA_SRC)/ooo/ooo.c
+
 ifeq ($(WITH_LINUX),1)
 SOURCES += \
 	$(KAPUSHA_SRC)/sys/linux.c

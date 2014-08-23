@@ -137,6 +137,11 @@ static inline KPmat4f kpMat4f(KPvec4f r0, KPvec4f r1, KPvec4f r2, KPvec4f r3) {
   return ret;
 }
 
+static inline KPmat4f kpMat4fIdentity() {
+  return kpMat4f(kpVec4f(1,0,0,0),kpVec4f(0,1,0,0),
+    kpVec4f(0,0,1,0),kpVec4f(0,0,0,1));
+}
+
 KPmat4f kpMat4fTranspose(KPmat4f m);
 KPvec4f kpMat4fMulv4(const KPmat4f m, KPvec4f v);
 KPmat4f kpMat4fMulm4(const KPmat4f a, const KPmat4f b);
