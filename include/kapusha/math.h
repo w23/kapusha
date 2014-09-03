@@ -79,11 +79,15 @@ static inline KPvec3f kpVec3fNeg(KPvec3f a) {
   return kpVec3f(-a.x, -a.y, -a.z);
 }
 
-static inline KPvec3f kpVec3fAddv3(KPvec3f a, KPvec3f b) {
+static inline KPvec3f kpVec3fAdd(KPvec3f a, KPvec3f b) {
   return kpVec3f(a.x + b.x, a.y + b.y, a.z + b.z);
 }
 
-static inline KPvec3f kpVec3fMulv3(KPvec3f a, KPvec3f b) {
+static inline KPvec3f kpVec3fSub(KPvec3f a, KPvec3f b) {
+  return kpVec3f(a.x - b.x, a.y - b.y, a.z - b.z);
+}
+
+static inline KPvec3f kpVec3fMul(KPvec3f a, KPvec3f b) {
  return kpVec3f(a.x * b.x, a.y * b.y, a.z * b.z);
 }
 
@@ -107,12 +111,16 @@ static inline KPvec4f kpVec4f(KPf32 x, KPf32 y, KPf32 z, KPf32 w) {
   return v;
 }
 
-static inline KPvec4f kpVec4fAddv4(KPvec4f a, KPvec4f b) {
+static inline KPvec4f kpVec4fNeg(KPvec4f v) {
+  return kpVec4f(-v.x, -v.y, -v.z, -v.w);
+}
+
+static inline KPvec4f kpVec4fAdd(KPvec4f a, KPvec4f b) {
   KPvec4f ret = {a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w};
   return ret;
 }
 
-static inline KPvec4f kpVec4fMulv4(KPvec4f a, KPvec4f b) {
+static inline KPvec4f kpVec4fMul(KPvec4f a, KPvec4f b) {
   KPvec4f ret = {a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
   return ret;
 }
@@ -137,45 +145,50 @@ static inline KPmat4f kpMat4f(KPvec4f r0, KPvec4f r1, KPvec4f r2, KPvec4f r3) {
   return ret;
 }
 
-static inline KPmat4f kpMat4fIdentity() {
+static inline KPmat4f kpMat4fMakeIdentity() {
   return kpMat4f(kpVec4f(1,0,0,0),kpVec4f(0,1,0,0),
     kpVec4f(0,0,1,0),kpVec4f(0,0,0,1));
 }
 
-KPmat4f kpMat4fTranspose(KPmat4f m);
-KPvec4f kpMat4fMulv4(const KPmat4f m, KPvec4f v);
-KPmat4f kpMat4fMulm4(const KPmat4f a, const KPmat4f b);
+static inline KPmat4f kpMat4fMakeTranslation(KPvec3f t) {
+  return kpMat4f(kpVec4f(1,0,0,t.x),kpVec4f(0,1,0,t.y),
+    kpVec4f(0,0,1,t.z),kpVec4f(0,0,0,1));
+}
 
-KPmat4f kpMat4fProjPerspective(KPf32 near, KPf32 far, KPf32 aspect, KPf32 fov);
+KPmat4f kpMat4fTranspose(KPmat4f m);
+KPvec4f kpMat4fMulv(const KPmat4f m, KPvec4f v);
+KPmat4f kpMat4fMul(const KPmat4f a, const KPmat4f b);
+
+KPmat4f kpMat4fMakePerspective(KPf32 fov, KPf32 aspect, KPf32 near, KPf32 far);
 
 /******************************************************************************/
 /* Quaternion operations */
 
 typedef struct { KPvec4f v; } KPquatf;
 
-static inline KPquatf kpQuatfv4(KPvec4f v) {
+static inline KPquatf kpQuatfVec4(KPvec4f v) {
   const KPquatf q = {v};
   return q;
 }
 
-static inline KPquatf kpQuatfIdentity() {
-  return kpQuatfv4(kpVec4f(0.f,0.f,0.f,1.f));
+static inline KPquatf kpQuatfMakeIdentity() {
+  return kpQuatfVec4(kpVec4f(0.f,0.f,0.f,1.f));
 }
 
-KPquatf kpQuatfRotation(KPvec3f v, KPf32 a);
+KPquatf kpQuatfMakeRotation(KPvec3f v, KPf32 a);
 
 static inline KPquatf kpQuatfMulf(KPquatf q, KPf32 f) {
-  return kpQuatfv4(kpVec4fMulf(q.v, f));
+  return kpQuatfVec4(kpVec4fMulf(q.v, f));
 }
 
-static inline KPquatf kpQuatfAddq(KPquatf a, KPquatf b) {
-  return kpQuatfv4(kpVec4fAddv4(a.v, b.v));
+static inline KPquatf kpQuatfAdd(KPquatf a, KPquatf b) {
+  return kpQuatfVec4(kpVec4fAdd(a.v, b.v));
 }
 
-KPquatf kpQuatfMulq(KPquatf a, KPquatf b);
+KPquatf kpQuatfMul(KPquatf a, KPquatf b);
 
 static inline KPquatf kpQuatfConjugate(KPquatf q) {
-  return kpQuatfv4(kpVec4f(-q.v.x, -q.v.y, -q.v.z, q.v.w));
+  return kpQuatfVec4(kpVec4f(-q.v.x, -q.v.y, -q.v.z, q.v.w));
 }
 
 static inline KPf32 kpQuatfMagnitude(KPquatf q) {
@@ -183,22 +196,25 @@ static inline KPf32 kpQuatfMagnitude(KPquatf q) {
 }
 
 KPquatf kpQuatfNormalize(KPquatf q);
+KPquatf kpQuatfMakeMat4f(KPmat4f m);
+KPmat4f kpMat4fMakeQuatf(KPquatf q);
 
 /******************************************************************************/
 /* Dual quaternion operations */
 
 typedef struct { KPquatf r, d; } KPdquatf;
 
-KPdquatf kpDquatfRotationTranslation(KPvec3f axis, KPf32 angle, KPvec3f transl);
-KPdquatf kpDquatfMatrix(KPmat4f m);
+KPdquatf kpDquatfMakeIdentity();
+KPdquatf kpDquatfMakeQuatf(KPquatf q);
+KPdquatf kpDquatfMakeTransform(KPvec3f axis, KPf32 angle, KPvec3f transl);
+KPdquatf kpDquatfMakeMat4f(KPmat4f m);
 
 KPvec3f kpDquatfGetTranslation(KPdquatf dq);
 
-KPmat4f kpMat4fdq(KPdquatf dq);
-
-KPdquatf kpDquatfMuldq(KPdquatf a, KPdquatf b);
-
+KPdquatf kpDquatfMul(KPdquatf a, KPdquatf b);
 KPdquatf kpDquatfNormalize(KPdquatf dq);
+
+KPmat4f kpMat4fMakeDquatf(KPdquatf dq);
 
 #ifdef __cplusplus
 } // extern "C"

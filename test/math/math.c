@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <kapusha/math.h>
+#include <kapusha/ooo.h>
 
 #define TOLERANCE 1e-5
 #define FEQ(a,b) (kpDistancef(a,b) < TOLERANCE)
@@ -51,6 +52,50 @@
   } else { \
     fprintf(stderr, "OK: %s:%d: test (%s) == (%s)\n", \
       __FILE__, __LINE__, #a, #b); \
+  }}
+
+static int m4eq(const KPmat4f *a, const KPmat4f *b) {
+  const KPf32 *pa = &a->r[0].x, *pb = &b->r[0].x;
+  int i = 0;
+  for (; i < 16; ++i)
+    if (!FEQ(*pa, *pb))
+      return 0;
+  return 1;
+}
+
+#define KP_TEST_M4EQ(a,b) { \
+  const KPmat4f A = (a), B = (b); \
+  if (!m4eq(&A, &B)) { \
+    fprintf(stderr, "FAIL: %s:%d: test (%s) != (%s) !!!\n", \
+      __FILE__, __LINE__, #a, #b); \
+    abort(); \
+  } else { \
+    fprintf(stderr, "OK: %s:%d: test (%s) == (%s)\n", \
+      __FILE__, __LINE__, #a, #b); \
+  }}
+
+static int qeq(KPquatf a, KPquatf b) {
+  if (a.v.x > 0 && b.v.x < 0) {
+    b.v.x = -b.v.x;
+    b.v.y = -b.v.y;
+    b.v.z = -b.v.z;
+  }
+  const KPf32 *pa = &a.v.x, *pb = &b.v.x;
+  int i = 0;
+  for (; i < 4; ++i)
+    if (!FEQ(*pa, *pb))
+      return 0;
+  return 1;
+}
+
+#define KP_TEST_QEQ(a,b) { \
+  const KPquatf A = (a), B = (b); \
+  if (!qeq(A,B)) { \
+    fprintf(stderr, "FAIL: %s:%d: test (%s){%f,%f,%f,%f} != {%f,%f,%f,%f}(%s) !!!\n", \
+      __FILE__, __LINE__, #a, A.v.x, A.v.y, A.v.z, A.v.w, B.v.x, B.v.y, B.v.z, B.v.w, #b); \
+  } else { \
+    fprintf(stderr, "OK: %s:%d: test (%s){%f,%f,%f,%f} == {%f,%f,%f,%f}(%s)\n", \
+      __FILE__, __LINE__, #a, A.v.x, A.v.y, A.v.z, A.v.w, B.v.x, B.v.y, B.v.z, B.v.w, #b); \
   }}
 
 int main(int argc, char *argv[]) {
@@ -209,18 +254,18 @@ int main(int argc, char *argv[]) {
       kpDquatfGetTranslation(kpDquatfMatrix(kpMat4fdq(kpDquatfMatrix(kpMat4fdq(
         kpDquatfRotationTranslation(kpVec3f(1,0,0),a,kpVec3f(0,7,16)))))
       )));
-    KP_TEST_V4EQ(kpQuatfRotation(kpVec3f(1,0,0),a).v,
+    KP_TEST_QEQ(kpQuatfRotation(kpVec3f(1,0,0),a),
       kpDquatfMatrix(kpMat4fdq(kpDquatfMatrix(kpMat4fdq(
         kpDquatfRotationTranslation(kpVec3f(1,0,0),a,kpVec3f(1,11,0)))))
-      ).r.v);
-    KP_TEST_V4EQ(kpQuatfRotation(kpVec3f(0,1,0),a).v,
+      ).r);
+    KP_TEST_QEQ(kpQuatfRotation(kpVec3f(0,1,0),a),
       kpDquatfMatrix(kpMat4fdq(kpDquatfMatrix(kpMat4fdq(
         kpDquatfRotationTranslation(kpVec3f(0,1,0),a,kpVec3f(1,11,0)))))
-      ).r.v);
-    KP_TEST_V4EQ(kpQuatfRotation(kpVec3f(0,0,1),a).v,
+      ).r);
+    KP_TEST_QEQ(kpQuatfRotation(kpVec3f(0,0,1),a),
       kpDquatfMatrix(kpMat4fdq(kpDquatfMatrix(kpMat4fdq(
         kpDquatfRotationTranslation(kpVec3f(0,0,1),a,kpVec3f(1,11,0)))))
-      ).r.v);
+      ).r);
   }
 
   KP_TEST_M4EQS(
@@ -244,6 +289,154 @@ int main(int argc, char *argv[]) {
   KP_TEST_M4EQS(
     kpMat4f(kpVec4f(1,2,3,4),kpVec4f(5,6,7,8),kpVec4f(9,10,11,12),kpVec4f(13,14,15,16)),
     kpMat4fTranspose(kpMat4fTranspose(kpMat4f(kpVec4f(1,2,3,4),kpVec4f(5,6,7,8),kpVec4f(9,10,11,12),kpVec4f(13,14,15,16)))));
+
+  { /* matrix order: (AB)v = A(Bv) */
+    KP_TEST_V4EQ(
+      kpMat4fMulv4(kpMat4fMulm4(
+          kpMat4f(
+            kpVec4f(17,27,37,47),kpVec4f(57,67,77,87),
+            kpVec4f(97,107,117,127),kpVec4f(137,147,157,167)),
+          kpMat4f(
+            kpVec4f(1,2,3,4),kpVec4f(5,6,7,8),
+            kpVec4f(9,10,11,12),kpVec4f(13,14,15,16))),
+        kpVec4f(100,200,300,400)),
+      kpMat4fMulv4(
+        kpMat4f(
+          kpVec4f(17,27,37,47),kpVec4f(57,67,77,87),
+          kpVec4f(97,107,117,127),kpVec4f(137,147,157,167)),
+        kpMat4fMulv4(
+          kpMat4f(
+            kpVec4f(1,2,3,4),kpVec4f(5,6,7,8),
+            kpVec4f(9,10,11,12),kpVec4f(13,14,15,16)),
+          kpVec4f(100,200,300,400))));
+  }
+
+  { /* dual quaternion multiplication order == matrix */
+    KPdquatf qa, qb;
+    KPmat4f ma, mb;
+    qa = kpDquatfRotationTranslation(
+      kpVec3fNormalize(kpVec3f(1,2,3)),4,kpVec3f(5,6,7));
+    qb = kpDquatfRotationTranslation(
+      kpVec3fNormalize(kpVec3f(9,8,7)),6,kpVec3f(5,4,3));
+    ma = kpMat4fdq(qa);
+    mb = kpMat4fdq(qb);
+    KP_TEST_M4EQ(kpMat4fMulm4(mb, ma), kpMat4fdq(kpDquatfMuldq(qb, qa)));
+  }
+
+  { /* dual quaternion commutativity */
+    KPdquatf q;
+    KPmat4f m;
+    q = kpDquatfRotationTranslation(
+      kpVec3fNormalize(kpVec3f(1,2,3)),4,kpVec3f(5,6,7)); /* q=AtAr */
+    q = kpDquatfMuldq(kpDquatfRotationTranslation(
+      kpVec3fNormalize(kpVec3f(9,8,7)),6,kpVec3f(5,4,3)), q); /* q=BtBrAtAr */
+    m = kpMat4fdq(q); /* m = BtBrAtAr */
+
+    q = kpDquatfRotationTranslation(
+      kpVec3fNormalize(kpVec3f(1,2,3)),4,kpVec3f(5,6,7)); /* q=AtAr */
+    q = kpDquatfMuldq(kpDquatfRotationTranslation(
+      kpVec3fNormalize(kpVec3f(9,8,7)),6,kpVec3f(0,0,0)), q); /* q=BrAtAr */
+    q = kpDquatfMuldq(kpDquatfRotationTranslation(
+      kpVec3fNormalize(kpVec3f(9,8,7)),0,kpVec3f(5,4,3)), q); /* q=BtBrAtAr */
+    KP_TEST_M4EQ(m, kpMat4fdq(q));
+  }
+
+  { /* reframe commutativity */
+    KPreframe_t fa, fb;
+    kpReframeMakeTransform(&fa,
+      kpVec3fNormalize(kpVec3f(1,2,3)),4,kpVec3f(5,6,7));
+    kpReframeMakeIdentity(&fb);
+    kpReframeRotateAroundAxis(&fb,kpVec3fNormalize(kpVec3f(1,2,3)),4);
+    kpReframeTranslate(&fb, kpVec3f(5,6,7));
+    kpReframeSyncMatrix(&fa);
+    kpReframeSyncMatrix(&fb);
+    KP_TEST_M4EQ(fa.mat, fb.mat);
+  }
+
+  { /* trivial static frame orientation */
+    KPreframe_t f;
+    kpReframeMakeIdentity(&f);
+    KP_TEST_V3EQ(kpVec3f(1,0,0),kpReframeGetXAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,1,0),kpReframeGetYAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,0,1),kpReframeGetZAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,0,0),kpReframeGetTranslation(&f));
+    kpReframeMakeIdentity(&f);
+    kpReframeRotateAroundAxis(&f,kpVec3f(1,0,0),KPF32_PI2);
+    kpReframeSyncMatrix(&f);
+    KP_TEST_V3EQ(kpVec3f(1,0,0),kpReframeGetXAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,0,1),kpReframeGetYAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,-1,0),kpReframeGetZAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,0,0),kpReframeGetTranslation(&f));
+
+    kpReframeMakeRotation(&f,kpVec3f(1,0,0),KPF32_PI2);
+    kpReframeSyncMatrix(&f);
+    KP_TEST_V3EQ(kpVec3f(1,0,0),kpReframeGetXAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,0,1),kpReframeGetYAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,-1,0),kpReframeGetZAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,0,0),kpReframeGetTranslation(&f));
+    kpReframeRotateAroundAxis(&f,kpVec3f(1,0,0),KPF32_PI2);
+    kpReframeSyncMatrix(&f);
+    KP_TEST_V3EQ(kpVec3f(1,0,0),kpReframeGetXAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,-1,0),kpReframeGetYAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,0,-1),kpReframeGetZAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,0,0),kpReframeGetTranslation(&f));
+
+    kpReframeMakeRotation(&f,kpVec3f(0,1,0),KPF32_PI2);
+    kpReframeSyncMatrix(&f);
+    KP_TEST_V3EQ(kpVec3f(0,0,-1),kpReframeGetXAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,1,0),kpReframeGetYAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(1,0,0),kpReframeGetZAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,0,0),kpReframeGetTranslation(&f));
+
+    kpReframeMakeRotation(&f,kpVec3f(0,0,1),KPF32_PI2);
+    kpReframeSyncMatrix(&f);
+    KP_TEST_V3EQ(kpVec3f(0,1,0),kpReframeGetXAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(-1,0,0),kpReframeGetYAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,0,1),kpReframeGetZAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,0,0),kpReframeGetTranslation(&f));
+  }
+
+  { /* reference frame applying order == matrix */
+    KPreframe_t f;
+    KPmat4f m;
+
+    kpReframeMakeTransform(&f,
+      kpVec3fNormalize(kpVec3f(1,2,3)),4,kpVec3f(5,6,7)); /* f = A */
+    kpReframeSyncMatrix(&f);
+    m = f.mat; /* m = A */
+
+    kpReframeMakeTransform(&f,
+      kpVec3fNormalize(kpVec3f(9,8,7)),6,kpVec3f(4,3,1)); /* f = B */
+    kpReframeSyncMatrix(&f);
+    m = kpMat4fMulm4(m, f.mat); /* m = AB */
+
+    kpReframeRotateAroundAxis(&f,kpVec3fNormalize(kpVec3f(1,2,3)),4); /* f = fA */
+    kpReframeTranslate(&f,kpVec3f(5,6,7));
+    kpReframeSyncMatrix(&f);
+    KP_TEST_M4EQ(m, f.mat);
+  }
+
+  {
+    KPreframe_t f;
+    kpReframeMakeTransform(&f,kpVec3f(1,0,0),KPF32_PI2,kpVec3f(10,5,4));
+    kpReframeSyncMatrix(&f);
+    KP_TEST_V3EQ(kpVec3f(1,0,0),kpReframeGetXAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,0,1),kpReframeGetYAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,-1,0),kpReframeGetZAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(10,5,4),kpReframeGetTranslation(&f));
+    kpReframeRotateAroundAxis(&f,kpVec3f(1,0,0),KPF32_PI2);
+    kpReframeSyncMatrix(&f);
+    KP_TEST_V3EQ(kpVec3f(1,0,0),kpReframeGetXAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,-1,0),kpReframeGetYAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,0,-1),kpReframeGetZAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(10,-4,5),kpReframeGetTranslation(&f));
+    kpReframeRotateAroundAxis(&f,kpVec3f(0,1,0),KPF32_PI2);
+    kpReframeSyncMatrix(&f);
+    KP_TEST_V3EQ(kpVec3f(0,0,-1),kpReframeGetXAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(0,-1,0),kpReframeGetYAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(-1,0,0),kpReframeGetZAxis(&f));
+    KP_TEST_V3EQ(kpVec3f(5,-4,-10),kpReframeGetTranslation(&f));
+  }
 
   return 0;
 }

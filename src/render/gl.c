@@ -246,7 +246,7 @@ void kp__RenderProgramEnvDtor(void *env) {
 KPrender_program_env_o kpRenderProgramEnvCreate() {
   DECLARE_STATE;
   KP__render_program_env_t *this = KP_NEW(KP__render_program_env_t, state->heap);
-  KP__L("%p created");
+  KP__L("%p created", this);
   this->O.dtor = kp__RenderProgramEnvDtor;
   kpMemset(this->values, 0, sizeof(this->values));
   return this;

@@ -55,7 +55,7 @@ static inline int kpStrlen(const char *str) { return strlen(str); }
 
 void kpLog(const char *prefix, const char *format, ...) {
   /* \todo multiline logs: per-line prefixes and limits */
-  const int L = 128;
+  const int L = 1024;
   const int PL = kpStrlen(prefix);
   char buffer[L];
   va_list argp;
