@@ -208,6 +208,7 @@ KPdquatf kpDquatfMakeIdentity();
 KPdquatf kpDquatfMakeQuatf(KPquatf q);
 KPdquatf kpDquatfMakeTransform(KPvec3f axis, KPf32 angle, KPvec3f transl);
 KPdquatf kpDquatfMakeMat4f(KPmat4f m);
+KPdquatf kpDquatfMakeInverse(KPdquatf dq);
 
 KPvec3f kpDquatfGetTranslation(KPdquatf dq);
 

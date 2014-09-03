@@ -32,7 +32,7 @@ KPmat4f kpMat4fTranspose(KPmat4f m) {
     kpVec4f(m.r[0].w, m.r[1].w, m.r[2].w, m.r[3].w));
 }
 
-KPvec4f kpMat4fMulv4(const KPmat4f m, KPvec4f v) {
+KPvec4f kpMat4fMulv(const KPmat4f m, KPvec4f v) {
   return kpVec4f(
     kpVec4fDot(m.r[0], v),
     kpVec4fDot(m.r[1], v),
@@ -184,6 +184,17 @@ KPmat4f kpMat4fMakeDquatf(KPdquatf dq) {
   m.r[1].w = t.y;
   m.r[2].w = t.z;
   return m;
+}
+
+KPdquatf kpDquatfMakeInverse(KPdquatf dq) {
+  KPdquatf ret;
+  ret.r = kpQuatfConjugate(dq.r);
+  ret.d = kpQuatfMul(ret.r, kpQuatfMul(dq.d, ret.r));
+  ret.d.v.x = -ret.d.v.x;
+  ret.d.v.y = -ret.d.v.y;
+  ret.d.v.z = -ret.d.v.z;
+  ret.d.v.w = -ret.d.v.w;
+  return ret;
 }
 
 KPdquatf kpDquatfMul(KPdquatf a, KPdquatf b) {
