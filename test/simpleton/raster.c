@@ -78,7 +78,7 @@ void simpleton_size(int width, int height) {
 }
 
 void simpleton_draw(KPtime_ms pts) {
-  kpRenderProgramEnvSetScalarf(&env, kpRenderTag("TIME"), pts / 1000.0f);
+  kpRenderProgramEnvSetScalarf(env, kpRenderTag("TIME"), pts / 1000.0f);
 
   KPrender_cmd_rasterize_t raster;
   raster.header.cmd = KPrender_Command_Rasterize;

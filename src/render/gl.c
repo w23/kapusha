@@ -464,6 +464,18 @@ int kpRenderProgramModuleSet(
   if ((this->flags & KP__RenderProgramReady) == KP__RenderProgramReady) {
     glLinkProgram(this->name); KP__GLASSERT
     /* \todo errcheck */
+    {
+      GLint val;
+      glGetProgramiv(this->name, GL_LINK_STATUS, &val);
+      if (val != GL_TRUE) {
+        glGetProgramiv(this->name, GL_INFO_LOG_LENGTH, &val);
+        char *buffer = kpAlloc(val + 1);
+        glGetProgramInfoLog(this->name, val + 1, NULL, buffer);
+        KP__L("%p: %s", this, buffer);
+        kpFree(buffer);
+        return 0;
+      }
+    }
   }
   return 1;
 }

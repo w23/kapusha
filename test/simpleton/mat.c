@@ -1,4 +1,4 @@
-#include <GLFW/glfw3.h>
+#include <stddef.h>
 
 #include "kapusha/simpleton.h"
 #include "kapusha/render.h"
@@ -107,7 +107,7 @@ void simpleton_init(int argc, const char *argv[]) {
   env = kpRenderProgramEnvCreate();
 
   fill.header.cmd = KPrender_Command_Fill;
-  fill.color = kpVec4f(0, .5, 0, 0);
+  fill.color = kpVec4f(0, .1, 0, 0);
 
   raster.header.cmd = KPrender_Command_Rasterize;
   raster.batch = batch;
@@ -116,51 +116,26 @@ void simpleton_init(int argc, const char *argv[]) {
   raster.env = &env;
 }
 
-void simpleton_size(int width, int height) {
+void simpleton_resize(int width, int height) {
   KPrender_destination_t dest;
   kpRenderDestinationDefaults(&dest);
   dest.viewport.tr.x = width;
   dest.viewport.tr.y = height;
   kpRenderSetDestination(&dest);
 
-  proj = kpMat4fProjPerspective(1.f, 100.f, (KPf32)width/(KPf32)height, 90.f);
+  proj = kpMat4fMakePerspective(90.f, (KPf32)width/(KPf32)height, 1.f, 100.f);
 }
 
-void simpleton_draw(KPtime_ms pts) {
-  KPdquatf q = kpDquatfRotationTranslation(
+void simpleton_update(KPtime_ms pts) {
+  KPdquatf q = kpDquatfMakeTransform(
     kpVec3fNormalize(kpVec3f(0, 1, 1)), pts / 1000.f, kpVec3f(0, 0, -5.f));
-  KPmat4f m = kpMat4fMulm4(proj, kpMat4fdq(q));
+  KPmat4f m = kpMat4fMul(proj, kpMat4fMakeDquatf(q));
 
-  kpRenderProgramEnvSetMat4f(&env, kpRenderTag("MMVP"), &m);
+  kpRenderProgramEnvSetMat4f(env, kpRenderTag("MMVP"), &m);
 
   kpRenderExecuteCommand(&fill.header);
   kpRenderExecuteCommand(&raster.header);
 }
 
-static void glfw_resize_cb(GLFWwindow *win, int w, int h) {
-  KP_UNUSED(win);
-  simpleton_size(w, h);
-}
-
-int main(int argc, char *argv[]) {
-  KP_UNUSED(argc);
-  KP_UNUSED(argv);
-
-  if (!glfwInit())
-    return -1;
-
-  GLFWwindow* window = glfwCreateWindow(640, 480, "My Title", NULL, NULL);
-  glfwMakeContextCurrent(window);
-  simpleton_init(argc, (const char**)argv);
-  glfwSetWindowSizeCallback(window, glfw_resize_cb);
-
-  while (!glfwWindowShouldClose(window)){
-    simpleton_draw(glfwGetTime() * 1000.0);
-    glfwSwapBuffers(window);
-    glfwPollEvents();
-  }
-
-  glfwDestroyWindow(window);
-  glfwTerminate();
-
-}
+void simpleton_key(int code, int down) {}
+void simpleton_mouse(int dx, int dy) {}
