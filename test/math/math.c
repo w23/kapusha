@@ -1,3 +1,4 @@
+#include <memory.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <kapusha/math.h>
@@ -8,9 +9,14 @@
 #define V3EQ(a,b) (FEQ(a.x,b.x) && FEQ(a.y,b.y) && FEQ(a.z,b.z))
 #define V4EQ(a,b) (FEQ(a.x,b.x) && FEQ(a.y,b.y) && FEQ(a.z,b.z) && FEQ(a.w,b.w))
 
+static int count_ok = 0, count_fail = 0;
+
 #define KP_TEST(t) \
   if (!(t)) { \
     fprintf(stderr, "%s:%d: test (%s) failed!\n", __FILE__, __LINE__, #t); \
+    ++count_fail; \
+  } else { \
+    ++count_ok; \
   }
 
 #define KP_TEST_FEQ(a,b) { \
@@ -18,9 +24,11 @@
   if (!FEQ(A,B)) { \
     fprintf(stderr, "FAIL: %s:%d: test (%s)%f != %f(%s) !!!\n", \
       __FILE__, __LINE__, #a, A, B, #b); \
+    ++count_fail; \
   } else { \
     fprintf(stderr, "OK: %s:%d: test (%s)%f == %f(%s)\n", \
       __FILE__, __LINE__, #a, A, B, #b); \
+    ++count_ok; \
   }}
 
 #define KP_TEST_V3EQ(a,b) { \
@@ -28,9 +36,11 @@
   if (!V3EQ(A,B)) { \
     fprintf(stderr, "FAIL: %s:%d: test (%s){%f,%f,%f} != {%f,%f,%f}(%s) !!!\n", \
       __FILE__, __LINE__, #a, A.x, A.y, A.z, B.x, B.y, B.z, #b); \
+    ++count_fail; \
   } else { \
     fprintf(stderr, "OK: %s:%d: test (%s){%f,%f,%f} == {%f,%f,%f}(%s)\n", \
       __FILE__, __LINE__, #a, A.x, A.y, A.z, B.x, B.y, B.z, #b); \
+    ++count_ok; \
   }}
 
 #define KP_TEST_V4EQ(a,b) { \
@@ -38,9 +48,11 @@
   if (!V4EQ(A,B)) { \
     fprintf(stderr, "FAIL: %s:%d: test (%s){%f,%f,%f,%f} != {%f,%f,%f,%f}(%s) !!!\n", \
       __FILE__, __LINE__, #a, A.x, A.y, A.z, A.w, B.x, B.y, B.z, B.w, #b); \
+    ++count_fail; \
   } else { \
     fprintf(stderr, "OK: %s:%d: test (%s){%f,%f,%f,%f} == {%f,%f,%f,%f}(%s)\n", \
       __FILE__, __LINE__, #a, A.x, A.y, A.z, A.w, B.x, B.y, B.z, B.w, #b); \
+    ++count_ok; \
   }}
 
 #define KP_TEST_M4EQS(a,b) { \
@@ -48,10 +60,11 @@
   if (memcmp(&A, &B, sizeof(A)) != 0) { \
     fprintf(stderr, "FAIL: %s:%d: test (%s) != (%s) !!!\n", \
       __FILE__, __LINE__, #a, #b); \
-    abort(); \
+    ++count_fail; \
   } else { \
     fprintf(stderr, "OK: %s:%d: test (%s) == (%s)\n", \
       __FILE__, __LINE__, #a, #b); \
+    ++count_ok; \
   }}
 
 static int m4eq(const KPmat4f *a, const KPmat4f *b) {
@@ -68,10 +81,11 @@ static int m4eq(const KPmat4f *a, const KPmat4f *b) {
   if (!m4eq(&A, &B)) { \
     fprintf(stderr, "FAIL: %s:%d: test (%s) != (%s) !!!\n", \
       __FILE__, __LINE__, #a, #b); \
-    abort(); \
+    ++count_fail; \
   } else { \
     fprintf(stderr, "OK: %s:%d: test (%s) == (%s)\n", \
       __FILE__, __LINE__, #a, #b); \
+    ++count_ok; \
   }}
 
 static int qeq(KPquatf a, KPquatf b) {
@@ -93,12 +107,16 @@ static int qeq(KPquatf a, KPquatf b) {
   if (!qeq(A,B)) { \
     fprintf(stderr, "FAIL: %s:%d: test (%s){%f,%f,%f,%f} != {%f,%f,%f,%f}(%s) !!!\n", \
       __FILE__, __LINE__, #a, A.v.x, A.v.y, A.v.z, A.v.w, B.v.x, B.v.y, B.v.z, B.v.w, #b); \
+    ++count_fail; \
   } else { \
     fprintf(stderr, "OK: %s:%d: test (%s){%f,%f,%f,%f} == {%f,%f,%f,%f}(%s)\n", \
       __FILE__, __LINE__, #a, A.v.x, A.v.y, A.v.z, A.v.w, B.v.x, B.v.y, B.v.z, B.v.w, #b); \
+    ++count_ok; \
   }}
 
 int main(int argc, char *argv[]) {
+  KP_UNUSED(argc);
+  KP_UNUSED(argv);
 
   KP_TEST_FEQ(kpVec3fLength(kpVec3ff(5)),8.66025403784438646763f);
 
@@ -348,9 +366,7 @@ int main(int argc, char *argv[]) {
     kpReframeMakeIdentity(&fb);
     kpReframeRotateAroundAxis(&fb,kpVec3fNormalize(kpVec3f(1,2,3)),4);
     kpReframeTranslate(&fb, kpVec3f(5,6,7));
-    kpReframeSyncMatrix(&fa);
-    kpReframeSyncMatrix(&fb);
-    KP_TEST_M4EQ(fa.mat, fb.mat);
+    KP_TEST_M4EQ(*kpReframeGetMatrix(&fa), *kpReframeGetMatrix(&fb));
   }
 
   { /* trivial static frame orientation */
@@ -362,34 +378,29 @@ int main(int argc, char *argv[]) {
     KP_TEST_V3EQ(kpVec3f(0,0,0),kpReframeGetTranslation(&f));
     kpReframeMakeIdentity(&f);
     kpReframeRotateAroundAxis(&f,kpVec3f(1,0,0),KPF32_PI2);
-    kpReframeSyncMatrix(&f);
     KP_TEST_V3EQ(kpVec3f(1,0,0),kpReframeGetXAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,0,1),kpReframeGetYAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,-1,0),kpReframeGetZAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,0,0),kpReframeGetTranslation(&f));
 
     kpReframeMakeRotation(&f,kpVec3f(1,0,0),KPF32_PI2);
-    kpReframeSyncMatrix(&f);
     KP_TEST_V3EQ(kpVec3f(1,0,0),kpReframeGetXAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,0,1),kpReframeGetYAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,-1,0),kpReframeGetZAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,0,0),kpReframeGetTranslation(&f));
     kpReframeRotateAroundAxis(&f,kpVec3f(1,0,0),KPF32_PI2);
-    kpReframeSyncMatrix(&f);
     KP_TEST_V3EQ(kpVec3f(1,0,0),kpReframeGetXAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,-1,0),kpReframeGetYAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,0,-1),kpReframeGetZAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,0,0),kpReframeGetTranslation(&f));
 
     kpReframeMakeRotation(&f,kpVec3f(0,1,0),KPF32_PI2);
-    kpReframeSyncMatrix(&f);
     KP_TEST_V3EQ(kpVec3f(0,0,-1),kpReframeGetXAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,1,0),kpReframeGetYAxis(&f));
     KP_TEST_V3EQ(kpVec3f(1,0,0),kpReframeGetZAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,0,0),kpReframeGetTranslation(&f));
 
     kpReframeMakeRotation(&f,kpVec3f(0,0,1),KPF32_PI2);
-    kpReframeSyncMatrix(&f);
     KP_TEST_V3EQ(kpVec3f(0,1,0),kpReframeGetXAxis(&f));
     KP_TEST_V3EQ(kpVec3f(-1,0,0),kpReframeGetYAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,0,1),kpReframeGetZAxis(&f));
@@ -402,36 +413,30 @@ int main(int argc, char *argv[]) {
 
     kpReframeMakeTransform(&f,
       kpVec3fNormalize(kpVec3f(1,2,3)),4,kpVec3f(5,6,7)); /* f = A */
-    kpReframeSyncMatrix(&f);
-    m = f.mat; /* m = A */
+    m = *kpReframeGetMatrix(&f); /* m = A */
 
     kpReframeMakeTransform(&f,
       kpVec3fNormalize(kpVec3f(9,8,7)),6,kpVec3f(4,3,1)); /* f = B */
-    kpReframeSyncMatrix(&f);
-    m = kpMat4fMul(m, f.mat); /* m = AB */
+    m = kpMat4fMul(m, *kpReframeGetMatrix(&f)); /* m = AB */
 
     kpReframeRotateAroundAxis(&f,kpVec3fNormalize(kpVec3f(1,2,3)),4); /* f = fA */
     kpReframeTranslate(&f,kpVec3f(5,6,7));
-    kpReframeSyncMatrix(&f);
-    KP_TEST_M4EQ(m, f.mat);
+    KP_TEST_M4EQ(m, *kpReframeGetMatrix(&f));
   }
 
   {
     KPreframe_t f;
     kpReframeMakeTransform(&f,kpVec3f(1,0,0),KPF32_PI2,kpVec3f(10,5,4));
-    kpReframeSyncMatrix(&f);
     KP_TEST_V3EQ(kpVec3f(1,0,0),kpReframeGetXAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,0,1),kpReframeGetYAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,-1,0),kpReframeGetZAxis(&f));
     KP_TEST_V3EQ(kpVec3f(10,5,4),kpReframeGetTranslation(&f));
     kpReframeRotateAroundAxis(&f,kpVec3f(1,0,0),KPF32_PI2);
-    kpReframeSyncMatrix(&f);
     KP_TEST_V3EQ(kpVec3f(1,0,0),kpReframeGetXAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,-1,0),kpReframeGetYAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,0,-1),kpReframeGetZAxis(&f));
     KP_TEST_V3EQ(kpVec3f(10,-4,5),kpReframeGetTranslation(&f));
     kpReframeRotateAroundAxis(&f,kpVec3f(0,1,0),KPF32_PI2);
-    kpReframeSyncMatrix(&f);
     KP_TEST_V3EQ(kpVec3f(0,0,-1),kpReframeGetXAxis(&f));
     KP_TEST_V3EQ(kpVec3f(0,-1,0),kpReframeGetYAxis(&f));
     KP_TEST_V3EQ(kpVec3f(-1,0,0),kpReframeGetZAxis(&f));
@@ -445,5 +450,6 @@ int main(int argc, char *argv[]) {
     KP_TEST_M4EQ(kpMat4fMakeDquatf(q), kpMat4fMakeDquatf(kpDquatfMakeInverse(kpDquatfMakeInverse(q))));
   }
 
+  printf("Results: ok: %d, fail: %d\n", count_ok, count_fail);
   return 0;
 }

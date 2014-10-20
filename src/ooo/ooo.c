@@ -1,59 +1,92 @@
 #include "kapusha/ooo.h"
 
-void kpReframeMakeIdentity(KPreframe_t *f) {
-  f->dq = kpDquatfMakeTransform(kpVec3f(0,0,0),0, kpVec3f(0,0,0));
-  f->mat = kpMat4fMakeIdentity();
+/******************************************************************************/
+/* reframe */
+
+typedef enum {
+  KP__ReframeFlagDirtyMat = 0x01,
+} KP__ReframeFlags;
+
+static void kp__ReframeUpdate(KPreframe_t *this) {
+  if (this->flags_ & KP__ReframeFlagDirtyMat) {
+    this->mat_ = kpMat4fMakeDquatf(this->dq_);
+    this->flags_ ^= KP__ReframeFlagDirtyMat;
+  }
 }
 
-void kpReframeMakeDQ(KPreframe_t *f, KPdquatf dq) {
-  f->dq = dq;
-  kpReframeSyncMatrix(f);
+void kpReframeMakeIdentity(KPreframe_t *this) {
+  this->dq_ = kpDquatfMakeTransform(kpVec3f(0,0,0),0, kpVec3f(0,0,0));
+  this->mat_ = kpMat4fMakeIdentity();
+  this->flags_ = 0;
 }
 
-void kpReframeMakeLookAt(KPvec3f pos, KPvec3f at, KPvec3f up);
-
-void kpReframeSyncMatrix(KPreframe_t *f) {
-  f->mat = kpMat4fMakeDquatf(f->dq);
+void kpReframeMakeDquatf(KPreframe_t *this, KPdquatf dq) {
+  this->dq_ = dq;
+  this->flags_ |= KP__ReframeFlagDirtyMat;
 }
 
-KPvec3f kpReframeGetXAxis(KPreframe_t *f) {
-  return kpVec3f(f->mat.r[0].x, f->mat.r[1].x, f->mat.r[2].x);
+void kpReframeMakeTransform(KPreframe_t *this,
+  KPvec3f axis, KPf32 angle, KPvec3f translation)
+{
+  kpReframeMakeDquatf(this,
+    kpDquatfMakeTransform(axis, angle, translation));
 }
 
-KPvec3f kpReframeGetYAxis(KPreframe_t *f) {
-  return kpVec3f(f->mat.r[0].y, f->mat.r[1].y, f->mat.r[2].y);
+void kpReframeMakeRotation(KPreframe_t *this,
+  KPvec3f axis, KPf32 angle)
+{
+  kpReframeMakeTransform(this, axis, angle, kpVec3f(0,0,0));
 }
 
-KPvec3f kpReframeGetZAxis(KPreframe_t *f) {
-  return kpVec3f(f->mat.r[0].z, f->mat.r[1].z, f->mat.r[2].z);
+/* \todo void kpReframeMakeLookAt(KPvec3f pos, KPvec3f at, KPvec3f up); */
+
+const KPmat4f *kpReframeGetMatrix(KPreframe_t *this) {
+  kp__ReframeUpdate(this);
+  return &this->mat_;
 }
 
-KPvec3f kpReframeGetTranslation(KPreframe_t *f) {
-  return kpVec3f(f->mat.r[0].w, f->mat.r[1].w, f->mat.r[2].w);
+KPvec3f kpReframeGetXAxis(KPreframe_t *this) {
+  kp__ReframeUpdate(this);
+  return kpVec3f(this->mat_.r[0].x, this->mat_.r[1].x, this->mat_.r[2].x);
 }
 
-KPvec4f kpReframeGetRotation(KPreframe_t *f);
-
-void kpReframeTranslate(KPreframe_t *f, KPvec3f by) {
-  f->dq = kpDquatfMul(
-    kpDquatfMakeTransform(kpVec3f(0,0,0),0,by), f->dq);
+KPvec3f kpReframeGetYAxis(KPreframe_t *this) {
+  kp__ReframeUpdate(this);
+  return kpVec3f(this->mat_.r[0].y, this->mat_.r[1].y, this->mat_.r[2].y);
 }
 
-void kpReframeRotateAroundSelfX(KPreframe_t *f, KPf32 angle) {
-  kpReframeRotateAroundAxis(f, kpVec3f(1,0,0), angle);
+KPvec3f kpReframeGetZAxis(KPreframe_t *this) {
+  kp__ReframeUpdate(this);
+  return kpVec3f(this->mat_.r[0].z, this->mat_.r[1].z, this->mat_.r[2].z);
 }
 
-void kpReframeRotateAroundSelfY(KPreframe_t *f, KPf32 angle) {
-  kpReframeRotateAroundAxis(f, kpVec3f(0,1,0), angle);
+KPvec3f kpReframeGetTranslation(KPreframe_t *this) {
+  kp__ReframeUpdate(this);
+  return kpVec3f(this->mat_.r[0].w, this->mat_.r[1].w, this->mat_.r[2].w);
 }
 
-void kpReframeRotateAroundSelfZ(KPreframe_t *f, KPf32 angle) {
-  kpReframeRotateAroundAxis(f, kpVec3f(0,0,1), angle);
+void kpReframeTranslate(KPreframe_t *this, KPvec3f by) {
+  this->dq_ = kpDquatfMul(
+    kpDquatfMakeTransform(kpVec3f(0,0,0),0,by), this->dq_);
+  this->flags_ |= KP__ReframeFlagDirtyMat;
 }
 
-void kpReframeRotateAroundAxis(KPreframe_t *f, KPvec3f axis, KPf32 angle) {
-  f->dq = kpDquatfMul(
-    kpDquatfMakeTransform(axis, angle, kpVec3f(0,0,0)), f->dq);
+void kpReframeRotateAroundSelfX(KPreframe_t *this, KPf32 angle) {
+  kpReframeRotateAroundAxis(this, kpVec3f(1,0,0), angle);
+}
+
+void kpReframeRotateAroundSelfY(KPreframe_t *this, KPf32 angle) {
+  kpReframeRotateAroundAxis(this, kpVec3f(0,1,0), angle);
+}
+
+void kpReframeRotateAroundSelfZ(KPreframe_t *this, KPf32 angle) {
+  kpReframeRotateAroundAxis(this, kpVec3f(0,0,1), angle);
+}
+
+void kpReframeRotateAroundAxis(KPreframe_t *this, KPvec3f axis, KPf32 angle) {
+  this->dq_ = kpDquatfMul(
+    kpDquatfMakeTransform(axis, angle, kpVec3f(0,0,0)), this->dq_);
+  this->flags_ |= KP__ReframeFlagDirtyMat;
 }
 
 /******************************************************************************/
