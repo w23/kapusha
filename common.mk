@@ -27,12 +27,14 @@ endif
 # assign per-platform settings
 ifeq ($(PLATFORM),LinuxDesktop)
 	WITH_POSIX := 1
+	WITH_X11 := 1
 	WITH_GL := 1
 	WITH_LINUX := 1
 	CFLAGS += -DKP_GCC_ATOMICS
 else ifeq ($(PLATFORM),LinuxRaspberry)
 # On Raspberry Pi there are some specifics
-	CFLAGS += -DKP_RASPBERRY=1 -I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads
+	CFLAGS += -DKP_GCC_ATOMICS -DKP_RASPBERRY
+	CFLAGS += -I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads
 	CFLAGS += -I/opt/vc/include/interface/vmcs_host/linux
 	LDFLAGS += -lGLESv2 -lEGL -lbcm_host -L/opt/vc/lib
 # Only EGL is supported
@@ -45,20 +47,26 @@ else ifeq ($(PLATFORM),Windows)
 	CFLAGS += -DUNICODE -D_UNICODE
 	LDFLAGS += -luser32 -lopengl32 -lgdi32 -lwinmm
 	LDFLAGS += -static-libgcc -static-libstdc++
-	WITH_LINUX := 1
-	WITH_POSIX := 1
 	WITH_WIN32 := 1
+	WITH_LINUX := 0
+	WITH_POSIX := 0
 	WITH_X11 := 0
 	WITH_EGL := 0
 	SYSTEM := sys_win32.c
 endif
 
 ifeq ($(WITH_X11),1)
-	LDFLAGS += -lX11 -lrt
+	LDFLAGS += -lX11 -lrt -lXrandr
 endif
 
 ifeq ($(WITH_GL),1)
 	LDFLAGS += -lGL
+endif
+
+ifeq ($(WITH_POSIX),1)
+	CFLAGS += -DKP_OS_POSIX
+	CFLAGS += -pthread
+	LDFLAGS += -pthread
 endif
 
 ifeq ($(DO_STRIP), 1)

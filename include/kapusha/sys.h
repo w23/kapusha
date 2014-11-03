@@ -48,19 +48,56 @@ inline static KPs32 kpS32AtomicDec(KPs32_atomic* v) {
 #error define os/compiler-specifics for atomic ops
 #endif
 
+typedef void *(*KPthread_f)(void *user_data);
+
+typedef struct {
+  const char *name;
+  void *user_data;
+  KPthread_f thread_func;
+} KPthread_params_t;
+
+#ifdef KP_OS_POSIX
+#include <pthread.h>
+typedef pthread_mutex_t KPmutex_t;
+typedef pthread_cond_t KPcondvar_t;
+#else
+#error define os-specifics for threading
+#endif
+
+void kpThreadSpawn(const KPthread_params_t *params);
+
+void kpMutexInit(KPmutex_t *mutex);
+void kpMutexDestroy(KPmutex_t *mutex);
+void kpMutexLock(KPmutex_t *mutex);
+void kpMutexUnlock(KPmutex_t *mutex);
+
+void kpCondvarInit(KPcondvar_t *condvar);
+void kpCondvarDestroy(KPcondvar_t *condvar);
+void kpCondvarWait(KPcondvar_t *condvar, KPmutex_t *mutex);
+void kpCondvarSignal(KPcondvar_t *condvar);
+
 /******************************************************************************/
 /* assert */
 
-#define KP_ASSERT(v)
+#define KP_UNUSED(v) (void)(v);
+
 #define KP_RASSERT(v) \
   if (!(v)) { \
     KP_L("KP_RASSERT(" #v ") failed at %s:%d", __FILE__, __LINE__); \
     kpSysExit(-1); \
   }
 
-#define KP_FAIL(...)
-
-#define KP_UNUSED(v) (void)(v);
+#ifdef KP_SIZECODING
+#define KP_ASSERT(v)
+#define KP_FAIL(...) kpSysExit(-1)
+#else
+#define KP_ASSERT(v) KP_RASSERT(v)
+#define KP_FAIL(...) \
+  { \
+    KP_L("KP_FAIL: " __VA_ARGS__); \
+    kpSysExit(-1); \
+  }
+#endif
 
 /* Kill current process */
 void kpSysExit(int code);

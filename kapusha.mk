@@ -6,15 +6,12 @@ KAPUSHA_SRC = $(KAPUSHA_ROOT)src
 
 # core
 SOURCES += \
-	$(KAPUSHA_SRC)/core/core.c
-
-# math
-SOURCES += \
+	$(KAPUSHA_SRC)/core/core.c \
 	$(KAPUSHA_SRC)/math/math.c
 
 # ooo
-SOURCES += \
-	$(KAPUSHA_SRC)/ooo/ooo.c
+#SOURCES += \
+#	$(KAPUSHA_SRC)/ooo/ooo.c
 
 ifeq ($(WITH_LINUX),1)
 SOURCES += \
@@ -31,24 +28,17 @@ endif
 
 ifeq ($(WITH_X11),1)
 SOURCES += \
-	$(KAPUSHA_SRC)/sys/x11_systems.c \
-	$(KAPUSHA_SRC)/sys/x11_main.c
+	$(KAPUSHA_SRC)/sys/x11.c
 endif
 
-ifeq ($(WITH_GL),1)
-SOURCES += \
-	$(KAPUSHA_SRC)/render/gl.c
-endif
-
-#ifeq ($(WITH_SIMPLE_X11),1)
+#ifeq ($(WITH_GL),1)
 #SOURCES += \
-#	$(KAPUSHA_SRC)/sys/x11_systems.c \
-#	$(KAPUSHA_SRC)/sys/x11_main.c
+#	$(KAPUSHA_SRC)/render/gl.c
 #endif
 
 ifeq ($(WITH_WIN32), 1)
 SOURCES += \
-	$(KAPUSHA_SRC)/sys/win_systems.c
+	$(KAPUSHA_SRC)/sys/windows.c
 endif
 
 ifeq ($(WITH_POSIX), 1)

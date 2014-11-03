@@ -87,6 +87,17 @@ int kpVsnprintf(char *buffer, KPsize size, const char *format, va_list argp);
 int kpSnprintf(char *buffer, KPsize size, const char *format, ...);
 
 /******************************************************************************/
+/* Message queue */
+
+/* TODO
+
+void kpQueuePut
+void kpQueuePull
+void kpQueuePoll
+void kpQueueDone
+*/
+
+/******************************************************************************/
 /* String */
 
 /* \todo */

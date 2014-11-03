@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "kapusha/sys.h"
+#include <kapusha/sys.h>
+#include "x11.h"
 
 KPtime_ms KP_now_ms() {
     struct timespec ts;
@@ -18,4 +19,10 @@ void kpSysExit(int code) {
 
 void kp__LogOutput(const char *output) {
   puts(output);
+}
+
+int main(int argc, char *argv[])
+{
+  kp__X11Init();
+  return 0;
 }
