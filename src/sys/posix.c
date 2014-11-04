@@ -1,11 +1,17 @@
 #include <kapusha/sys.h>
 #include <kapusha/core.h>
 
-void kpThreadSpawn(const KPthread_params_t *params) {
+KPthread_t kpThreadSpawn(const KPthread_params_t *params) {
   pthread_t thread;
   KP_ASSERT(params->thread_func != 0);
 
-  pthread_create(&thread, 0, params->thread_func, params->user_data);
+  int result = pthread_create(&thread, 0, params->thread_func, params->user_data);
+  KP_ASSERT(result == 0);
+  return thread;
+}
+
+void kpThreadJoin(KPthread_t thread) {
+  pthread_join(thread, 0);
 }
 
 void kpMutexInit(KPmutex_t *mutex) {

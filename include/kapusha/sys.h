@@ -31,19 +31,28 @@ typedef KPu32 KPtime_ms;
 #ifdef KP_OS_MACH
 #include <libkern/OSAtomic.h>
 typedef volatile int32_t KPs32_atomic;
-inline static KPs32 kpS32AtomicRead(KPs32_atomic* v) { return *v; }
-inline static KPs32 kpS32AtomicInc(KPs32_atomic* v) {
+inline static KPs32 kpS32AtomicLoad(KPs32_atomic *v) { return *v; }
+inline static KPs32 kpS32AtomicInc(KPs32_atomic *v) {
   return OSAtomicIncrement32(v); }
-inline static KPs32 kpS32AtomicDec(KPs32_atomic* v) {
+inline static KPs32 kpS32AtomicDec(KPs32_atomic *v) {
   return OSAtomicDecrement32(v); }
 #elif defined(KP_GCC_ATOMICS)
 typedef volatile int KPs32_atomic;
-inline static KPs32 kpS32AtomicRead(KPs32_atomic* v) {
-  return __sync_fetch_and_add(v, 0); }
-inline static KPs32 kpS32AtomicInc(KPs32_atomic* v) {
-  return __sync_fetch_and_add(v, 1); }
-inline static KPs32 kpS32AtomicDec(KPs32_atomic* v) {
-  return __sync_fetch_and_sub(v, 1); }
+inline static KPs32 kpS32AtomicLoad(KPs32_atomic *v) {
+  return __sync_fetch_and_add(v, 0);
+}
+inline static void kpS32AtomicStore(KPs32_atomic *v, KPs32 value) {
+  while (!__sync_bool_compare_and_swap(v, *v, value));
+}
+inline static KPs32 kpS32AtomicInc(KPs32_atomic *v) {
+  return __sync_fetch_and_add(v, 1);
+}
+inline static KPs32 kpS32AtomicDec(KPs32_atomic *v) {
+  return __sync_fetch_and_sub(v, 1);
+}
+inline static void kpAtomicSynchronize() {
+  __sync_synchronize();
+}
 #else
 #error define os/compiler-specifics for atomic ops
 #endif
@@ -60,11 +69,13 @@ typedef struct {
 #include <pthread.h>
 typedef pthread_mutex_t KPmutex_t;
 typedef pthread_cond_t KPcondvar_t;
+typedef pthread_t KPthread_t;
 #else
 #error define os-specifics for threading
 #endif
 
-void kpThreadSpawn(const KPthread_params_t *params);
+KPthread_t kpThreadSpawn(const KPthread_params_t *params);
+void kpThreadJoin(KPthread_t);
 
 void kpMutexInit(KPmutex_t *mutex);
 void kpMutexDestroy(KPmutex_t *mutex);

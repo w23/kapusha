@@ -6,10 +6,10 @@
 #include <kapusha/sys.h>
 #include "x11.h"
 
-KPtime_ms KP_now_ms() {
-    struct timespec ts;
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    return ts.tv_sec * 1000ULL + ts.tv_nsec / 1000000ULL;
+KPtime_ns kpSysTimeNs() {
+  struct timespec ts;
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  return ts.tv_sec * 1000000000ULL + ts.tv_nsec;
 }
 
 void kpSysExit(int code) {
@@ -24,5 +24,7 @@ void kp__LogOutput(const char *output) {
 int main(int argc, char *argv[])
 {
   kp__X11Init();
+  appConfigure(argc, (const char**)argv);
+  kp__X11Run();
   return 0;
 }

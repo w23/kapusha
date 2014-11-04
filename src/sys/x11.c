@@ -4,61 +4,94 @@
 
 #include "x11.h"
 
-typedef struct {
-  GLXDrawable dest;
-  GLXContext context;
-} KP__glx_context_t;
-
-void KP__GLXCreate(KP__glx_context_t);
-void KP__GLXDestroy(KP__glx_context_t);
-
-typedef struct { KP_O;
-  KPwindow_params_t params;
-
-  GLXFBConfig *glxconfigs;
-  int nglxconfigs;
-  XVisualInfo *vinfo;
-  Window window;
-
-  KP__glx_context_t context;
-} *KP__x11_window_o;
+#define KP__SYS "X11"
 
 typedef struct KP__x11_output_t { KPoutput_video_t parent;
   int screenx, screeny;
 } *KP__x11_output_o;
 
+typedef struct KP__x11_window_t { KP_O;
+  void *user_data;
+  KPwindow_painter_create_f painter_create_func;
+  KPwindow_painter_configure_f painter_configure_func;
+  KPwindow_painter_f painter_func;
+  GLXFBConfig *glxconfigs;
+  int nglxconfigs;
+  XVisualInfo *vinfo;
+  Window window;
+  GLXDrawable drawable;
+  GLXContext context;
+  KP__x11_output_o output;
+
+  KPs32_atomic update;
+  KPmutex_t mutex;
+  int width, height;
+  KPthread_t painter_thread;
+} KP__x11_window_t, *KP__x11_window_o;
+
+enum {
+  KP__X11WindowUpdateNone,
+  KP__X11WindowUpdateConfig,
+  KP__X11WindowUpdateStop
+} KP__X11WindowUpdate;
+
 ////////////////////////////////////////////////////////////////////////////////
 
-static Display *display = 0;
-static int xrr_event_base;
-static int xrr_error_base;
+static struct {
+  Display *display;
+  int xrr_event_base;
+  int xrr_error_base;
+
+  struct {
+#define MAX_OUTPUTS 8
+    KP__x11_output_o outputs[MAX_OUTPUTS];
+  } outputs;
+} g = {0};
+
+/*
+static void kp__OutputAdd(KP__x11_output_o *output) {
+}
+*/
+
+KPiterable_o kpOutputsSelect(int *selectors) {
+  return 0;
+}
+
+/* FIXME */
+static KP__x11_window_o window = 0;
 
 void kp__X11Init() {
-  KP_ASSERT(display == 0);
-  display = XOpenDisplay(0);
-  KP_ASSERT(display != 0);
+  KP_ASSERT(g.display == 0);
+  XInitThreads();
+  g.display = XOpenDisplay(0);
+  KP_ASSERT(g.display != 0);
 
-  const Bool xrr = XRRQueryExtension(display, &xrr_event_base, &xrr_error_base);
+  kpMemset(&g.outputs, 0, sizeof(g.outputs));
+
+  const Bool xrr = XRRQueryExtension(g.display, &g.xrr_event_base, &g.xrr_error_base);
   KP_ASSERT(xrr == True);
 
-  const int nscreens = XScreenCount(display);
+  /* int oindex = 0; */
+  const int nscreens = XScreenCount(g.display);
   for (int i = 0; i < nscreens; ++i) {
-    KP_L("screen %d/%d", i+1, nscreens);
-    Screen *screen = XScreenOfDisplay(display, i);
-    KP_L("  size: %dx%dpx, %dx%dmm",
+    KP__L("screen %d/%d", i+1, nscreens);
+    Screen *screen = XScreenOfDisplay(g.display, i);
+    KP__L("  size: %dx%dpx, %dx%dmm",
       screen->width, screen->height,
       screen->mwidth, screen->mheight);
 
-    XRRScreenResources *resources = XRRGetScreenResources(display, screen->root);
+    /* XSelectInput(g.display, screen->root, StructureNotifyMask); */
+
+    XRRScreenResources *resources = XRRGetScreenResources(g.display, screen->root);
     for (int j = 0; j < resources->noutput; ++j) {
-      XRROutputInfo *info = XRRGetOutputInfo(display, resources, resources->outputs[j]);
-      KP_L("  output %d/%d: %s", j+1, resources->noutput, info->name);
-      if (info->connection == RR_Connected) {
-        KP_L("    size %dx%dmm", info->mm_width, info->mm_height);
-        XRRCrtcInfo *crtc = XRRGetCrtcInfo(display, resources, info->crtc);
-        KP_L("    %d,%d %dx%d", crtc->x, crtc->y, crtc->width, crtc->height);
+      XRROutputInfo *info = XRRGetOutputInfo(g.display, resources, resources->outputs[j]);
+      KP__L("  output %d/%d: %s", j+1, resources->noutput, info->name);
+      if (info->connection == RR_Connected && info->crtc != None) {
+        KP__L("    size %dx%dmm", info->mm_width, info->mm_height);
+        XRRCrtcInfo *crtc = XRRGetCrtcInfo(g.display, resources, info->crtc);
+        KP__L("    %d,%d %dx%d", crtc->x, crtc->y, crtc->width, crtc->height);
         XRRFreeCrtcInfo(crtc);
-      } else KP_L("   DISCONNECTED");
+      } else KP__L("   DISCONNECTED");
       XRRFreeOutputInfo(info);
     }
     XRRFreeScreenResources(resources);
@@ -66,153 +99,175 @@ void kp__X11Init() {
 }
 
 void kp__X11Run() {
-}
-#if 0
   XEvent event;
-
-  /* TODO NOTE fd-runloop integration: XInternalConntectionNumbers and friends */
   for (;;) {
-    while (XPending(display)) {
-      XNextEvent(display, &event);
-      switch (event.type) {
-        case ConfigureNotify:
-          x11->window->size(kpVec2i(
-              event.xconfigure.width, event.xconfigure.height);
-          break;
+    XNextEvent(g.display, &event);
+    switch (event.type) {
+      case ConfigureNotify:
+/*        window->size(kpVec2i(
+            event.xconfigure.width, event.xconfigure.height);*/
+        break;
 
-        case KeyPress:
-        case KeyRelease:
-          handle_key(&event.xkey, &x11->keys, &x11->key_handler);
-          break;
+      case KeyPress:
+      case KeyRelease:
+/*        handle_key(&event.xkey, &x11->keys, &x11->key_handler);*/
+        break;
 
-        case ButtonPress:
-        case ButtonRelease:
-          handle_pointer_button(&event.xbutton, &x11->pointer, &x11->pointer_handler);
-          break;
+      case ButtonPress:
+      case ButtonRelease:
+/*        handle_pointer_button(&event.xbutton, &x11->pointer, &x11->pointer_handler);*/
+        break;
 
-        case MotionNotify:
-          handle_pointer_motion(&event.xmotion, &x11->pointer, &x11->pointer_handler);
-          break;
+      case MotionNotify:
+/*        handle_pointer_motion(&event.xmotion, &x11->pointer, &x11->pointer_handler);*/
+        break;
 
-        default:
-          L("Unexpected XEvent %d", event.type);
-      }
+      default:
+        KP__L("Unexpected XEvent %d", event.type);
     }
-
   }
-
 }
 
-static void kp__GLXContextCreate(KP__glx_context_t *);
+////////////////////////////////////////////////////////////////////////////////
 
-static void kp__X11WindowOpen(KP__x11_window_o *);
-static void kp__X11WindowDtor(KP__window_x11_o w);
-static void kp__X11WindowThreadFunc(KPthread_context_t *ctx);
+static void kp__X11WindowDtor(void *obj) {
+  KP_THIS(KP__x11_window_t, obj);
+  kpMutexLock(&this->mutex);
+  this->update = KP__X11WindowUpdateStop;
+  kpMutexLock(&this->mutex);
+  kpThreadJoin(this->painter_thread);
 
-KPwindow_o kpWindowCreate(
-  const KPwindow_params_t *params,
-  void (*window_event)(const KPwindows_event_t *event))
-{
-  KP__x11_window_o window = KP_NEW(*KP__x11_window_o, 0);
-  window.dtor = kp__X11WindowDtor;
-  kpMemcpy(window->params, params, sizeof(*params));
-
-  kp__GLXContextCreate(&window->context);
-  kp__X11WindowOpen(&window);
-
-  KPthread_params_t tparams;
-  tparams.user_data = kpRetain(window);
-  tparams.name = "window";
-  tparams.thread_func = kp__X11WindowThreadFunc;
-  kpThreadSpawn(&tparams);
-
-  return window;
+  if (this->context != 0) glXDestroyContext(g.display, this->context);
+  if (this->drawable != 0) glXDestroyWindow(g.display, this->drawable);
+  if (this->window != 0) XDestroyWindow(g.display, this->window);
+  if (this->vinfo != 0) XFree(this->vinfo);
+  if (this->glxconfigs != 0) XFree(this->glxconfigs);
+  kpRelease(this->output);
+  kpMutexDestroy(&this->mutex);
 }
 
-static void kp__X11WindowDtor(KP__window_x11_o w) {
-  KP_FAIL("Window dtor not implemented");
+static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
+  KP__x11_window_o this = KP_NEW(KP__x11_window_t, 0);
+  this->O.dtor = kp__X11WindowDtor;
+  this->user_data = params->user_data;
+  this->painter_create_func = params->painter_create_func;
+  this->painter_configure_func = params->painter_configure_func;
+  this->painter_func = params->painter_func;
+  this->glxconfigs = 0;
+  this->nglxconfigs = 0;
+  this->vinfo = 0;
+  this->window = 0;
+  this->drawable = 0;
+  this->context = 0;
 
-  if (w->window != NULL) XDestroyWindow(display, w->window);
-  if (xvis != NULL) XFree(xvis);
-  XFree(glxconfigs);
-  return 0;
-}
-
-static void kp__GLXContextCreate(KP__glx_context_t *context) {
   int attrs[] = {
-    /* ? GLX_X_RENDERABLE, True, */
+    GLX_X_RENDERABLE, True,
     GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
     GLX_RENDER_TYPE, GLX_RGBA_BIT,
     GLX_CONFIG_CAVEAT, GLX_NONE,
     GLX_RED_SIZE, 8,
     GLX_GREEN_SIZE, 8,
     GLX_BLUE_SIZE, 8,
+    GLX_ALPHA_SIZE, 8,
     GLX_DEPTH_SIZE, 24,
     GLX_DOUBLEBUFFER, True,
-    GLX_SAMPLE_BUFFERS, 1,
-    GLX_SAMPLES, 4,
+/*    GLX_SAMPLE_BUFFERS, 1,
+    GLX_SAMPLES, 4,*/
     0
   };
-  context->configs = glXChooseFBConfig(display, 0, attrs, &context->nconfigs);
-  KP_ASSERT(context->configs != 0 || context->nconfigs > 0);
+  this->glxconfigs = glXChooseFBConfig(g.display, 0/*screen*/, attrs, &this->nglxconfigs);
+  KP_ASSERT(this->glxconfigs != 0);
+  KP_ASSERT(this->nglxconfigs > 0);
 
-  context->visualinfo = glXGetVisualFromFBConfig(display, context->configs[0]);
-  KP_ASSERT(context->visualinfo != 0);
+  this->vinfo = glXGetVisualFromFBConfig(g.display, this->glxconfigs[0]);
+  KP_ASSERT(this->vinfo != 0);
 
-  context->context = glXCreateNewContext(display, context->configs[0],
+  this->context = glXCreateNewContext(g.display, this->glxconfigs[0],
     GLX_RGBA_TYPE, /*share_list*/ 0, True);
-  KP_ASSERT(context->context != 0);
-}
+  KP_ASSERT(this->context != 0);
 
-static void kp__X11WindowOpen(KP__x11_window_o w) {
   XSetWindowAttributes winattrs;
   winattrs.event_mask =
     ExposureMask | VisibilityChangeMask | StructureNotifyMask |
     KeyPressMask | PointerMotionMask;
   winattrs.border_pixel = 0;
   winattrs.bit_gravity = StaticGravity;
-  winattrs.colormap = XCreateColormap(display,
-    RootWindow(display, w->context.visualinfo->screen),
-    w->context.visualinfo>visual, AllocNone);
+  winattrs.colormap = XCreateColormap(g.display,
+    RootWindow(g.display, this->vinfo->screen),
+    this->vinfo->visual, AllocNone);
 
-  w->window = XCreateWindow(display, DefaultRootWindow(display),
-    0, 0, w->params.width, w->params.height, 0,
-    w->context.visualinfo->depth, InputOutput, w->context.visualinfo->visual,
+  this->width = params->width;
+  this->height = params->height;
+
+  this->window = XCreateWindow(g.display, RootWindow(g.display, this->vinfo->screen),
+    0, 0, this->width, this->height, 0,
+    this->vinfo->depth, InputOutput, this->vinfo->visual,
     CWBorderPixel | CWBitGravity | CWEventMask | CWColormap, &winattrs);
 
-  XStoreName(display, w->window, w->params.name);
+  XStoreName(g.display, this->window, params->title);
+  XMapWindow(g.display, this->window);
 
-  XMapWindow(display, w->window);
+  this->drawable = glXCreateWindow(g.display, this->glxconfigs[0], this->window, 0);
+  KP_ASSERT(this->drawable != 0);
 
-  context->context.window = glXCreateWindow(display, w->context.configs[0], w->window, 0);
-  KP_ASSERT(context->context.window != 0);
-
-  XSelectInput(display, w->window,
+  XSelectInput(g.display, this->window,
     KeyPressMask | KeyReleaseMask | ButtonPressMask |
     ButtonReleaseMask | PointerMotionMask | StructureNotifyMask);
+
+  this->update = KP__X11WindowUpdateConfig;
+  kpMutexInit(&this->mutex);
+  return this;
 }
 
-static void kp__WindowX11ThreadFunc(void *user_data) {
+static void *kp__X11WindowThreadFunc(void *user_data) {
   KP__x11_window_o w = (KP__x11_window_o)user_data;
-  KPtime_ms time_prev, time_now, time_start;
+  KPtime_ms time_prev, time_now;
 
-  glXMakeContextCurrent(display, w->context.dest, w->context.dest, w->context.context);
+  glXMakeContextCurrent(g.display, w->drawable, w->drawable, w->context);
 
-  time_prev = time_start = KP_now();
+  KP__L("[%p] window started painting", w);
+
+  KPwindow_painter_create_t create;
+  KPwindow_painter_configure_t config;
+  KPwindow_painter_t paint;
+  create.window = config.window = paint.window = w;
+  create.user_data = config.user_data = paint.user_data = w->user_data;
+  paint.time_delta = paint.time_delta_frame = 16000000;/*FIXME w->output->parent.frame_delta;*/
+
+  w->painter_create_func(&create);
+
+  // balance the tparams.user_data = kpRetain(window);
+  kpRelease(w);
+
+  time_now = time_prev = kpSysTimeNs();
   for (;;) {
-    time_now = KP_now();
-    x11->window->draw(time_prev, time_prev + 16);
-    glXSwapBuffers(display, w->context.dest);
-    time_prev = now;
+    kpAtomicSynchronize();
+    const int update = kpS32AtomicLoad(&w->update);
+    if (update == KP__X11WindowUpdateConfig) {
+      kpMutexLock(&w->mutex);
+      config.width = w->width;
+      config.height = w->height;
+      w->update = KP__X11WindowUpdateNone;
+      kpMutexUnlock(&w->mutex);
+      w->painter_configure_func(&config);
+    } else if (update == KP__X11WindowUpdateStop) break;
+
+    paint.pts_estimate = time_now + paint.time_delta_frame;
+    w->painter_func(&paint);
+
+    glXSwapBuffers(g.display, w->drawable);
+
+    time_prev = time_now;
+    time_now = kpSysTimeNs();
+    paint.time_delta = time_now - time_prev;
   }
 
-  KP_glcontext_make_current(NULL);
-  KP_glcontext_glx_dtor(&ctx);
-
-  x11->window->dtor(x11->window);
+  glXMakeContextCurrent(g.display, w->drawable, w->drawable, 0);
+  KP__L("[%p] window stopped painting", w);
+  return 0;
 }
 
-
+#if 0
 static inline KPKey x11_keyevent_to_keytype(XKeyEvent *event) {
   int keysym = XLookupKeysym(event, 0);
   switch (keysym) {
@@ -241,7 +296,7 @@ static inline KPKey x11_keyevent_to_keytype(XKeyEvent *event) {
     XKKK(Shift_R, RightShift); XKKK(Caps_Lock, Capslock);
 #undef XKKK
   }
-  KP_L("Unknown keysym 0x%04x", keysym);
+  KP__L("Unknown keysym 0x%04x", keysym);
   return KPKeyUnknown;
 }
 
@@ -322,3 +377,17 @@ static inline void x11_handle_pointer_motion(XMotionEvent *xmotion,
   handler->func(handler->param, &event);
 }
 #endif
+
+KPwindow_o kpWindowCreate(const KPwindow_params_t *params) {
+  KP_ASSERT(window == 0);
+  window = kp__X11WindowCreate(params);
+
+  KPthread_params_t tparams;
+  tparams.user_data = kpRetain(window);
+  tparams.name = "window";
+  tparams.thread_func = kp__X11WindowThreadFunc;
+  window->painter_thread = kpThreadSpawn(&tparams);
+
+  return window;
+}
+

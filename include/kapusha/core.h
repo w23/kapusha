@@ -98,6 +98,20 @@ void kpQueueDone
 */
 
 /******************************************************************************/
+/* Cotainers */
+
+typedef struct KPbuffer_t { KP_O;
+  KPsize size;
+  void *data;
+} KPbuffer_t, *KPbuffer_o;
+
+KPbuffer_o kpBufferCreate(KPsize size, void *source);
+void kpBufferResize(KPbuffer_o buffer, KPsize new_size);
+
+typedef struct KPiterable_t { KP_O;
+} KPiterable_t, *KPiterable_o;
+
+/******************************************************************************/
 /* String */
 
 /* \todo */
