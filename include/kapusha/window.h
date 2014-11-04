@@ -41,7 +41,7 @@ typedef struct {
 typedef struct {
   KPwindow_o window;
   void *user_data;
-  int width, height;
+  KPu32 width, height;
 } KPwindow_painter_configure_t;
 
 typedef struct {

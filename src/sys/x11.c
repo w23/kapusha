@@ -23,17 +23,8 @@ typedef struct KP__x11_window_t { KP_O;
   GLXContext context;
   KP__x11_output_o output;
 
-  KPs32_atomic update;
-  KPmutex_t mutex;
-  int width, height;
   KPthread_t painter_thread;
 } KP__x11_window_t, *KP__x11_window_o;
-
-enum {
-  KP__X11WindowUpdateNone,
-  KP__X11WindowUpdateConfig,
-  KP__X11WindowUpdateStop
-} KP__X11WindowUpdate;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -62,6 +53,7 @@ static KP__x11_window_o window = 0;
 
 void kp__X11Init() {
   KP_ASSERT(g.display == 0);
+  //XInitThreads();
   g.display = XOpenDisplay(0);
   KP_ASSERT(g.display != 0);
 
@@ -70,7 +62,6 @@ void kp__X11Init() {
   const Bool xrr = XRRQueryExtension(g.display, &g.xrr_event_base, &g.xrr_error_base);
   KP_ASSERT(xrr == True);
 
-  /* int oindex = 0; */
   const int nscreens = XScreenCount(g.display);
   for (int i = 0; i < nscreens; ++i) {
     KP__L("screen %d/%d", i+1, nscreens);
@@ -102,10 +93,6 @@ void kp__X11Run() {
   for (;;) {
     XNextEvent(g.display, &event);
     switch (event.type) {
-      case ConfigureNotify:
-/*        window->size(kpVec2i(
-            event.xconfigure.width, event.xconfigure.height);*/
-        break;
 
       case KeyPress:
       case KeyRelease:
@@ -131,18 +118,15 @@ void kp__X11Run() {
 
 static void kp__X11WindowDtor(void *obj) {
   KP_THIS(KP__x11_window_t, obj);
-  kpMutexLock(&this->mutex);
-  this->update = KP__X11WindowUpdateStop;
-  kpMutexLock(&this->mutex);
-  kpThreadJoin(this->painter_thread);
 
-  if (this->context != 0) glXDestroyContext(g.display, this->context);
-  if (this->drawable != 0) glXDestroyWindow(g.display, this->drawable);
-  if (this->window != 0) XDestroyWindow(g.display, this->window);
+  if (this->window != 0) {
+    XUnmapWindow(g.display, this->window);
+    kpThreadJoin(this->painter_thread);
+    XDestroyWindow(g.display, this->window);
+  }
   if (this->vinfo != 0) XFree(this->vinfo);
   if (this->glxconfigs != 0) XFree(this->glxconfigs);
   kpRelease(this->output);
-  kpMutexDestroy(&this->mutex);
 }
 
 static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
@@ -181,10 +165,6 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
   this->vinfo = glXGetVisualFromFBConfig(g.display, this->glxconfigs[0]);
   KP_ASSERT(this->vinfo != 0);
 
-  this->context = glXCreateNewContext(g.display, this->glxconfigs[0],
-    GLX_RGBA_TYPE, /*share_list*/ 0, True);
-  KP_ASSERT(this->context != 0);
-
   XSetWindowAttributes winattrs;
   winattrs.event_mask =
     ExposureMask | VisibilityChangeMask | StructureNotifyMask |
@@ -195,11 +175,11 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
     RootWindow(g.display, this->vinfo->screen),
     this->vinfo->visual, AllocNone);
 
-  this->width = params->width;
-  this->height = params->height;
+  int width = params->width;
+  int height = params->height;
 
   this->window = XCreateWindow(g.display, RootWindow(g.display, this->vinfo->screen),
-    0, 0, this->width, this->height, 0,
+    0, 0, width, height, 0,
     this->vinfo->depth, InputOutput, this->vinfo->visual,
     CWBorderPixel | CWBitGravity | CWEventMask | CWColormap, &winattrs);
 
@@ -208,10 +188,7 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
 
   XSelectInput(g.display, this->window,
     KeyPressMask | KeyReleaseMask | ButtonPressMask |
-    ButtonReleaseMask | PointerMotionMask | StructureNotifyMask);
-
-  this->update = KP__X11WindowUpdateConfig;
-  kpMutexInit(&this->mutex);
+    ButtonReleaseMask | PointerMotionMask);
 
   XSync(g.display, False);
   return this;
@@ -223,6 +200,10 @@ static void *kp__X11WindowThreadFunc(void *user_data) {
 
   Display *dpy = XOpenDisplay(0);
   KP_ASSERT(dpy != 0);
+
+  w->context = glXCreateNewContext(dpy, w->glxconfigs[0],
+    GLX_RGBA_TYPE, /*share_list*/ 0, True);
+  KP_ASSERT(w->context != 0);
 
   w->drawable = glXCreateWindow(dpy, w->glxconfigs[0], w->window, 0);
   KP_ASSERT(w->drawable != 0);
@@ -240,33 +221,58 @@ static void *kp__X11WindowThreadFunc(void *user_data) {
 
   w->painter_create_func(&create);
 
+  XWindowAttributes wa;
+  XGetWindowAttributes(dpy, w->window, &wa);
+  config.width = wa.width;
+  config.height = wa.height;
+  w->painter_configure_func(&config);
+
+  XSelectInput(dpy, w->window, StructureNotifyMask);
+
   // balance the tparams.user_data = kpRetain(window);
   kpRelease(w);
 
   time_now = time_prev = kpSysTimeNs();
-  for (;;) {
-    kpAtomicSynchronize();
-    const int update = kpS32AtomicLoad(&w->update);
-    if (update == KP__X11WindowUpdateConfig) {
-      kpMutexLock(&w->mutex);
-      config.width = w->width;
-      config.height = w->height;
-      w->update = KP__X11WindowUpdateNone;
-      kpMutexUnlock(&w->mutex);
-      w->painter_configure_func(&config);
-    } else if (update == KP__X11WindowUpdateStop) break;
+  for (int loop = 1; loop != 0;) {
+  //KP__L("%d", __LINE__);
+    while (XPending(dpy)) {
+      XEvent e;
+      XNextEvent(dpy, &e);
+      switch (e.type) {
+        case MapNotify:
+        case ReparentNotify:
+          break;
+
+        case ConfigureNotify:
+          if (e.xconfigure.width != config.width
+            || e.xconfigure.height != config.height) {
+            config.width = e.xconfigure.width;
+            config.height = e.xconfigure.height;
+            w->painter_configure_func(&config);
+          }
+          break;
+
+        case DestroyNotify:
+        case UnmapNotify:
+          goto exit;
+          break;
+      }
+    }
 
     paint.pts = time_now + paint.time_delta_frame;
     w->painter_func(&paint);
 
-    glXSwapBuffers(g.display, w->drawable);
+    glXSwapBuffers(dpy, w->drawable);
 
     time_prev = time_now;
     time_now = kpSysTimeNs();
     paint.time_delta = time_now - time_prev;
   }
 
+exit:
   glXMakeContextCurrent(dpy, w->drawable, w->drawable, 0);
+  glXDestroyWindow(dpy, w->drawable);
+  glXDestroyContext(dpy, w->context);
   XCloseDisplay(dpy);
   KP__L("[%p] window stopped painting", w);
   return 0;
