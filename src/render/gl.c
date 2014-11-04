@@ -376,7 +376,7 @@ static void kp__RenderProgramEnvApply(
       }
       break;
     default:
-      KP_FAIL(!"Impossible KP__RenderProgramEnvValueType %d", value->type);
+      KP_FAIL("Impossible KP__RenderProgramEnvValueType %d", value->type);
   }
 }
 
@@ -412,7 +412,7 @@ int kpRenderProgramModuleSet(
   KPblob_desc_t data)
 {
   KP_THIS(KP__render_program_t, program);
-  KP_ASSERT(data.size < INT_MAX);
+  KP_ASSERT(data.size < 0xfffffffful);
   KPu32 flag;
   GLint shader;
   switch (module) {

@@ -31,10 +31,10 @@ SOURCES += \
 	$(KAPUSHA_SRC)/sys/x11.c
 endif
 
-#ifeq ($(WITH_GL),1)
-#SOURCES += \
-#	$(KAPUSHA_SRC)/render/gl.c
-#endif
+ifeq ($(WITH_GL),1)
+SOURCES += \
+	$(KAPUSHA_SRC)/render/gl.c
+endif
 
 ifeq ($(WITH_WIN32), 1)
 SOURCES += \

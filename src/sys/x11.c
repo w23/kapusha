@@ -219,7 +219,7 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
 
 static void *kp__X11WindowThreadFunc(void *user_data) {
   KP__x11_window_o w = (KP__x11_window_o)user_data;
-  KPtime_ms time_prev, time_now;
+  KPtime_ns time_prev, time_now;
 
   Display *dpy = XOpenDisplay(0);
   KP_ASSERT(dpy != 0);
@@ -256,7 +256,7 @@ static void *kp__X11WindowThreadFunc(void *user_data) {
       w->painter_configure_func(&config);
     } else if (update == KP__X11WindowUpdateStop) break;
 
-    paint.pts_estimate = time_now + paint.time_delta_frame;
+    paint.pts = time_now + paint.time_delta_frame;
     w->painter_func(&paint);
 
     glXSwapBuffers(g.display, w->drawable);

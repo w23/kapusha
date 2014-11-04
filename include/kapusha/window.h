@@ -47,7 +47,7 @@ typedef struct {
 typedef struct {
   KPwindow_o window;
   void *user_data;
-  KPtime_ns pts_estimate;
+  KPtime_ns pts;
   KPtime_ns time_delta;
   KPtime_ns time_delta_frame;
 } KPwindow_painter_t;
