@@ -62,7 +62,6 @@ static KP__x11_window_o window = 0;
 
 void kp__X11Init() {
   KP_ASSERT(g.display == 0);
-  XInitThreads();
   g.display = XOpenDisplay(0);
   KP_ASSERT(g.display != 0);
 
@@ -207,15 +206,14 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
   XStoreName(g.display, this->window, params->title);
   XMapWindow(g.display, this->window);
 
-  this->drawable = glXCreateWindow(g.display, this->glxconfigs[0], this->window, 0);
-  KP_ASSERT(this->drawable != 0);
-
   XSelectInput(g.display, this->window,
     KeyPressMask | KeyReleaseMask | ButtonPressMask |
     ButtonReleaseMask | PointerMotionMask | StructureNotifyMask);
 
   this->update = KP__X11WindowUpdateConfig;
   kpMutexInit(&this->mutex);
+
+  XSync(g.display, False);
   return this;
 }
 
@@ -223,7 +221,13 @@ static void *kp__X11WindowThreadFunc(void *user_data) {
   KP__x11_window_o w = (KP__x11_window_o)user_data;
   KPtime_ms time_prev, time_now;
 
-  glXMakeContextCurrent(g.display, w->drawable, w->drawable, w->context);
+  Display *dpy = XOpenDisplay(0);
+  KP_ASSERT(dpy != 0);
+
+  w->drawable = glXCreateWindow(dpy, w->glxconfigs[0], w->window, 0);
+  KP_ASSERT(w->drawable != 0);
+
+  glXMakeContextCurrent(dpy, w->drawable, w->drawable, w->context);
 
   KP__L("[%p] window started painting", w);
 
@@ -232,7 +236,7 @@ static void *kp__X11WindowThreadFunc(void *user_data) {
   KPwindow_painter_t paint;
   create.window = config.window = paint.window = w;
   create.user_data = config.user_data = paint.user_data = w->user_data;
-  paint.time_delta = paint.time_delta_frame = 16000000;/*FIXME w->output->parent.frame_delta;*/
+  paint.time_delta = paint.time_delta_frame = 16000000ULL;/*FIXME w->output->parent.frame_delta;*/
 
   w->painter_create_func(&create);
 
@@ -262,7 +266,8 @@ static void *kp__X11WindowThreadFunc(void *user_data) {
     paint.time_delta = time_now - time_prev;
   }
 
-  glXMakeContextCurrent(g.display, w->drawable, w->drawable, 0);
+  glXMakeContextCurrent(dpy, w->drawable, w->drawable, 0);
+  XCloseDisplay(dpy);
   KP__L("[%p] window stopped painting", w);
   return 0;
 }
