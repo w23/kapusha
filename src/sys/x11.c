@@ -7,8 +7,9 @@
 #define KP__SYS "X11"
 
 typedef struct KP__x11_output_t { KPoutput_video_t parent;
-  int screenx, screeny;
-} *KP__x11_output_o;
+  int screen;
+  int x, y;
+} KP__x11_output_t, *KP__x11_output_o;
 
 typedef struct KP__x11_window_t { KP_O;
   void *user_data;
@@ -32,30 +33,77 @@ static struct {
   Display *display;
   int xrr_event_base;
   int xrr_error_base;
+  Atom delete_message;
 
   struct {
 #define MAX_OUTPUTS 8
-    KP__x11_output_o outputs[MAX_OUTPUTS];
+    int slot;
+    KP__x11_output_o array[MAX_OUTPUTS];
   } outputs;
 } g = {0};
 
-/*
-static void kp__OutputAdd(KP__x11_output_o *output) {
+typedef struct {
+  const char *name;
+  int screen;
+  KPu32 x, y, w, h, wmm, hmm;
+  KPtime_ns frame_delta;
+  KPu32 flags;
+} KP__output_desc_t;
+
+static void kp__OutputAdd(const KP__output_desc_t *desc) {
+  if (g.outputs.slot == MAX_OUTPUTS) {
+    KP__L("too many outputs FIXME");
+    return;
+  }
+
+  KP__x11_output_o output = KP_NEW(KP__x11_output_t, 0);
+
+  output->parent.header.type = KPOutputVideo;
+  output->parent.width = desc->w;
+  output->parent.height = desc->h;
+  output->parent.width_mm = desc->wmm;
+  output->parent.height_mm = desc->hmm;
+  output->parent.frame_delta = desc->frame_delta;
+  output->parent.flags = desc->flags;
+  output->screen = desc->screen;
+  output->x = desc->x;
+  output->y = desc->y;
+
+  output->parent.hppmm = (KPf32)desc->wmm / desc->w;
+  output->parent.vppmm = (KPf32)desc->hmm / desc->h;
+
+  KP__L("    PPMM %f %f", output->parent.hppmm, output->parent.vppmm);
+
+  g.outputs.array[g.outputs.slot++] = output;
 }
-*/
 
 KPiterable_o kpOutputsSelect(int *selectors) {
   return 0;
 }
 
-/* FIXME */
-static KP__x11_window_o window = 0;
+KPtime_ns kp__X11RRModeFrameTime(const XRRScreenResources *res, RRMode mode) {
+  for (int i = 0; i < res->nmode; ++i) {
+    if (res->modes[i].id == mode) {
+      XRRModeInfo *info = res->modes + i;
+      if (info->dotClock == 0)
+        return 0;
+      KPu32 v = info->vTotal;
+      if (info->modeFlags & RR_DoubleScan) v *= 2;
+      if (info->modeFlags & RR_Interlace) v /= 2;
+      return 1000000000ULL * (v * info->hTotal) / info->dotClock;
+    }
+  }
+  KP_FAIL("Mode %#x doesn't exist", mode);
+  return 0;
+}
 
 void kp__X11Init() {
   KP_ASSERT(g.display == 0);
-  //XInitThreads();
+  /* XInitThreads(); */
   g.display = XOpenDisplay(0);
   KP_ASSERT(g.display != 0);
+
+  /* ?? g.delete_message = XInternAtom(g.display, "WM_DELETE_WINDOW", True); */
 
   kpMemset(&g.outputs, 0, sizeof(g.outputs));
 
@@ -70,20 +118,46 @@ void kp__X11Init() {
       screen->width, screen->height,
       screen->mwidth, screen->mheight);
 
-    /* XSelectInput(g.display, screen->root, StructureNotifyMask); */
+    KPtime_ns minframedelta = 1000000000ULL;
+    KP__output_desc_t od;
+    od.screen = i;
 
     XRRScreenResources *resources = XRRGetScreenResources(g.display, screen->root);
+    const RROutput primary = XRRGetOutputPrimary(g.display, screen->root);
     for (int j = 0; j < resources->noutput; ++j) {
-      XRROutputInfo *info = XRRGetOutputInfo(g.display, resources, resources->outputs[j]);
+      RROutput output = resources->outputs[j];
+      XRROutputInfo *info = XRRGetOutputInfo(g.display, resources, output);
       KP__L("  output %d/%d: %s", j+1, resources->noutput, info->name);
       if (info->connection == RR_Connected && info->crtc != None) {
+        if (primary == output) KP__L("    PRIMARY");
         KP__L("    size %dx%dmm", info->mm_width, info->mm_height);
         XRRCrtcInfo *crtc = XRRGetCrtcInfo(g.display, resources, info->crtc);
         KP__L("    %d,%d %dx%d", crtc->x, crtc->y, crtc->width, crtc->height);
+
+        od.x = crtc->x;
+        od.y = crtc->y;
+        od.w = crtc->width;
+        od.h = crtc->height;
+        od.wmm = info->mm_width;
+        od.hmm = info->mm_height;
+        od.frame_delta = kp__X11RRModeFrameTime(resources, crtc->mode);
+        if (minframedelta > od.frame_delta) minframedelta = od.frame_delta;
+        od.flags = (primary == output) ? KPVideoOutputPrimary : 0;
+        kp__OutputAdd(&od);
+
+        KP__L("    frame_time %dus", (int)(od.frame_delta / 1000ULL));
+
         XRRFreeCrtcInfo(crtc);
       } else KP__L("   DISCONNECTED");
       XRRFreeOutputInfo(info);
     }
+    od.x = od.y = 0;
+    od.w = screen->width; od.h = screen->height;
+    od.wmm = screen->mwidth; od.hmm = screen->mheight;
+    od.frame_delta = minframedelta;
+    od.flags = KPVideoOutputCombined;
+    kp__OutputAdd(&od);
+
     XRRFreeScreenResources(resources);
   }
 }
@@ -143,6 +217,11 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
   this->drawable = 0;
   this->context = 0;
 
+  this->output = kpRetain(params->output);
+
+  if (this->output == 0) /* TODO elaborate */
+    this->output = kpRetain(g.outputs.array[g.outputs.slot-1]);
+
   int attrs[] = {
     GLX_X_RENDERABLE, True,
     GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
@@ -158,7 +237,8 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
     GLX_SAMPLES, 4,*/
     0
   };
-  this->glxconfigs = glXChooseFBConfig(g.display, 0/*screen*/, attrs, &this->nglxconfigs);
+  this->glxconfigs = glXChooseFBConfig(
+    g.display, this->output->screen, attrs, &this->nglxconfigs);
   KP_ASSERT(this->glxconfigs != 0);
   KP_ASSERT(this->nglxconfigs > 0);
 
@@ -174,17 +254,85 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
   winattrs.colormap = XCreateColormap(g.display,
     RootWindow(g.display, this->vinfo->screen),
     this->vinfo->visual, AllocNone);
+  winattrs.override_redirect = False/*True*/;
 
-  int width = params->width;
-  int height = params->height;
+  int x = this->output->x;
+  int y = this->output->y;
+  int width = (params->width < 8) ? this->output->parent.width : params->width;
+  int height = (params->height < 8) ? this->output->parent.height : params->height;
+
+  KP__L("window %d,%d %dx%d", x, y, width, height);
 
   this->window = XCreateWindow(g.display, RootWindow(g.display, this->vinfo->screen),
-    0, 0, width, height, 0,
+    x, y, width, height, 0,
     this->vinfo->depth, InputOutput, this->vinfo->visual,
-    CWBorderPixel | CWBitGravity | CWEventMask | CWColormap, &winattrs);
+    CWBorderPixel | CWBitGravity | CWEventMask | CWColormap | CWOverrideRedirect, &winattrs);
 
   XStoreName(g.display, this->window, params->title);
   XMapWindow(g.display, this->window);
+
+  if (params->flags & KPWindowFlagFixedSize) {
+    XSizeHints hints;
+    hints.min_width = hints.max_width = width;
+    hints.min_height = hints.max_height = height;
+    hints.flags = USPosition | PMinSize | PMaxSize;
+    XSetWMNormalHints(g.display, this->window, &hints);
+  }
+
+  if (params->flags & KPWindowFlagFullscreen) {
+    XEvent e;
+    e.xclient.type = ClientMessage;
+    e.xclient.serial = 0;
+    e.xclient.send_event = True;
+    e.xclient.window = this->window;
+#if 0
+    Atom state = XInternAtom(g.display, "_NET_WM_STATE", False);
+    e.xclient.message_type = state;
+    e.xclient.format = 32;
+    e.xclient.data.l[0] = 1/*_NET_WM_STATE_ADD*/;
+    Atom fullscreen = XInternAtom(g.display, "_NET_WM_STATE_FULLSCREEN", False);
+    e.xclient.data.l[1] = fullscreen;
+    e.xclient.data.l[2] = 0;
+    XSendEvent(g.display, RootWindow(g.display, this->vinfo->screen), False,
+      SubstructureRedirectMask | SubstructureNotifyMask, &e);
+#endif
+
+#if 1
+    e.xclient.type = ClientMessage;
+    e.xclient.serial = 0;
+    e.xclient.send_event = True;
+    e.xclient.window = this->window;
+    Atom state = XInternAtom(g.display, "_NET_WM_STATE", False);
+    e.xclient.message_type = state;
+    e.xclient.format = 32;
+    e.xclient.data.l[0] = 1/*_NET_WM_STATE_ADD*/;
+    Atom sticky = XInternAtom(g.display, "_NET_WM_STATE_STICKY", False);
+    e.xclient.data.l[1] = sticky;
+    e.xclient.data.l[2] = 0;
+    XSendEvent(g.display, RootWindow(g.display, this->vinfo->screen), False,
+      SubstructureRedirectMask | SubstructureNotifyMask, &e);
+#endif
+
+#if 0
+    e.xclient.message_type = XInternAtom(g.display, "_NET_WM_DESKTOP", False);
+    e.xclient.format = 32;
+    e.xclient.data.l[0] = 0xffffffffu;
+    e.xclient.data.l[1] = 1;
+    e.xclient.data.l[2] = 0;
+    XSendEvent(g.display, RootWindow(g.display, this->vinfo->screen), False,
+      SubstructureRedirectMask | SubstructureNotifyMask, &e);
+#endif
+
+    e.xclient.message_type = XInternAtom(g.display, "_NET_MOVERESIZE_WINDOW", False);
+    e.xclient.format = 32;
+    e.xclient.data.l[0] = 0x1f00;
+    e.xclient.data.l[1] = x;
+    e.xclient.data.l[2] = y;
+    e.xclient.data.l[1] = width;
+    e.xclient.data.l[2] = height;
+    XSendEvent(g.display, RootWindow(g.display, this->vinfo->screen), False,
+      SubstructureRedirectMask | SubstructureNotifyMask, &e);
+  }
 
   XSelectInput(g.display, this->window,
     KeyPressMask | KeyReleaseMask | ButtonPressMask |
@@ -193,6 +341,9 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
   XSync(g.display, False);
   return this;
 }
+
+#undef KP__SYS
+#define KP__SYS "X11::render"
 
 static void *kp__X11WindowThreadFunc(void *user_data) {
   KP__x11_window_o w = (KP__x11_window_o)user_data;
@@ -217,7 +368,7 @@ static void *kp__X11WindowThreadFunc(void *user_data) {
   KPwindow_painter_t paint;
   create.window = config.window = paint.window = w;
   create.user_data = config.user_data = paint.user_data = w->user_data;
-  paint.time_delta = paint.time_delta_frame = 16000000ULL;/*FIXME w->output->parent.frame_delta;*/
+  paint.time_delta = paint.time_delta_frame = w->output->parent.frame_delta;
 
   w->painter_create_func(&create);
 
@@ -225,16 +376,19 @@ static void *kp__X11WindowThreadFunc(void *user_data) {
   XGetWindowAttributes(dpy, w->window, &wa);
   config.width = wa.width;
   config.height = wa.height;
+  config.aspect = config.width * w->output->parent.hppmm
+    / (config.height * w->output->parent.vppmm);
   w->painter_configure_func(&config);
 
   XSelectInput(dpy, w->window, StructureNotifyMask);
+  //Atom delete_message = XInternAtom(dpy, "WM_DELETE_WINDOW", True);
+  //XSetWMProtocols(dpy, w->window, &delete_message, 1);
 
   // balance the tparams.user_data = kpRetain(window);
   kpRelease(w);
 
   time_now = time_prev = kpSysTimeNs();
   for (int loop = 1; loop != 0;) {
-  //KP__L("%d", __LINE__);
     while (XPending(dpy)) {
       XEvent e;
       XNextEvent(dpy, &e);
@@ -248,12 +402,16 @@ static void *kp__X11WindowThreadFunc(void *user_data) {
             || e.xconfigure.height != config.height) {
             config.width = e.xconfigure.width;
             config.height = e.xconfigure.height;
+            config.aspect = config.width * w->output->parent.hppmm
+              / (config.height * w->output->parent.vppmm);
             w->painter_configure_func(&config);
           }
           break;
 
+        case ClientMessage:
         case DestroyNotify:
         case UnmapNotify:
+          KP__L("%d", __LINE__);
           goto exit;
           break;
       }
@@ -390,8 +548,7 @@ static inline void x11_handle_pointer_motion(XMotionEvent *xmotion,
 #endif
 
 KPwindow_o kpWindowCreate(const KPwindow_params_t *params) {
-  KP_ASSERT(window == 0);
-  window = kp__X11WindowCreate(params);
+  KP__x11_window_o window = kp__X11WindowCreate(params);
 
   KPthread_params_t tparams;
   tparams.user_data = kpRetain(window);

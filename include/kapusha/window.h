@@ -20,6 +20,7 @@ enum {
 typedef struct KPoutput_video_t { KPoutput_t header;
   int width, height;
   int width_mm, height_mm;
+  KPf32 vppmm, hppmm;
   KPtime_ns frame_delta;
   KPu32 flags;
 } KPoutput_video_t, *KPoutput_video_o;
@@ -42,6 +43,7 @@ typedef struct {
   KPwindow_o window;
   void *user_data;
   KPu32 width, height;
+  KPf32 aspect;
 } KPwindow_painter_configure_t;
 
 typedef struct {
@@ -56,6 +58,12 @@ typedef void (*KPwindow_painter_create_f)(const KPwindow_painter_create_t *);
 typedef void (*KPwindow_painter_configure_f)(const KPwindow_painter_configure_t *);
 typedef void (*KPwindow_painter_f)(const KPwindow_painter_t *);
 
+enum {
+  KPWindowFlagFullscreen = 0x01,
+  KPWindowFlagFixedSize = 0x02,
+  KPWindowFlagFixedPos = 0x04
+} KPWindowFlags;
+
 typedef struct {
   void *user_data;
   KPwindow_painter_create_f painter_create_func;
@@ -64,6 +72,7 @@ typedef struct {
   KPoutput_video_o output;
   const char *title;
   int width, height;
+  KPu32 flags;
 } KPwindow_params_t;
 
 KPwindow_o kpWindowCreate(const KPwindow_params_t *params);
