@@ -5,6 +5,14 @@
 extern "C" {
 #endif
 
+typedef struct KPcolorspace_t {
+  KPf32 red_x, red_y;
+  KPf32 green_x, green_y;
+  KPf32 blue_x, blue_y;
+  KPf32 white_x, white_y;
+  KPf32 gamma;
+} KPcolorspace_t;
+
 typedef struct KPoutput_t { KP_O;
   enum {
     KPOutputVideo
@@ -23,6 +31,7 @@ typedef struct KPoutput_video_t { KPoutput_t header;
   KPf32 vppmm, hppmm;
   KPtime_ns frame_delta;
   KPu32 flags;
+  KPcolorspace_t colorspace;
 } KPoutput_video_t, *KPoutput_video_o;
 
 enum {

@@ -83,6 +83,15 @@ static inline void kpMemset(void *dst, int value, KPsize size) {
     ((char*)dst)[i] = value;
 }
 
+static inline int kpMemcmp(const void *left, const void *right, KPsize size) {
+  for (KPsize i = 0; i < size; ++i) {
+    /* TODO optimize */
+    if (((const KPu8*)left)[i] < ((const KPu8*)right)[i]) return -1;
+    if (((const KPu8*)left)[i] > ((const KPu8*)right)[i]) return 1;
+  }
+  return 0;
+}
+
 int kpVsnprintf(char *buffer, KPsize size, const char *format, va_list argp);
 int kpSnprintf(char *buffer, KPsize size, const char *format, ...);
 

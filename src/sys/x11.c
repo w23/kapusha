@@ -1,4 +1,5 @@
 #include <X11/Xlib.h>
+#include <X11/Xatom.h>
 #include <X11/extensions/Xrandr.h>
 #include <GL/glx.h>
 
@@ -48,7 +49,68 @@ typedef struct {
   KPu32 x, y, w, h, wmm, hmm;
   KPtime_ns frame_delta;
   KPu32 flags;
+  KPcolorspace_t *colorspace;
 } KP__output_desc_t;
+
+typedef struct {
+  char manufacturer[4];
+  KPu16 product_code;
+  KPu32 serial;
+  KPcolorspace_t colorspace;
+} KP__edid_minimal_t;
+
+static int kp__ParseEDIDMinimal(const KPu8 *data, KPsize size, KP__edid_minimal_t *edid) {
+  kpMemset(edid, 0, sizeof(*edid));
+  if (size < 128)
+    return 0;
+
+  static const KPu8 edid_hdr[8] = {0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00};
+  if (0 != kpMemcmp(data, &edid_hdr, sizeof(edid_hdr)))
+    return 0;
+
+  edid->manufacturer[0] = (              (data[8]>>2) &0x1f) + 'A' - 1;
+  edid->manufacturer[1] = (((data[8]<<3)|(data[9]>>5))&0x1f) + 'A' - 1;
+  edid->manufacturer[2] =                (data[9]     &0x1f) + 'A' - 1;
+  edid->manufacturer[3] = 0;
+
+  edid->product_code = data[10] | (data[11] << 8);
+  edid->serial = data[12] | (data[13] << 8) | (data[14] << 16) | (data[15] << 24);
+
+  if (data[0x17] == 0xff)
+    edid->colorspace.gamma = 1.f;
+  else
+    edid->colorspace.gamma = 1.f + data[0x17] / 100.f;
+
+  edid->colorspace.red_x   = (((data[0x19]>>6)&0x03) | data[0x1B]) / 1024.f;
+  edid->colorspace.red_y   = (((data[0x19]>>4)&0x03) | data[0x1C]) / 1024.f;
+  edid->colorspace.green_x = (((data[0x19]>>2)&0x03) | data[0x1D]) / 1024.f;
+  edid->colorspace.green_y = (((data[0x19]>>0)&0x03) | data[0x1E]) / 1024.f;
+  edid->colorspace.blue_x  = (((data[0x1A]>>6)&0x03) | data[0x1F]) / 1024.f;
+  edid->colorspace.blue_y  = (((data[0x1A]>>4)&0x03) | data[0x20]) / 1024.f;
+  edid->colorspace.white_x = (((data[0x1A]>>2)&0x03) | data[0x21]) / 1024.f;
+  edid->colorspace.white_y = (((data[0x1A]>>0)&0x03) | data[0x22]) / 1024.f;
+
+  KP__L("    EDID: %s", edid->manufacturer);
+
+  return 1;
+}
+
+static int kp__ReadOutputEDID(RROutput output, KP__edid_minimal_t *edid) {
+  int format;
+  unsigned long nitems, bytes_after;
+  Atom type;
+  KPu8 *buffer = 0;
+
+  XRRGetOutputProperty(g.display, output, XInternAtom(g.display, "EDID", False),
+    0, 100, False, False, AnyPropertyType, &type, &format, &nitems, &bytes_after, &buffer);
+
+  int result = 0;
+  if (type == XA_INTEGER && format == 8)
+    result = kp__ParseEDIDMinimal(buffer, nitems, edid);
+
+  XFree(buffer);
+  return result;
+}
 
 static void kp__OutputAdd(const KP__output_desc_t *desc) {
   if (g.outputs.slot == MAX_OUTPUTS) {
@@ -72,6 +134,12 @@ static void kp__OutputAdd(const KP__output_desc_t *desc) {
   output->parent.hppmm = (KPf32)desc->wmm / desc->w;
   output->parent.vppmm = (KPf32)desc->hmm / desc->h;
 
+  if (desc->colorspace != 0)
+    kpMemcpy(&output->parent.colorspace, desc->colorspace, sizeof(KPcolorspace_t));
+  else
+    /* TODO reasonable defaults */
+    kpMemset(&output->parent.colorspace, 0, sizeof(KPcolorspace_t));
+
   KP__L("    PPMM %f %f", output->parent.hppmm, output->parent.vppmm);
 
   g.outputs.array[g.outputs.slot++] = output;
@@ -81,7 +149,8 @@ KPiterable_o kpOutputsSelect(int *selectors) {
   return 0;
 }
 
-KPtime_ns kp__X11RRModeFrameTime(const XRRScreenResources *res, RRMode mode) {
+
+static KPtime_ns kp__X11RRModeFrameTime(const XRRScreenResources *res, RRMode mode) {
   for (int i = 0; i < res->nmode; ++i) {
     if (res->modes[i].id == mode) {
       XRRModeInfo *info = res->modes + i;
@@ -130,9 +199,22 @@ void kp__X11Init() {
       KP__L("  output %d/%d: %s", j+1, resources->noutput, info->name);
       if (info->connection == RR_Connected && info->crtc != None) {
         if (primary == output) KP__L("    PRIMARY");
+        od.flags = (primary == output) ? KPVideoOutputPrimary : 0;
+
         KP__L("    size %dx%dmm", info->mm_width, info->mm_height);
+
         XRRCrtcInfo *crtc = XRRGetCrtcInfo(g.display, resources, info->crtc);
         KP__L("    %d,%d %dx%d", crtc->x, crtc->y, crtc->width, crtc->height);
+
+        od.colorspace = 0;
+        KP__edid_minimal_t edid;
+        if (kp__ReadOutputEDID(output, &edid) != 0) {
+          od.colorspace = &edid.colorspace;
+          if ( edid.manufacturer[0] == 'O'
+            && edid.manufacturer[1] == 'V'
+            && edid.manufacturer[2] == 'R')
+            od.flags |= KPVideoOutputOculus;
+        }
 
         od.x = crtc->x;
         od.y = crtc->y;
@@ -142,7 +224,6 @@ void kp__X11Init() {
         od.hmm = info->mm_height;
         od.frame_delta = kp__X11RRModeFrameTime(resources, crtc->mode);
         if (minframedelta > od.frame_delta) minframedelta = od.frame_delta;
-        od.flags = (primary == output) ? KPVideoOutputPrimary : 0;
         kp__OutputAdd(&od);
 
         KP__L("    frame_time %dus", (int)(od.frame_delta / 1000ULL));
@@ -219,8 +300,15 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
 
   this->output = kpRetain(params->output);
 
-  if (this->output == 0) /* TODO elaborate */
-    this->output = kpRetain(g.outputs.array[g.outputs.slot-1]);
+  if (this->output == 0) /* TODO elaborate */ {
+    int index = 0;
+    for (;;) {
+      if (g.outputs.array[index]->parent.flags & KPVideoOutputOculus) break;
+      if (index == g.outputs.slot - 1) break;
+      ++index;
+    }
+    this->output = kpRetain(g.outputs.array[index]);
+  }
 
   int attrs[] = {
     GLX_X_RENDERABLE, True,
@@ -254,7 +342,8 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
   winattrs.colormap = XCreateColormap(g.display,
     RootWindow(g.display, this->vinfo->screen),
     this->vinfo->visual, AllocNone);
-  winattrs.override_redirect = False/*True*/;
+
+  winattrs.override_redirect = (params->flags & KPWindowFlagFixedPos) ? True : False;
 
   int x = this->output->x;
   int y = this->output->y;
