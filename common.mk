@@ -55,6 +55,11 @@ else ifeq ($(PLATFORM),Windows)
 	SYSTEM := sys_win32.c
 endif
 
+ifdef OVR_SDK_DIR
+	CFLAGS += -DKP_OVR -I$(OVR_SDK_DIR)/LibOVR/Src
+	LDFLAGS += -L$(OVR_SDK_DIR)/LibOVR -L$(OVR_SDK_DIR)/LibOVR/Lib/Linux/Release/x86_64 -lovr
+endif
+
 ifeq ($(WITH_X11),1)
 	LDFLAGS += -lX11 -lrt -lXrandr
 endif

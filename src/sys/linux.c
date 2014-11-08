@@ -3,8 +3,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef KP_OVR
+#include <OVR_CAPI.h>
+#endif
+
 #include <kapusha/sys.h>
 #include "x11.h"
+
+#define KP__SYS "startup"
 
 static KPtime_ns time_offset = 0;
 
@@ -27,6 +33,15 @@ int main(int argc, char *argv[])
 {
   time_offset = kpSysTimeNs();
   kp__X11Init();
+#ifdef KP_OVR
+  ovr_Initialize();
+
+  ovrHmd hmd = ovrHmd_Create(0);
+  if (hmd) {
+    KP__L("name: %s, manf: %s", hmd->ProductName, hmd->Manufacturer);
+    KP__L("%d,%d %dx%d", hmd->WindowsPos.x, hmd->WindowsPos.y, hmd->Resolution.w, hmd->Resolution.h);
+  }
+#endif
   appConfigure(argc, (const char**)argv);
   kp__X11Run();
   return 0;
