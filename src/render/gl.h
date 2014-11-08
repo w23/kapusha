@@ -156,7 +156,7 @@ typedef struct {
 
   KP__render_sampler_t *sampler_units[KP__RenderSamplers_MAX];
   int sampler_unit_active, sampler_group_unit;
-  
+
   KP__render_program_t *program;
 } KP__render_state_t;
 
@@ -168,6 +168,7 @@ static void kp__RenderStateBufferBind(
   KP__render_state_t*,
   KP__render_buffer_t*,
   KP__RenderBufferTarget);
+
 static void kp__RenderStateBufferUnbind(
   KP__render_state_t*,
   KP__render_buffer_t*);

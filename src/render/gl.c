@@ -28,7 +28,7 @@ void kp__GlAssert(const char *file, int line) {
 
 inline static KP__render_state_t *kp__CurrentRenderState() {
   /* \todo multithreading */
-  static KP__render_state_t state;
+  static __thread KP__render_state_t state;
   return &state;
 }
 
