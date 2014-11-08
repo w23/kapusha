@@ -1,10 +1,6 @@
 #include <stddef.h>
-
-#include "kapusha/simpleton.h"
-#include "kapusha/render.h"
-
-static KPrender_batch_o batch;
-static KPrender_program_o program;
+#include <kapusha/window.h>
+#include <kapusha/render.h>
 
 static const char shader_vertex[] =
 "uniform mat4 um4_mvp;\n"
@@ -49,12 +45,16 @@ static KPu16 indices[36] = {
   0, 2, 4, 0, 4, 6
 };
 
-KPrender_program_env_o env;
-KPrender_cmd_fill_t fill;
-KPrender_cmd_rasterize_t raster;
-KPmat4f proj;
 
-void simpleton_init(int argc, const char *argv[]) {
+static KPrender_batch_o batch;
+static KPrender_program_o program;
+static KPrender_program_env_o env;
+static KPrender_cmd_fill_t fill;
+static KPrender_cmd_rasterize_t raster;
+static KPmat4f proj;
+
+static void create(const KPwindow_painter_create_t *create) {
+  KP_UNUSED(create);
   KPrender_buffer_o buffer = kpRenderBufferCreate();
   KPblob_desc_t data;
   data.data = vertices;
@@ -116,19 +116,20 @@ void simpleton_init(int argc, const char *argv[]) {
   raster.env = &env;
 }
 
-void simpleton_resize(int width, int height) {
+static void configure(const KPwindow_painter_configure_t *cfg) {
   KPrender_destination_t dest;
   kpRenderDestinationDefaults(&dest);
-  dest.viewport.tr.x = width;
-  dest.viewport.tr.y = height;
+  dest.viewport.tr.x = cfg->width;
+  dest.viewport.tr.y = cfg->height;
   kpRenderSetDestination(&dest);
 
-  proj = kpMat4fMakePerspective(90.f, (KPf32)width/(KPf32)height, 1.f, 100.f);
+  proj = kpMat4fMakePerspective(90.f, cfg->aspect, 1.f, 100.f);
 }
 
-void simpleton_update(KPtime_ms pts) {
+static void paint(const KPwindow_painter_t *paint) {
+  const KPf32 pts = (paint->pts / 1000000ULL) / 1000.f;
   KPdquatf q = kpDquatfMakeTransform(
-    kpVec3fNormalize(kpVec3f(0, 1, 1)), pts / 1000.f, kpVec3f(0, 0, -5.f));
+    kpVec3fNormalize(kpVec3f(0, 1, 1)), pts, kpVec3f(0, 0, -5.f));
   KPmat4f m = kpMat4fMul(proj, kpMat4fMakeDquatf(q));
 
   kpRenderProgramEnvSetMat4f(env, kpRenderTag("MMVP"), &m);
@@ -137,5 +138,20 @@ void simpleton_update(KPtime_ms pts) {
   kpRenderExecuteCommand(&raster.header);
 }
 
-void simpleton_key(int code, int down) {}
-void simpleton_mouse(int dx, int dy) {}
+int appConfigure(int argc, const char *argv[]) {
+  KP_UNUSED(argc);
+  KP_UNUSED(argv);
+
+  KPwindow_params_t wp;
+  wp.title = "kapusha sample: a cube";
+  wp.user_data = 0;
+  wp.painter_create_func = create;
+  wp.painter_configure_func = configure;
+  wp.painter_func = paint;
+  wp.output = 0;
+  wp.flags = 0;
+  wp.width = wp.height = 0;
+  kpWindowCreate(&wp);
+
+  return 0;
+}

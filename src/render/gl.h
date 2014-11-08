@@ -180,8 +180,6 @@ static int kp__RenderStateSamplerBind(KP__render_state_t *state,
 static void kp__RenderStateSamplerUnbind(KP__render_state_t *state,
   KP__render_sampler_t *sampler);
 
-
-
 #ifdef __cplusplus
 } // extern "C"
 #endif

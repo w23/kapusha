@@ -5,6 +5,9 @@
 
 #include "x11.h"
 
+void kp__RenderInitThread();
+void kp__RenderCloseThread();
+
 #define KP__SYS "X11"
 
 typedef struct KP__x11_output_t { KPoutput_video_t parent;
@@ -436,6 +439,9 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
 
 static void *kp__X11WindowThreadFunc(void *user_data) {
   KP__x11_window_o w = (KP__x11_window_o)user_data;
+  KPwindow_painter_create_t create;
+  KPwindow_painter_configure_t config;
+  KPwindow_painter_t paint;
   KPtime_ns time_prev, time_now;
 
   Display *dpy = XOpenDisplay(0);
@@ -450,11 +456,10 @@ static void *kp__X11WindowThreadFunc(void *user_data) {
 
   glXMakeContextCurrent(dpy, w->drawable, w->drawable, w->context);
 
+  kp__RenderInitThread();
+
   KP__L("[%p] window started painting", w);
 
-  KPwindow_painter_create_t create;
-  KPwindow_painter_configure_t config;
-  KPwindow_painter_t paint;
   create.window = config.window = paint.window = w;
   create.user_data = config.user_data = paint.user_data = w->user_data;
   paint.time_delta = paint.time_delta_frame = w->output->parent.frame_delta;
@@ -517,6 +522,7 @@ static void *kp__X11WindowThreadFunc(void *user_data) {
   }
 
 exit:
+  kp__RenderCloseThread();
   glXMakeContextCurrent(dpy, w->drawable, w->drawable, 0);
   glXDestroyWindow(dpy, w->drawable);
   glXDestroyContext(dpy, w->context);

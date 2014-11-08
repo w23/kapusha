@@ -1,11 +1,5 @@
-#include <GLFW/glfw3.h>
-
-#include "kapusha/simpleton.h"
-#include "kapusha/render.h"
-#include "kapusha/math.h"
-
-static KPrender_batch_o batch;
-static KPrender_program_o program;
+#include <kapusha/window.h>
+#include <kapusha/render.h>
 
 static const KPvec2f vertices[3] = {
   {0.5f, -0.5f}, {0.0f, 0.5f}, {-0.5f, -0.5f}
@@ -24,13 +18,17 @@ static const char shader_fragment[] =
 "varying vec2 vv2_param;\n"
 "uniform float uf_time;\n"
 "void main() {\n"
-"  gl_FragColor = vec4(vv2_param, .5+.5*sin(10.*vv2_param.y+uf_time), 1.);\n"
+"  gl_FragColor = vec4(vv2_param, .5+.5*sin(10.*(vv2_param.y+uf_time)), 1.);\n"
 "}\n"
 ;
 
-KPrender_program_env_o env;
+static KPrender_program_o program;
+static KPrender_batch_o batch;
+static KPrender_program_env_o env;
 
-void simpleton_init(int argc, const char *argv[]) {
+static void create(const KPwindow_painter_create_t *create) {
+  KP_UNUSED(create);
+
   KPrender_buffer_o buf = kpRenderBufferCreate();
   KPblob_desc_t data;
   data.data = vertices;
@@ -69,16 +67,21 @@ void simpleton_init(int argc, const char *argv[]) {
   env = kpRenderProgramEnvCreate();
 }
 
-void simpleton_size(int width, int height) {
+static void configure(const KPwindow_painter_configure_t *cfg) {
   KPrender_destination_t dest;
   kpRenderDestinationDefaults(&dest);
-  dest.viewport.tr.x = width;
-  dest.viewport.tr.y = height;
+  dest.viewport.tr.x = cfg->width;
+  dest.viewport.tr.y = cfg->height;
   kpRenderSetDestination(&dest);
 }
 
-void simpleton_draw(KPtime_ms pts) {
-  kpRenderProgramEnvSetScalarf(env, kpRenderTag("TIME"), pts / 1000.0f);
+static void paint(const KPwindow_painter_t *paint) {
+  kpRenderProgramEnvSetScalarf(env, kpRenderTag("TIME"), paint->pts / 1000000000.);
+
+  KPrender_cmd_fill_t fill;
+  fill.header.cmd = KPrender_Command_Fill;
+  fill.color = kpVec4f(0.f, 0.f, 0.f, 1.f);
+  kpRenderExecuteCommand(&fill.header);
 
   KPrender_cmd_rasterize_t raster;
   raster.header.cmd = KPrender_Command_Rasterize;
@@ -89,25 +92,20 @@ void simpleton_draw(KPtime_ms pts) {
   kpRenderExecuteCommand(&raster.header);
 }
 
-int main(int argc, char *argv[]) {
+int appConfigure(int argc, const char *argv[]) {
   KP_UNUSED(argc);
   KP_UNUSED(argv);
 
-  if (!glfwInit())
-    return -1;
+  KPwindow_params_t wp;
+  wp.title = "kapusha sample: raster";
+  wp.user_data = 0;
+  wp.painter_create_func = create;
+  wp.painter_configure_func = configure;
+  wp.painter_func = paint;
+  wp.output = 0;
+  wp.flags = 0;
+  wp.width = wp.height = 0;
+  kpWindowCreate(&wp);
 
-  GLFWwindow* window = glfwCreateWindow(640, 480, "My Title", NULL, NULL);
-  glfwMakeContextCurrent(window);
-  simpleton_init(argc, (const char**)argv);
-  simpleton_size(640, 480);
-
-  while (!glfwWindowShouldClose(window)){
-    simpleton_draw(glfwGetTime() * 1000.0);
-    glfwSwapBuffers(window);
-    glfwPollEvents();
-  }
-
-  glfwDestroyWindow(window);
-  glfwTerminate();
-
+  return 0;
 }

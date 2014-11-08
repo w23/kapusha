@@ -32,6 +32,19 @@ inline static KP__render_state_t *kp__CurrentRenderState() {
   return &state;
 }
 
+void kp__RenderInitThread() {
+  DECLARE_STATE;
+  kpMemset(state, 0, sizeof(*state));
+}
+
+void kp__RenderCloseThread() {
+  DECLARE_STATE;
+  for(KPu32 i = 0; i < KP__RenderBufferTarget_MAX; ++i)
+    kpRelease(state->buffer_targets[i]);
+  for(KPu32 i = 0; i < KP__RenderSamplers_MAX; ++i)
+    kpRelease(state->sampler_units[i]);
+}
+
 /*
 static void kp__RenderStateInit(KP__render_state_t *state) {
   int i = 0;

@@ -1,10 +1,6 @@
-#include <GLFW/glfw3.h>
-
-#include "kapusha/simpleton.h"
-#include "kapusha/render.h"
-
-static KPrender_batch_o batch;
-static KPrender_program_o program;
+#include <stddef.h>
+#include <kapusha/window.h>
+#include <kapusha/render.h>
 
 static const char shader_vertex[] =
 "uniform mat4 um4_mvp;\n"
@@ -50,12 +46,16 @@ static KPu16 indices[36] = {
   0, 2, 4, 0, 4, 6
 };
 
-KPrender_program_env_o env;
-KPrender_cmd_fill_t fill;
-KPrender_cmd_rasterize_t raster;
-KPmat4f proj;
 
-void simpleton_init(int argc, const char *argv[]) {
+static KPrender_batch_o batch;
+static KPrender_program_o program;
+static KPrender_program_env_o env;
+static KPrender_cmd_fill_t fill;
+static KPrender_cmd_rasterize_t raster;
+static KPmat4f proj;
+
+static void create(const KPwindow_painter_create_t *create) {
+  KP_UNUSED(create);
   KPrender_buffer_o buffer = kpRenderBufferCreate();
   KPblob_desc_t data;
   data.data = vertices;
@@ -105,9 +105,9 @@ void simpleton_init(int argc, const char *argv[]) {
 
   kpRenderProgramAttributeTag(program, "av3_vertex", kpRenderTag("VRTX"));
   kpRenderProgramAttributeTag(program, "av3_color", kpRenderTag("COLR"));
-  kpRenderProgramAttributeTag(program, "us2_tex", kpRenderTag("STEX"));
 
   kpRenderProgramArgumentTag(program, "um4_mvp", kpRenderTag("MMVP"));
+  kpRenderProgramArgumentTag(program, "us2_tex", kpRenderTag("STEX"));
 
   env = kpRenderProgramEnvCreate();
 
@@ -122,7 +122,7 @@ void simpleton_init(int argc, const char *argv[]) {
 
   KPsurface_o surface = kpSurfaceCreate(256, 256, KPSurfaceFormatU8RGBA);
   KPu32 *pix = (KPu32*)surface->buffer;
-  int x, y;
+  KPu32 x, y;
   for (y = 0; y < surface->height; ++y)
     for (x = 0; x < surface->width; ++x, ++pix) {
       KPu8 r = x + y;
@@ -139,51 +139,42 @@ void simpleton_init(int argc, const char *argv[]) {
   kpRelease(sampler);
 }
 
-void simpleton_size(int width, int height) {
+static void configure(const KPwindow_painter_configure_t *cfg) {
   KPrender_destination_t dest;
   kpRenderDestinationDefaults(&dest);
-  dest.viewport.tr.x = width;
-  dest.viewport.tr.y = height;
+  dest.viewport.tr.x = cfg->width;
+  dest.viewport.tr.y = cfg->height;
   kpRenderSetDestination(&dest);
 
-  proj = kpMat4fProjPerspective(1.f, 100.f, (KPf32)width/(KPf32)height, 90.f);
+  proj = kpMat4fMakePerspective(90.f, cfg->aspect, 1.f, 100.f);
 }
 
-void simpleton_draw(KPtime_ms pts) {
-  KPdquatf q = kpDquatfRotationTranslation(
-    kpVec3fNormalize(kpVec3f(0, 1, 1)), pts / 1000.f, kpVec3f(0, 0, -5.f-3.f*kpSinf(pts/1000.f)));
-  KPmat4f m = kpMat4fMulm4(proj, kpMat4fdq(q));
+static void paint(const KPwindow_painter_t *paint) {
+  const KPf32 pts = (paint->pts / 1000000ULL) / 1000.f;
+  KPdquatf q = kpDquatfMakeTransform(
+    kpVec3fNormalize(kpVec3f(0, 1, 1)), pts, kpVec3f(0, 0, -5.f-3.f*kpSinf(pts)));
+  KPmat4f m = kpMat4fMul(proj, kpMat4fMakeDquatf(q));
 
-  kpRenderProgramEnvSetMat4f(&env, kpRenderTag("MMVP"), &m);
+  kpRenderProgramEnvSetMat4f(env, kpRenderTag("MMVP"), &m);
 
   kpRenderExecuteCommand(&fill.header);
   kpRenderExecuteCommand(&raster.header);
 }
 
-static void glfw_resize_cb(GLFWwindow *win, int w, int h) {
-  KP_UNUSED(win);
-  simpleton_size(w, h);
-}
-
-int main(int argc, char *argv[]) {
+int appConfigure(int argc, const char *argv[]) {
   KP_UNUSED(argc);
   KP_UNUSED(argv);
 
-  if (!glfwInit())
-    return -1;
+  KPwindow_params_t wp;
+  wp.title = "kapusha sample: textured cube";
+  wp.user_data = 0;
+  wp.painter_create_func = create;
+  wp.painter_configure_func = configure;
+  wp.painter_func = paint;
+  wp.output = 0;
+  wp.flags = 0;
+  wp.width = wp.height = 0;
+  kpWindowCreate(&wp);
 
-  GLFWwindow* window = glfwCreateWindow(640, 480, "My Title", NULL, NULL);
-  glfwMakeContextCurrent(window);
-  simpleton_init(argc, (const char**)argv);
-  glfwSetWindowSizeCallback(window, glfw_resize_cb);
-
-  while (!glfwWindowShouldClose(window)){
-    simpleton_draw(glfwGetTime() * 1000.0);
-    glfwSwapBuffers(window);
-    glfwPollEvents();
-  }
-
-  glfwDestroyWindow(window);
-  glfwTerminate();
-
+  return 0;
 }
