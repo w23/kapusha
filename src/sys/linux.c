@@ -42,7 +42,8 @@ int main(int argc, char *argv[])
     KP__L("%d,%d %dx%d", hmd->WindowsPos.x, hmd->WindowsPos.y, hmd->Resolution.w, hmd->Resolution.h);
   }
 #endif
-  appConfigure(argc, (const char**)argv);
+  kpuserAppCreate(argc, (const char**)argv);
   kp__X11Run();
+  kpuserAppDestroy();
   return 0;
 }

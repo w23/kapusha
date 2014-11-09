@@ -98,6 +98,11 @@ int kpSnprintf(char *buffer, KPsize size, const char *format, ...);
 /******************************************************************************/
 /* Message queue */
 
+typedef void* KPmessage_queue_t;
+
+KPmessage_queue_t *kpMessageQueueCreate(/*mode, size, policy*/);
+void kpMessageQueueDestroy(KPmessage_queue_t *queue);
+
 /* TODO
 
 void kpQueuePut

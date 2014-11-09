@@ -54,7 +54,7 @@ static KPrender_cmd_fill_t fill;
 static KPrender_cmd_rasterize_t raster;
 static KPmat4f proj;
 
-static void create(const KPwindow_painter_create_t *create) {
+static void create(const KPwindow_painter_header_t *create) {
   KP_UNUSED(create);
   KPrender_buffer_o buffer = kpRenderBufferCreate();
   KPblob_desc_t data;
@@ -149,7 +149,7 @@ static void configure(const KPwindow_painter_configure_t *cfg) {
   proj = kpMat4fMakePerspective(90.f, cfg->aspect, 1.f, 100.f);
 }
 
-static void paint(const KPwindow_painter_t *paint) {
+static void paint(const KPwindow_painter_paint_t *paint) {
   const KPf32 pts = (paint->pts / 1000000ULL) / 1000.f;
   KPdquatf q = kpDquatfMakeTransform(
     kpVec3fNormalize(kpVec3f(0, 1, 1)), pts, kpVec3f(0, 0, -5.f-3.f*kpSinf(pts)));
@@ -161,7 +161,11 @@ static void paint(const KPwindow_painter_t *paint) {
   kpRenderExecuteCommand(&raster.header);
 }
 
-int appConfigure(int argc, const char *argv[]) {
+static void destroy(const KPwindow_painter_header_t *destroy) {
+  KP_UNUSED(destroy);
+}
+
+int kpuserAppCreate(int argc, const char *argv[]) {
   KP_UNUSED(argc);
   KP_UNUSED(argv);
 
@@ -171,10 +175,15 @@ int appConfigure(int argc, const char *argv[]) {
   wp.painter_create_func = create;
   wp.painter_configure_func = configure;
   wp.painter_func = paint;
+  wp.painter_destroy_func = destroy;
   wp.output = 0;
   wp.flags = 0;
   wp.width = wp.height = 0;
   kpWindowCreate(&wp);
 
+  return 0;
+}
+
+int kpuserAppDestroy() {
   return 0;
 }

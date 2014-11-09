@@ -26,7 +26,7 @@ static KPrender_program_o program;
 static KPrender_batch_o batch;
 static KPrender_program_env_o env;
 
-static void create(const KPwindow_painter_create_t *create) {
+static void create(const KPwindow_painter_header_t *create) {
   KP_UNUSED(create);
 
   KPrender_buffer_o buf = kpRenderBufferCreate();
@@ -75,7 +75,7 @@ static void configure(const KPwindow_painter_configure_t *cfg) {
   kpRenderSetDestination(&dest);
 }
 
-static void paint(const KPwindow_painter_t *paint) {
+static void paint(const KPwindow_painter_paint_t *paint) {
   kpRenderProgramEnvSetScalarf(env, kpRenderTag("TIME"), paint->pts / 1000000000.);
 
   KPrender_cmd_fill_t fill;
@@ -92,7 +92,11 @@ static void paint(const KPwindow_painter_t *paint) {
   kpRenderExecuteCommand(&raster.header);
 }
 
-int appConfigure(int argc, const char *argv[]) {
+static void destroy(const KPwindow_painter_header_t *destroy) {
+  KP_UNUSED(destroy);
+}
+
+int kpuserAppCreate(int argc, const char *argv[]) {
   KP_UNUSED(argc);
   KP_UNUSED(argv);
 
@@ -102,10 +106,15 @@ int appConfigure(int argc, const char *argv[]) {
   wp.painter_create_func = create;
   wp.painter_configure_func = configure;
   wp.painter_func = paint;
+  wp.painter_destroy_func = destroy;
   wp.output = 0;
   wp.flags = 0;
   wp.width = wp.height = 0;
   kpWindowCreate(&wp);
 
+  return 0;
+}
+
+int kpuserAppDestroy() {
   return 0;
 }

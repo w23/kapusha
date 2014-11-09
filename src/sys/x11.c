@@ -20,6 +20,7 @@ typedef struct KP__x11_window_t { KP_O;
   KPwindow_painter_create_f painter_create_func;
   KPwindow_painter_configure_f painter_configure_func;
   KPwindow_painter_f painter_func;
+  KPwindow_painter_destroy_f painter_destroy_func;
   GLXFBConfig *glxconfigs;
   int nglxconfigs;
   XVisualInfo *vinfo;
@@ -93,8 +94,6 @@ static int kp__ParseEDIDMinimal(const KPu8 *data, KPsize size, KP__edid_minimal_
   edid->colorspace.white_x = (((data[0x1A]>>2)&0x03) | data[0x21]) / 1024.f;
   edid->colorspace.white_y = (((data[0x1A]>>0)&0x03) | data[0x22]) / 1024.f;
 
-  KP__L("    EDID: %s", edid->manufacturer);
-
   return 1;
 }
 
@@ -148,10 +147,10 @@ static void kp__OutputAdd(const KP__output_desc_t *desc) {
   g.outputs.array[g.outputs.slot++] = output;
 }
 
-KPiterable_o kpOutputsSelect(int *selectors) {
+KPiterable_o kpOutputsSelect(KPuptr *selectors) {
+  KP_UNUSED(selectors);
   return 0;
 }
-
 
 static KPtime_ns kp__X11RRModeFrameTime(const XRRScreenResources *res, RRMode mode) {
   for (int i = 0; i < res->nmode; ++i) {
@@ -294,6 +293,7 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
   this->painter_create_func = params->painter_create_func;
   this->painter_configure_func = params->painter_configure_func;
   this->painter_func = params->painter_func;
+  this->painter_destroy_func = params->painter_destroy_func;
   this->glxconfigs = 0;
   this->nglxconfigs = 0;
   this->vinfo = 0;
@@ -361,6 +361,10 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
     CWBorderPixel | CWBitGravity | CWEventMask | CWColormap | CWOverrideRedirect, &winattrs);
 
   XStoreName(g.display, this->window, params->title);
+
+  Atom delete_message = XInternAtom(g.display, "WM_DELETE_WINDOW", True);
+  XSetWMProtocols(g.display, this->window, &delete_message, 1);
+
   XMapWindow(g.display, this->window);
 
   if (params->flags & KPWindowFlagFixedSize) {
@@ -439,9 +443,7 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
 
 static void *kp__X11WindowThreadFunc(void *user_data) {
   KP__x11_window_o w = (KP__x11_window_o)user_data;
-  KPwindow_painter_create_t create;
-  KPwindow_painter_configure_t config;
-  KPwindow_painter_t paint;
+  KPwindow_painter_paint_t paint;
   KPtime_ns time_prev, time_now;
 
   Display *dpy = XOpenDisplay(0);
@@ -460,23 +462,21 @@ static void *kp__X11WindowThreadFunc(void *user_data) {
 
   KP__L("[%p] window started painting", w);
 
-  create.window = config.window = paint.window = w;
-  create.user_data = config.user_data = paint.user_data = w->user_data;
+  paint.config.header.window = w;
+  paint.config.header.user_data = w->user_data;
   paint.time_delta = paint.time_delta_frame = w->output->parent.frame_delta;
 
-  w->painter_create_func(&create);
+  w->painter_create_func(&paint.config.header);
 
   XWindowAttributes wa;
   XGetWindowAttributes(dpy, w->window, &wa);
-  config.width = wa.width;
-  config.height = wa.height;
-  config.aspect = config.width * w->output->parent.hppmm
-    / (config.height * w->output->parent.vppmm);
-  w->painter_configure_func(&config);
+  paint.config.width = wa.width;
+  paint.config.height = wa.height;
+  paint.config.aspect = paint.config.width * w->output->parent.hppmm
+    / (paint.config.height * w->output->parent.vppmm);
+  w->painter_configure_func(&paint.config);
 
   XSelectInput(dpy, w->window, StructureNotifyMask);
-  //Atom delete_message = XInternAtom(dpy, "WM_DELETE_WINDOW", True);
-  //XSetWMProtocols(dpy, w->window, &delete_message, 1);
 
   // balance the tparams.user_data = kpRetain(window);
   kpRelease(w);
@@ -492,13 +492,13 @@ static void *kp__X11WindowThreadFunc(void *user_data) {
           break;
 
         case ConfigureNotify:
-          if (e.xconfigure.width != config.width
-            || e.xconfigure.height != config.height) {
-            config.width = e.xconfigure.width;
-            config.height = e.xconfigure.height;
-            config.aspect = config.width * w->output->parent.hppmm
-              / (config.height * w->output->parent.vppmm);
-            w->painter_configure_func(&config);
+          if (e.xconfigure.width != paint.config.width
+            || e.xconfigure.height != paint.config.height) {
+            paint.config.width = e.xconfigure.width;
+            paint.config.height = e.xconfigure.height;
+            paint.config.aspect = paint.config.width * w->output->parent.hppmm
+              / (paint.config.height * w->output->parent.vppmm);
+            w->painter_configure_func(&paint.config);
           }
           break;
 
@@ -522,6 +522,7 @@ static void *kp__X11WindowThreadFunc(void *user_data) {
   }
 
 exit:
+  w->painter_destroy_func(&paint.config.header);
   kp__RenderCloseThread();
   glXMakeContextCurrent(dpy, w->drawable, w->drawable, 0);
   glXDestroyWindow(dpy, w->drawable);
