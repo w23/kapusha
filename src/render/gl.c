@@ -1,3 +1,4 @@
+#include <limits.h>
 #include "../render/gl.h"
 
 #define KP__SYS "GL"
@@ -720,8 +721,9 @@ static void kp__RenderCommandRasterize(KPrender_cmd_rasterize_t *cmd) {
     kp__RenderStateBufferBind(state, 0, KP__RenderBufferTargetElementArray);
     /*KP__L("glDrawArrays(%d, %d, %d)", batch->index.primitive,
       batch->index.offset, batch->index.count);*/
+    KP_ASSERT(batch->index.offset < INT_MAX);
     glDrawArrays(batch->index.primitive,
-      batch->index.offset, batch->index.count); KP__GLASSERT
+      (int)batch->index.offset, batch->index.count); KP__GLASSERT
   }
 
   /* cleanup */

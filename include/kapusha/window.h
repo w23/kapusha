@@ -5,30 +5,6 @@
 extern "C" {
 #endif
 
-typedef struct KPcolorspace_t {
-  KPf32 red_x, red_y;
-  KPf32 green_x, green_y;
-  KPf32 blue_x, blue_y;
-  KPf32 white_x, white_y;
-  KPf32 gamma;
-} KPcolorspace_t;
-
-enum {
-  KPVideoOutputCombined = 0x0001,
-  KPVideoOutputPrimary = 0x0002,
-  KPVideoOutputOculus = 0x0003,
-  KPVideoOutputActive = 0x0004
-} KPVideoOutputFlags;
-
-typedef struct KPoutput_video_t { KPoutput_t header;
-  int width, height;
-  int width_mm, height_mm;
-  KPf32 vppmm, hppmm;
-  KPtime_ns frame_delta;
-  KPu32 flags;
-  KPcolorspace_t colorspace;
-} KPoutput_video_t, *KPoutput_video_o;
-
 typedef void *KPwindow_o;
 
 typedef struct {

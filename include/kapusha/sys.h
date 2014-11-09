@@ -95,7 +95,7 @@ void kpCondvarSignal(KPcondvar_t *condvar);
 #define KP_RASSERT(v) \
   if (!(v)) { \
     KP_L("KP_RASSERT(" #v ") failed at %s:%d", __FILE__, __LINE__); \
-    kpSysExit(-1); \
+    kpSysAbort(); \
   }
 
 #ifdef KP_SIZECODING
@@ -106,18 +106,18 @@ void kpCondvarSignal(KPcondvar_t *condvar);
 #define KP_FAIL(...) \
   { \
     KP_L("KP_FAIL: " __VA_ARGS__); \
-    kpSysExit(-1); \
+    kpSysAbort(); \
   }
 #endif
-
-/* Kill current process */
-void kpSysExit(int code);
 
 /* Get current precise monotonic system time in nanoseconds */
 KPtime_ns kpSysTimeNs();
 
 /* System-specific way to output debug log messages */
-void kp__LogOutput(const char *output);
+void kp__SysLogOutput(const char *output);
+
+/* Immediately kill current process */
+void kpSysAbort();
 
 #ifdef __cplusplus
 } // extern "C"

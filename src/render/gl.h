@@ -21,6 +21,7 @@
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
 #endif
+#define GL_RGBA32F GL_RGBA32F_ARB
 #elif KP_RASPBERRY
 #define KP_GLES 1
 #include <GLES2/gl2.h>

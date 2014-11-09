@@ -78,8 +78,6 @@ int kpRenderProgramAttributeTag(
 /******************************************************************************/
 /* sampler */
 
-typedef void *KPrender_sampler_o;
-
 KPrender_sampler_o kpRenderSamplerCreate();
 
 int kpRenderSamplerUpload(KPrender_sampler_o s, KPsurface_o);

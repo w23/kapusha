@@ -51,12 +51,12 @@ int kpSnprintf(char *buffer, KPsize size, const char *format, ...) {
   return ret;
 }
 
-static inline int kpStrlen(const char *str) { return strlen(str); }
+static inline KPsize kpStrlen(const char *str) { return strlen(str); }
 
 void kpLog(const char *prefix, const char *format, ...) {
   /* \todo multiline logs: per-line prefixes and limits */
   const int L = 1024;
-  const int PL = kpStrlen(prefix);
+  const KPsize PL = kpStrlen(prefix);
   char buffer[L];
   va_list argp;
 
@@ -68,13 +68,13 @@ void kpLog(const char *prefix, const char *format, ...) {
   buffer[PL+2] = ' ';
 
   va_start(argp, format);
-  int len = kpVsnprintf(buffer + PL + 3, L - PL - 6, format, argp) + PL + 3;
+  KPsize len = kpVsnprintf(buffer + PL + 3, L - PL - 6, format, argp) + PL + 3;
   va_end(argp);
   if (len == L - 3) {
     buffer[L-4] = buffer[L-3] = buffer[L-2] = '.';
     buffer[L-1] = 0;
   }
-  kp__LogOutput(buffer);
+  kp__SysLogOutput(buffer);
 }
 
 /******************************************************************************/
