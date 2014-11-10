@@ -74,17 +74,20 @@ typedef struct {
 } KPblob_desc_t;
 
 static inline void kpMemcpy(void *dst, const void *src, KPsize size) {
-  for (KPsize i = 0; i < size; ++i)
+  KPsize i;
+  for (i = 0; i < size; ++i)
     ((char*)dst)[i] = ((const char*)src)[i];
 }
 
 static inline void kpMemset(void *dst, int value, KPsize size) {
-  for (KPsize i = 0; i < size; ++i)
+  KPsize i;
+  for (i = 0; i < size; ++i)
     ((char*)dst)[i] = value;
 }
 
 static inline int kpMemcmp(const void *left, const void *right, KPsize size) {
-  for (KPsize i = 0; i < size; ++i) {
+  KPsize i;
+  for (i = 0; i < size; ++i) {
     /* TODO optimize */
     if (((const KPu8*)left)[i] < ((const KPu8*)right)[i]) return -1;
     if (((const KPu8*)left)[i] > ((const KPu8*)right)[i]) return 1;
@@ -100,16 +103,30 @@ int kpSnprintf(char *buffer, KPsize size, const char *format, ...);
 
 typedef void* KPmessage_queue_t;
 
-KPmessage_queue_t *kpMessageQueueCreate(/*mode, size, policy*/);
-void kpMessageQueueDestroy(KPmessage_queue_t *queue);
+typedef struct KPmessage_t {
+  KPu32 tag;
+  KPu32 type;
+  KPsize size;
+  void *data;
+} KPmessage_t;
 
-/* TODO
+KPmessage_queue_t kpMessageQueueCreate();
+void kpMessageQueueDestroy(KPmessage_queue_t queue);
 
-void kpQueuePut
-void kpQueuePull
-void kpQueuePoll
-void kpQueueDone
-*/
+void kpMessageQueuePut(KPmessage_queue_t queue,
+  KPu32 tag, KPu32 type, const void *data, KPsize size);
+KPmessage_t *kpMessageQueueGet(KPmessage_queue_t queue, KPtime_ms timeout);
+void kpMessageDiscard(KPmessage_t *message);
+
+/******************************************************************************/
+/* Lock-free queue */
+
+/* todo linked-list stack
+ *
+ * void kpLockFreeQueuePut(); push on top
+ * void kpLockFreeQueuePollAll(); xchg top, reverse links
+ *
+ * */
 
 /******************************************************************************/
 /* Cotainers */
