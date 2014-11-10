@@ -42,7 +42,7 @@ static struct {
 
   struct {
 #define MAX_OUTPUTS 8
-    int slot;
+    KPsize slot;
     KP__x11_output_o array[MAX_OUTPUTS];
   } outputs;
 } g = {0};
@@ -147,8 +147,40 @@ static void kp__OutputAdd(const KP__output_desc_t *desc) {
   g.outputs.array[g.outputs.slot++] = output;
 }
 
-KPiterable_o kpOutputsSelect(KPuptr *selectors) {
-  KP_UNUSED(selectors);
+KPsize kp__X11OutputsSelect(KPuptr *selectors, KPoutput_o *outputs, KPsize max) {
+  KPsize found = 0;
+  KPu32 flags = 0;
+
+  while (selectors) {
+    switch (*selectors++) {
+      case KPOutputSelectorType:
+        if (*selectors++ != KPOutputVideo) return 0;
+        break;
+      case KPOutputSelectorFlags:
+        flags = *selectors++;
+        break;
+      case KPOutputSelector_End:
+      default:
+        selectors = 0;
+        break;
+    }
+  }
+
+  for (KPsize i = 0; i < g.outputs.slot; ++i) {
+    KP__x11_output_o output = g.outputs.array[i];
+    if ((output->parent.flags & flags) == flags) {
+      if (max > 0) {
+        *outputs++ = kpRetain(output);
+        --max;
+      }
+      ++found;
+    }
+  }
+  return found;
+}
+
+KPsize kp__X11InputsSelect(KPuptr *selectors, KPinput_o *inputs, KPsize max) {
+  KP_UNUSED(selectors); KP_UNUSED(inputs); KP_UNUSED(max);
   return 0;
 }
 
@@ -173,8 +205,6 @@ void kp__X11Init() {
   /* XInitThreads(); */
   g.display = XOpenDisplay(0);
   KP_ASSERT(g.display != 0);
-
-  /* ?? g.delete_message = XInternAtom(g.display, "WM_DELETE_WINDOW", True); */
 
   kpMemset(&g.outputs, 0, sizeof(g.outputs));
 
@@ -301,17 +331,8 @@ static KP__x11_window_o kp__X11WindowCreate(const KPwindow_params_t *params) {
   this->drawable = 0;
   this->context = 0;
 
+  KP_ASSERT(params->output != 0);
   this->output = kpRetain(params->output);
-
-  if (this->output == 0) /* TODO elaborate */ {
-    int index = 0;
-    for (;;) {
-      if (g.outputs.array[index]->parent.flags & KPVideoOutputOculus) break;
-      if (index == g.outputs.slot - 1) break;
-      ++index;
-    }
-    this->output = kpRetain(g.outputs.array[index]);
-  }
 
   int attrs[] = {
     GLX_X_RENDERABLE, True,

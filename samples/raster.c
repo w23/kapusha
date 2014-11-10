@@ -101,15 +101,14 @@ int kpuserAppCreate(int argc, const char *argv[]) {
   KP_UNUSED(argv);
 
   KPwindow_params_t wp;
-  
+
   KPuptr selector[] = {
     KPOutputSelectorType, KPOutputVideo,
     KPOutputSelector_End
   };
   KPsize outputs = kpOutputsSelect(selector, (KPoutput_o*)&wp.output, 1);
   KP_UNUSED(outputs);
-  KP_ASSERT(outputs == 1);
-  
+
   wp.title = "kapusha sample: raster";
   wp.user_data = 0;
   wp.painter_create_func = create;

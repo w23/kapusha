@@ -20,13 +20,20 @@ KPtime_ns kpSysTimeNs() {
   return (ts.tv_sec * 1000000000ULL + ts.tv_nsec) - time_offset;
 }
 
-void kpSysExit(int code) {
-  KP_UNUSED(code);
+void kpSysAbort() {
   abort();
 }
 
-void kp__LogOutput(const char *output) {
+void kp__SysLogOutput(const char *output) {
   puts(output);
+}
+
+KPsize kpOutputsSelect(KPuptr *selectors, KPoutput_o *outputs, KPsize max) {
+  return kp__X11OutputsSelect(selectors, outputs, max);
+}
+
+KPsize kpInputsSelect(KPuptr *selectors, KPinput_o *inputs, KPsize max) {
+  return kp__X11InputsSelect(selectors, inputs, max);
 }
 
 int main(int argc, char *argv[])

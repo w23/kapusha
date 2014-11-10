@@ -47,9 +47,9 @@ typedef struct KPoutput_video_t { KPoutput_t header;
 } KPoutput_video_t, *KPoutput_video_o;
 
 enum {
+  KPOutputSelector_End = 0,
   KPOutputSelectorType, /* KPOutputVideo, KPOutputAudio, default == any*/
-  KPOutputSelectorFlags,
-  KPOutputSelector_End = 0
+  KPOutputSelectorFlags
 } KPOutputSelectors;
 
 typedef struct KPinput_t { KP_O;

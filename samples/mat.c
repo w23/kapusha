@@ -147,13 +147,20 @@ int kpuserAppCreate(int argc, const char *argv[]) {
   KP_UNUSED(argv);
 
   KPwindow_params_t wp;
+
+  KPuptr selector[] = {
+    KPOutputSelectorType, KPOutputVideo,
+    KPOutputSelector_End
+  };
+  KPsize outputs = kpOutputsSelect(selector, (KPoutput_o*)&wp.output, 1);
+  KP_UNUSED(outputs);
+
   wp.title = "kapusha sample: a cube";
   wp.user_data = 0;
   wp.painter_create_func = create;
   wp.painter_configure_func = configure;
   wp.painter_func = paint;
   wp.painter_destroy_func = destroy;
-  wp.output = 0;
   wp.flags = 0;
   wp.width = wp.height = 0;
   kpWindowCreate(&wp);
