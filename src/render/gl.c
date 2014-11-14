@@ -44,6 +44,7 @@ void kp__RenderCloseThread() {
     kpRelease(state->buffer_targets[i]);
   for(KPu32 i = 0; i < KP__RenderSamplers_MAX; ++i)
     kpRelease(state->sampler_units[i]);
+  kpRelease(state->framebuffer);
 }
 
 /*
@@ -202,14 +203,15 @@ static void kp__RenderSamplerDtor(void *s) {
   KP_THIS(KP__render_sampler_t, s);
   KP__L("%p: destroy texture %d", this, this->name);
   kp__RenderStateSamplerUnbind(state, this);
-  glDeleteTextures(1, &this->name);
+  glDeleteTextures(1, &this->name); KP__GLASSERT
 }
 
-int kpRenderSamplerUpload(KPrender_sampler_o sampler, KPsurface_o surface) {
+int kp__RenderSamplerUpload(KP__render_sampler_o this,
+  KPu32 width, KPu32 height, KPSurfaceFormat format, const void *data)
+{
   DECLARE_STATE;
-  KP_THIS(KP__render_sampler_t, sampler);
   GLuint fmt_internal, fmt, type;
-  switch (surface->format) {
+  switch (format) {
     case KPSurfaceFormatU8R:
       type = GL_UNSIGNED_BYTE; fmt_internal = GL_ALPHA; fmt = GL_ALPHA; break;
     case KPSurfaceFormatU8RG:
@@ -225,22 +227,34 @@ int kpRenderSamplerUpload(KPrender_sampler_o sampler, KPsurface_o surface) {
     case KPSurfaceFormatF32RGBA:
       type = GL_FLOAT; fmt_internal = GL_RGBA32F; fmt = GL_RGBA; break;
     default:
-      KP_FAIL("Invalid surface format %d", surface->format);
+      KP_FAIL("Invalid surface format %d", format);
       return 0;
   }
   kp__RenderStateSamplerBind(state, this);
-  glTexImage2D(GL_TEXTURE_2D, 0, fmt_internal,
-    surface->width, surface->height, 0, fmt, type, surface->buffer);
+  glTexImage2D(GL_TEXTURE_2D, 0, fmt_internal, width, height, 0, fmt, type, data);
   KP__GLASSERT
 
+  this->width = width;
+  this->height = height;
+
   /* \todo this should be program-specific */
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  KP__GLASSERT
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  KP__GLASSERT
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); KP__GLASSERT
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); KP__GLASSERT
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); KP__GLASSERT
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); KP__GLASSERT
   return 1;
+}
+
+int kpRenderSamplerAlloc(KPrender_sampler_o sampler,
+  KPu32 width, KPu32 height, KPSurfaceFormat format)
+{
+  return kp__RenderSamplerUpload(sampler,
+    width, height, format, 0);
+}
+
+int kpRenderSamplerUpload(KPrender_sampler_o sampler, KPsurface_o surface) {
+  return kp__RenderSamplerUpload(sampler,
+    surface->width, surface->height, surface->format, surface->buffer);
 }
 
 /******************************************************************************/
@@ -386,7 +400,7 @@ static void kp__RenderProgramEnvApply(
         int unit = kp__RenderStateSamplerBind(state, value->v.sampler);
         /*KP__L("%p: bind texture %p to %d", this, value->v.sampler, unit);*/
         KP_ASSERT(unit >= 0);
-        glUniform1i(location, unit);
+        glUniform1i(location, unit); KP__GLASSERT
       }
       break;
     default:
@@ -625,26 +639,155 @@ void kpRenderBatchDrawSet(KPrender_batch_o batch,
   this->index.count = param->count;
 }
 
+/******************************************************************************/
+/* GL framebuffer */
+
+void kp__RenderFramebufferDtor(void *obj) {
+  KP_THIS(KP__render_framebuffer_t, obj);
+  if (this->renderbuffer_depth != 0) {
+    glDeleteRenderbuffers(1, &this->renderbuffer_depth);
+    KP__GLASSERT
+  }
+  kpRelease(this->depth);
+  for (KPsize i = 0; i < this->ncolors; ++i)
+    kpRelease(this->colors[i]);
+  glDeleteFramebuffers(1, &this->name); KP__GLASSERT
+}
+
+void kp__RenderStateFramebufferBind(KP__render_framebuffer_o this) {
+  DECLARE_STATE;
+  kpRetain(this);
+  if (this == 0) {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0); KP__GLASSERT
+    return;
+  }
+
+  glBindFramebuffer(GL_FRAMEBUFFER, this->name); KP__GLASSERT
+  kpRelease(state->framebuffer);
+  state->framebuffer = this;
+}
+
+KPrender_framebuffer_o kpRenderFramebufferCreate(
+  KPrender_framebuffer_params_t* params)
+{
+  DECLARE_STATE;
+  KP_ASSERT(params->ncolors == 1);
+  KP__render_framebuffer_o this = (KP__render_framebuffer_o)kpNew(0,
+    sizeof(KP__render_framebuffer_t) +
+    sizeof(KP__render_sampler_o) * params->ncolors);
+  this->O.dtor = kp__RenderFramebufferDtor;
+
+  KP__render_sampler_o *colors = (KP__render_sampler_o*)params->colors;
+
+  this->width = colors[0]->width;
+  this->height = colors[0]->height;
+
+  glGenFramebuffers(1, &this->name); KP__GLASSERT
+  glBindFramebuffer(GL_FRAMEBUFFER, this->name); KP__GLASSERT
+
+  this->ncolors = params->ncolors;
+  this->colors = (KP__render_sampler_o*)(this + 1);
+  for (KPsize i = 0; i < params->ncolors; ++i) {
+    this->colors[i] = kpRetain(params->colors[i]);
+    KP_ASSERT(this->colors[i]->width == this->width);
+    KP_ASSERT(this->colors[i]->height == this->height);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
+      GL_TEXTURE_2D, this->colors[i]->name, 0); KP__GLASSERT
+  }
+
+  this->depth = kpRetain(params->depth);
+  if (this->depth == 0 && (params->flags & KPRenderFramebufferFlagDepthAny) != 0) {
+    glGenRenderbuffers(1, &this->renderbuffer_depth); KP__GLASSERT
+    glBindRenderbuffer(GL_RENDERBUFFER, this->renderbuffer_depth); KP__GLASSERT
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT,
+      this->width, this->height); KP__GLASSERT
+    glBindRenderbuffer(GL_RENDERBUFFER, 0); KP__GLASSERT
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+      GL_RENDERBUFFER, this->renderbuffer_depth); KP__GLASSERT
+  } else if (this->depth != 0) {
+    KP_ASSERT(this->depth->width == this->width);
+    KP_ASSERT(this->depth->height == this->height);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
+      this->depth->name); KP__GLASSERT
+  }
+
+  switch (glCheckFramebufferStatus(GL_FRAMEBUFFER)) {
+    case GL_FRAMEBUFFER_COMPLETE: break;
+    case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+      KP_FAIL("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT");
+      break;
+    case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+      KP_FAIL("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT");
+      break;
+#ifdef GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS
+    case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
+      KP_FAIL("GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS");
+      break;
+#endif
+    case GL_FRAMEBUFFER_UNSUPPORTED:
+      KP_FAIL("GL_FRAMEBUFFER_UNSUPPORTED");
+      break;
+    default:
+      KP_FAIL("Unknown framebuffer status");
+  }
+  KP__GLASSERT
+
+  // restore previous binding
+  kp__RenderStateFramebufferBind(state->framebuffer);
+  return this;
+}
+
+
 /*********************************** GLOBAL ***********************************/
 
 #undef KP__SYS
 #define KP__SYS "GL"
 
+static const GLenum KP__render_depth_func[] = {
+/*  KPRenderDepthFuncNever*/ GL_NEVER,
+/*  KPRenderDepthFuncAlways*/ GL_ALWAYS,
+/*  KPRenderDepthFuncLess*/ GL_LESS,
+/*  KPRenderDepthFuncLessOrEqual*/ GL_LEQUAL,
+/*  KPRenderDepthFuncGreater*/ GL_GREATER,
+/*  KPRenderDepthFuncGreaterOrEqual*/ GL_GEQUAL,
+/*  KPRenderDepthFuncNotEqual*/ GL_NOTEQUAL,
+/*  KPRenderDepthFuncEqual*/ GL_EQUAL
+};
+
 void kpRenderSetDestination(const KPrender_destination_t *dest) {
-  KP__L("glViewport(%d, %d, %d, %d)",
-    dest->viewport.bl.x, dest->viewport.bl.y,
-    dest->viewport.tr.x - dest->viewport.bl.x,
-    dest->viewport.tr.y - dest->viewport.bl.y);
-  glViewport(
-    dest->viewport.bl.x, dest->viewport.bl.y,
-    dest->viewport.tr.x - dest->viewport.bl.x,
-    dest->viewport.tr.y - dest->viewport.bl.y);
-  glEnable(GL_DEPTH_TEST);
+  DECLARE_STATE;
+  kp__RenderStateFramebufferBind(dest->framebuffer);
+
+  KPu32 x = dest->viewport.bl.x, y = dest->viewport.bl.y;
+  KPu32 width = dest->viewport.tr.x - dest->viewport.bl.x;
+  KPu32 height = dest->viewport.tr.y - dest->viewport.bl.y;
+
+  KP__render_framebuffer_o fb = (KP__render_framebuffer_o)dest->framebuffer;
+
+  if (width == 0 || height == 0) {
+    KP_ASSERT(fb != 0);
+    x = y = 0;
+    width = fb->width;
+    height = fb->height;
+  }
+  /*KP__L("%d %d %d %d", x, y, width, height);*/
+  glViewport(x, y, width, height); KP__GLASSERT
+
+  if (dest->depth.test == KPRenderDepthTestEnabled)
+  {
+    glEnable(GL_DEPTH_TEST); KP__GLASSERT
+    glDepthMask(dest->depth.write == KPRenderDepthWriteEnabled); KP__GLASSERT
+    KP_ASSERT(dest->depth.func >= KPRenderDepthFuncNever);
+    KP_ASSERT(dest->depth.func <= KPRenderDepthFuncEqual);
+    glDepthFunc(KP__render_depth_func[dest->depth.func]); KP__GLASSERT
+  } else {
+    glDisable(GL_DEPTH_TEST); KP__GLASSERT
+  }
 }
 
 static void kp__RenderCommandFill(KPrender_cmd_fill_t *cmd) {
-  glClearColor(cmd->color.x, cmd->color.y, cmd->color.z, cmd->color.w);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClearColor(cmd->color.x, cmd->color.y, cmd->color.z, cmd->color.w); KP__GLASSERT
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); KP__GLASSERT
 }
 
 static void kp__RenderCommandRasterize(KPrender_cmd_rasterize_t *cmd) {

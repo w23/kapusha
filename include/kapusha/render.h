@@ -80,6 +80,8 @@ int kpRenderProgramAttributeTag(
 
 KPrender_sampler_o kpRenderSamplerCreate();
 
+int kpRenderSamplerAlloc(KPrender_sampler_o s,
+  KPu32 width, KPu32 height, KPSurfaceFormat format);
 int kpRenderSamplerUpload(KPrender_sampler_o s, KPsurface_o);
 
 /******************************************************************************/
@@ -158,22 +160,52 @@ void kpRenderBatchDrawSet(KPrender_batch_o,
   const KPrender_draw_params_t*);
 
 /******************************************************************************/
+/* framebuffer */
+
+typedef void *KPrender_framebuffer_o;
+
+enum KPrender_framebuffer_flags_t {
+  KPRenderFramebufferFlagDepthAny = 0x01,
+  KPRenderFramebufferFlagDepthMax = 0x07,
+};
+
+typedef struct KPrender_framebuffer_params_t {
+  KPsize ncolors;
+  KPrender_sampler_o *colors;
+  KPrender_sampler_o depth;
+  KPu32 flags;
+} KPrender_framebuffer_params_t;
+
+KPrender_framebuffer_o kpRenderFramebufferCreate(KPrender_framebuffer_params_t*);
+
+/******************************************************************************/
 /* destination */
 
 typedef struct {
-/*! \todo
-  KPrender_framebuffer_o *framebuffer;
-  int depth_mode;
-  int stencil_mode;
-  int color_mode;
-  */
   KPrect2i viewport;
-} KPrender_destination_t;
+  KPrender_framebuffer_o framebuffer;
 
-static inline void kpRenderDestinationDefaults(KPrender_destination_t *dest) {
-  dest->viewport.bl.x = dest->viewport.bl.y =
-  dest->viewport.tr.x = dest->viewport.tr.y = 0;
-}
+  struct {
+    enum {
+      KPRenderDepthTestDisabled,
+      KPRenderDepthTestEnabled
+    } test;
+    enum {
+      KPRenderDepthWriteDisabled,
+      KPRenderDepthWriteEnabled
+    } write;
+    enum {
+      KPRenderDepthFuncNever,
+      KPRenderDepthFuncAlways,
+      KPRenderDepthFuncLess,
+      KPRenderDepthFuncLessOrEqual,
+      KPRenderDepthFuncGreater,
+      KPRenderDepthFuncGreaterOrEqual,
+      KPRenderDepthFuncNotEqual,
+      KPRenderDepthFuncEqual
+    } func;
+  } depth;
+} KPrender_destination_t;
 
 void kpRenderSetDestination(const KPrender_destination_t *dest);
 

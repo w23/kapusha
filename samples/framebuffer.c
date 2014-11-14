@@ -9,7 +9,7 @@ static const char shader_vertex[] =
 "varying vec2 vv2_tc;\n"
 "void main() {\n"
 "  gl_Position = um4_mvp * vec4(av3_vertex, 1.);\n"
-"  vv2_tc = av3_color.xy * 1.6 - vec2(.8);\n"
+"  vv2_tc = av3_color.xz*.98;\n"
 "}\n"
 ;
 
@@ -46,12 +46,11 @@ static KPu16 indices[36] = {
   0, 2, 4, 0, 4, 6
 };
 
-
-static KPrender_batch_o batch;
-static KPrender_program_o program;
 static KPrender_program_env_o env;
-static KPrender_cmd_fill_t fill;
-static KPrender_cmd_rasterize_t raster;
+static KPrender_cmd_fill_t clear, frame_clear;
+static KPrender_cmd_rasterize_t draw_cube;
+static KPrender_sampler_o texture, frame_texture;
+static KPrender_destination_t window, frame;
 static KPmat4f proj;
 
 static void create(const KPwindow_painter_header_t *create) {
@@ -62,7 +61,7 @@ static void create(const KPwindow_painter_header_t *create) {
   data.size = sizeof(vertices);
   kpRenderBufferUpload(buffer, KPRenderBufferFlagNone, data);
 
-  batch = kpRenderBatchCreate();
+  KPrender_batch_o batch = kpRenderBatchCreate();
   KPrender_vertex_attrib_t attrib;
   attrib.buffer = buffer;
   attrib.components = 3;
@@ -93,7 +92,7 @@ static void create(const KPwindow_painter_header_t *create) {
   kpRenderBatchDrawSet(batch, &draw);
   kpRelease(buffer);
 
-  program = kpRenderProgramCreate();
+  KPrender_program_o program = kpRenderProgramCreate();
 
   data.data = shader_vertex;
   data.size = sizeof(shader_vertex);
@@ -111,14 +110,17 @@ static void create(const KPwindow_painter_header_t *create) {
 
   env = kpRenderProgramEnvCreate();
 
-  fill.header.cmd = KPrender_Command_Fill;
-  fill.color = kpVec4f(0, .5, 0, 0);
+  clear.header.cmd = KPrender_Command_Fill;
+  clear.color = kpVec4f(0, .5, 0, 0);
 
-  raster.header.cmd = KPrender_Command_Rasterize;
-  raster.batch = batch;
-  raster.program = program;
-  raster.env_count = 1;
-  raster.env = &env;
+  frame_clear.header.cmd = KPrender_Command_Fill;
+  frame_clear.color = kpVec4f(.5, 0, 0, 0);
+
+  draw_cube.header.cmd = KPrender_Command_Rasterize;
+  draw_cube.batch = batch;
+  draw_cube.program = program;
+  draw_cube.env_count = 1;
+  draw_cube.env = &env;
 
   KPsurface_o surface = kpSurfaceCreate(256, 256, KPSurfaceFormatU8RGBA);
   KPu32 *pix = (KPu32*)surface->buffer;
@@ -131,24 +133,35 @@ static void create(const KPwindow_painter_header_t *create) {
       *pix = (0xff000000) | (b << 16) | (g << 8) | r;
     }
 
-  KPrender_sampler_o sampler = kpRenderSamplerCreate();
-  kpRenderSamplerUpload(sampler, surface);
+  texture = kpRenderSamplerCreate();
+  kpRenderSamplerUpload(texture, surface);
   kpRelease(surface);
 
-  kpRenderProgramEnvSetSampler(env, kpRenderTag("STEX"), sampler);
-  kpRelease(sampler);
+  frame_texture = kpRenderSamplerCreate();
+  kpRenderSamplerAlloc(frame_texture, 256, 256, KPSurfaceFormatU8RGBA);
+
+  KPrender_framebuffer_params_t fbp;
+  fbp.ncolors = 1;
+  fbp.colors = &frame_texture;
+  fbp.depth = 0;
+  fbp.flags = KPRenderFramebufferFlagDepthAny;
+
+  frame.framebuffer = kpRenderFramebufferCreate(&fbp);
+  frame.viewport.tr.x = frame.viewport.tr.y
+    = frame.viewport.bl.x = frame.viewport.bl.y = 0;
+  frame.depth.test = KPRenderDepthTestEnabled;
+  frame.depth.write = KPRenderDepthWriteEnabled;
+  frame.depth.func = KPRenderDepthFuncLess;
 }
 
 static void configure(const KPwindow_painter_configure_t *cfg) {
-  KPrender_destination_t dest;
-  dest.framebuffer = 0;
-  dest.viewport.bl.x = dest.viewport.bl.y = 0;
-  dest.depth.test = KPRenderDepthTestEnabled;
-  dest.depth.write = KPRenderDepthWriteEnabled;
-  dest.depth.func = KPRenderDepthFuncLess;
-  dest.viewport.tr.x = cfg->width;
-  dest.viewport.tr.y = cfg->height;
-  kpRenderSetDestination(&dest);
+  window.framebuffer = 0;
+  window.viewport.bl.x = window.viewport.bl.y = 0;
+  window.depth.test = KPRenderDepthTestEnabled;
+  window.depth.write = KPRenderDepthWriteEnabled;
+  window.depth.func = KPRenderDepthFuncLess;
+  window.viewport.tr.x = cfg->width;
+  window.viewport.tr.y = cfg->height;
 
   proj = kpMat4fMakePerspective(90.f, cfg->aspect, 1.f, 100.f);
 }
@@ -157,12 +170,20 @@ static void paint(const KPwindow_painter_paint_t *paint) {
   const KPf32 pts = (paint->pts / 1000000ULL) / 1000.f;
   KPdquatf q = kpDquatfMakeTransform(
     kpVec3fNormalize(kpVec3f(0, 1, 1)), pts, kpVec3f(0, 0, -5.f-3.f*kpSinf(pts)));
-  KPmat4f m = kpMat4fMul(proj, kpMat4fMakeDquatf(q));
+  KPmat4f m = kpMat4fMul(kpMat4fMakePerspective(90.f, 1.f, 1.f, 100.f), kpMat4fMakeDquatf(q));
 
+  kpRenderSetDestination(&frame);
+  kpRenderExecuteCommand(&frame_clear.header);
+  kpRenderProgramEnvSetSampler(env, kpRenderTag("STEX"), texture);
+  kpRenderExecuteCommand(&draw_cube.header);
+
+  m = kpMat4fMul(proj, kpMat4fMakeDquatf(q));
   kpRenderProgramEnvSetMat4f(env, kpRenderTag("MMVP"), &m);
 
-  kpRenderExecuteCommand(&fill.header);
-  kpRenderExecuteCommand(&raster.header);
+  kpRenderSetDestination(&window);
+  kpRenderExecuteCommand(&clear.header);
+  kpRenderProgramEnvSetSampler(env, kpRenderTag("STEX"), frame_texture);
+  kpRenderExecuteCommand(&draw_cube.header);
 }
 
 static void destroy(const KPwindow_painter_header_t *destroy) {

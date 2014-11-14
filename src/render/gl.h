@@ -67,9 +67,10 @@ enum {
   KP__RenderSamplers_MAX = 8
 };
 
-typedef struct { KP_O;
+typedef struct KP__render_sampler_t { KP_O;
   GLuint name;
-} KP__render_sampler_t;
+  KPu32 width, height;
+} KP__render_sampler_t, *KP__render_sampler_o;
 
 static void kp__RenderSamplerDtor(void *s);
 
@@ -148,6 +149,18 @@ typedef struct { KP_O;
 } KP__render_batch_t;
 
 /******************************************************************************/
+/* GL framebuffer */
+
+typedef struct KP__render_framebuffer_t { KP_O;
+  GLuint name;
+  KPu32 width, height;
+  KPu32 ncolors;
+  KP__render_sampler_o *colors;
+  KP__render_sampler_o depth;
+  GLuint renderbuffer_depth;
+} KP__render_framebuffer_t, *KP__render_framebuffer_o;
+
+/******************************************************************************/
 /* GL render state */
 
 typedef struct {
@@ -159,6 +172,8 @@ typedef struct {
   int sampler_unit_active, sampler_group_unit;
 
   KP__render_program_t *program;
+
+  KP__render_framebuffer_o framebuffer;
 } KP__render_state_t;
 
 inline static KP__render_state_t *kp__CurrentRenderState();

@@ -118,7 +118,11 @@ static void create(const KPwindow_painter_header_t *create) {
 
 static void configure(const KPwindow_painter_configure_t *cfg) {
   KPrender_destination_t dest;
-  kpRenderDestinationDefaults(&dest);
+  dest.framebuffer = 0;
+  dest.viewport.bl.x = dest.viewport.bl.y = 0;
+  dest.depth.test = KPRenderDepthTestEnabled;
+  dest.depth.write = KPRenderDepthWriteEnabled;
+  dest.depth.func = KPRenderDepthFuncLess;
   dest.viewport.tr.x = cfg->width;
   dest.viewport.tr.y = cfg->height;
   kpRenderSetDestination(&dest);
