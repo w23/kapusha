@@ -47,7 +47,7 @@ static KPu16 indices[36] = {
 };
 
 static KPrender_program_env_o env;
-static KPrender_cmd_fill_t clear, frame_clear;
+static KPrender_cmd_fill_t window_clear, frame_clear;
 static KPrender_cmd_rasterize_t draw_cube;
 static KPrender_sampler_o texture, frame_texture;
 static KPrender_destination_t window, frame;
@@ -110,8 +110,8 @@ static void create(const KPwindow_painter_header_t *create) {
 
   env = kpRenderProgramEnvCreate();
 
-  clear.header.cmd = KPrender_Command_Fill;
-  clear.color = kpVec4f(0, .5, 0, 0);
+  window_clear.header.cmd = KPrender_Command_Fill;
+  window_clear.color = kpVec4f(0, .5, 0, 0);
 
   frame_clear.header.cmd = KPrender_Command_Fill;
   frame_clear.color = kpVec4f(.5, 0, 0, 0);
@@ -181,7 +181,7 @@ static void paint(const KPwindow_painter_paint_t *paint) {
   kpRenderProgramEnvSetMat4f(env, kpRenderTag("MMVP"), &m);
 
   kpRenderSetDestination(&window);
-  kpRenderExecuteCommand(&clear.header);
+  kpRenderExecuteCommand(&window_clear.header);
   kpRenderProgramEnvSetSampler(env, kpRenderTag("STEX"), frame_texture);
   kpRenderExecuteCommand(&draw_cube.header);
 }

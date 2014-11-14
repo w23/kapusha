@@ -20,6 +20,7 @@
 #else
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
+#define glFramebufferTexture glFramebufferTextureEXT
 #endif
 #define GL_RGBA32F GL_RGBA32F_ARB
 #elif KP_RASPBERRY
@@ -154,7 +155,7 @@ typedef struct { KP_O;
 typedef struct KP__render_framebuffer_t { KP_O;
   GLuint name;
   KPu32 width, height;
-  KPu32 ncolors;
+  KPsize ncolors;
   KP__render_sampler_o *colors;
   KP__render_sampler_o depth;
   GLuint renderbuffer_depth;
