@@ -6,7 +6,7 @@
 
 @implementation KPWindow
 - (instancetype)initWithWindow:(KP__cocoa_window_t*)window
-  freeParams:(const KPwindow_free_params_t*)params
+  freeParams:(const KPwindow_open_free_params_t*)params
 {
   KP_ASSERT(window);
   KP_ASSERT(params);
@@ -45,9 +45,11 @@
     backing:NSBackingStoreBuffered
     defer:YES];
   KP_ASSERT(self);
+  
   [self setLevel:NSMainMenuWindowLevel+1];
   [self setOpaque:YES];
   [self setHidesOnDeactivate:YES];
+  
   window_ = window;
   window_->output = kpRetain(output);
   
@@ -69,7 +71,15 @@
   window_->window = self;
 
   [self setContentView:view];
+  [self setAcceptsMouseMovedEvents:YES];
   [self makeKeyAndOrderFront:self];
+}
+
+-(BOOL) canBecomeKeyWindow {
+	return YES;
+}
+
+- (void) mouseMoved:(NSEvent *)theEvent {
 }
 
 // @protocol NSWindowDelegate
@@ -128,20 +138,20 @@ void kp__CocoaWindowDtor(void *obj) {
   }
 }
 
-KPwindow_o kpWindowCreate(
-  void *user_data, KPwindow_painter_f painter, KPstring_o title)
-{
+KPwindow_o kpWindowCreate(const KPwindow_create_params_t *params) {
   KP__cocoa_window_o this = KP_NEW(KP__cocoa_window_t, 0);
   this->O.dtor = kp__CocoaWindowDtor;
-  this->user_data = user_data;
-  this->painter_func = painter;
-  this->title = kpRetain(title);
+  this->user_data = params->paint_user_data;
+  this->painter_func = params->painter;
+  this->title = kpRetain(params->title);
   this->output = 0;
   this->window = nil;
   return this;
 }
 
-int kpWindowOpenFree(KPwindow_o window, const KPwindow_free_params_t *params) {
+int kpWindowOpenFree(KPwindow_o window,
+  const KPwindow_open_free_params_t *params)
+{
   KP_THIS(KP__cocoa_window_t, window);
   KP_ASSERT(this->window == nil);
   

@@ -105,7 +105,8 @@ typedef void* KPmessage_queue_t;
 
 typedef struct KPmessage_t {
   KPu32 tag;
-  KPu32 type;
+  void *origin;
+  KPu32 type, param;
   KPsize size;
   void *data;
 } KPmessage_t;
@@ -114,7 +115,8 @@ KPmessage_queue_t kpMessageQueueCreate();
 void kpMessageQueueDestroy(KPmessage_queue_t queue);
 
 void kpMessageQueuePut(KPmessage_queue_t queue,
-  KPu32 tag, KPu32 type, const void *data, KPsize size);
+  KPu32 tag, void *origin, KPu32 type, KPu32 param,
+  const void *data, KPsize size);
 KPmessage_t *kpMessageQueueGet(KPmessage_queue_t queue, KPtime_ms timeout);
 void kpMessageDiscard(KPmessage_t *message);
 

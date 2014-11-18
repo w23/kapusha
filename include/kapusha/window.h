@@ -30,13 +30,30 @@ typedef struct {
 
 typedef void (*KPwindow_painter_f)(const KPwindow_painter_event_t *);
 
-typedef struct KPwindow_free_params_t {
+typedef struct KPwindow_event_t {
+  enum {
+    KPWindowEventVisibility,
+    KPWindowEventFocus,
+    KPWindowEventCloseRequest,
+    KPWindowEventClosed
+  } type;
+} KPwindow_event_t;
+
+typedef struct KPwindow_create_params_t {
+  KPstring_o title;
+  void *paint_user_data;
+  KPwindow_painter_f painter;
+  KPmessage_queue_t *event_queue;
+  KPu32 tag;
+} KPwindow_create_params_t;
+
+typedef struct KPwindow_open_free_params_t {
   KPu32 min_width, min_height;
   KPu32 max_width, max_height;
-} KPwindow_free_params_t;
+} KPwindow_open_free_params_t;
 
-KPwindow_o kpWindowCreate(void *user_data, KPwindow_painter_f, KPstring_o title);
-int kpWindowOpenFree(KPwindow_o, const KPwindow_free_params_t *params);
+KPwindow_o kpWindowCreate(const KPwindow_create_params_t *params);
+int kpWindowOpenFree(KPwindow_o, const KPwindow_open_free_params_t *params);
 int kpWindowOpenAttached(KPwindow_o, KPoutput_video_o);
 
 #ifdef __cplusplus

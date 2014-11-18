@@ -191,8 +191,9 @@ void kpMessageQueueDestroy(KPmessage_queue_t queue) {
   kpMutexDestroy(&this->mutex);
 }
 
-void kpMessageQueuePut(
-  KPmessage_queue_t queue, KPu32 tag, KPu32 type, const void *data, KPsize size)
+void kpMessageQueuePut(KPmessage_queue_t queue,
+  KPu32 tag, void *origin, KPu32 type, KPu32 param,
+  const void *data, KPsize size)
 {
   KP__message_queue_t *this = (KP__message_queue_t*)queue;
 
@@ -200,7 +201,9 @@ void kpMessageQueuePut(
   KP__message_t *msg = kpAlloc(sizeof(KP__message_t) + size);
   msg->link.next = msg->link.prev = 0;
   msg->msg.tag = tag;
+  msg->msg.origin = origin;
   msg->msg.type = type;
+  msg->msg.param = param;
   msg->msg.data = msg + 1;
   msg->msg.size = size;
   kpMemcpy(msg->msg.data, data, size);
