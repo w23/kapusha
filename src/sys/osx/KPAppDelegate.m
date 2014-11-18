@@ -50,3 +50,7 @@ KPsize kpInputsSelect(KPuptr *selectors, KPinput_o *inputs, KPsize max) {
   KP__L("INPUTS NOT IMPLEMENTED");
   return 0;
 }
+
+void kpAppDestroy(int exit_code) {
+  [[NSApplication sharedApplication] terminate:nil];
+}

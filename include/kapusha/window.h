@@ -43,7 +43,7 @@ typedef struct KPwindow_create_params_t {
   KPstring_o title;
   void *paint_user_data;
   KPwindow_painter_f painter;
-  KPmessage_queue_t *event_queue;
+  KPmessage_queue_t event_queue;
   KPu32 tag;
 } KPwindow_create_params_t;
 

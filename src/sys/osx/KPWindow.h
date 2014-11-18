@@ -9,6 +9,7 @@ typedef struct KP__cocoa_window_t { KP_O;
   void *user_data;
   KPwindow_painter_f painter_func;
   KPstring_o title;
+  KPmessage_queue_t queue;
   KP__cocoa_output_o output;
   KPWindow *window;
 } KP__cocoa_window_t, *KP__cocoa_window_o;

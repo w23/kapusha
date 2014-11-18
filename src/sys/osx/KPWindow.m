@@ -84,7 +84,6 @@
 
 // @protocol NSWindowDelegate
 - (BOOL)windowShouldClose:(id)sender {
-  [[NSApplication sharedApplication] terminate:self];
   return YES;
 }
 
@@ -144,6 +143,7 @@ KPwindow_o kpWindowCreate(const KPwindow_create_params_t *params) {
   this->user_data = params->paint_user_data;
   this->painter_func = params->painter;
   this->title = kpRetain(params->title);
+  this->queue = params->event_queue;
   this->output = 0;
   this->window = nil;
   return this;
