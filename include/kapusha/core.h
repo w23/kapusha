@@ -136,16 +136,21 @@ typedef struct KPbuffer_t { KP_O;
   void *data;
 } KPbuffer_t, *KPbuffer_o;
 
-KPbuffer_o kpBufferCreate(KPsize size, void *source);
-void kpBufferResize(KPbuffer_o buffer, KPsize new_size);
-
-typedef struct KPiterable_t { KP_O;
-} KPiterable_t, *KPiterable_o;
+KPbuffer_o kpBufferCreate(KPsize size, const void *source);
 
 /******************************************************************************/
 /* String */
 
-/* \todo */
+typedef struct KPstring_t { KPbuffer_t buf;
+} KPstring_t, *KPstring_o;
+
+KPstring_o kpStringCreate(const char *string);
+static inline KPsize kpStringLength(KPstring_o str) {
+  return str->buf.size - 1;
+}
+static inline const char *kpStringCString(KPstring_o str) {
+  return str->buf.data;
+}
 
 /******************************************************************************/
 /* Surface */
