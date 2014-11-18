@@ -53,7 +53,7 @@ static KPrender_cmd_fill_t fill;
 static KPrender_cmd_rasterize_t raster;
 static KPmat4f proj;
 
-static void create(const KPwindow_painter_header_t *create) {
+static void create() {
   KP_UNUSED(create);
   KPrender_buffer_o buffer = kpRenderBufferCreate();
   KPblob_desc_t data;

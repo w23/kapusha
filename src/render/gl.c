@@ -166,7 +166,7 @@ static int kp__RenderStateSamplerBind(KP__render_state_t *state,
   if (state->sampler_units[unit] == this)
     return unit;
 
-  KP__L("%p: bind %d to unit %d", this, this->name, unit);
+  /*KP__L("%p: bind %d to unit %d", this, this->name, unit);*/
   glBindTexture(GL_TEXTURE_2D, this->name); KP__GLASSERT
   state->sampler_units[unit] = this;
   return unit;
@@ -357,10 +357,10 @@ int kpRenderProgramEnvSetSampler(
   KP_THIS(KP__render_program_env_t, env);
   int slot = kp__RenderProgramEnvFindSlot(this, tag);
   if (slot < 0) return 0;
-  KP__L("%p set %c%c%c%c(%d) = %p", this,
+  /*KP__L("%p set %c%c%c%c(%d) = %p", this,
     tag.tag.name[0],tag.tag.name[1],tag.tag.name[2],tag.tag.name[3],
     slot,
-    sampler);
+    sampler);*/
   this->values[slot].tag = tag;
   if (this->values[slot].type == KP__RenderProgramEnvValueSampler)
     kpRelease(this->values[slot].v.sampler);

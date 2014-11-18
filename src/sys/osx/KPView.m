@@ -1,103 +1,107 @@
+#import "kapusha/core.h"
 #import "KPView.h"
-#import "KPWindow.h"
 
 static CVReturn kp__ViewDisplayLink(CVDisplayLinkRef displayLink,
   const CVTimeStamp *inNow, const CVTimeStamp *inOutputTime,
   CVOptionFlags flagsIn, CVOptionFlags *flagsOut, void *displayLinkContext);
 
-////////////////////////////////////////////////////////////////////////////////
-@interface KPView () <NSWindowDelegate> {
-  KPWindow *native_window_;
-  KP__cocoa_window_o window_;
-  CVDisplayLinkRef display_link_;
-  KPwindow_painter_paint_t paint_;
+@interface KPView () {
+@private
+  CVTimeStamp ts_;
 }
-- (void) paintWithPTS:(const CVTimeStamp*)ts;
+- (void)paintWithPTS:(const CVTimeStamp*)ts;
 @end
 
-////////////////////////////////////////////////////////////////////////////////
 @implementation KPView
-- (id) initWithWindow:(KP__cocoa_window_o)window
+- (instancetype)initWithSize:(NSSize)size delegate:(id<KPViewDelegate>)delegate
 {
+  KP_ASSERT(delegate);
   static const NSOpenGLPixelFormatAttribute attribs[] = {
     NSOpenGLPFADoubleBuffer,
     NSOpenGLPFADepthSize, 32,
     NSOpenGLPFAAccelerated,
     0
   };
-  
-  NSOpenGLPixelFormat *pixfmt = [[[NSOpenGLPixelFormat alloc]
-                                  initWithAttributes:attribs] autorelease];
-  KP_ASSERT(pixfmt);
-  
-  NSRect bounds = NSMakeRect(0, 0, window->width, window->height);
+  NSOpenGLPixelFormat* pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
+  KP_ASSERT(pixelFormat);
 
-  self = [super initWithFrame:bounds pixelFormat:pixfmt];
+  self = [super initWithFrame:CGRectMake(0, 0, size.width, size.height) pixelFormat:pixelFormat];
   KP_ASSERT(self);
   
-  window_ = window;
-  paint_.config.header.user_data = window->user_data;
-  paint_.config.header.window = window;
-  
+  [self  setWantsBestResolutionOpenGLSurface:YES];
+
+  delegate_ = delegate;
+
   CVDisplayLinkCreateWithActiveCGDisplays(&display_link_);
   CVDisplayLinkSetOutputCallback(display_link_, &kp__ViewDisplayLink, self);
+
   return self;
 }
 
 - (void) dealloc {
+  CVDisplayLinkStop(display_link_);
+  CVDisplayLinkRelease(display_link_);
+
   [super dealloc];
 }
 
+- (void)willClose {
+  CVDisplayLinkStop(display_link_);
+  
+  [[self openGLContext] makeCurrentContext];
+  CGLLockContext([[self openGLContext] CGLContextObj]);
+  [delegate_ viewStopping];
+  CGLFlushDrawable([[self openGLContext] CGLContextObj]);
+  CGLUnlockContext([[self openGLContext] CGLContextObj]);
+
+}
+
 - (void) prepareOpenGL {
+  [super prepareOpenGL];
+
   GLint swapInt = 1;
   [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
+  
+  [delegate_ viewInitialized];
   
   CGLContextObj cglContext = [[self openGLContext] CGLContextObj];
   CGLPixelFormatObj cglPixelFormat = [[self pixelFormat] CGLPixelFormatObj];
   CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(
     display_link_, cglContext, cglPixelFormat);
-  
-  window_->painter_create_func(&paint_.config.header);
-  
+  CVDisplayLinkGetCurrentTime(display_link_, &ts_);
   CVDisplayLinkStart(display_link_);
 }
 
 - (void) reshape {
-  [[self openGLContext] makeCurrentContext];
+  [super reshape];
+
   CGLLockContext([[self openGLContext] CGLContextObj]);
-  [[self openGLContext] update];
   
-  paint_.config.width = self.bounds.size.width;
-  paint_.config.height = self.bounds.size.height;
-  paint_.config.aspect = paint_.config.width * window_->output->parent.hppmm
-    / (paint_.config.height * window_->output->parent.vppmm);
-  window_->painter_configure_func(&paint_.config);
+  [delegate_ viewResized:[self convertRectToBacking:self.bounds].size];
 
   CGLUnlockContext([[self openGLContext] CGLContextObj]);
-  [self unlockFocus];
+}
+
+- (void)renewGState {
+    [[self window] disableScreenUpdatesUntilFlush];
+    [super renewGState];
 }
 
 - (void) drawRect:(NSRect)dirtyRect {
   KP_UNUSED(dirtyRect);
+  if (CVDisplayLinkIsRunning(display_link_))
+    [self paintWithPTS:nil];
 }
 
 - (void) paintWithPTS:(const CVTimeStamp*)ts {
-  if (![self lockFocusIfCanDraw]) return;
-  
-  paint_.pts = ts->videoTime;
-
   [[self openGLContext] makeCurrentContext];
   CGLLockContext([[self openGLContext] CGLContextObj]);
-  window_->painter_func(&paint_);
-  [[self openGLContext] flushBuffer];
+  if (ts) kpMemcpy(&ts_, ts, sizeof(ts_));
+  [delegate_ viewPaint:&ts_];
+  CGLFlushDrawable([[self openGLContext] CGLContextObj]);
   CGLUnlockContext([[self openGLContext] CGLContextObj]);
-  [self unlockFocus];
 }
 
-- (BOOL)windowShouldClose:(id)sender {
-  [[NSApplication sharedApplication] terminate:self];
-  return YES;
-}
 @end
 
 static CVReturn kp__ViewDisplayLink(CVDisplayLinkRef displayLink,
@@ -107,41 +111,3 @@ static CVReturn kp__ViewDisplayLink(CVDisplayLinkRef displayLink,
   [(KPView*)displayLinkContext paintWithPTS:inOutputTime];
   return kCVReturnSuccess;
 }
-
-
-KPwindow_o kpWindowCreate(const KPwindow_params_t *params) {
-  KP__cocoa_window_o this = KP_NEW(KP__cocoa_window_t, 0);
-  KP_ASSERT(params->output);
-  this->user_data = params->user_data;
-  this->painter_create_func = params->painter_create_func;
-  this->painter_configure_func = params->painter_configure_func;
-  this->painter_func = params->painter_func;
-  this->painter_destroy_func = params->painter_destroy_func;
-  this->output = kpRetain(params->output);
-  
-  CGRect rect;
-  rect.origin.x = rect.origin.y = 0;
-  if (params->width < 8 || params->height < 8) {
-    rect.size.width = this->output->parent.width;
-    rect.size.height = this->output->parent.height;
-  } else {
-    rect.size.width = params->width;
-    rect.size.height = params->height;
-  }
-  
-  this->view = [[KPView alloc] initWithWindow:this];
-  
-  KPWindow *native = [[KPWindow alloc]
-    initWithRect:rect
-        onScreen:this->output->screen
-        delegate:this->view];
-
-  native.title = [NSString stringWithCString:params->title
-                                          encoding:NSUTF8StringEncoding];
-  native.contentView = this->view;
-  
-  [native makeKeyAndOrderFront:nil];
-  native.acceptsMouseMovedEvents = YES;
-  return this;
-}
-

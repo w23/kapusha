@@ -53,7 +53,7 @@ static KPrender_sampler_o texture, frame_texture;
 static KPrender_destination_t window, frame;
 static KPmat4f proj;
 
-static void create(const KPwindow_painter_header_t *create) {
+static void create() {
   KP_UNUSED(create);
   KPrender_buffer_o buffer = kpRenderBufferCreate();
   KPblob_desc_t data;
@@ -154,20 +154,20 @@ static void create(const KPwindow_painter_header_t *create) {
   frame.depth.func = KPRenderDepthFuncLess;
 }
 
-static void configure(const KPwindow_painter_configure_t *cfg) {
+static void configure(const KPwindow_painter_event_t *event) {
   window.framebuffer = 0;
   window.viewport.bl.x = window.viewport.bl.y = 0;
   window.depth.test = KPRenderDepthTestEnabled;
   window.depth.write = KPRenderDepthWriteEnabled;
   window.depth.func = KPRenderDepthFuncLess;
-  window.viewport.tr.x = cfg->width;
-  window.viewport.tr.y = cfg->height;
+  window.viewport.tr.x = event->configuration.width;
+  window.viewport.tr.y = event->configuration.height;
 
-  proj = kpMat4fMakePerspective(90.f, cfg->aspect, 1.f, 100.f);
+  proj = kpMat4fMakePerspective(90.f, event->configuration.aspect, 1.f, 100.f);
 }
 
-static void paint(const KPwindow_painter_paint_t *paint) {
-  const KPf32 pts = (paint->pts / 1000000ULL) / 1000.f;
+static void paint(const KPwindow_painter_event_t *event) {
+  const KPf32 pts = (event->time.pts / 1000000ULL) / 1000.f;
   KPdquatf q = kpDquatfMakeTransform(
     kpVec3fNormalize(kpVec3f(0, 1, 1)), pts, kpVec3f(0, 0, -5.f-3.f*kpSinf(pts)));
   KPmat4f m = kpMat4fMul(kpMat4fMakePerspective(90.f, 1.f, 1.f, 100.f), kpMat4fMakeDquatf(q));
@@ -186,37 +186,52 @@ static void paint(const KPwindow_painter_paint_t *paint) {
   kpRenderExecuteCommand(&draw_cube.header);
 }
 
-static void destroy(const KPwindow_painter_header_t *destroy) {
+static void destroy() {
   KP_UNUSED(destroy);
+}
+
+static void painter(const KPwindow_painter_event_t *event) {
+  switch (event->type) {
+    case KPWindowPaintBegin:
+      create();
+      break;
+    case KPWindowPaintPaint:
+      paint(event);
+      break;
+    case KPWindowPaintReconfigure:
+      configure(event);
+      break;
+    case KPWindowPaintEnd:
+      destroy();
+      break;
+    case KPWindowPaintPause:
+      break;
+
+    default:
+      KP_FAIL("Unexpected event %d", event->type);
+      break;
+  }
 }
 
 int kpuserAppCreate(int argc, const char *argv[]) {
   KP_UNUSED(argc);
   KP_UNUSED(argv);
-
-  KPwindow_params_t wp;
-
-  KPuptr selector[] = {
-    KPOutputSelectorType, KPOutputVideo,
-    KPOutputSelector_End
-  };
-  KPsize outputs = kpOutputsSelect(selector, (KPoutput_o*)&wp.output, 1);
-  KP_UNUSED(outputs);
-
-  wp.title = "kapusha sample: textured cube";
-  wp.user_data = 0;
-  wp.painter_create_func = create;
-  wp.painter_configure_func = configure;
-  wp.painter_func = paint;
-  wp.painter_destroy_func = destroy;
-  wp.flags = 0;
-  wp.width = wp.height = 0;
-  kpWindowCreate(&wp);
-
+  
+  KPstring_o title = kpStringCreate("kapusha: framebuffer");
+  KPwindow_o window = kpWindowCreate(0, painter, title);
+  kpRelease(title);
+  
+  KPwindow_free_params_t p;
+  p.min_width = 640;
+  p.min_height = 480;
+  p.max_width = 1920;
+  p.max_height = 1080;
+  
+  kpWindowOpenFree(window, &p);
   return 0;
 }
 
 int kpuserAppDestroy() {
-  KP_FAIL("Not implemented");
+  //KP_FAIL("Not implemented");
   return 0;
 }
