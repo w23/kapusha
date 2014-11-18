@@ -1,5 +1,5 @@
 #include <stddef.h>
-#include <kapusha/window.h>
+#include "common/runner.h"
 #include <kapusha/render.h>
 
 static const char shader_vertex[] =
@@ -116,22 +116,22 @@ static void create() {
   raster.env = &env;
 }
 
-static void configure(const KPwindow_painter_configure_t *cfg) {
+static void configure(const KPwindow_painter_event_t *event) {
   KPrender_destination_t dest;
   dest.framebuffer = 0;
   dest.viewport.bl.x = dest.viewport.bl.y = 0;
   dest.depth.test = KPRenderDepthTestEnabled;
   dest.depth.write = KPRenderDepthWriteEnabled;
   dest.depth.func = KPRenderDepthFuncLess;
-  dest.viewport.tr.x = cfg->width;
-  dest.viewport.tr.y = cfg->height;
+  dest.viewport.tr.x = event->configuration.width;
+  dest.viewport.tr.y = event->configuration.height;
   kpRenderSetDestination(&dest);
 
-  proj = kpMat4fMakePerspective(90.f, cfg->aspect, 1.f, 100.f);
+  proj = kpMat4fMakePerspective(90.f, event->configuration.aspect, 1.f, 100.f);
 }
 
-static void paint(const KPwindow_painter_paint_t *paint) {
-  const KPf32 pts = (paint->pts / 1000000ULL) / 1000.f;
+static void paint(const KPwindow_painter_event_t *event) {
+  const KPf32 pts = (event->time.pts / 1000000ULL) / 1000.f;
   KPdquatf q = kpDquatfMakeTransform(
     kpVec3fNormalize(kpVec3f(0, 1, 1)), pts, kpVec3f(0, 0, -5.f));
   KPmat4f m = kpMat4fMul(proj, kpMat4fMakeDquatf(q));
@@ -142,36 +142,8 @@ static void paint(const KPwindow_painter_paint_t *paint) {
   kpRenderExecuteCommand(&raster.header);
 }
 
-static void destroy(const KPwindow_painter_header_t *destroy) {
+static void destroy() {
   KP_UNUSED(destroy);
 }
 
-int kpuserAppCreate(int argc, const char *argv[]) {
-  KP_UNUSED(argc);
-  KP_UNUSED(argv);
-
-  KPwindow_params_t wp;
-
-  KPuptr selector[] = {
-    KPOutputSelectorType, KPOutputVideo,
-    KPOutputSelector_End
-  };
-  KPsize outputs = kpOutputsSelect(selector, (KPoutput_o*)&wp.output, 1);
-  KP_UNUSED(outputs);
-
-  wp.title = "kapusha sample: a cube";
-  wp.user_data = 0;
-  wp.painter_create_func = create;
-  wp.painter_configure_func = configure;
-  wp.painter_func = paint;
-  wp.painter_destroy_func = destroy;
-  wp.flags = 0;
-  wp.width = wp.height = 0;
-  kpWindowCreate(&wp);
-
-  return 0;
-}
-
-int kpuserAppDestroy() {
-  return 0;
-}
+sample_t mat = {"kapusha: mat", create, configure, paint, destroy};

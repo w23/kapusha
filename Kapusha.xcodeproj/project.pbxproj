@@ -29,7 +29,6 @@
 		E1823B561A0F64AD008702B9 /* posix.c in Sources */ = {isa = PBXBuildFile; fileRef = E1823B551A0F64AD008702B9 /* posix.c */; };
 		E1823B591A0F94E5008702B9 /* KPWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = E1823B571A0F94E5008702B9 /* KPWindow.h */; };
 		E1823B5A1A0F94E5008702B9 /* KPWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = E1823B581A0F94E5008702B9 /* KPWindow.m */; };
-		E1823B5F1A0FE2D1008702B9 /* raster.c in Sources */ = {isa = PBXBuildFile; fileRef = E1823B5D1A0FE2C1008702B9 /* raster.c */; };
 		E1823B631A0FE412008702B9 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1823B621A0FE412008702B9 /* CoreVideo.framework */; };
 		E1823B641A0FE46F008702B9 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1823B621A0FE412008702B9 /* CoreVideo.framework */; };
 		E184ECF217848671007CDEF3 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E184ECF117848671007CDEF3 /* CoreText.framework */; };
@@ -45,7 +44,20 @@
 		E1DEAC8E1A1B12C6000CE365 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1DAB9CF197760C6004718B4 /* OpenGL.framework */; };
 		E1DEAC8F1A1B12C6000CE365 /* libkapusha.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E131D4FF166201F400B0320A /* libkapusha.a */; };
 		E1DEAC901A1B12C6000CE365 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E131D5031662033F00B0320A /* Cocoa.framework */; };
-		E1DEAC971A1B132C000CE365 /* tex.c in Sources */ = {isa = PBXBuildFile; fileRef = E1823B5E1A0FE2C1008702B9 /* tex.c */; };
+		E1DEACA11A1BD64E000CE365 /* runner.c in Sources */ = {isa = PBXBuildFile; fileRef = E1DEACA01A1BD64E000CE365 /* runner.c */; settings = {COMPILER_FLAGS = "-DSAMPLES=raster"; }; };
+		E1DEACA21A1BD64E000CE365 /* runner.c in Sources */ = {isa = PBXBuildFile; fileRef = E1DEACA01A1BD64E000CE365 /* runner.c */; settings = {COMPILER_FLAGS = "-DSAMPLES=framebuffer"; }; };
+		E1DEACA31A1BD64E000CE365 /* runner.c in Sources */ = {isa = PBXBuildFile; fileRef = E1DEACA01A1BD64E000CE365 /* runner.c */; settings = {COMPILER_FLAGS = "-DSAMPLES=tex"; }; };
+		E1DEACA41A1BD818000CE365 /* tex.c in Sources */ = {isa = PBXBuildFile; fileRef = E1DEAC9F1A1BD586000CE365 /* tex.c */; };
+		E1DEACA51A1BD81D000CE365 /* raster.c in Sources */ = {isa = PBXBuildFile; fileRef = E1DEAC9E1A1BD586000CE365 /* raster.c */; };
+		E1DEACAA1A1BDE52000CE365 /* runner.c in Sources */ = {isa = PBXBuildFile; fileRef = E1DEACA01A1BD64E000CE365 /* runner.c */; settings = {COMPILER_FLAGS = "-DSAMPLES=\"tex, mat, raster, framebuffer\" -DPSAMPLES=\"&tex, &mat, &raster, &framebuffer\""; }; };
+		E1DEACAB1A1BDE52000CE365 /* tex.c in Sources */ = {isa = PBXBuildFile; fileRef = E1DEAC9F1A1BD586000CE365 /* tex.c */; };
+		E1DEACAD1A1BDE52000CE365 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1823B621A0FE412008702B9 /* CoreVideo.framework */; };
+		E1DEACAE1A1BDE52000CE365 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1DAB9CF197760C6004718B4 /* OpenGL.framework */; };
+		E1DEACAF1A1BDE52000CE365 /* libkapusha.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E131D4FF166201F400B0320A /* libkapusha.a */; };
+		E1DEACB01A1BDE52000CE365 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E131D5031662033F00B0320A /* Cocoa.framework */; };
+		E1DEACB71A1BDEA0000CE365 /* mat.c in Sources */ = {isa = PBXBuildFile; fileRef = E1DEAC9C1A1BD586000CE365 /* mat.c */; };
+		E1DEACB81A1BDEA4000CE365 /* raster.c in Sources */ = {isa = PBXBuildFile; fileRef = E1DEAC9E1A1BD586000CE365 /* raster.c */; };
+		E1DEACB91A1BDEA6000CE365 /* framebuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = E136D1DE1A16B2A800F24DAB /* framebuffer.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +82,13 @@
 			remoteGlobalIDString = E131D4FE166201F400B0320A;
 			remoteInfo = libkapusha_osx;
 		};
+		E1DEACA81A1BDE52000CE365 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E18DDFC9163D8ED100869CF5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E131D4FE166201F400B0320A;
+			remoteInfo = libkapusha_osx;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -87,7 +106,7 @@
 /* Begin PBXFileReference section */
 		E131D4FF166201F400B0320A /* libkapusha.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libkapusha.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E131D5031662033F00B0320A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
-		E136D1DE1A16B2A800F24DAB /* framebuffer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = framebuffer.c; path = samples/framebuffer.c; sourceTree = "<group>"; };
+		E136D1DE1A16B2A800F24DAB /* framebuffer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = framebuffer.c; sourceTree = "<group>"; };
 		E136D1ED1A16B2AE00F24DAB /* osx.sample.framebuffer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = osx.sample.framebuffer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E16FDB1B198A00660030B5FB /* osx.test.simpleton.raster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = osx.test.simpleton.raster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1735B321972C26C007B88FC /* core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = core.h; sourceTree = "<group>"; };
@@ -106,10 +125,6 @@
 		E1823B551A0F64AD008702B9 /* posix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = posix.c; sourceTree = "<group>"; };
 		E1823B571A0F94E5008702B9 /* KPWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPWindow.h; sourceTree = "<group>"; };
 		E1823B581A0F94E5008702B9 /* KPWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPWindow.m; sourceTree = "<group>"; };
-		E1823B5C1A0FE2C1008702B9 /* mat.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = mat.c; path = samples/mat.c; sourceTree = "<group>"; };
-		E1823B5D1A0FE2C1008702B9 /* raster.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = raster.c; path = samples/raster.c; sourceTree = "<group>"; };
-		E1823B5E1A0FE2C1008702B9 /* tex.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tex.c; path = samples/tex.c; sourceTree = "<group>"; };
-		E1823B601A0FE354008702B9 /* osx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = osx.plist; path = samples/osx.plist; sourceTree = "<group>"; };
 		E1823B621A0FE412008702B9 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		E184ECF117848671007CDEF3 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreText.framework; sourceTree = DEVELOPER_DIR; };
 		E18DDFF8163D8F3A00869CF5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -133,7 +148,13 @@
 		E1DEAC831A1B031B000CE365 /* KPOutputManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPOutputManager.h; sourceTree = "<group>"; };
 		E1DEAC841A1B031B000CE365 /* KPOutputManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPOutputManager.m; sourceTree = "<group>"; };
 		E1DEAC951A1B12C6000CE365 /* osx.sample.tex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = osx.sample.tex.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		E1DEAC961A1B12C6000CE365 /* osx.sample.framebuffer copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "osx.sample.framebuffer copy-Info.plist"; path = "/Users/w23/Documents/src/kapusha/osx.sample.framebuffer copy-Info.plist"; sourceTree = "<absolute>"; };
+		E1DEAC9B1A1BD586000CE365 /* runner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = runner.h; sourceTree = "<group>"; };
+		E1DEAC9C1A1BD586000CE365 /* mat.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = mat.c; sourceTree = "<group>"; };
+		E1DEAC9D1A1BD586000CE365 /* osx.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = osx.plist; sourceTree = "<group>"; };
+		E1DEAC9E1A1BD586000CE365 /* raster.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = raster.c; sourceTree = "<group>"; };
+		E1DEAC9F1A1BD586000CE365 /* tex.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = tex.c; sourceTree = "<group>"; };
+		E1DEACA01A1BD64E000CE365 /* runner.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = runner.c; sourceTree = "<group>"; };
+		E1DEACB51A1BDE52000CE365 /* osx.sample.multiwindow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = osx.sample.multiwindow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +208,17 @@
 				E1DEAC8E1A1B12C6000CE365 /* OpenGL.framework in Frameworks */,
 				E1DEAC8F1A1B12C6000CE365 /* libkapusha.a in Frameworks */,
 				E1DEAC901A1B12C6000CE365 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E1DEACAC1A1BDE52000CE365 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1DEACAD1A1BDE52000CE365 /* CoreVideo.framework in Frameworks */,
+				E1DEACAE1A1BDE52000CE365 /* OpenGL.framework in Frameworks */,
+				E1DEACAF1A1BDE52000CE365 /* libkapusha.a in Frameworks */,
+				E1DEACB01A1BDE52000CE365 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,13 +296,13 @@
 		E1823B5B1A0FE2AC008702B9 /* samples */ = {
 			isa = PBXGroup;
 			children = (
+				E1DEAC9A1A1BD586000CE365 /* common */,
+				E1DEAC9C1A1BD586000CE365 /* mat.c */,
+				E1DEAC9E1A1BD586000CE365 /* raster.c */,
+				E1DEAC9F1A1BD586000CE365 /* tex.c */,
 				E136D1DE1A16B2A800F24DAB /* framebuffer.c */,
-				E1823B5C1A0FE2C1008702B9 /* mat.c */,
-				E1823B5D1A0FE2C1008702B9 /* raster.c */,
-				E1823B5E1A0FE2C1008702B9 /* tex.c */,
-				E1823B601A0FE354008702B9 /* osx.plist */,
 			);
-			name = samples;
+			path = samples;
 			sourceTree = "<group>";
 		};
 		E18DDFC7163D8ED100869CF5 = {
@@ -281,7 +313,6 @@
 				E1735B3D1972C283007B88FC /* src */,
 				E18DDFF7163D8F3A00869CF5 /* Frameworks */,
 				E18DDFF6163D8F3A00869CF5 /* Products */,
-				E1DEAC961A1B12C6000CE365 /* osx.sample.framebuffer copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -293,6 +324,7 @@
 				E16FDB1B198A00660030B5FB /* osx.test.simpleton.raster.app */,
 				E136D1ED1A16B2AE00F24DAB /* osx.sample.framebuffer.app */,
 				E1DEAC951A1B12C6000CE365 /* osx.sample.tex.app */,
+				E1DEACB51A1BDE52000CE365 /* osx.sample.multiwindow.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -335,6 +367,16 @@
 				E1C9D637197B08EA0063BD64 /* gl.h */,
 			);
 			path = render;
+			sourceTree = "<group>";
+		};
+		E1DEAC9A1A1BD586000CE365 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				E1DEAC9D1A1BD586000CE365 /* osx.plist */,
+				E1DEAC9B1A1BD586000CE365 /* runner.h */,
+				E1DEACA01A1BD64E000CE365 /* runner.c */,
+			);
+			path = common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -442,6 +484,24 @@
 			productReference = E1DEAC951A1B12C6000CE365 /* osx.sample.tex.app */;
 			productType = "com.apple.product-type.application";
 		};
+		E1DEACA61A1BDE52000CE365 /* osx.sample.multiwindow */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E1DEACB21A1BDE52000CE365 /* Build configuration list for PBXNativeTarget "osx.sample.multiwindow" */;
+			buildPhases = (
+				E1DEACA91A1BDE52000CE365 /* Sources */,
+				E1DEACAC1A1BDE52000CE365 /* Frameworks */,
+				E1DEACB11A1BDE52000CE365 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E1DEACA71A1BDE52000CE365 /* PBXTargetDependency */,
+			);
+			name = osx.sample.multiwindow;
+			productName = simpleton.fill;
+			productReference = E1DEACB51A1BDE52000CE365 /* osx.sample.multiwindow.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -468,6 +528,7 @@
 				E16FDB0E198A00660030B5FB /* osx.sample.raster */,
 				E136D1DF1A16B2AE00F24DAB /* osx.sample.framebuffer */,
 				E1DEAC871A1B12C6000CE365 /* osx.sample.tex */,
+				E1DEACA61A1BDE52000CE365 /* osx.sample.multiwindow */,
 			);
 		};
 /* End PBXProject section */
@@ -488,6 +549,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E1DEAC911A1B12C6000CE365 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E1DEACB11A1BDE52000CE365 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -519,6 +587,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E136D1EF1A16B2C900F24DAB /* framebuffer.c in Sources */,
+				E1DEACA21A1BD64E000CE365 /* runner.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,7 +595,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1823B5F1A0FE2D1008702B9 /* raster.c in Sources */,
+				E1DEACA11A1BD64E000CE365 /* runner.c in Sources */,
+				E1DEACA51A1BD81D000CE365 /* raster.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -545,7 +615,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1DEAC971A1B132C000CE365 /* tex.c in Sources */,
+				E1DEACA31A1BD64E000CE365 /* runner.c in Sources */,
+				E1DEACA41A1BD818000CE365 /* tex.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E1DEACA91A1BDE52000CE365 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1DEACAA1A1BDE52000CE365 /* runner.c in Sources */,
+				E1DEACAB1A1BDE52000CE365 /* tex.c in Sources */,
+				E1DEACB91A1BDEA6000CE365 /* framebuffer.c in Sources */,
+				E1DEACB81A1BDEA4000CE365 /* raster.c in Sources */,
+				E1DEACB71A1BDEA0000CE365 /* mat.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -566,6 +649,11 @@
 			isa = PBXTargetDependency;
 			target = E131D4FE166201F400B0320A /* libkapusha_osx */;
 			targetProxy = E1DEAC891A1B12C6000CE365 /* PBXContainerItemProxy */;
+		};
+		E1DEACA71A1BDE52000CE365 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E131D4FE166201F400B0320A /* libkapusha_osx */;
+			targetProxy = E1DEACA81A1BDE52000CE365 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -665,7 +753,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = samples/osx.plist;
+				INFOPLIST_FILE = samples/common/osx.plist;
 				PRODUCT_NAME = osx.sample.framebuffer;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
@@ -701,7 +789,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = samples/osx.plist;
+				INFOPLIST_FILE = samples/common/osx.plist;
 				PRODUCT_NAME = osx.sample.framebuffer;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
@@ -742,7 +830,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = samples/osx.plist;
+				INFOPLIST_FILE = samples/common/osx.plist;
 				PRODUCT_NAME = osx.test.simpleton.raster;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
@@ -778,7 +866,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = samples/osx.plist;
+				INFOPLIST_FILE = samples/common/osx.plist;
 				PRODUCT_NAME = osx.test.simpleton.raster;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
@@ -912,7 +1000,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = samples/osx.plist;
+				INFOPLIST_FILE = samples/common/osx.plist;
 				PRODUCT_NAME = osx.sample.tex;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
@@ -948,8 +1036,85 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = samples/osx.plist;
+				INFOPLIST_FILE = samples/common/osx.plist;
 				PRODUCT_NAME = osx.sample.tex;
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		E1DEACB31A1BDE52000CE365 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = samples/common/osx.plist;
+				PRODUCT_NAME = osx.sample.multiwindow;
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		E1DEACB41A1BDE52000CE365 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = samples/common/osx.plist;
+				PRODUCT_NAME = osx.sample.multiwindow;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1008,6 +1173,15 @@
 			buildConfigurations = (
 				E1DEAC931A1B12C6000CE365 /* Debug */,
 				E1DEAC941A1B12C6000CE365 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E1DEACB21A1BDE52000CE365 /* Build configuration list for PBXNativeTarget "osx.sample.multiwindow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E1DEACB31A1BDE52000CE365 /* Debug */,
+				E1DEACB41A1BDE52000CE365 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

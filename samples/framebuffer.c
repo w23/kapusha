@@ -1,5 +1,5 @@
 #include <stddef.h>
-#include <kapusha/window.h>
+#include "common/runner.h"
 #include <kapusha/render.h>
 
 static const char shader_vertex[] =
@@ -190,48 +190,4 @@ static void destroy() {
   KP_UNUSED(destroy);
 }
 
-static void painter(const KPwindow_painter_event_t *event) {
-  switch (event->type) {
-    case KPWindowPaintBegin:
-      create();
-      break;
-    case KPWindowPaintPaint:
-      paint(event);
-      break;
-    case KPWindowPaintReconfigure:
-      configure(event);
-      break;
-    case KPWindowPaintEnd:
-      destroy();
-      break;
-    case KPWindowPaintPause:
-      break;
-
-    default:
-      KP_FAIL("Unexpected event %d", event->type);
-      break;
-  }
-}
-
-int kpuserAppCreate(int argc, const char *argv[]) {
-  KP_UNUSED(argc);
-  KP_UNUSED(argv);
-  
-  KPstring_o title = kpStringCreate("kapusha: framebuffer");
-  KPwindow_o window = kpWindowCreate(0, painter, title);
-  kpRelease(title);
-  
-  KPwindow_free_params_t p;
-  p.min_width = 640;
-  p.min_height = 480;
-  p.max_width = 1920;
-  p.max_height = 1080;
-  
-  kpWindowOpenFree(window, &p);
-  return 0;
-}
-
-int kpuserAppDestroy() {
-  //KP_FAIL("Not implemented");
-  return 0;
-}
+sample_t framebuffer = {"kapusha: framebuffer", create, configure, paint, destroy};
