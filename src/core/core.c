@@ -80,14 +80,9 @@ void kpLog(const char *prefix, const char *format, ...) {
 /******************************************************************************/
 /* Cotainers */
 
-void kp__BufferDtor(void *obj) {
-  KP_THIS(KPbuffer_t, obj);
-  kpFree(this->data);
-}
-
 KPbuffer_o kpBufferCreate(KPsize size, const void *source) {
   KPbuffer_o this = kpNew(0, sizeof(KPbuffer_t) + size);
-  this->O.dtor = kp__BufferDtor;
+  this->O.dtor = 0;
   this->data = this + 1;
   this->size = size;
   if (source != 0) kpMemcpy(this->data, source, size);
