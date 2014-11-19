@@ -1,10 +1,10 @@
 #import <Cocoa/Cocoa.h>
 
 @protocol KPViewDelegate <NSObject>
-- (void)viewInitialized;
-- (void)viewResized:(CGSize)size;
-- (void)viewPaint:(const CVTimeStamp*)pts;
-- (void)viewStopping;
+- (void)viewWasInitialized;
+- (void)viewWasResized:(CGSize)size;
+- (void)viewWillPresent:(const CVTimeStamp*)pts;
+- (void)viewWillDisappear;
 @end
 
 @interface KPView : NSOpenGLView {
@@ -13,5 +13,6 @@
   CVDisplayLinkRef display_link_;
 }
 - (instancetype)initWithSize:(NSSize)size delegate:(id<KPViewDelegate>)delegate;
-- (void)willClose;
+- (void)pause;
+- (void)resume;
 @end

@@ -1,16 +1,20 @@
 #import "kapusha/core.h"
 #import "KPView.h"
 
-static CVReturn kp__ViewDisplayLink(CVDisplayLinkRef displayLink,
-  const CVTimeStamp *inNow, const CVTimeStamp *inOutputTime,
-  CVOptionFlags flagsIn, CVOptionFlags *flagsOut, void *displayLinkContext);
-
 @interface KPView () {
 @private
   CVTimeStamp ts_;
 }
-- (void)paintWithPTS:(const CVTimeStamp*)ts;
+- (void)presentWithPTS:(const CVTimeStamp*)ts;
 @end
+
+static CVReturn kp__ViewDisplayLink(CVDisplayLinkRef displayLink,
+  const CVTimeStamp *inNow, const CVTimeStamp *inOutputTime,
+  CVOptionFlags flagsIn, CVOptionFlags *flagsOut, void *displayLinkContext)
+{
+  [(KPView*)displayLinkContext presentWithPTS:inOutputTime];
+  return kCVReturnSuccess;
+}
 
 @implementation KPView
 - (instancetype)initWithSize:(NSSize)size delegate:(id<KPViewDelegate>)delegate
@@ -45,24 +49,13 @@ static CVReturn kp__ViewDisplayLink(CVDisplayLinkRef displayLink,
   [super dealloc];
 }
 
-- (void)willClose {
-  CVDisplayLinkStop(display_link_);
-  
-  [[self openGLContext] makeCurrentContext];
-  CGLLockContext([[self openGLContext] CGLContextObj]);
-  [delegate_ viewStopping];
-  CGLFlushDrawable([[self openGLContext] CGLContextObj]);
-  CGLUnlockContext([[self openGLContext] CGLContextObj]);
-
-}
-
 - (void) prepareOpenGL {
   [super prepareOpenGL];
 
   GLint swapInt = 1;
   [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
   
-  [delegate_ viewInitialized];
+  [delegate_ viewWasInitialized];
   
   CGLContextObj cglContext = [[self openGLContext] CGLContextObj];
   CGLPixelFormatObj cglPixelFormat = [[self pixelFormat] CGLPixelFormatObj];
@@ -76,9 +69,7 @@ static CVReturn kp__ViewDisplayLink(CVDisplayLinkRef displayLink,
   [super reshape];
 
   CGLLockContext([[self openGLContext] CGLContextObj]);
-  
-  [delegate_ viewResized:[self convertRectToBacking:self.bounds].size];
-
+  [delegate_ viewWasResized:[self convertRectToBacking:self.bounds].size];
   CGLUnlockContext([[self openGLContext] CGLContextObj]);
 }
 
@@ -90,24 +81,35 @@ static CVReturn kp__ViewDisplayLink(CVDisplayLinkRef displayLink,
 - (void) drawRect:(NSRect)dirtyRect {
   KP_UNUSED(dirtyRect);
   if (CVDisplayLinkIsRunning(display_link_))
-    [self paintWithPTS:nil];
+    [self presentWithPTS:nil];
 }
 
-- (void) paintWithPTS:(const CVTimeStamp*)ts {
+- (void)viewWillMoveToWindow:(NSWindow *)newWindow {
+  if (newWindow != nil) return;
+  CVDisplayLinkStop(display_link_);
+  
   [[self openGLContext] makeCurrentContext];
   CGLLockContext([[self openGLContext] CGLContextObj]);
-  if (ts) kpMemcpy(&ts_, ts, sizeof(ts_));
-  [delegate_ viewPaint:&ts_];
+  [delegate_ viewWillDisappear];
   CGLFlushDrawable([[self openGLContext] CGLContextObj]);
   CGLUnlockContext([[self openGLContext] CGLContextObj]);
 }
 
-@end
-
-static CVReturn kp__ViewDisplayLink(CVDisplayLinkRef displayLink,
-  const CVTimeStamp *inNow, const CVTimeStamp *inOutputTime,
-  CVOptionFlags flagsIn, CVOptionFlags *flagsOut, void *displayLinkContext)
-{
-  [(KPView*)displayLinkContext paintWithPTS:inOutputTime];
-  return kCVReturnSuccess;
+- (void) presentWithPTS:(const CVTimeStamp*)ts {
+  [[self openGLContext] makeCurrentContext];
+  CGLLockContext([[self openGLContext] CGLContextObj]);
+  if (ts) kpMemcpy(&ts_, ts, sizeof(ts_));
+  [delegate_ viewWillPresent:&ts_];
+  CGLFlushDrawable([[self openGLContext] CGLContextObj]);
+  CGLUnlockContext([[self openGLContext] CGLContextObj]);
 }
+
+- (void)pause {
+  CVDisplayLinkStop(display_link_);
+}
+
+- (void)resume {
+  CVDisplayLinkStart(display_link_);
+}
+
+@end
