@@ -7,11 +7,9 @@ extern "C" {
 #endif
 
 /* should be implemented by api user */
-/* Application starting point */
-int kpuserAppCreate(int argc, const char *argv[]);
-int kpuserAppDestroy();
+/* Entry point to dedicated application thread (not main()) */
+int kpuserAppRun(int argc, const char **argv);
 
-void kpAppSetEventQueue(KPmessage_queue_t *queue);
 void kpAppDestroy(int exit_code /* = 0 for success */);
 
 typedef struct KPoutput_t { KP_O;
@@ -48,7 +46,7 @@ typedef struct KPoutput_video_t { KPoutput_t header;
 
 enum {
   KPOutputSelector_End = 0,
-  KPOutputSelectorType, /* KPOutputVideo, KPOutputAudio, default == any*/
+  KPOutputSelectorType, /* KPOutputVideo, KPOutputAudio, default == any */
   KPOutputSelectorFlags
 } KPOutputSelectors;
 

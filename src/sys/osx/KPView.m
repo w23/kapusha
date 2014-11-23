@@ -88,16 +88,16 @@ static CVReturn kp__ViewDisplayLink(CVDisplayLinkRef displayLink,
   if (newWindow != nil) return;
   CVDisplayLinkStop(display_link_);
   
-  [[self openGLContext] makeCurrentContext];
   CGLLockContext([[self openGLContext] CGLContextObj]);
+  [[self openGLContext] makeCurrentContext];
   [delegate_ viewWillDisappear];
   CGLFlushDrawable([[self openGLContext] CGLContextObj]);
   CGLUnlockContext([[self openGLContext] CGLContextObj]);
 }
 
 - (void) presentWithPTS:(const CVTimeStamp*)ts {
-  [[self openGLContext] makeCurrentContext];
   CGLLockContext([[self openGLContext] CGLContextObj]);
+  [[self openGLContext] makeCurrentContext];
   if (ts) kpMemcpy(&ts_, ts, sizeof(ts_));
   [delegate_ viewWillPresent:&ts_];
   CGLFlushDrawable([[self openGLContext] CGLContextObj]);

@@ -102,10 +102,11 @@
 
 - (void)windowWillClose:(NSNotification *)notification {
   self.contentView = nil;
-  kpMessageQueuePut(window_->queue, window_->queue_tag, window_,
-    KPWindowEventClose, 1, 0, 0);
+  if (window_->queue) {
+    kpMessageQueuePut(window_->queue, window_->queue_tag, window_,
+      KPWindowEventClose, 1, 0, 0);
+  }
   window_->window = nil;
-  kpWindowStop(window_);
 }
 
 // @protocol KPViewDelegate
@@ -143,55 +144,65 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+// there's only way to get to this function -- via user release
 void kp__CocoaWindowDtor(void *obj) {
   KP_THIS(KP__cocoa_window_t, obj);
   this->queue = 0;
   kpRelease(this->title);
   this->title = 0;
-  
   kpWindowStop(this);
 }
 
 KPwindow_o kpWindowCreate(const KPwindow_create_params_t *params) {
-  KP__cocoa_window_o this = KP_NEW(KP__cocoa_window_t, 0);
-  this->O.dtor = kp__CocoaWindowDtor;
-  this->user_data = params->paint_user_data;
-  this->painter_func = params->painter;
-  this->title = kpRetain(params->title);
-  this->queue = params->queue;
-  this->queue_tag = params->queue_tag;
-  this->output = 0;
-  this->window = nil;
-  return this;
+  __block KPwindow_o retval;
+  dispatch_sync(dispatch_get_main_queue(), ^(){
+    KP__cocoa_window_o this = KP_NEW(KP__cocoa_window_t, 0);
+    this->O.dtor = kp__CocoaWindowDtor;
+    this->user_data = params->paint_user_data;
+    this->painter_func = params->painter;
+    this->title = kpRetain(params->title);
+    this->queue = params->queue;
+    this->queue_tag = params->queue_tag;
+    this->output = 0;
+    this->window = nil;
+    retval = this;
+  });
+  return retval;
 }
 
 void kpWindowStart(KPwindow_o window,
   const KPwindow_floating_params_t *params)
 {
-  KP_THIS(KP__cocoa_window_t, window);
-  KP_ASSERT(this->window == nil);
-  
-  this->window = [[KPWindow alloc] initWithWindow:this floatingParams:params];
-  KP_ASSERT(this->window);
+  dispatch_sync(dispatch_get_main_queue(), ^(){
+    KP_THIS(KP__cocoa_window_t, window);
+    KP_ASSERT(this->window == nil);
+    
+    this->window = [[KPWindow alloc] initWithWindow:this floatingParams:params];
+    KP_ASSERT(this->window);
+  });
 }
 
 void kpWindowStartAttached(KPwindow_o window, KPoutput_video_o output) {
-  KP_THIS(KP__cocoa_window_t, window);
-  KP_ASSERT(this->window == nil);
-  
-  this->window = [[KPWindow alloc]
-    initWithWindow: this
-    output: (KP__cocoa_output_o)output];
-  KP_ASSERT(this->window);
+  dispatch_sync(dispatch_get_main_queue(), ^(){
+    KP_THIS(KP__cocoa_window_t, window);
+    KP_ASSERT(this->window == nil);
+    
+    this->window = [[KPWindow alloc]
+      initWithWindow: this
+      output: (KP__cocoa_output_o)output];
+    KP_ASSERT(this->window);
+  });
 }
 
 void kpWindowStop(KPwindow_o window) {
-  KP_THIS(KP__cocoa_window_t, window);
-  kpRelease(this->output);
-  this->output = 0;
+  dispatch_sync(dispatch_get_main_queue(), ^(){
+    KP_THIS(KP__cocoa_window_t, window);
+    kpRelease(this->output);
+    this->output = 0;
 
-  if (this->window) {
-    [this->window close];
-    this->window = nil;
-  }
+    if (this->window) {
+      [this->window close];
+      this->window = nil;
+    }
+  });
 }
