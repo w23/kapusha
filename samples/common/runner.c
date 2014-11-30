@@ -48,21 +48,16 @@ int kpuserAppRun(int argc, const char *argv[]) {
   int opened_windows;
   for (KPsize i = 0; i < sizeof(samples) / sizeof(*samples); ++i) {
     KPwindow_create_params_t params;
-    params.queue = app_queue;
-    params.paint_user_data = samples[i];
-    params.painter = painter;
-    params.queue_tag = 0;
     params.title = kpStringCreate(samples[i]->title);
+    params.attachment = 0;
+    params.painter = painter;
+    params.paint_user_data = samples[i];
+    params.queue = app_queue;
+    params.queue_userdata.data = 0;
+    params.queue_userdata.tag = 0;
     KPwindow_o window = kpWindowCreate(&params);
     kpRelease(params.title);
-    
-    KPwindow_floating_params_t p;
-    p.min_width = 640;
-    p.min_height = 480;
-    p.max_width = 1920;
-    p.max_height = 1080;
-    
-    kpWindowStart(window, &p);
+    kpWindowStart(window);
     ++opened_windows;
   }
   
@@ -71,20 +66,19 @@ int kpuserAppRun(int argc, const char *argv[]) {
     KPmessage_t *msg = kpMessageQueueGet(app_queue, -1);
     KP_ASSERT(msg);
     KP_L("msg: %d, from %p", msg->type, msg->origin);
-    if (msg->tag == 0) {
+    if (msg->user.tag == 0) {
       switch (msg->type) {
       case KPWindowEventCloseRequest:
-        kpWindowStop(msg->origin);
-        break;
-      case KPWindowEventClose:
         kpRelease(msg->origin);
+        break;
+      case KPWindowEventDestroyed:
         --opened_windows;
         if (opened_windows == 0)
           loop = 0;
         break;
       }
     }
-    kpMessageDiscard(msg);
+    kpMessageRelease(msg);
   }
   
   kpMessageQueueDestroy(app_queue);

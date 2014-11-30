@@ -35,30 +35,27 @@ typedef struct KPwindow_event_t {
     KPWindowEventVisibility,
     KPWindowEventFocus,
     KPWindowEventCloseRequest,
-    KPWindowEventClose
+    KPWindowEventDestroyed,
+    KPWindowEventKeyboard,
+    KPWindowEventPointer
   } type;
 } KPwindow_event_t;
 
 typedef struct KPwindow_create_params_t {
   KPstring_o title;
-  
-  void *paint_user_data;
+
+  KPoutput_video_o attachment;
+
   KPwindow_painter_f painter;
+  void *paint_user_data;
   
   KPmessage_queue_t queue;
-  KPu32 queue_tag;
+  KPmessage_user_t queue_userdata;
 } KPwindow_create_params_t;
 
-typedef struct KPwindow_floating_params_t {
-  KPu32 min_width, min_height;
-  KPu32 max_width, max_height;
-} KPwindow_floating_params_t;
-
 KPwindow_o kpWindowCreate(const KPwindow_create_params_t *params);
-void kpWindowStart(KPwindow_o, const KPwindow_floating_params_t *params);
-void kpWindowStartAttached(KPwindow_o, KPoutput_video_o);
-/*void kpWindowPause(KPwindow_o);
-void kpWindowResume(KPwindow_o);*/
+void kpWindowStart(KPwindow_o);
+void kpWindowRepaint(KPwindow_o);
 void kpWindowStop(KPwindow_o);
 
 #ifdef __cplusplus

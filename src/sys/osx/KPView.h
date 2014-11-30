@@ -13,6 +13,7 @@
   CVDisplayLinkRef display_link_;
 }
 - (instancetype)initWithSize:(NSSize)size delegate:(id<KPViewDelegate>)delegate;
-- (void)pause;
-- (void)resume;
+- (void)renderStart;
+- (void)renderStop;
+- (void)renderRepaint;
 @end

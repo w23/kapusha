@@ -1,80 +1,76 @@
 #import "KPWindow.h"
 
+#define KP__SYS "Cocoa::window"
+
 @interface KPWindow ()
-- (void) commonInitializeWithRect:(NSRect)rect;
+- (void) renderStart;
+- (void) renderStop;
+- (void) renderRepaint;
 @end
 
 @implementation KPWindow
-- (instancetype)initWithWindow:(KP__cocoa_window_t*)window
-  floatingParams:(const KPwindow_floating_params_t*)params
+- (instancetype)
+  initWithParams:(const KPwindow_create_params_t*)params
+  window:(KP__cocoa_window_t*)window
 {
-  KP_ASSERT(window);
   KP_ASSERT(params);
+  KP_ASSERT(window);
   
   NSRect rect;
-  rect.origin.x = rect.origin.y = 0;
-  rect.size.width = (params->min_width + params->max_width) / 2;
-  rect.size.height = (params->min_height + params->max_height) / 2;
+  NSUInteger style_mask;
+  
+  if (params->attachment) {
+    KP__cocoa_output_t *output = (KP__cocoa_output_t*)params->attachment;
+    rect = [output->screen frame];
+    style_mask = NSBorderlessWindowMask;
+  } else {
+    NSScreen *screen = [NSScreen mainScreen];
+    rect.size.width = screen.frame.size.width / 2;
+    rect.size.height = screen.frame.size.height / 2;
+    rect.origin.x = rect.size.width / 2;
+    rect.origin.y = rect.size.height / 2;
+    style_mask = NSTitledWindowMask | NSClosableWindowMask |
+      NSMiniaturizableWindowMask | NSResizableWindowMask |
+      NSTexturedBackgroundWindowMask;
+  }
   
   self = [super
     initWithContentRect: rect
-    styleMask: NSTitledWindowMask | NSClosableWindowMask |
-      NSMiniaturizableWindowMask | NSResizableWindowMask |
-      NSTexturedBackgroundWindowMask
+    styleMask: style_mask
     backing: NSBackingStoreBuffered
     defer: YES
   ];
   KP_ASSERT(self);
-  [self setMinSize:NSSizeFromCGSize(
-    CGSizeMake(params->min_width, params->min_height))];
-  [self setMaxSize:NSSizeFromCGSize(
-    CGSizeMake(params->max_width, params->max_height))];
+  
+  if (params->attachment) {
+    [self setLevel:NSMainMenuWindowLevel+1];
+    [self setOpaque:YES];
+    [self setHidesOnDeactivate:YES];
+  } else {
+    [self setMinSize:NSSizeFromCGSize(CGSizeMake(64, 64))];
+    /* ?? [self setMaxSize:NSSizeFromCGSize(max)]; */
+  }
   window_ = window;
-  window_->output = 0;
+  output_ = kpRetain(params->attachment);
+  queue_seq_ = 0;
+  queue_ = params->queue;
+  queue_userdata_ = params->queue_userdata;
   
-  [self commonInitializeWithRect:rect];
-  return self;
-}
-
-- (instancetype)initWithWindow:(KP__cocoa_window_t*)window
-  output:(KP__cocoa_output_o)output
-{
-  KP_ASSERT(output);
-  NSRect rect = [output->screen frame];
-  self = [[KPWindow alloc]
-    initWithContentRect: rect
-    styleMask: NSBorderlessWindowMask
-    backing:NSBackingStoreBuffered
-    defer:YES];
-  KP_ASSERT(self);
-  
-  [self setLevel:NSMainMenuWindowLevel+1];
-  [self setOpaque:YES];
-  [self setHidesOnDeactivate:YES];
-  
-  window_ = window;
-  window_->output = kpRetain(output);
-  
-  [self commonInitializeWithRect:
-    NSMakeRect(0.0, 0.0, rect.size.width, rect.size.height)];
-  return self;
-}
-
-- (void) commonInitializeWithRect:(NSRect)rect {
-  pevent_.user_data = window_->user_data;
+  painter_ = params->painter;
+  pevent_.user_data = params->paint_user_data;
   pevent_.window = window_;
 
-  self.title = [NSString stringWithCString:kpStringCString(window_->title)
+  self.title = [NSString stringWithCString:kpStringCString(params->title)
     encoding:NSUTF8StringEncoding];
   self.delegate = self;
 
-  KPView *view = [[KPView alloc] initWithSize:rect.size
-    delegate:self];
+  KPView *view = [[KPView alloc] initWithSize:rect.size delegate:self];
   window_->window = self;
 
   [self setContentView:view];
   [self setAcceptsMouseMovedEvents:YES];
   [self makeKeyAndOrderFront:self];
+  return self;
 }
 
 - (void) dealloc {
@@ -85,34 +81,79 @@
 	return YES;
 }
 
+- (void) processMouseEvent:(NSEvent*)event {
+}
+
+- (void) processKeyboardEvent:(NSEvent*)event {
+}
+
 // "@protocol" NSResponder
 
+- (void) mouseDown:(NSEvent *)theEvent {
+  [self processMouseEvent:theEvent];
+}
+
+- (void) mouseUp:(NSEvent *)theEvent {
+  [self processMouseEvent:theEvent];
+}
+
 - (void) mouseMoved:(NSEvent *)theEvent {
+  [self processMouseEvent:theEvent];
+}
+
+- (void) keyDown:(NSEvent *)theEvent {
+  [self processKeyboardEvent:theEvent];
+}
+
+- (void) keyUp:(NSEvent *)theEvent {
+  [self processKeyboardEvent:theEvent];
+}
+
+- (void) flagsChanged:(NSEvent *)theEvent {
+  [self processKeyboardEvent:theEvent];
 }
 
 // @protocol NSWindowDelegate
 - (BOOL)windowShouldClose:(id)sender {
-  if (window_->queue) {
-    kpMessageQueuePut(window_->queue, window_->queue_tag, window_,
-    KPWindowEventCloseRequest, 1, 0, 0);
-    return NO;
-  }
-  return YES;
+  if (!queue_) return YES;
+  
+  /* TODO pool */
+  KPmessage_t msg;
+  msg.timestamp = kpSysTimeNs();
+  msg.sequence = queue_seq_++;
+  msg.origin = window_;
+  msg.user = queue_userdata_;
+  msg.type = KPWindowEventCloseRequest;
+  msg.param = 0;
+  msg.data = 0;
+  msg.size = 0;
+  kpMessageQueuePutCopy(queue_, &msg);
+  return NO;
 }
 
 - (void)windowWillClose:(NSNotification *)notification {
+  [(KPView*)self.contentView renderStop];
   self.contentView = nil;
-  if (window_->queue) {
-    kpMessageQueuePut(window_->queue, window_->queue_tag, window_,
-      KPWindowEventClose, 1, 0, 0);
+  
+  if (queue_) {
+    KPmessage_t msg;
+    msg.timestamp = kpSysTimeNs();
+    msg.sequence = queue_seq_++;
+    msg.origin = window_;
+    msg.user = queue_userdata_;
+    msg.type = KPWindowEventDestroyed;
+    msg.param = 0;
+    msg.data = 0;
+    msg.size = 0;
+    kpMessageQueuePutCopy(queue_, &msg);
   }
-  window_->window = nil;
+  window_ = 0;
 }
 
 // @protocol KPViewDelegate
 - (void)viewWasInitialized {
   pevent_.type = KPWindowPaintBegin;
-  window_->painter_func(&pevent_);
+  painter_(&pevent_);
 }
 
 - (void)viewWasResized:(CGSize)size {
@@ -120,12 +161,12 @@
   pevent_.configuration.width = size.width;
   pevent_.configuration.height = size.height;
   
-  if (window_->output)
-    pevent_.configuration.aspect = size.width * window_->output->parent.hppmm
-      / (size.height * window_->output->parent.vppmm);
+  if (output_)
+    pevent_.configuration.aspect = size.width * output_->parent.hppmm
+      / (size.height * output_->parent.vppmm);
   else
     pevent_.configuration.aspect = size.width / size.height;
-  window_->painter_func(&pevent_);
+  painter_(&pevent_);
 }
 
 - (void)viewWillPresent:(const CVTimeStamp*)pts {
@@ -133,12 +174,24 @@
   pevent_.time.pts = pts->videoTime;
   pevent_.time.time_delta = pts->videoRefreshPeriod;
   pevent_.time.time_delta_frame = pts->videoRefreshPeriod;
-  window_->painter_func(&pevent_);
+  painter_(&pevent_);
 }
 
 - (void)viewWillDisappear {
   pevent_.type = KPWindowPaintEnd;
-  window_->painter_func(&pevent_);
+  painter_(&pevent_);
+}
+
+- (void) renderStart {
+  [self.contentView renderStart];
+}
+
+- (void) renderStop {
+  [self.contentView renderStop];
+}
+
+- (void) renderRepaint {
+  [self.contentView renderRepaint];
 }
 @end
 
@@ -146,11 +199,12 @@
 
 // there's only way to get to this function -- via user release
 void kp__CocoaWindowDtor(void *obj) {
+  KP_ASSERT(obj);
   KP_THIS(KP__cocoa_window_t, obj);
-  this->queue = 0;
-  kpRelease(this->title);
-  this->title = 0;
-  kpWindowStop(this);
+  [this->window
+    performSelectorOnMainThread:@selector(close)
+    withObject:nil
+    waitUntilDone:YES];
 }
 
 KPwindow_o kpWindowCreate(const KPwindow_create_params_t *params) {
@@ -158,51 +212,41 @@ KPwindow_o kpWindowCreate(const KPwindow_create_params_t *params) {
   dispatch_sync(dispatch_get_main_queue(), ^(){
     KP__cocoa_window_o this = KP_NEW(KP__cocoa_window_t, 0);
     this->O.dtor = kp__CocoaWindowDtor;
-    this->user_data = params->paint_user_data;
-    this->painter_func = params->painter;
-    this->title = kpRetain(params->title);
-    this->queue = params->queue;
-    this->queue_tag = params->queue_tag;
-    this->output = 0;
-    this->window = nil;
+    this->window = [[KPWindow alloc]
+      initWithParams:(const KPwindow_create_params_t*)params
+      window:this];
+    KP_ASSERT(this->window);
     retval = this;
   });
   return retval;
 }
 
-void kpWindowStart(KPwindow_o window,
-  const KPwindow_floating_params_t *params)
-{
-  dispatch_sync(dispatch_get_main_queue(), ^(){
-    KP_THIS(KP__cocoa_window_t, window);
-    KP_ASSERT(this->window == nil);
-    
-    this->window = [[KPWindow alloc] initWithWindow:this floatingParams:params];
-    KP_ASSERT(this->window);
-  });
+void kpWindowStart(KPwindow_o window) {
+  KP_ASSERT(window);
+  KP_THIS(KP__cocoa_window_t, window);
+  KP_ASSERT(this->window);
+  [this->window
+    performSelectorOnMainThread:@selector(renderStart)
+    withObject:nil
+    waitUntilDone:YES];
 }
 
-void kpWindowStartAttached(KPwindow_o window, KPoutput_video_o output) {
-  dispatch_sync(dispatch_get_main_queue(), ^(){
-    KP_THIS(KP__cocoa_window_t, window);
-    KP_ASSERT(this->window == nil);
-    
-    this->window = [[KPWindow alloc]
-      initWithWindow: this
-      output: (KP__cocoa_output_o)output];
-    KP_ASSERT(this->window);
-  });
+void kpWindowRepaint(KPwindow_o window) {
+  KP_ASSERT(window);
+  KP_THIS(KP__cocoa_window_t, window);
+  KP_ASSERT(this->window);
+  [this->window
+    performSelectorOnMainThread:@selector(renderRepaint)
+    withObject:nil
+    waitUntilDone:YES];
 }
 
 void kpWindowStop(KPwindow_o window) {
-  dispatch_sync(dispatch_get_main_queue(), ^(){
-    KP_THIS(KP__cocoa_window_t, window);
-    kpRelease(this->output);
-    this->output = 0;
-
-    if (this->window) {
-      [this->window close];
-      this->window = nil;
-    }
-  });
+  KP_ASSERT(window);
+  KP_THIS(KP__cocoa_window_t, window);
+  KP_ASSERT(this->window);
+  [this->window
+    performSelectorOnMainThread:@selector(renderStop)
+    withObject:nil
+    waitUntilDone:YES];
 }

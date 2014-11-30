@@ -62,7 +62,6 @@ static CVReturn kp__ViewDisplayLink(CVDisplayLinkRef displayLink,
   CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(
     display_link_, cglContext, cglPixelFormat);
   CVDisplayLinkGetCurrentTime(display_link_, &ts_);
-  CVDisplayLinkStart(display_link_);
 }
 
 - (void) reshape {
@@ -104,12 +103,16 @@ static CVReturn kp__ViewDisplayLink(CVDisplayLinkRef displayLink,
   CGLUnlockContext([[self openGLContext] CGLContextObj]);
 }
 
-- (void)pause {
+- (void)renderStart {
+  CVDisplayLinkStart(display_link_);
+}
+
+- (void)renderStop {
   CVDisplayLinkStop(display_link_);
 }
 
-- (void)resume {
-  CVDisplayLinkStart(display_link_);
+- (void)renderRepaint {
+  [self update];
 }
 
 @end

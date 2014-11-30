@@ -135,11 +135,6 @@ KPsurface_o kpSurfaceCreate(KPu32 width, KPu32 height, KPSurfaceFormat fmt) {
 /******************************************************************************/
 /* Linked list */
 
-typedef struct KPlink_t {
-  struct KPlink_t *next;
-  struct KPlink_t *prev;
-} KPlink_t;
-
 void kpLinkInsertAfter(KPlink_t *link, KPlink_t *after) {
   KP_ASSERT(link != 0); KP_ASSERT(after != 0);
   KP_ASSERT(link->next == 0); KP_ASSERT(link->prev == 0);
@@ -161,15 +156,10 @@ void kpLinkRemove(KPlink_t *link) {
 /******************************************************************************/
 /* Message queue */
 
-typedef struct KP__message_t {
-  KPlink_t link;
-  KPmessage_t msg;
-} KP__message_t;
-
 typedef struct KP__message_queue_t {
   KPmutex_t mutex;
   KPcondvar_t condvar;
-  KP__message_t *head, *tail;
+  KPmessage_carrier_t *head, *tail;
 } KP__message_queue_t;
 
 KPmessage_queue_t kpMessageQueueCreate() {
@@ -186,32 +176,36 @@ void kpMessageQueueDestroy(KPmessage_queue_t queue) {
   kpMutexDestroy(&this->mutex);
 }
 
-void kpMessageQueuePut(KPmessage_queue_t queue,
-  KPu32 tag, void *origin, KPu32 type, KPu32 param,
-  const void *data, KPsize size)
-{
+void kpMessageQueuePut(KPmessage_queue_t queue, KPmessage_carrier_t *carrier) {
   KP__message_queue_t *this = (KP__message_queue_t*)queue;
-
-  /* TODO message pool */
-  KP__message_t *msg = kpAlloc(sizeof(KP__message_t) + size);
-  msg->link.next = msg->link.prev = 0;
-  msg->msg.tag = tag;
-  msg->msg.origin = origin;
-  msg->msg.type = type;
-  msg->msg.param = param;
-  msg->msg.data = msg + 1;
-  msg->msg.size = size;
-  kpMemcpy(msg->msg.data, data, size);
-
+  carrier->link.next = carrier->link.prev = 0;
+  
   kpMutexLock(&this->mutex);
   if (this->tail == 0)
-    this->head = this->tail = msg;
+    this->head = this->tail = carrier;
   else {
-    kpLinkInsertAfter(&msg->link, &this->tail->link);
-    this->tail = msg;
+    kpLinkInsertAfter(&carrier->link, &this->tail->link);
+    this->tail = carrier;
   }
   kpCondvarSignal(&this->condvar);
   kpMutexUnlock(&this->mutex);
+}
+
+static void kp__message_copy_release(KPmessage_carrier_t *carrier) {
+  /* TODO return to pool */
+  kpFree(carrier);
+}
+
+void kpMessageQueuePutCopy(KPmessage_queue_t queue, const KPmessage_t *message){
+  /* TODO message pool */
+  KPmessage_carrier_t *carrier = kpAlloc(
+    sizeof(KPmessage_carrier_t) + message->size);
+  kpMemcpy(&carrier->msg, message, sizeof(*message));
+  carrier->msg.data = carrier + 1;
+  carrier->msg.size = message->size;
+  carrier->release_func = kp__message_copy_release;
+  kpMemcpy(carrier->msg.data, message->data, message->size);
+  kpMessageQueuePut(queue, carrier);
 }
 
 KPmessage_t *kpMessageQueueGet(KPmessage_queue_t queue, KPtime_ms timeout) {
@@ -230,7 +224,7 @@ KPmessage_t *kpMessageQueueGet(KPmessage_queue_t queue, KPtime_ms timeout) {
     this->head = this->tail = 0;
   else {
     KPlink_t *head = &this->head->link;
-    this->head = (KP__message_t*)head->next;
+    this->head = (KPmessage_carrier_t*)head->next;
     kpLinkRemove(head);
   }
 
@@ -238,7 +232,8 @@ KPmessage_t *kpMessageQueueGet(KPmessage_queue_t queue, KPtime_ms timeout) {
   return ret;
 }
 
-void kpMessageDiscard(KPmessage_t *message) {
-  /* TODO return to pool */
-  kpFree(((KPu8*)message) - sizeof(KPlink_t));
+void kpMessageRelease(KPmessage_t *message) {
+  KPmessage_carrier_t *carrier = (KPmessage_carrier_t*)(
+    ((KPu8*)message) - offsetof(KPmessage_carrier_t, msg));
+  carrier->release_func(carrier);
 }

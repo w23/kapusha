@@ -99,26 +99,53 @@ int kpVsnprintf(char *buffer, KPsize size, const char *format, va_list argp);
 int kpSnprintf(char *buffer, KPsize size, const char *format, ...);
 
 /******************************************************************************/
+/* Linked list */
+
+typedef struct KPlink_t {
+  struct KPlink_t *next;
+  struct KPlink_t *prev;
+} KPlink_t;
+
+void kpLinkInsertAfter(KPlink_t *link, KPlink_t *after);
+void kpLinkRemove(KPlink_t *link);
+
+/******************************************************************************/
 /* Message queue */
 
 typedef void* KPmessage_queue_t;
 
+typedef struct KPmessage_user_t {
+  void *data;
+  KPuptr tag;
+} KPmessage_user_t;
+
 typedef struct KPmessage_t {
-  KPu32 tag;
+  KPtime_ns timestamp;
+  KPuptr sequence;
   void *origin;
-  KPu32 type, param;
+  KPmessage_user_t user;
+  KPu32 type;
+  KPuptr param;
   KPsize size;
   void *data;
 } KPmessage_t;
 
+struct KPmessage_carrier_t;
+
+typedef void KPmessage_release_f(struct KPmessage_carrier_t *);
+
+typedef struct KPmessage_carrier_t {
+  KPlink_t link;
+  KPmessage_t msg;
+  KPmessage_release_f *release_func;
+} KPmessage_carrier_t;
+
 KPmessage_queue_t kpMessageQueueCreate();
 void kpMessageQueueDestroy(KPmessage_queue_t queue);
-
-void kpMessageQueuePut(KPmessage_queue_t queue,
-  KPu32 tag, void *origin, KPu32 type, KPu32 param,
-  const void *data, KPsize size);
+void kpMessageQueuePut(KPmessage_queue_t queue, KPmessage_carrier_t *message);
+void kpMessageQueuePutCopy(KPmessage_queue_t queue, const KPmessage_t *message);
 KPmessage_t *kpMessageQueueGet(KPmessage_queue_t queue, KPtime_ms timeout);
-void kpMessageDiscard(KPmessage_t *message);
+void kpMessageRelease(KPmessage_t *message);
 
 /******************************************************************************/
 /* Lock-free queue */
