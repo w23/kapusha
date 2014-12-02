@@ -44,7 +44,7 @@ typedef struct KPwindow_event_t {
 typedef struct KPwindow_create_params_t {
   KPstring_o title;
 
-  KPoutput_video_o attachment;
+  KPdisplay_o attachment;
 
   KPwindow_painter_f painter;
   void *paint_user_data;

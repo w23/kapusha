@@ -77,14 +77,6 @@ static void *app_thread(void* arg) {
 }
 @end
 
-KPsize kpInputsSelect(KPuptr *selectors, KPinput_o *inputs, KPsize max) {
-  KP_UNUSED(selectors);
-  KP_UNUSED(inputs);
-  KP_UNUSED(max);
-  KP__L("INPUTS NOT IMPLEMENTED");
-  return 0;
-}
-
 void kpAppDestroy(int exit_code) {
   [[NSApplication sharedApplication] terminate:nil];
 }

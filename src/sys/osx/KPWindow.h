@@ -2,6 +2,7 @@
 #import "kapusha/window.h"
 #import "KPView.h"
 #import "KPOutputManager.h"
+#import "cocoa_input.h"
 
 @class KPWindow;
 
@@ -18,6 +19,8 @@ typedef struct KP__cocoa_window_t { KP_O;
   KPmessage_user_t queue_userdata_;
   KPwindow_painter_f painter_;
   KPwindow_painter_event_t pevent_;
+  KP__cocoa_keyboard_t keyboard_;
+  KP__cocoa_mouse_t mouse_;
 }
 - (instancetype)
   initWithParams:(const KPwindow_create_params_t*)params

@@ -1,4 +1,4 @@
-#import "cocoa_keyboard.h"
+#import "cocoa_input.h"
 
 static const int keymap[128] = {
   KPKeyA,       //0x00 = kVK_ANSI_A
@@ -133,20 +133,51 @@ static const int keymap[128] = {
 
 #define KP__SYS "Cocoa::keyboard"
 
-KP__input_keyboard_t *kp__InputKeyboardCreate() {
-  KP__input_keyboard_t *this = KP_NEW(KP__input_keyboard_t, 0);
-  this->I.O.dtor = 0;
-  this->I.nregisters = KPKey_count;
-  this->I.registers = this->keys;
-  this->evt_serial = 0;
-  kpMemset(this->keys, 0, sizeof(this->keys));
-  return this;
+void kp__KeyboardInit(KP__input_keyboard_t *keyboard) {
+  keyboard->queue_serial = 0;
+  keyboard->message_pool = 0;
+  kpMemset(&keyboard->state, 0, sizeof(keyboard->state));
 }
 
-void kp__CocoaKeyboardEvent(KP__cocoa_keyboard_o keyboard,
+void kp__KeyboardKey(KP__input_keyboard_t *keyboard,
+  KPKey key, int down, KPtime_ns time)
+{
+  KP_ASSERT(key >= 0);
+  KP_ASSERT(key < KPKey_count);
+  if (keyboard->state.keys[key].v.u == (!!down)) return;
+  keyboard->state.keys[key].v.u = (!!down);
+  
+  KPmessage_carrier_t *carrier = kpHeapAlloc(keyboard->message_pool,
+    sizeof(KPmessage_carrier_t) + sizeof(KPinput_keyboard_event_data_t));
+  
+  KPinput_keyboard_event_data_t *event =
+    (KPinput_keyboard_event_data_t*)(carrier + 1);
+  event->changed = key;
+  event->reg.changed = &event->changed;
+  event->reg.nchanged = 1;
+  event->state = keyboard->state;
+  
+  carrier->link.next = carrier->link.prev = 0;
+  carrier->msg.data = event;
+  carrier->msg.size = sizeof(*event);
+  carrier->msg.type = KPInputKeyboardKey;
+  carrier->msg.origin = keyboard->queue_origin;
+  carrier->msg.param = key;
+  carrier->msg.sequence = keyboard->queue_serial++;
+  carrier->msg.timestamp = time;
+  carrier->msg.user = keyboard->queue_user;
+  carrier->release_func = (KPmessage_release_f*)kpFree; /* FIXME */
+  kpMessageQueuePut(keyboard->queue, carrier);
+}
+
+void kp__CocoaKeyboardInit(KP__cocoa_keyboard_t *keyboard) {
+  kp__KeyboardInit(&keyboard->kbd);
+}
+
+void kp__CocoaKeyboardEvent(KP__cocoa_keyboard_t *keyboard,
   NSEvent *event, KPtime_ns time)
 {
-  KP_THIS(KP__cocoa_keyboard_t, keyboard);
+  KP__input_keyboard_t *this = &keyboard->kbd;
   const int code = event.keyCode;
   if (code > 127) {
     KP__L("Unexpected keyCode %d", code);
@@ -155,7 +186,7 @@ void kp__CocoaKeyboardEvent(KP__cocoa_keyboard_o keyboard,
 
   int key = keymap[code];
   if (event.type != NSFlagsChanged) {
-    kp__KeyboardKey(&this->K, keymap[code], event.type == NSKeyDown, time);
+    kp__KeyboardKey(this, keymap[code], event.type == NSKeyDown, time);
   } else {
     int kbit;
     switch (key) {
@@ -172,6 +203,14 @@ void kp__CocoaKeyboardEvent(KP__cocoa_keyboard_o keyboard,
         KP__L("Unknown key %d", key);
         return;
     }
-    kp__KeyboardKey(&this->K, keymap[code], event.modifierFlags & kbit, time);
+    kp__KeyboardKey(this, keymap[code], event.modifierFlags & kbit, time);
   }
+}
+
+void kp__CocoaMouseInit(KP__cocoa_mouse_t *mouse) {
+}
+
+void kp__CocoaMouseEvent(KP__cocoa_mouse_t *mouse, NSWindow *window,
+  NSEvent *event, KPtime_ns time)
+{
 }

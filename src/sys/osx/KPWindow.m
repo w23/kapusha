@@ -59,6 +59,13 @@
   painter_ = params->painter;
   pevent_.user_data = params->paint_user_data;
   pevent_.window = window_;
+  
+  kp__CocoaKeyboardInit(&keyboard_);
+  keyboard_.kbd.queue = params->queue;
+  keyboard_.kbd.queue_origin = window;
+  keyboard_.kbd.queue_user = params->queue_userdata;
+
+  kp__CocoaMouseInit(&mouse_);
 
   self.title = [NSString stringWithCString:kpStringCString(params->title)
     encoding:NSUTF8StringEncoding];
@@ -82,9 +89,11 @@
 }
 
 - (void) processMouseEvent:(NSEvent*)event {
+  kp__CocoaMouseEvent(&mouse_, self, event, event.timestamp / 1000.);
 }
 
 - (void) processKeyboardEvent:(NSEvent*)event {
+  kp__CocoaKeyboardEvent(&keyboard_, event, event.timestamp / 1000.);
 }
 
 // "@protocol" NSResponder
