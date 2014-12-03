@@ -43,7 +43,7 @@ int kpuserAppRun(int argc, const char *argv[]) {
   KP_UNUSED(argc);
   KP_UNUSED(argv);
   
-  KPmessage_queue_t app_queue = kpMessageQueueCreate();
+  KPmessage_queue_p app_queue = kpMessageQueueCreate();
   
   int opened_windows;
   for (KPsize i = 0; i < sizeof(samples) / sizeof(*samples); ++i) {
@@ -78,7 +78,7 @@ int kpuserAppRun(int argc, const char *argv[]) {
         break;
       }
     }
-    kpMessageRelease(msg);
+    kpRelease(msg);
   }
   
   kpMessageQueueDestroy(app_queue);

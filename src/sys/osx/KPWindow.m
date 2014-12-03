@@ -219,7 +219,7 @@ void kp__CocoaWindowDtor(void *obj) {
 KPwindow_o kpWindowCreate(const KPwindow_create_params_t *params) {
   __block KPwindow_o retval;
   dispatch_sync(dispatch_get_main_queue(), ^(){
-    KP__cocoa_window_o this = KP_NEW(KP__cocoa_window_t, 0);
+    KP__cocoa_window_o this = KP_NEW(KP__cocoa_window_t);
     this->O.dtor = kp__CocoaWindowDtor;
     this->window = [[KPWindow alloc]
       initWithParams:(const KPwindow_create_params_t*)params

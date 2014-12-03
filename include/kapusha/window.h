@@ -49,7 +49,7 @@ typedef struct KPwindow_create_params_t {
   KPwindow_painter_f painter;
   void *paint_user_data;
   
-  KPmessage_queue_t queue;
+  KPmessage_queue_p queue;
   KPmessage_user_t queue_userdata;
 } KPwindow_create_params_t;
 

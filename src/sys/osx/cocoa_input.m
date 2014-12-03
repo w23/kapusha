@@ -135,7 +135,7 @@ static const int keymap[128] = {
 
 void kp__KeyboardInit(KP__input_keyboard_t *keyboard) {
   keyboard->queue_serial = 0;
-  keyboard->message_pool = 0;
+  keyboard->message_pool = kp_allocator_default;
   kpMemset(&keyboard->state, 0, sizeof(keyboard->state));
 }
 
@@ -147,7 +147,7 @@ void kp__KeyboardKey(KP__input_keyboard_t *keyboard,
   if (keyboard->state.keys[key].v.u == (!!down)) return;
   keyboard->state.keys[key].v.u = (!!down);
   
-  KPmessage_carrier_t *carrier = kpHeapAlloc(keyboard->message_pool,
+  KPmessage_carrier_t *carrier = kpNew(keyboard->message_pool,
     sizeof(KPmessage_carrier_t) + sizeof(KPinput_keyboard_event_data_t));
   
   KPinput_keyboard_event_data_t *event =
@@ -166,7 +166,6 @@ void kp__KeyboardKey(KP__input_keyboard_t *keyboard,
   carrier->msg.sequence = keyboard->queue_serial++;
   carrier->msg.timestamp = time;
   carrier->msg.user = keyboard->queue_user;
-  carrier->release_func = (KPmessage_release_f*)kpFree; /* FIXME */
   kpMessageQueuePut(keyboard->queue, carrier);
 }
 

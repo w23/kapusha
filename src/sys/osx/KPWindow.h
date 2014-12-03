@@ -15,7 +15,7 @@ typedef struct KP__cocoa_window_t { KP_O;
   KP__cocoa_window_t *window_;
   KP__cocoa_output_o output_;
   KPuptr queue_seq_;
-  KPmessage_queue_t queue_;
+  KPmessage_queue_p queue_;
   KPmessage_user_t queue_userdata_;
   KPwindow_painter_f painter_;
   KPwindow_painter_event_t pevent_;

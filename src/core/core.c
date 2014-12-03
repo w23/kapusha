@@ -5,26 +5,23 @@
 #include <stdio.h>
 #include <memory.h>
 
-static void *default_alloc(struct KPheap_header_t *heap, KPsize size) {
-  /* \todo libc-based malloc should be separate compile-time decision */
-  KP_UNUSED(heap);
+/* \todo libc-based malloc should be separate compile-time decision */
+static void *default_alloc(KPallocator_p allocator, KPsize size) {
+  KP_UNUSED(allocator);
   return malloc(size);
 }
 
-static void default_free(struct KPheap_header_t *heap, void *mem) {
-  KP_UNUSED(heap);
+static void default_free(KPallocator_p allocator, void *mem) {
+  KP_UNUSED(allocator);
   free(mem);
 }
 
-static KPheap_header_t kp__heap_default_impl = {
-  default_alloc, default_free
-};
+static KPallocator_t kp__allocator_default = { default_alloc, default_free };
+KPallocator_p kp_allocator_default = &kp__allocator_default;
 
-KPheap_p kp__heap_default = &kp__heap_default_impl;
-
-void *kpNew(KPheap_p heap, KPsize size) {
-  KP_THIS(KPobject_header_t, kpHeapAlloc(heap, size));
-  this->heap = heap;
+void *kpNew(KPallocator_p allocator, KPsize size) {
+  KP_THIS(KPobject_header_t, kpAllocatorAlloc(allocator, size));
+  this->allocator = allocator;
   this->refcount = 1;
   this->dtor = 0;
   return this;
@@ -35,7 +32,7 @@ void kpRelease(void *obj) {
   KP_THIS(KPobject_header_t, obj);
   if (kpS32AtomicDec(&this->refcount) > 0) return;
   if (this->dtor) this->dtor(this);
-  kpHeapFree(this->heap, this);
+  kpAllocatorFree(this->allocator, this);
 }
 
 int kpVsnprintf(char *buffer, KPsize size, const char *format, va_list argp) {
@@ -81,7 +78,7 @@ void kpLog(const char *prefix, const char *format, ...) {
 /* Cotainers */
 
 KPbuffer_o kpBufferCreate(KPsize size, const void *source) {
-  KPbuffer_o this = kpNew(0, sizeof(KPbuffer_t) + size);
+  KPbuffer_o this = kpNew(kp_allocator_default, sizeof(KPbuffer_t) + size);
   this->O.dtor = 0;
   this->data = this + 1;
   this->size = size;
@@ -121,7 +118,7 @@ KPsurface_o kpSurfaceCreate(KPu32 width, KPu32 height, KPSurfaceFormat fmt) {
   const KPsize header_size = ((sizeof(KPsurface_t) + 15) / 16) * 16;
   const KPu32 total_size = header_size + stride * height;
 
-  KPsurface_t *this = kpNew(0, total_size);
+  KPsurface_t *this = kpNew(kp_allocator_default, total_size);
   this->width = width;
   this->height = height;
   this->format = fmt;
@@ -162,7 +159,7 @@ typedef struct KP__message_queue_t {
   KPmessage_carrier_t *head, *tail;
 } KP__message_queue_t;
 
-KPmessage_queue_t kpMessageQueueCreate() {
+KPmessage_queue_p kpMessageQueueCreate() {
   KP__message_queue_t *this = kpAlloc(sizeof(KP__message_queue_t));
   kpMutexInit(&this->mutex);
   kpCondvarInit(&this->condvar);
@@ -170,13 +167,13 @@ KPmessage_queue_t kpMessageQueueCreate() {
   return this;
 }
 
-void kpMessageQueueDestroy(KPmessage_queue_t queue) {
+void kpMessageQueueDestroy(KPmessage_queue_p queue) {
   KP__message_queue_t *this = (KP__message_queue_t*)queue;
   kpCondvarDestroy(&this->condvar);
   kpMutexDestroy(&this->mutex);
 }
 
-void kpMessageQueuePut(KPmessage_queue_t queue, KPmessage_carrier_t *carrier) {
+void kpMessageQueuePut(KPmessage_queue_p queue, KPmessage_carrier_t *carrier) {
   KP__message_queue_t *this = (KP__message_queue_t*)queue;
   carrier->link.next = carrier->link.prev = 0;
   
@@ -191,24 +188,19 @@ void kpMessageQueuePut(KPmessage_queue_t queue, KPmessage_carrier_t *carrier) {
   kpMutexUnlock(&this->mutex);
 }
 
-static void kp__message_copy_release(KPmessage_carrier_t *carrier) {
-  /* TODO return to pool */
-  kpFree(carrier);
-}
-
-void kpMessageQueuePutCopy(KPmessage_queue_t queue, const KPmessage_t *message){
+void kpMessageQueuePutCopy(KPmessage_queue_p queue, const KPmessage_t *message){
   /* TODO message pool */
-  KPmessage_carrier_t *carrier = kpAlloc(
+  KPmessage_carrier_t *carrier = kpNew(
+    kp_allocator_default,
     sizeof(KPmessage_carrier_t) + message->size);
-  kpMemcpy(&carrier->msg, message, sizeof(*message));
+  carrier->msg = *message;
   carrier->msg.data = carrier + 1;
   carrier->msg.size = message->size;
-  carrier->release_func = kp__message_copy_release;
   kpMemcpy(carrier->msg.data, message->data, message->size);
   kpMessageQueuePut(queue, carrier);
 }
 
-KPmessage_t *kpMessageQueueGet(KPmessage_queue_t queue, KPtime_ms timeout) {
+KPmessage_t *kpMessageQueueGet(KPmessage_queue_p queue, KPtime_ms timeout) {
   KP__message_queue_t *this = (KP__message_queue_t*)queue;
   kpMutexLock(&this->mutex);
   while (this->head == 0) {
@@ -218,22 +210,17 @@ KPmessage_t *kpMessageQueueGet(KPmessage_queue_t queue, KPtime_ms timeout) {
   }
 
   KP_ASSERT(this->head != 0);
-  KPmessage_t *ret = &this->head->msg;
+  KPmessage_o ret = &this->head->msg;
 
   if (this->head == this->tail)
     this->head = this->tail = 0;
   else {
     KPlink_t *head = &this->head->link;
-    this->head = (KPmessage_carrier_t*)head->next;
+    this->head = (KPmessage_carrier_t*)
+      ((KPu8*)(head->next) - offsetof(KPmessage_carrier_t, link));
     kpLinkRemove(head);
   }
 
   kpMutexUnlock(&this->mutex);
   return ret;
-}
-
-void kpMessageRelease(KPmessage_t *message) {
-  KPmessage_carrier_t *carrier = (KPmessage_carrier_t*)(
-    ((KPu8*)message) - offsetof(KPmessage_carrier_t, msg));
-  carrier->release_func(carrier);
 }

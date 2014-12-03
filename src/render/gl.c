@@ -105,7 +105,7 @@ static void kp__RenderBufferDtor(void *buffer) {
 
 KPrender_buffer_o kpRenderBufferCreate() {
   DECLARE_STATE;
-  KP__render_buffer_t *this = KP_NEW(KP__render_buffer_t, state->heap);
+  KP__render_buffer_t *this = KP_NEW(KP__render_buffer_t);
   this->O.dtor = kp__RenderBufferDtor;
   glGenBuffers(1, &this->name); KP__GLASSERT
   KP_ASSERT(this->name != 0);
@@ -190,7 +190,7 @@ void kp__RenderStateSamplerUnbind(KP__render_state_t *state,
 
 KPrender_sampler_o kpRenderSamplerCreate() {
   DECLARE_STATE;
-  KP__render_sampler_t *this = KP_NEW(KP__render_sampler_t, state->heap);
+  KP__render_sampler_t *this = KP_NEW(KP__render_sampler_t);
   this->name = 0;
   glGenTextures(1, &this->name); KP__GLASSERT
   KP__L("%p: create texture %d", this, this->name);
@@ -273,7 +273,7 @@ void kp__RenderProgramEnvDtor(void *env) {
 
 KPrender_program_env_o kpRenderProgramEnvCreate() {
   DECLARE_STATE;
-  KP__render_program_env_t *this = KP_NEW(KP__render_program_env_t, state->heap);
+  KP__render_program_env_t *this = KP_NEW(KP__render_program_env_t);
   KP__L("%p created", this);
   this->O.dtor = kp__RenderProgramEnvDtor;
   kpMemset(this->values, 0, sizeof(this->values));
@@ -421,7 +421,7 @@ static void kp__RenderProgramDtor(void *buffer) {
 
 KPrender_program_o kpRenderProgramCreate() {
   DECLARE_STATE;
-  KP__render_program_t *this = KP_NEW(KP__render_program_t, state->heap);
+  KP__render_program_t *this = KP_NEW(KP__render_program_t);
   this->O.dtor = kp__RenderProgramDtor;
   this->name = glCreateProgram(); KP__GLASSERT
   KP__L("%p: create %d", this, this->name);
@@ -579,7 +579,7 @@ void kp__RenderBatchDtor(void *batch) {
 
 KPrender_batch_o kpRenderBatchCreate() {
   DECLARE_STATE;
-  KP__render_batch_t *this = KP_NEW(KP__render_batch_t, state->heap);
+  KP__render_batch_t *this = KP_NEW(KP__render_batch_t);
   this->O.dtor = kp__RenderBatchDtor;
   for (int i = 0; i < KP__RENDER_BATCH_MAX_ATTRIBS; ++i)
     this->attribs[i].tag.tag.value = 0;
@@ -672,7 +672,8 @@ KPrender_framebuffer_o kpRenderFramebufferCreate(
 {
   DECLARE_STATE;
   KP_ASSERT(params->ncolors == 1);
-  KP__render_framebuffer_o this = (KP__render_framebuffer_o)kpNew(0,
+  KP__render_framebuffer_o this = (KP__render_framebuffer_o)kpNew(
+    kp_allocator_default,
     sizeof(KP__render_framebuffer_t) +
     sizeof(KP__render_sampler_o) * params->ncolors);
   this->O.dtor = kp__RenderFramebufferDtor;

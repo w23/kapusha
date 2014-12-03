@@ -16,29 +16,29 @@ void kpLog(const char *prefix, const char *format, ...);
 #define KP__L(...) kpLog(KP__SYS, __VA_ARGS__)
 
 /******************************************************************************/
-/* Heaps and allocation */
+/* Allocators */
 
-typedef struct KPheap_header_t {
-  void *(*alloc)(struct KPheap_header_t *heap, KPsize size);
-  void (*free)(struct KPheap_header_t *heap, void *mem);
-} KPheap_header_t;
+typedef struct KPallocator_t {
+  void *(*alloc)(struct KPallocator_t *heap, KPsize size);
+  void (*free)(struct KPallocator_t *heap, void *mem);
+} KPallocator_t, *KPallocator_p;
 
-typedef KPheap_header_t* KPheap_p;
-
-extern KPheap_p kp__heap_default;
-
-inline static void *kpHeapAlloc(KPheap_p heap, KPsize size) {
-  if (heap == 0) heap = kp__heap_default;
-  return heap->alloc(heap, size);
+inline static void *kpAllocatorAlloc(KPallocator_p a, KPsize size) {
+  return a->alloc(a, size);
 }
 
-inline static void kpHeapFree(KPheap_p heap, void* ptr) {
-  if (heap == 0) heap = kp__heap_default;
-  return heap->free(heap, ptr);
+inline static void kpAllocatorFree(KPallocator_p a, void* ptr) {
+  return a->free(a, ptr);
 }
 
-inline static void *kpAlloc(KPsize size) { return kpHeapAlloc(0, size); }
-inline static void kpFree(void *ptr) { kpHeapFree(0, ptr); }
+extern KPallocator_p kp_allocator_default;
+
+inline static void *kpAlloc(KPsize size) {
+  return kpAllocatorAlloc(kp_allocator_default, size);
+}
+inline static void kpFree(void *ptr) {
+  kpAllocatorFree(kp_allocator_default, ptr);
+}
 
 /******************************************************************************/
 /* Base building block refcounted object */
@@ -46,7 +46,7 @@ inline static void kpFree(void *ptr) { kpHeapFree(0, ptr); }
 typedef struct {
   KPs32_atomic refcount;
   void (*dtor)(void *obj);
-  KPheap_p heap;
+  KPallocator_p allocator;
 } KPobject_header_t;
 
 #define KP_O KPobject_header_t O
@@ -61,9 +61,9 @@ inline static void *kpRetain(void *obj) {
 
 void kpRelease(void *obj);
 
-void *kpNew(KPheap_p heap, KPsize size);
+void *kpNew(KPallocator_p allocator, KPsize size);
 
-#define KP_NEW(name,heap) (name*)kpNew(heap, sizeof(name));
+#define KP_NEW(name) (name*)kpNew(kp_allocator_default, sizeof(name));
 
 /******************************************************************************/
 /* Misc memory stuff */
@@ -112,14 +112,14 @@ void kpLinkRemove(KPlink_t *link);
 /******************************************************************************/
 /* Message queue */
 
-typedef void* KPmessage_queue_t;
+typedef void *KPmessage_queue_p;
 
 typedef struct KPmessage_user_t {
   void *data;
   KPuptr tag;
 } KPmessage_user_t;
 
-typedef struct KPmessage_t {
+typedef struct KPmessage_t { KP_O;
   KPtime_ns timestamp;
   KPuptr sequence;
   void *origin;
@@ -128,24 +128,19 @@ typedef struct KPmessage_t {
   KPuptr param;
   KPsize size;
   void *data;
-} KPmessage_t;
+} KPmessage_t, *KPmessage_o;
 
-struct KPmessage_carrier_t;
-
-typedef void KPmessage_release_f(struct KPmessage_carrier_t *);
+KPmessage_queue_p kpMessageQueueCreate();
+void kpMessageQueueDestroy(KPmessage_queue_p);
+void kpMessageQueueDestroy(KPmessage_queue_p);
+void kpMessageQueuePutCopy(KPmessage_queue_p, const KPmessage_t *message);
+KPmessage_o kpMessageQueueGet(KPmessage_queue_p, KPtime_ms timeout);
 
 typedef struct KPmessage_carrier_t {
-  KPlink_t link;
   KPmessage_t msg;
-  KPmessage_release_f *release_func;
+  KPlink_t link;
 } KPmessage_carrier_t;
-
-KPmessage_queue_t kpMessageQueueCreate();
-void kpMessageQueueDestroy(KPmessage_queue_t queue);
-void kpMessageQueuePut(KPmessage_queue_t queue, KPmessage_carrier_t *message);
-void kpMessageQueuePutCopy(KPmessage_queue_t queue, const KPmessage_t *message);
-KPmessage_t *kpMessageQueueGet(KPmessage_queue_t queue, KPtime_ms timeout);
-void kpMessageRelease(KPmessage_t *message);
+void kpMessageQueuePut(KPmessage_queue_p, KPmessage_carrier_t *message);
 
 /******************************************************************************/
 /* Lock-free queue */

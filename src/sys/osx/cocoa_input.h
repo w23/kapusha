@@ -5,8 +5,8 @@ typedef struct KP__input_keyboard_t {
   KPuptr queue_serial;
   void *queue_origin;
   KPmessage_user_t queue_user;
-  KPmessage_queue_t queue;
-  KPheap_p message_pool;
+  KPmessage_queue_p queue;
+  KPallocator_p message_pool;
   KPinput_keyboard_state_t state;
 } KP__input_keyboard_t;
 

@@ -166,7 +166,6 @@ typedef struct KP__render_framebuffer_t { KP_O;
 
 typedef struct {
   /* are not retained */
-  KPheap_p heap;
   KP__render_buffer_t *buffer_targets[KP__RenderBufferTarget_MAX];
 
   KP__render_sampler_t *sampler_units[KP__RenderSamplers_MAX];
@@ -177,7 +176,7 @@ typedef struct {
   KP__render_framebuffer_o framebuffer;
 } KP__render_state_t;
 
-inline static KP__render_state_t *kp__CurrentRenderState();
+inline static KP__render_state_t *kp__RenderState();
 
 //static void kp__RenderStateInit(KP__render_state_t *state);
 
