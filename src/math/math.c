@@ -103,34 +103,41 @@ KPquatf kpQuatfNormalize(KPquatf q) {
 }
 
 KPquatf kpQuatfMakeMat4f(KPmat4f m) {
+  KPf32 trace;
   KPquatf q;
-  const KPf32 tr = m.r[0].x + m.r[1].y + m.r[2].z;
-  if (tr > 0.f) { /* w is fine */
-    q.v.w = kpSqrtf(tr + 1.f) * .5f;
-    const KPf32 wwww = q.v.w * 4.f;
-    q.v.x = (m.r[2].y - m.r[1].z) / wwww;
-    q.v.y = (m.r[0].z - m.r[2].x) / wwww;
-    q.v.z = (m.r[1].x - m.r[0].y) / wwww;
-  } else if (m.r[0].x > m.r[1].y && m.r[0].x > m.r[2].z) {
-    /* x is the largest */
-    q.v.x = kpSqrtf(1.f + m.r[0].x - m.r[1].y - m.r[2].z) * .5f;
-    const KPf32 xxxx = q.v.x * 4.f;
-    q.v.y = (m.r[0].y + m.r[1].x) / xxxx;
-    q.v.z = (m.r[0].z + m.r[2].x) / xxxx;
-    q.v.w = (m.r[2].y - m.r[1].z) / xxxx;
-  } else if (m.r[1].y > m.r[2].z) { /* y is the largest */
-    q.v.y = kpSqrtf(1.f - m.r[0].x + m.r[1].y - m.r[2].z) * .5f;
-    const KPf32 yyyy = q.v.y * 4.f;
-    q.v.x = (m.r[0].y + m.r[1].x) / yyyy;
-    q.v.z = (m.r[1].z + m.r[2].y) / yyyy;
-    q.v.w = (m.r[0].z - m.r[2].x) / yyyy;
-  } else { /* nokori wa z */
-    q.v.z = kpSqrtf(1.f - m.r[0].x - m.r[1].y + m.r[2].z) * .5f;
-    const KPf32 zzzz = q.v.z * 4.f;
-    q.v.x = (m.r[0].z + m.r[2].x) / zzzz;
-    q.v.y = (m.r[1].z + m.r[2].y) / zzzz;
-    q.v.w = (m.r[1].x - m.r[0].y) / zzzz;
+
+  // thx 2 Mike Day, Insomniac Games
+  if (m.r[2].z < 0.) { // |(x,y)| > |(z,w)|
+    if (m.r[0].x > m.r[1].y) { // |x| > |y|
+      trace = 1.f + m.r[0].x - m.r[1].y - m.r[2].z;
+      q.v.x = trace;
+      q.v.y = m.r[0].y + m.r[1].x;
+      q.v.z = m.r[2].x + m.r[0].z;
+      q.v.w = m.r[1].z - m.r[2].y;
+    } else { // |x| < |y|
+      trace = 1.f - m.r[0].x + m.r[1].y - m.r[2].z;
+      q.v.x = m.r[0].y + m.r[1].x;
+      q.v.y = trace;
+      q.v.z = m.r[1].z + m.r[2].y;
+      q.v.w = m.r[2].x - m.r[0].z;
+    }
+  } else {
+    if (m.r[0].x < -m.r[1].y) { // |z| > |w|
+      trace = 1.f - m.r[0].x - m.r[1].y + m.r[2].z;
+      q.v.x = m.r[2].x + m.r[0].z;
+      q.v.y = m.r[1].z + m.r[2].y;
+      q.v.z = trace;
+      q.v.w = m.r[0].y - m.r[1].x;
+    } else { // |z| < |w|
+      trace = 1.f + m.r[0].x + m.r[1].y + m.r[2].z;
+      q.v.x = m.r[1].z - m.r[2].y;
+      q.v.y = m.r[2].x - m.r[0].z;
+      q.v.z = m.r[0].y - m.r[1].x;
+      q.v.w = trace;
+    }
   }
+
+  q.v = kpVec4fMulf(q.v, kpSqrtf(trace));
   return kpQuatfNormalize(q);
 }
 
